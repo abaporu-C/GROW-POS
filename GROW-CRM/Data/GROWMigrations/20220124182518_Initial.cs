@@ -466,7 +466,6 @@ namespace GROW_CRM.Data.GROWMigrations
                 name: "IX_UploadedFile_HouseholdID",
                 table: "UploadedFile",
                 column: "HouseholdID");
-            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
