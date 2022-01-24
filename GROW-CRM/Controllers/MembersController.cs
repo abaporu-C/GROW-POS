@@ -20,14 +20,146 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch,
+            int? HouseholdID, int? GenderID, 
+            int? page, int? pageSizeID, string actionButton,
+            string sortDirection = "asc", string sortField = "Member")
         {
+            //Toggle the Open/Closed state of the collapse depending on if we are filtering
+            ViewData["Filtering"] = ""; //Asume not filtering
+
+            //NOTE: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "Member", "Age", "Gender", "Household" };
+
+            PopulateDropDownLists();
+
             var members = from m in _context.Members
                               .Include(m => m.Gender)
                               .Include(m => m.Household)
                               .Include(m => m.IncomeSituation)
                               select m;
 
+
+            //Add as many filters as needed
+            if (HouseholdID.HasValue)
+            {
+                members = members.Where(p => p.HouseholdID == HouseholdID);
+                ViewData["Filtering"] = " show";
+            }
+            if (GenderID.HasValue)
+            {
+                members = members.Where(p => p.GenderID == GenderID);
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(MemberSearch))
+            {
+                members = members.Where(p => p.LastName.ToUpper().Contains(MemberSearch.ToUpper())
+                                       || p.FirstName.ToUpper().Contains(MemberSearch.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(PhoneSearch))
+            {
+                members = members.Where(p => p.PhoneNumber.Contains(PhoneSearch));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(HouseholdSearch))
+            {
+                members = members.Where(p => p.Household.StreetName.ToUpper().Contains(HouseholdSearch.ToUpper())
+                                       || p.Household.City.ToUpper().Contains(HouseholdSearch.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted!
+            {
+                page = 1;//Reset page to start
+
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+
+            //Now we know which field and direction to sort by
+            if (sortField == "Member")
+                    {
+                        if (sortDirection == "asc")
+                        {
+                            members = members
+                        .OrderBy(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+
+                        }
+                        else
+                        {
+                            members = members
+                               .OrderByDescending(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+
+
+
+                }
+                    }
+                    else if (sortField == "Age")
+                    {
+                        if (sortDirection == "asc")
+                        {
+                            members = members
+                                .OrderByDescending(p => p.DOB)
+                        .ThenByDescending(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+                        }
+                        else
+                        {
+                            members = members
+                                 .OrderBy(p => p.DOB)
+                        .ThenBy(p => p.LastName)
+                        .ThenBy(p => p.FirstName);
+                        }
+                    }
+                    else if (sortField == "Gender")
+                    {
+                        if (sortDirection == "asc")
+                        {
+                            members = members
+                                 .OrderBy(p => p.Gender.Name)
+                        .ThenBy(p => p.LastName)
+                        .ThenBy(p => p.FirstName);
+                        }
+                        else
+                        {
+                            members = members
+                                .OrderByDescending(p => p.Gender.Name)
+                        .ThenByDescending(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+                        }
+                    }
+                   /* else //Sorting by Athlete Name
+                    {
+                        if (sortDirection == "asc")
+                        {
+                            members = members
+                                .OrderBy(p => p.LastName)
+                        .ThenBy(p => p.FirstName);
+                        }
+                        else
+                        {
+                            members = members
+                                .OrderByDescending(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+                        }
+                    }*/
+                
+            
+
+            //Set sort for next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
 
             return View(await members.ToListAsync());
         }
@@ -173,6 +305,25 @@ namespace GROW_CRM.Controllers
         private bool MemberExists(int id)
         {
             return _context.Members.Any(e => e.ID == id);
+        }
+
+        private SelectList HouseholdSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Households
+                .OrderBy(d => d.City), "ID", "Name", selectedId);
+                
+        }
+        private SelectList GenderSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Genders
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+        private void PopulateDropDownLists(Member member = null)
+        {
+            ViewData["HouseholdID"] = HouseholdSelectList(member?.HouseholdID);
+           
+            ViewData["GenderID"] = GenderSelectList(member?.GenderID);
+           
         }
     }
 }
