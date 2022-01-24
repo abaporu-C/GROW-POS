@@ -72,7 +72,7 @@ namespace GROW_CRM.Data
         //Model Builder Event
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("GROW");
+            //modelBuilder.HasDefaultSchema("GROW");
 
             //Adding Composite Keys
             modelBuilder.Entity<DietaryRestrictionMember>()

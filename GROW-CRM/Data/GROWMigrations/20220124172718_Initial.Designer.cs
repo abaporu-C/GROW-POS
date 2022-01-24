@@ -9,14 +9,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220124004352_Initial")]
+    [Migration("20220124172718_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("GROW")
                 .HasAnnotation("ProductVersion", "3.1.21");
 
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestriction", b =>
@@ -83,10 +82,13 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("AptNumber")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT")
@@ -102,16 +104,20 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProvinceID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StreetName")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasMaxLength(5);
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -207,15 +213,19 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<int>("GenderID")
                         .HasColumnType("INTEGER");
@@ -228,16 +238,22 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(10);
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
