@@ -101,7 +101,7 @@ namespace GROW_CRM.Models
         public string Email { get; set; }
 
         [Display(Name ="Notes")]
-        [Required(ErrorMessage = "You cannot leave the notes blank.")]
+        
         [StringLength(2000, ErrorMessage = "Only 2000 characters for notes.")]
         [DataType(DataType.MultilineText)]
         public string Notes { get; set; }

@@ -22,8 +22,14 @@ namespace GROW_CRM.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var gROWContext = _context.Members.Include(m => m.Gender).Include(m => m.Household).Include(m => m.IncomeSituation);
-            return View(await gROWContext.ToListAsync());
+            var members = from m in _context.Members
+                              .Include(m => m.Gender)
+                              .Include(m => m.Household)
+                              .Include(m => m.IncomeSituation)
+                              select m;
+
+
+            return View(await members.ToListAsync());
         }
 
         // GET: Members/Details/5

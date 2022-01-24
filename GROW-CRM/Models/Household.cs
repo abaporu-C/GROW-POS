@@ -19,7 +19,6 @@ namespace GROW_CRM.Models
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
-        [StringLength(5)]
         public int StreetNumber { get; set; }
 
         [Display(Name ="Street Name")]

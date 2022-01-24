@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220124172718_Initial")]
+    [Migration("20220124180826_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,8 +116,7 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasMaxLength(100);
 
                     b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(5);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -246,7 +245,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 

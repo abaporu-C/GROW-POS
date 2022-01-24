@@ -114,8 +114,7 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasMaxLength(100);
 
                     b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(5);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -244,7 +243,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
