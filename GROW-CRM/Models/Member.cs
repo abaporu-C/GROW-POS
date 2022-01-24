@@ -85,7 +85,7 @@ namespace GROW_CRM.Models
         [Required(ErrorMessage = "You cannot leave the birth date blank.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
 
         [Display(Name ="Phone Number")]
         [Required(ErrorMessage = "Phone number is required.")]
