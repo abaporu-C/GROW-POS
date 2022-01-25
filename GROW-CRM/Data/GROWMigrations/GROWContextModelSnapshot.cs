@@ -80,7 +80,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("AptNumber")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
@@ -107,6 +106,11 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<int>("ProvinceID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("StreetName")
                         .IsRequired()

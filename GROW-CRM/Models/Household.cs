@@ -1,4 +1,5 @@
 using GROW_CRM.Models.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,9 +37,7 @@ namespace GROW_CRM.Models
         public string StreetName { get; set; }
 
         [Display(Name ="Apartment Number")]
-        [Required(ErrorMessage ="You must provide an apartment number")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
-        [Range(1, 9999, ErrorMessage = "Apartment number cannot exceed 9999")]
         public int? AptNumber { get; set; }
 
         [Display(Name = "City Name")]
@@ -72,6 +71,10 @@ namespace GROW_CRM.Models
         public Province Province { get; set; }
 
         //O:M Relationships
+
+        [ScaffoldColumn(false)]
+        [Timestamp]
+        public Byte[] RowVersion { get; set; }//Added for concurrency
 
         public ICollection<Member> Members { get; set; }
 
