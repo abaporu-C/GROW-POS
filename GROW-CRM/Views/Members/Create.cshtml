@@ -49,7 +49,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class ="form-control" asp-items="ViewBag.GenderID"></select>
+                <select asp-for="Gender.Name" class ="form-control" asp-items="ViewBag.GenderID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="HouseholdID" class="control-label"></label>
@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class ="form-control" asp-items="ViewBag.IncomeSituationID"></select>
+                <select asp-for="IncomeSituation.Situation" class ="form-control" asp-items="ViewBag.IncomeSituationID"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

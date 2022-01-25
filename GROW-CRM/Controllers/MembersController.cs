@@ -188,9 +188,9 @@ namespace GROW_CRM.Controllers
         // GET: Members/Create
         public IActionResult Create()
         {
-            ViewData["GenderID"] = new SelectList(_context.Genders, "ID", "ID");
+            ViewData["GenderID"] = new SelectList(_context.Genders, "ID", "Name");
             ViewData["HouseholdID"] = new SelectList(_context.Households, "ID", "City");
-            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "ID");
+            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "Situation");
             return View();
         }
 

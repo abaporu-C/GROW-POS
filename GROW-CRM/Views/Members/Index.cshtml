@@ -107,8 +107,9 @@
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.Household.Province)<br />
-                        @Html.DisplayFor(modelItem => item.Household.City) - @Html.DisplayFor(modelItem => item.Household.StreetNumber)  @Html.DisplayFor(modelItem => item.Household.StreetName)
+                         @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
+                        @Html.DisplayFor(modelItem => item.Household.City)
+                        @Html.DisplayFor(modelItem => item.Household.Province)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
