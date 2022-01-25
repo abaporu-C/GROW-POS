@@ -17,6 +17,15 @@ namespace GROW_CRM.Models
         //Fields
         public int ID { get; set; }
 
+        [Display(Name ="Full Address")]
+        public string FullAddress
+        {
+            get
+            {
+                return StreetNumber + " " + StreetName + ", int " + AptNumber + "- " + City + ", " + Province + " " + PostalCode;
+            }
+        }
+
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
         public int StreetNumber { get; set; }
