@@ -453,5 +453,6 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# Databse
+
+#Database
 *.db
