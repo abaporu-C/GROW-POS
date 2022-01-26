@@ -172,7 +172,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     CreatedOn = table.Column<DateTime>(nullable: true),
                     UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    StreetNumber = table.Column<int>(maxLength: 5, nullable: false),
+                    StreetNumber = table.Column<int>(nullable: false),
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     AptNumber = table.Column<int>(nullable: false),
                     City = table.Column<string>(maxLength: 255, nullable: false),
@@ -233,7 +233,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     DOB = table.Column<DateTime>(nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
                     Email = table.Column<string>(maxLength: 255, nullable: false),
-                    Notes = table.Column<string>(maxLength: 2000, nullable: false),
+                    Notes = table.Column<string>(maxLength: 2000, nullable: true),
                     GenderID = table.Column<int>(nullable: false),
                     HouseholdID = table.Column<int>(nullable: false),
                     IncomeSituationID = table.Column<int>(nullable: false)
@@ -466,7 +466,6 @@ namespace GROW_CRM.Data.GROWMigrations
                 name: "IX_UploadedFile_HouseholdID",
                 table: "UploadedFile",
                 column: "HouseholdID");
-            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -93,11 +93,12 @@ namespace GROW_CRM.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHold
-            modelBuilder.Entity<Household>()
-                .HasOne(h => h.Province)
-                .WithMany(p => p.Households)
-                .HasForeignKey(h => h.ProvinceID)
-                .OnDelete(DeleteBehavior.Restrict);
+              modelBuilder.Entity<Household>()
+                  .HasOne(h => h.Province)
+                  .WithMany(p => p.Households)
+                  .HasForeignKey(h => h.ProvinceID)
+                  .OnDelete(DeleteBehavior.Restrict);
+
 
             //HouseHoldDocuments
             modelBuilder.Entity<HouseholdDocument>()
