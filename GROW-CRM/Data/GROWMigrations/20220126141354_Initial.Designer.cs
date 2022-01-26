@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220125182924_Initial")]
+    [Migration("20220126141354_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
