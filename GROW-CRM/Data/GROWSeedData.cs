@@ -232,7 +232,8 @@ namespace GROW_CRM.Data
                         new Household
                         {
                             StreetNumber = 38,
-                            StreetName = "Church St.",                            
+                            StreetName = "Church St.",   
+                            AptNumber = 301,
                             City = "St. Catherines",
                             PostalCode = "R3E 9R8",
                             YearlyIncome = 25000M,
