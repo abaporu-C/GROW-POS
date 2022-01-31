@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GROW_CRM.Controllers
 {
@@ -22,7 +24,7 @@ namespace GROW_CRM.Controllers
         // GET: Households
         public async Task<IActionResult> Index()
         {
-            var gROWContext = _context.Households.Include(h => h.Province);
+            var gROWContext = _context.Households.Include(h => h.HouseholdStatus).Include(h => h.Province);
             return View(await gROWContext.ToListAsync());
         }
 
@@ -35,6 +37,7 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
+                .Include(h => h.HouseholdStatus)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
@@ -48,6 +51,7 @@ namespace GROW_CRM.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
+            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID");
             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID");
             return View();
         }
@@ -57,14 +61,16 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,YearlyIncome,NumberOfMembers,LICOVerified,ProvinceID")] Household household)
+        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,NumberOfMembers,LICOVerified,JoinedDate,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
             if (ModelState.IsValid)
             {
+                await AddDocumentsAsync(household, theFiles);
                 _context.Add(household);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
             return View(household);
         }
@@ -82,6 +88,7 @@ namespace GROW_CRM.Controllers
             {
                 return NotFound();
             }
+            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
             return View(household);
         }
@@ -91,7 +98,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,YearlyIncome,NumberOfMembers,LICOVerified,ProvinceID")] Household household)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,NumberOfMembers,LICOVerified,JoinedDate,ProvinceID,HouseholdStatusID")] Household household)
         {
             if (id != household.ID)
             {
@@ -118,6 +125,7 @@ namespace GROW_CRM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
             return View(household);
         }
@@ -131,6 +139,7 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
+                .Include(h => h.HouseholdStatus)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
@@ -156,5 +165,43 @@ namespace GROW_CRM.Controllers
         {
             return _context.Households.Any(e => e.ID == id);
         }
+
+        public async Task<FileContentResult> Download(int id)
+        {
+            var theFile = await _context.UploadedFiles
+                .Include(d => d.FileContent)
+                .Where(f => f.ID == id)
+                .FirstOrDefaultAsync();
+            return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
+        }
+
+        private async Task AddDocumentsAsync(Household household, List<IFormFile> theFiles)
+        {
+            foreach (var f in theFiles)
+            {
+                if (f != null)
+                {
+                    string mimeType = f.ContentType;
+                    string fileName = Path.GetFileName(f.FileName);
+                    long fileLength = f.Length;
+                    //Note: you could filter for mime types if you only want to allow
+                    //certain types of files.  I am allowing everything.
+                    if (!(fileName == "" || fileLength == 0))//Looks like we have a file!!!
+                    {
+                        HouseholdDocument d = new HouseholdDocument();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await f.CopyToAsync(memoryStream);
+                            d.FileContent.Content = memoryStream.ToArray();
+                        }
+                        d.FileContent.MimeType = mimeType;
+                        d.FileName = fileName;
+                        household.HouseholdDocuments.Add(d);
+                    };
+                }
+            }
+        }
+
+
     }
 }

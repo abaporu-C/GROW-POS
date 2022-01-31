@@ -94,6 +94,17 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("HouseholdCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(5);
+
+                    b.Property<int>("HouseholdStatusID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("JoinedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("LICOVerified")
                         .HasColumnType("INTEGER");
 
@@ -132,6 +143,8 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("HouseholdStatusID");
+
                     b.HasIndex("ProvinceID");
 
                     b.ToTable("Households");
@@ -150,6 +163,20 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasIndex("NotificationID");
 
                     b.ToTable("HouseholdNotifications");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.HouseholdStatus", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HouseholdStatuses");
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.IncomeSituation", b =>
@@ -489,7 +516,7 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("UploadedFile");
+                    b.ToTable("UploadedFiles");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("UploadedFile");
                 });
@@ -528,6 +555,12 @@ namespace GROW_CRM.Data.GROWMigrations
 
             modelBuilder.Entity("GROW_CRM.Models.Household", b =>
                 {
+                    b.HasOne("GROW_CRM.Models.HouseholdStatus", "HouseholdStatus")
+                        .WithMany("Households")
+                        .HasForeignKey("HouseholdStatusID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GROW_CRM.Models.Province", "Province")
                         .WithMany("Households")
                         .HasForeignKey("ProvinceID")

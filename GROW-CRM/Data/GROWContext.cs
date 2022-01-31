@@ -1,5 +1,6 @@
 using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
+using GROW_CRM.Models.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -70,6 +71,10 @@ namespace GROW_CRM.Data
         public DbSet<PaymentType> PaymentTypes { get; set; }
 
         public DbSet<Province> Provinces { get; set; }
+
+        public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
+
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         //Methods
 
