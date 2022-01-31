@@ -59,6 +59,9 @@
         <thead>
             <tr>
                 <th>
+                    <input type="submit" disabled="disabled" value="ID" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
                     @*@Html.DisplayNameFor(model => model.FullName)*@
                 </th>
@@ -88,38 +91,41 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender.Name)
-                    </td>
+            <tr>
+                <td>
+                   M:@Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender.Name)
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Age)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
 
-                    <td>
-                         @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
-                        @Html.DisplayFor(modelItem => item.Household.City)
-                        @Html.DisplayFor(modelItem => item.Household.Province)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-                </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
+                    @Html.DisplayFor(modelItem => item.Household.City)
+                    @Html.DisplayFor(modelItem => item.Household.Province)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
