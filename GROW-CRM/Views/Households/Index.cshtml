@@ -13,40 +13,35 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StreetNumber)
+                <input type="submit" disabled="disabled" value="Code" class="btn btn-link" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StreetName)
+                <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AptNumber)
+                <input type="submit" disabled="disabled" value="Street" class="btn btn-link" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                <input type="submit" disabled="disabled" value="Apartment" class="btn btn-link" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
+                <input type="submit" disabled="disabled" value="City" class="btn btn-link" />
+            </th>
+           
+            <th>
+                <input type="submit" disabled="disabled" value="Province" class="btn btn-link" />
+            </th>
+
+            <th>
+                <input type="submit" disabled="disabled" value="Members" class="btn btn-link" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HouseholdCode)
+                <input type="submit" disabled="disabled" value="LICO" class="btn btn-link" />
             </th>
+
+
             <th>
-                @Html.DisplayNameFor(model => model.YearlyIncome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfMembers)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LICOVerified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JoinedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Province)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HouseholdStatus)
+                <input type="submit" disabled="disabled" value="Status" class="btn btn-link" />
             </th>
             <th></th>
         </tr>
@@ -54,6 +49,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HouseholdCode)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StreetNumber)
             </td>
@@ -67,13 +65,7 @@
                 @Html.DisplayFor(modelItem => item.City)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseholdCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YearlyIncome)
+                @Html.DisplayFor(modelItem => item.Province.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NumberOfMembers)
@@ -81,14 +73,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LICOVerified)
             </td>
+
+
             <td>
-                @Html.DisplayFor(modelItem => item.JoinedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Province.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseholdStatus.ID)
+                @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

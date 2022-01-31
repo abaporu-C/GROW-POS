@@ -37,6 +37,7 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
+                .Include(h => h.Members).ThenInclude(m => m.IncomeSituation)
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -51,8 +52,9 @@ namespace GROW_CRM.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
-            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID");
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID");
+            var household = new Household();
+            
+            PopulateDropDownLists(household);
             return View();
         }
 
@@ -63,15 +65,24 @@ namespace GROW_CRM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,NumberOfMembers,LICOVerified,JoinedDate,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await AddDocumentsAsync(household, theFiles);
-                _context.Add(household);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await AddDocumentsAsync(household, theFiles);
+                    _context.Add(household);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { household.ID });
+                }
             }
-            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
+            catch (DbUpdateException)
+            {
+
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+           
+           /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
+            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
             return View(household);
         }
 
@@ -83,13 +94,17 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var household = await _context.Households.FindAsync(id);
+            var household = await _context.Households
+                .Include(h => h.HouseholdStatus)
+                .Include(h => h.Province)
+                .FirstOrDefaultAsync(h => h.ID == id);
+
             if (household == null)
             {
                 return NotFound();
             }
-            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
+
+            PopulateDropDownLists(household);
             return View(household);
         }
 
@@ -98,23 +113,38 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,NumberOfMembers,LICOVerified,JoinedDate,ProvinceID,HouseholdStatusID")] Household household)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != household.ID)
+
+            //Go get the Household to update
+
+            var householdToUpdate = await _context.Households
+                .Include(h => h.Province)
+                .Include(h => h.HouseholdStatus)
+                .SingleOrDefaultAsync(h => h.ID == id);
+
+            //Check that you got it or exit with a not found error
+            if (householdToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            
+
+            //Try updating it with the values posted
+            if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
+                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.City, h => h.PostalCode,
+                h => h.HouseholdCode, h => h.YearlyIncome, h => h.LICOVerified, h => h.NumberOfMembers, h => h.JoinedDate,
+                h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
                 {
-                    _context.Update(household);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { householdToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HouseholdExists(household.ID))
+                    if (!HouseholdExists(householdToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -123,11 +153,16 @@ namespace GROW_CRM.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+
             }
-            ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
-            return View(household);
+
+
+            PopulateDropDownLists(householdToUpdate);
+            return View(householdToUpdate);
         }
 
         // GET: Households/Delete/5
@@ -201,7 +236,21 @@ namespace GROW_CRM.Controllers
                 }
             }
         }
-
-
+        private SelectList ProvinceSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Provinces
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+        private SelectList HouseholdStatusSelectList(int? selectedId)
+        {
+            return new SelectList(_context.HouseholdStatuses
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+        private void PopulateDropDownLists(Household household = null)
+        {
+            ViewData["ProvinceID"] = ProvinceSelectList(household?.ProvinceID);
+            ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);
+           
+        }
     }
 }

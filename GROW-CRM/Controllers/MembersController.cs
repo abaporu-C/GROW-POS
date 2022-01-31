@@ -20,7 +20,8 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch,
+        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch, 
+            string HouseholdCodeSearch,
             int? HouseholdID, int? GenderID, 
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Member")
@@ -68,6 +69,12 @@ namespace GROW_CRM.Controllers
                                        || p.Household.City.ToUpper().Contains(HouseholdSearch.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
+            if (!String.IsNullOrEmpty(HouseholdCodeSearch))
+            {
+                members = members.Where(p => p.Household.HouseholdCode.Contains(HouseholdCodeSearch));
+                ViewData["Filtering"] = " show";
+            }
+
 
 
             //Before we sort, see if we have called for a change of filtering or sorting
