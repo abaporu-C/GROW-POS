@@ -84,6 +84,27 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for Statuses
+                if (!context.HouseholdStatuses.Any())
+                {
+                    //Array of status names
+                    string[] names = new string[] { "Active", "Inactive", "On Hold" };
+
+                    //List of Household Status Objects
+                    List<HouseholdStatus> householdStatuses = new List<HouseholdStatus>();
+
+                    //Add Household statuses to the list
+                    for (int i = 0; i < names.Count(); i++)
+                        householdStatuses.Add(new HouseholdStatus { Name = names[i] });
+
+                    //Add list to the context
+                    context.HouseholdStatuses.AddRange(householdStatuses);
+
+                    //Save the changes
+                    context.SaveChanges();
+                        
+                }
+
                 //Look for Income Situation
                 if (!context.IncomeSituations.Any())
                 {
@@ -208,12 +229,16 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+
                 //Look for Households
                 if (!context.Households.Any())
                 {
                     //Foreign Keys
                     int[] provincesIDs = context.Provinces.Select(p => p.ID).ToArray();
                     int provinceCount = provincesIDs.Count();
+
+                    int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
+                    int householdStatusesCount = householdStatusesIDs.Count();
 
                     //Add Households to context
                     context.Households.AddRange(
@@ -224,22 +249,28 @@ namespace GROW_CRM.Data
                             AptNumber = 201,
                             City = "St. Catherines",
                             PostalCode = "R3E9C8",
+                            HouseholdCode = "A00001",
                             YearlyIncome = 25000M,
                             NumberOfMembers = 2,
                             LICOVerified = true,
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)]
+                            JoinedDate = DateTime.Now,
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 1
                         },
                         new Household
                         {
-                            StreetNumber = 38,
-                            StreetName = "Church St.",   
-                            AptNumber = 301,
-                            City = "St. Catherines",
-                            PostalCode = "R3E 9R8",
-                            YearlyIncome = 25000M,
+                            StreetNumber = 1848,
+                            StreetName = "Paddock Trail Dr.",
+                            AptNumber = 0,
+                            City = "Niagara Falls",
+                            PostalCode = "L2H1W8",
+                            HouseholdCode = "A00002",
+                            YearlyIncome = 28000M,
                             NumberOfMembers = 3,
-                            LICOVerified = true,
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)]
+                            LICOVerified = false,
+                            JoinedDate = DateTime.Now,
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 2
                         }
                     );
 

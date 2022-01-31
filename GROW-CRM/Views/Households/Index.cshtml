@@ -28,6 +28,9 @@
                 @Html.DisplayNameFor(model => model.PostalCode)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.HouseholdCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.YearlyIncome)
             </th>
             <th>
@@ -37,7 +40,13 @@
                 @Html.DisplayNameFor(model => model.LICOVerified)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.JoinedDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Province)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HouseholdStatus)
             </th>
             <th></th>
         </tr>
@@ -61,6 +70,9 @@
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.HouseholdCode)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.YearlyIncome)
             </td>
             <td>
@@ -70,7 +82,13 @@
                 @Html.DisplayFor(modelItem => item.LICOVerified)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.JoinedDate)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Province.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HouseholdStatus.ID)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
