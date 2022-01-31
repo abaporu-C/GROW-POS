@@ -208,8 +208,8 @@ namespace GROW_CRM.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["GenderID"] = new SelectList(_context.Genders, "ID", "ID", member.GenderID);
-            ViewData["HouseholdID"] = new SelectList(_context.Households, "ID", "City", member.HouseholdID);
-            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "ID", member.IncomeSituationID);
+            ViewData["HouseholdID"] = new SelectList(_context.Households, "ID", "ID", member.HouseholdID);
+            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "Situation", member.IncomeSituationID);
             return View(member);
         }
 
