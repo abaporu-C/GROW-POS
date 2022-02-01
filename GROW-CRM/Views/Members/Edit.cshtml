@@ -50,17 +50,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
+                <select asp-for="Gender.Name" class="form-control" asp-items="ViewBag.GenderID"></select>
                 <span asp-validation-for="GenderID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HouseholdID" class="control-label"></label>
-                <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.HouseholdID"></select>
+                <select asp-for="Household.HouseholdCode" class="form-control" asp-items="ViewBag.HouseholdID"></select>
                 <span asp-validation-for="HouseholdID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID"></select>
+                <select asp-for="IncomeSituation.Situation" class="form-control" asp-items="ViewBag.IncomeSituationID"></select>
                 <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
             </div>
             <div class="form-group">

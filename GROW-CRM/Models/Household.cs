@@ -75,7 +75,7 @@ namespace GROW_CRM.Models
         [Required(ErrorMessage ="You must provide the number of people living in you household")]
         [Range(1,10,ErrorMessage ="Members in the household cannot exceed 10 people")]
         public int NumberOfMembers { get; set; }
-        
+
         [Display(Name ="LICO verification")]
         public bool LICOVerified { get; set; }
 
