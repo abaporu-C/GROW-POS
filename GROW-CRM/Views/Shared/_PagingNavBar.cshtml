@@ -1,0 +1,69 @@
+﻿<partial name="_PageSizeModal" />
+@{
+    if (Model.TotalPages == 0)
+    {
+<ul class="pagination justify-content-center" style="margin:20px 0">
+    <li class="page-item">
+        <button type="button" title="Click to change page size." data-toggle="modal" data-target="#pageSizeModal" class="btn btn-primary">
+            No Data to Show
+        </button>
+    </li>
+</ul>
+    }
+    else if (Model.TotalPages == 1)
+    {
+<ul class="pagination justify-content-center" style="margin:20px 0">
+    <li class="page-item">
+        <button type="button" title="Click to change page size." data-toggle="modal" data-target="#pageSizeModal" class="btn btn-primary">
+            Page @Model.PageIndex of @Model.TotalPages
+        </button>
+    </li>
+</ul>
+    }
+    else
+    {
+        var jumpAmount = (Model.TotalPages > 25) ? 10 : 5;
+        var prevDisabled = !Model.HasPreviousPage ? "disabled='disabled'" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled='disabled'" : "";
+        var stepBack = (Model.PageIndex <= jumpAmount) ? 1 : Model.PageIndex - jumpAmount;
+        var stepForward = (Model.PageIndex + jumpAmount > Model.TotalPages) ? Model.TotalPages : Model.PageIndex + jumpAmount;
+<ul class="pagination justify-content-center" style="margin:20px 0">
+    <li class="page-item">
+        <button type="submit" name="page" value="1" @prevDisabled class="btn page-link">
+            <span aria-hidden="true">&lArr;</span>&nbsp;First
+        </button>
+    </li>
+    <li class="page-item d-none d-md-inline">
+        <button type="submit" name="page" value="@(stepBack)" @prevDisabled
+                data-toggle="tooltip" title="Jump Back @(Model.PageIndex-stepBack) Pages" class="btn page-link">
+            <span aria-hidden="true">&lArr;</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <button type="submit" name="page" @prevDisabled value="@(Model.PageIndex - 1)" class="btn page-link">
+            &nbsp;<span aria-hidden="true">&larr;</span>&nbsp;<span class="d-none d-md-inline">Previous</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <button type="button" title="Click to change page size." data-toggle="modal" data-target="#pageSizeModal" class="btn btn-primary">
+            <span class="d-none d-md-inline">Pg. </span>@Model.PageIndex of @Model.TotalPages
+        </button>
+    </li>
+    <li class="page-item">
+        <button type="submit" name="page" @nextDisabled value="@(Model.PageIndex + 1)" class="btn page-link">
+            <span class="d-none d-md-inline">Next</span>&nbsp;<span aria-hidden="true">&rarr;</span>&nbsp;
+        </button>
+    </li>
+    <li class="page-item d-none d-md-inline">
+        <button type="submit" name="page" @nextDisabled value="@(stepForward)" title="Jump Forward @(stepForward-Model.PageIndex) Pages" class="btn page-link">
+            <span aria-hidden="true">&rArr;</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <button type="submit" name="page" @nextDisabled value="@(Model.TotalPages)" class="btn page-link">
+            Last&nbsp;<span aria-hidden="true">&rArr;</span>
+        </button>
+    </li>
+</ul>
+    }
+}

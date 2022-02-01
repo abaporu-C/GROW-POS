@@ -83,6 +83,8 @@ namespace GROW_CRM.Models
         public DateTime JoinedDate { get; set; } = DateTime.Now;
 
         //Foreign Keys
+        //[Display(Name ="City")]
+
         [Display(Name = "Province")]
         [Required(ErrorMessage = "You must select a Province")]
         public int ProvinceID { get; set; }

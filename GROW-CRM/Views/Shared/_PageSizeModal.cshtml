@@ -1,0 +1,26 @@
+﻿<!-- Modal-->
+<div class="modal fade" id="pageSizeModal" tabindex="-1" role="dialog" aria-labelledby="pageSizeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pageSizeModalLabel">Set Page Size</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Page Size: </span>
+                            </div>
+                            @Html.DropDownList("pageSizeID", null, htmlAttributes: new { @class = "form-control" })
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Set Page Size" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -248,7 +248,7 @@ namespace GROW_CRM.Controllers
                     await AddDocumentsAsync(household, theFiles);
                     _context.Add(household);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { household.ID });
+                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });
                 }
             }
             catch (DbUpdateException)
