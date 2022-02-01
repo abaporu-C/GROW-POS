@@ -124,6 +124,7 @@ namespace GROW_CRM.Controllers
 
             //Now get the MASTER record, the patient, so it can be displayed at the top of the screen
             Household household = _context.Households
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.Members)
@@ -266,11 +267,7 @@ namespace GROW_CRM.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }
-
-            var validationErrors = ModelState.Values.Where(E => E.Errors.Count > 0)
-.SelectMany(E => E.Errors)
-.Select(E => E.ErrorMessage)
-.ToList();
+            
             PopulateDropDownLists(memberToUpdate);
             return View(memberToUpdate);
         }

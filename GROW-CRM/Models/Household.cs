@@ -23,7 +23,7 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return StreetNumber + " " + StreetName + ", int " + AptNumber + "- " + City + ", " + Province + " " + PostalCode;
+                return StreetNumber + " " + StreetName + ", int " + AptNumber + "- " + City.Name + ", " + Province.Code + " " + PostalCode;
             }
         }
 
@@ -33,6 +33,19 @@ namespace GROW_CRM.Models
             get
             {
                 return "A:" + HouseholdCode.ToString().PadLeft(5, '0');
+            }
+        }
+
+        [Display(Name = "Number of Members")]        
+        public int NumberOfMembers
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (Member m in Members) count++;
+
+                return count;
             }
         }
 
@@ -48,12 +61,7 @@ namespace GROW_CRM.Models
 
         [Display(Name ="Apartment Number")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
-        public int? AptNumber { get; set; }
-
-        [Display(Name = "City Name")]
-        [Required(ErrorMessage = "You cannot leave the name of the city blank.")]
-        [StringLength(255, ErrorMessage = "City name cannot be more than 255 characters long.")]
-        public string City { get; set; }
+        public int? AptNumber { get; set; }        
 
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
@@ -69,21 +77,17 @@ namespace GROW_CRM.Models
         [Display(Name ="Yearly Income")]
         [Required(ErrorMessage ="You cannot leave the Yearly Income blank")]
         [Range(0.1d, 999999999.99d, ErrorMessage = "The yearly income cannot exceed 999,999,999.99")]
-        public decimal YearlyIncome { get; set; }
-
-        [Display(Name ="Members in the Household")]
-        [Required(ErrorMessage ="You must provide the number of people living in you household")]
-        [Range(1,10,ErrorMessage ="Members in the household cannot exceed 10 people")]
-        public int NumberOfMembers { get; set; }
+        public decimal YearlyIncome { get; set; }        
 
         [Display(Name ="LICO verification")]
-        public bool LICOVerified { get; set; }
-
-        [Display(Name ="Join Date")]
-        public DateTime JoinedDate { get; set; } = DateTime.Now;
+        public bool LICOVerified { get; set; }        
 
         //Foreign Keys
-        //[Display(Name ="City")]
+        [Display(Name ="City")]
+        [Required(ErrorMessage = "You must select a City")]
+        public int CityID { get; set; }
+
+        public City City { get; set; }
 
         [Display(Name = "Province")]
         [Required(ErrorMessage = "You must select a Province")]
@@ -98,11 +102,7 @@ namespace GROW_CRM.Models
         public HouseholdStatus HouseholdStatus { get; set; }
 
 
-        //O:M Relationships
-
-        [ScaffoldColumn(false)]
-        [Timestamp]
-        public Byte[] RowVersion { get; set; }//Added for concurrency
+        //O:M Relationships        
 
         public ICollection<Member> Members { get; set; }
 

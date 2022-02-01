@@ -16,6 +16,20 @@ namespace GROW_CRM.Data.GROWMigrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.21");
 
+            modelBuilder.Entity("GROW_CRM.Models.City", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestriction", b =>
                 {
                     b.Property<int>("ID")
@@ -82,10 +96,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<int?>("AptNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(255);
+                    b.Property<int>("CityID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT")
@@ -102,13 +114,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<int>("HouseholdStatusID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("JoinedDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("LICOVerified")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberOfMembers")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PostalCode")
@@ -117,11 +123,6 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<int>("ProvinceID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
@@ -142,6 +143,8 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CityID");
 
                     b.HasIndex("HouseholdStatusID");
 
@@ -555,6 +558,12 @@ namespace GROW_CRM.Data.GROWMigrations
 
             modelBuilder.Entity("GROW_CRM.Models.Household", b =>
                 {
+                    b.HasOne("GROW_CRM.Models.City", "City")
+                        .WithMany("Households")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("GROW_CRM.Models.HouseholdStatus", "HouseholdStatus")
                         .WithMany("Households")
                         .HasForeignKey("HouseholdStatusID")

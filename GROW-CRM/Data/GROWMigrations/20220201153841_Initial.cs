@@ -8,6 +8,19 @@ namespace GROW_CRM.Data.GROWMigrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DietaryRestrictions",
                 columns: table => new
                 {
@@ -188,20 +201,23 @@ namespace GROW_CRM.Data.GROWMigrations
                     StreetNumber = table.Column<int>(nullable: false),
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     AptNumber = table.Column<int>(nullable: true),
-                    City = table.Column<string>(maxLength: 255, nullable: false),
                     PostalCode = table.Column<string>(nullable: false),
                     HouseholdCode = table.Column<string>(maxLength: 5, nullable: false),
                     YearlyIncome = table.Column<decimal>(nullable: false),
-                    NumberOfMembers = table.Column<int>(nullable: false),
                     LICOVerified = table.Column<bool>(nullable: false),
-                    JoinedDate = table.Column<DateTime>(nullable: false),
+                    CityID = table.Column<int>(nullable: false),
                     ProvinceID = table.Column<int>(nullable: false),
-                    HouseholdStatusID = table.Column<int>(nullable: false),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    HouseholdStatusID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Households", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Households_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Households_HouseholdStatuses_HouseholdStatusID",
                         column: x => x.HouseholdStatusID,
@@ -431,6 +447,11 @@ namespace GROW_CRM.Data.GROWMigrations
                 column: "NotificationID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Households_CityID",
+                table: "Households",
+                column: "CityID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Households_HouseholdStatusID",
                 table: "Households",
                 column: "HouseholdStatusID");
@@ -494,7 +515,6 @@ namespace GROW_CRM.Data.GROWMigrations
                 name: "IX_UploadedFiles_HouseholdID",
                 table: "UploadedFiles",
                 column: "HouseholdID");
-            ExtraMigration.Steps(migrationBuilder);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -549,6 +569,9 @@ namespace GROW_CRM.Data.GROWMigrations
 
             migrationBuilder.DropTable(
                 name: "IncomeSituations");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "HouseholdStatuses");

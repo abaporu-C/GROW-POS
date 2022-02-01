@@ -38,6 +38,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<DietaryRestriction> DietaryRestrictions { get; set; }
 
         public DbSet<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
@@ -108,6 +110,11 @@ namespace GROW_CRM.Data
                   .HasForeignKey(h => h.ProvinceID)
                   .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Household>()
+                .HasOne(h => h.City)
+                .WithMany(c => c.Households)
+                .HasForeignKey(h => h.CityID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHoldDocuments
             modelBuilder.Entity<HouseholdDocument>()

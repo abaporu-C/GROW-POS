@@ -36,7 +36,7 @@ namespace GROW_CRM.Controllers
 
             var members = from m in _context.Members
                               .Include(m => m.Gender)
-                              .Include(m => m.Household)
+                              .Include(m => m.Household).ThenInclude(h => h.City)
                               .Include(m => m.IncomeSituation)
                               select m;
 
@@ -66,7 +66,7 @@ namespace GROW_CRM.Controllers
             if (!String.IsNullOrEmpty(HouseholdSearch))
             {
                 members = members.Where(p => p.Household.StreetName.ToUpper().Contains(HouseholdSearch.ToUpper())
-                                       || p.Household.City.ToUpper().Contains(HouseholdSearch.ToUpper()));
+                                       || p.Household.City.Name.ToUpper().Contains(HouseholdSearch.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(HouseholdCodeSearch))
