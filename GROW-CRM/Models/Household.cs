@@ -23,7 +23,7 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return StreetNumber + " " + StreetName + ", int " + AptNumber + "- " + City + ", " + Province + " " + PostalCode;
+                return StreetNumber + " " + StreetName + ", Unit " + AptNumber + "- " + City + ", " + Province.Name + " " + PostalCode;
             }
         }
 
