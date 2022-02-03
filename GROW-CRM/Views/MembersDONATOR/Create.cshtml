@@ -1,17 +1,17 @@
 ﻿@model GROW_CRM.Models.Member
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
-<h2>Edit Member: @Html.DisplayFor(model => model.FullName)</h2>
-<hr />
-<form asp-action="Edit">
-    <div class="row">
-        <div class="col-md-6">
+<h1>Create</h1>
 
+<h4>Member</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -33,23 +33,10 @@
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
-                <span asp-validation-for="GenderID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="YearlyIncome" class="control-label"></label>
-                <input asp-for="YearlyIncome" class="form-control" />
-                <span asp-validation-for="YearlyIncome" class="text-danger"></span>
-            </div>
-
-        </div>
-        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
@@ -60,31 +47,31 @@
                 <textarea asp-for="Notes" class="form-control"></textarea>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                @*<label asp-for="HouseholdID" class="control-label">Household ID</label>*@
-                <label>Household ID</label>
-                <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.HouseholdID"></select>
-                <span asp-validation-for="HouseholdID" class="text-danger"></span>
+                <label asp-for="YearlyIncome" class="control-label"></label>
+                <input asp-for="YearlyIncome" class="form-control" />
+                <span asp-validation-for="YearlyIncome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenderID" class="control-label"></label>
+                <select asp-for="GenderID" class ="form-control" asp-items="ViewBag.GenderID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="HouseholdID" class="control-label"></label>
+                <select asp-for="HouseholdID" class ="form-control" asp-items="ViewBag.HouseholdID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID"></select>
-                <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
+                <select asp-for="IncomeSituationID" class ="form-control" asp-items="ViewBag.IncomeSituationID"></select>
             </div>
-
-
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
-</form>
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -1,4 +1,4 @@
 Add-Migration -Context GROWContext -o Data\GROWMigrations Initial
 Update-Database -Context GROWContext
 
-ExtraMigration.Steps(migrationBuilder);
+ExtraMigration.Steps(migrationBuilder);  -----> don't use, Create Household not working with extra migrations. 
