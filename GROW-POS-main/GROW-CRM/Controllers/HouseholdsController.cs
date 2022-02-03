@@ -574,7 +574,6 @@ namespace GROW_CRM.Controllers
             return NotFound();
         }
 
-
         private async Task AddDocumentsAsync(Household household, List<IFormFile> theFiles)
         {
             foreach (var f in theFiles)
