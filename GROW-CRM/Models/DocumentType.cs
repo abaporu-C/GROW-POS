@@ -7,7 +7,7 @@ namespace GROW_CRM.Models
         //Constructor
         public DocumentType()
         {
-            HouseholdDocuments = new HashSet<HouseholdDocument>();
+            MemberDocuments = new HashSet<MemberDocument>();
         }
 
         //Fields
@@ -17,6 +17,6 @@ namespace GROW_CRM.Models
 
         //O:M Relationships
 
-        public ICollection<HouseholdDocument> HouseholdDocuments { get; set; }
+        public ICollection<MemberDocument> MemberDocuments { get; set; }
     }
 }

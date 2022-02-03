@@ -84,6 +84,27 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for Statuses
+                if (!context.HouseholdStatuses.Any())
+                {
+                    //Array of status names
+                    string[] names = new string[] { "Active", "Inactive", "On Hold" };
+
+                    //List of Household Status Objects
+                    List<HouseholdStatus> householdStatuses = new List<HouseholdStatus>();
+
+                    //Add Household statuses to the list
+                    for (int i = 0; i < names.Count(); i++)
+                        householdStatuses.Add(new HouseholdStatus { Name = names[i] });
+
+                    //Add list to the context
+                    context.HouseholdStatuses.AddRange(householdStatuses);
+
+                    //Save the changes
+                    context.SaveChanges();
+                        
+                }
+
                 //Look for Income Situation
                 if (!context.IncomeSituations.Any())
                 {
@@ -185,6 +206,30 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for Cities
+                if (!context.Cities.Any())
+                {
+                    var cities = new List<City>
+                    {
+                        new City{Name = "Grimsby"},
+                        new City{Name = "Lincoln"},
+                        new City{Name = "West Lincoln"},
+                        new City{Name = "Wainfleet"},
+                        new City{Name = "Pelham"},
+                        new City{Name = "St. Catharines"},
+                        new City{Name = "Throld"},
+                        new City{Name = "Welland"},
+                        new City{Name = "Port Colborne"},
+                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara Falls"},
+                        new City{Name = "Fort Erie"}
+                    };
+
+
+                    context.Cities.AddRange(cities);
+                    context.SaveChanges();                                        
+                }
+
                 //Look for Provinces
                 if (!context.Provinces.Any())
                 {
@@ -208,6 +253,7 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+
                 //Look for Households
                 if (!context.Households.Any())
                 {
@@ -215,31 +261,37 @@ namespace GROW_CRM.Data
                     int[] provincesIDs = context.Provinces.Select(p => p.ID).ToArray();
                     int provinceCount = provincesIDs.Count();
 
+                    int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
+                    int householdStatusesCount = householdStatusesIDs.Count();
+
+                    int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
+                    int citiesCount = citiesIDs.Count();
+
                     //Add Households to context
                     context.Households.AddRange(
                         new Household
                         {
                             StreetNumber = 65,
                             StreetName = "Church St.",
-                            AptNumber = 201,
-                            City = "St. Catherines",
+                            AptNumber = 201,                            
                             PostalCode = "R3E9C8",
-                            YearlyIncome = 25000M,
-                            NumberOfMembers = 2,
                             LICOVerified = true,
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)]
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 1
                         },
                         new Household
                         {
-                            StreetNumber = 38,
-                            StreetName = "Church St.",   
-                            AptNumber = 301,
-                            City = "St. Catherines",
-                            PostalCode = "R3E 9R8",
-                            YearlyIncome = 25000M,
-                            NumberOfMembers = 3,
-                            LICOVerified = true,
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)]
+                            StreetNumber = 1848,
+                            StreetName = "Paddock Trail Dr.",
+                            AptNumber = 0,                            
+                            PostalCode = "L2H1W8",
+                            LICOVerified = false,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 2
                         }
                     );
 
@@ -271,10 +323,9 @@ namespace GROW_CRM.Data
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];
-                        int[] numberOfMembers = context.Households.Where(h => h.ID == householdIDs[i]).Select(h => h.NumberOfMembers).ToArray();
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
 
-                        for(int j = 0; j < numberOfMembers[0]; j++)
+                        for(int j = 0; j < rnd.Next(5); j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -286,6 +337,7 @@ namespace GROW_CRM.Data
                                     PhoneNumber = "0000000000",
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
+                                    YearlyIncome = 15000d,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i],
                                     IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
@@ -295,7 +347,38 @@ namespace GROW_CRM.Data
                             context.SaveChanges();
                         }
                     }
-                }                
+                }
+
+                //Look for Dietary Restriction Members
+                if (!context.DietaryRestrictionMembers.Any())
+                {
+                    //Foreign Keys
+                    int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
+                    int drCount = drIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();                    
+
+                    foreach(int memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        context.DietaryRestrictionMembers.AddRange(
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            },
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            }
+                        );
+
+                        context.SaveChanges();
+                    }
+                }
             }
         }
     }

@@ -25,10 +25,182 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, 
+            int? HouseholdID, int? HouseholdStatusID,
+            int? page, int? pageSizeID, string actionButton,
+            string sortDirection = "asc", string sortField = "Code")
         {
-            var gROWContext = _context.Households.Include(h => h.Province);
-            return View(await gROWContext.ToListAsync());
+            //Toggle the Open/Closed state of the collapse depending on if we are filtering
+            ViewData["Filtering"] = ""; //Asume not filtering
+
+            //NOTE: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "#","Street", "City", "Province", "Members", "LICO", "Status" };
+
+            PopulateDropDownLists();
+
+
+
+            var households = from h in _context.Households
+                                .Include(h => h.HouseholdStatus)
+                                .Include(h => h.City)
+                                .Include(h => h.Province)
+                                .Include(h => h.Members)
+
+                             select h;
+
+            //Add as many filters as needed
+            if (HouseholdStatusID.HasValue)
+            {
+                households = households.Where(h => h.HouseholdStatusID == HouseholdStatusID);
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(StreetSearch))
+            {
+                households = households.Where(h => h.StreetName.ToUpper().Contains(StreetSearch.ToUpper())
+                                       || h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(CitySearch))
+            {
+                households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
+                                       || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }            
+
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted!
+            {
+                page = 1;//Reset page to start
+
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+
+
+            if (sortField == "#")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.ID);
+                }
+                else
+                {
+                    households = households
+                   .OrderByDescending(h => h.ID);
+                }
+            }
+            else if (sortField == "Street")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.StreetName)
+                    .ThenBy(h => h.StreetNumber);
+                }
+                else
+                {
+                    households = households
+                     .OrderByDescending(h => h.StreetName)
+                    .ThenByDescending(h => h.StreetNumber);
+                }
+            }
+            else if (sortField == "City")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.City.Name)
+                    .ThenBy(h => h.StreetName);
+                }
+                else
+                {
+                    households = households
+                     .OrderByDescending(h => h.City.Name)
+                    .ThenByDescending(h => h.StreetName);
+                }
+            }
+            else if (sortField == "Province")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.Province.Name)
+                    .ThenBy(h => h.City.Name)
+                    .ThenBy(h => h.StreetName);
+                }
+                else
+                {
+                    households = households
+                    .OrderByDescending(h => h.Province.Name)
+                    .ThenByDescending(h => h.City.Name)
+                    .ThenByDescending(h => h.StreetName);
+                }
+            }
+            else if (sortField == "Members")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.NumberOfMembers)
+                    .ThenBy(h => h.City.Name);
+                }
+                else
+                {
+                    households = households
+                     .OrderByDescending(h => h.NumberOfMembers)
+                    .ThenByDescending(h => h.City.Name);
+                }
+            }
+            else if (sortField == "LICO")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.LICOVerified)
+                    .ThenBy(h => h.City.Name)
+                    .ThenBy(h => h.StreetName);
+                }
+                else
+                {
+                    households = households
+                     .OrderByDescending(h => h.LICOVerified)
+                    .ThenByDescending(h => h.City.Name)
+                    .ThenByDescending(h => h.StreetName);
+                }
+            }
+            else if (sortField == "Status")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                    .OrderBy(h => h.HouseholdStatus.Name)
+                    .ThenBy(h => h.City.Name)
+                    .ThenBy(h => h.StreetName);
+                }
+                else
+                {
+                    households = households
+                     .OrderByDescending(h => h.HouseholdStatus.Name)
+                    .ThenByDescending(h => h.City.Name)
+                    .ThenByDescending(h => h.StreetName);
+                }
+            }
+
+
+
+            //Set sort for next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
+            return View(await households.ToListAsync());
         }
 
         // GET: Households/Details/5
@@ -40,6 +212,9 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
+                .Include(h => h.Members).ThenInclude(m => m.IncomeSituation)
+                .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
@@ -53,7 +228,9 @@ namespace GROW_CRM.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID");
+            var household = new Household();
+            
+            PopulateDropDownLists(household);
             return View();
         }
 
@@ -62,15 +239,26 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,YearlyIncome,NumberOfMembers,LICOVerified,ProvinceID")] Household household)
+        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(household);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await AddDocumentsAsync(household, theFiles);
+                    _context.Add(household);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });
+                }
             }
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
+            catch (DbUpdateException)
+            {
+
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+           
+           /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
+            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
             return View(household);
         }
 
@@ -82,12 +270,18 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var household = await _context.Households.FindAsync(id);
+            var household = await _context.Households
+                .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
+                .Include(h => h.Province)
+                .FirstOrDefaultAsync(h => h.ID == id);
+
             if (household == null)
             {
                 return NotFound();
             }
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
+
+            PopulateDropDownLists(household);
             return View(household);
         }
 
@@ -96,23 +290,39 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,YearlyIncome,NumberOfMembers,LICOVerified,ProvinceID")] Household household)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != household.ID)
+
+            //Go get the Household to update
+
+            var householdToUpdate = await _context.Households
+                .Include(h => h.City)
+                .Include(h => h.Province)
+                .Include(h => h.HouseholdStatus)
+                .SingleOrDefaultAsync(h => h.ID == id);
+
+            //Check that you got it or exit with a not found error
+            if (householdToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            
+
+            //Try updating it with the values posted
+            if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
+                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
+                h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
+                h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
                 {
-                    _context.Update(household);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = householdToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HouseholdExists(household.ID))
+                    if (!HouseholdExists(householdToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -121,10 +331,16 @@ namespace GROW_CRM.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+
             }
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);
-            return View(household);
+
+
+            PopulateDropDownLists(householdToUpdate);
+            return View(householdToUpdate);
         }
 
         // GET: Households/Delete/5
@@ -136,6 +352,8 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
+                .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)

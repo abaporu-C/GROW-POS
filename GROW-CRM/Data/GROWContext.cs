@@ -1,5 +1,6 @@
 using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
+using GROW_CRM.Models.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,6 +38,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<DietaryRestriction> DietaryRestrictions { get; set; }
 
         public DbSet<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
@@ -47,16 +50,16 @@ namespace GROW_CRM.Data
 
         public DbSet<Household> Households { get; set; }
 
-        public DbSet<HouseholdDocument> HouseholdDocuments { get; set; }
-
         public DbSet<HouseholdNotification> HouseholdNotifications { get; set; }
 
         public DbSet<IncomeSituation> IncomeSituations { get; set; }
 
         public DbSet<Item> Items { get; set; }        
 
-        public DbSet<Member> Members { get; set; }   
-        
+        public DbSet<Member> Members { get; set; }
+
+        public DbSet<MemberDocument> MemberDocuments { get; set; }
+
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
@@ -70,6 +73,10 @@ namespace GROW_CRM.Data
         public DbSet<PaymentType> PaymentTypes { get; set; }
 
         public DbSet<Province> Provinces { get; set; }
+
+        public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
+
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         //Methods
 
@@ -103,17 +110,22 @@ namespace GROW_CRM.Data
                   .HasForeignKey(h => h.ProvinceID)
                   .OnDelete(DeleteBehavior.Restrict);
 
-
-            //HouseHoldDocuments
-            modelBuilder.Entity<HouseholdDocument>()
-                .HasOne(hd => hd.Household)
-                .WithMany(h => h.HouseholdDocuments)
-                .HasForeignKey(hd => hd.HouseholdID)
+            modelBuilder.Entity<Household>()
+                .HasOne(h => h.City)
+                .WithMany(c => c.Households)
+                .HasForeignKey(h => h.CityID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<HouseholdDocument>()
+            //MemberDocuments
+            modelBuilder.Entity<MemberDocument>()
+                .HasOne(hd => hd.Member)
+                .WithMany(h => h.MemberDocuments)
+                .HasForeignKey(hd => hd.MemberID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MemberDocument>()
                 .HasOne(hd => hd.DocumentType)
-                .WithMany(dt => dt.HouseholdDocuments)
+                .WithMany(dt => dt.MemberDocuments)
                 .HasForeignKey(hd => hd.DocumentTypeID)
                 .OnDelete(DeleteBehavior.Restrict);
 

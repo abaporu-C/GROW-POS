@@ -20,7 +20,8 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch,
+        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch, 
+            string HouseholdCodeSearch,
             int? HouseholdID, int? GenderID, 
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Member")
@@ -35,7 +36,7 @@ namespace GROW_CRM.Controllers
 
             var members = from m in _context.Members
                               .Include(m => m.Gender)
-                              .Include(m => m.Household)
+                              .Include(m => m.Household).ThenInclude(h => h.City)
                               .Include(m => m.IncomeSituation)
                               select m;
 
@@ -65,9 +66,10 @@ namespace GROW_CRM.Controllers
             if (!String.IsNullOrEmpty(HouseholdSearch))
             {
                 members = members.Where(p => p.Household.StreetName.ToUpper().Contains(HouseholdSearch.ToUpper())
-                                       || p.Household.City.ToUpper().Contains(HouseholdSearch.ToUpper()));
+                                       || p.Household.City.Name.ToUpper().Contains(HouseholdSearch.ToUpper()));
                 ViewData["Filtering"] = " show";
-            }
+            }            
+
 
 
             //Before we sort, see if we have called for a change of filtering or sorting
@@ -208,8 +210,8 @@ namespace GROW_CRM.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["GenderID"] = new SelectList(_context.Genders, "ID", "ID", member.GenderID);
-            ViewData["HouseholdID"] = new SelectList(_context.Households, "ID", "City", member.HouseholdID);
-            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "ID", member.IncomeSituationID);
+            ViewData["HouseholdID"] = new SelectList(_context.Households, "ID", "ID", member.HouseholdID);
+            ViewData["IncomeSituationID"] = new SelectList(_context.IncomeSituations, "ID", "Situation", member.IncomeSituationID);
             return View(member);
         }
 

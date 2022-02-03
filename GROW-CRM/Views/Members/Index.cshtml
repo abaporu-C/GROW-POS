@@ -35,15 +35,15 @@
                 </div>
                 <div class="row">
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-5">
                         <label class="control-label">Search Member Name:</label>
                         @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Search by Household:</label>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search by Household Address:</label>
                         @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-5">
                         <label class="control-label">Search by Phone:</label>
                         @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
                     </div>
@@ -58,6 +58,9 @@
     <table class="table">
         <thead>
             <tr>
+                <th>
+                    <input type="submit" disabled="disabled" value="Household ID" class="btn btn-link" />
+                </th>
                 <th>
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
                     @*@Html.DisplayNameFor(model => model.FullName)*@
@@ -76,11 +79,9 @@
                     <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
                 </th>
 
+                
                 <th>
-                    <input type="submit" disabled="disabled" value="Household" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" disabled="disabled" value="Income" class="btn btn-link" />
+                    <input type="submit" disabled="disabled" value="Situation" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -88,38 +89,42 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender.Name)
-                    </td>
+            <tr>
+                <td>
+                    M:@Html.DisplayFor(modelItem => item.Household.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender.Name)
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Age)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
 
-                    <td>
-                         @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
-                        @Html.DisplayFor(modelItem => item.Household.City)
-                        @Html.DisplayFor(modelItem => item.Household.Province)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-                </tr>
+               @* <td>
+                    @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
+                    @Html.DisplayFor(modelItem => item.Household.City)
+                    @Html.DisplayFor(modelItem => item.Household.Province)
+                </td>*@
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
