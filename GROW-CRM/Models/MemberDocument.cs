@@ -2,12 +2,12 @@
 
 namespace GROW_CRM.Models
 {
-    public class HouseholdDocument : UploadedFile
+    public class MemberDocument : UploadedFile
     {
         //Foreign Keys
-        public int HouseholdID { get; set; }
+        public int MemberID { get; set; }
 
-        public Household Household { get; set; }
+        public Member Member { get; set; }
 
         public int DocumentTypeID { get; set; }
 

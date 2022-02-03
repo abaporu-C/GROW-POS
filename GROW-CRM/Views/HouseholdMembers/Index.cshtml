@@ -12,10 +12,10 @@
             <div class="col-sm-6">
                 <dl class="row">
                     <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.HouseholdCode)
+                        Household #
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.HouseholdCode)
+                        @Html.DisplayFor(model => household.ID)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.YearlyIncome)
@@ -36,10 +36,10 @@
                         @Html.DisplayFor(model => household.LICOVerified)
                     </dd>
                     <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.JoinedDate)
+                        Joined on:
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.JoinedDate)
+                        @Html.DisplayFor(model => household.CreatedOn)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.HouseholdStatus)

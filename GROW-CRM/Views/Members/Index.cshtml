@@ -44,10 +44,6 @@
                         @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-5">
-                        <label class="control-label">Search by Household Code:</label>
-                        @Html.TextBox("HouseholdCodeSearch", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-5">
                         <label class="control-label">Search by Phone:</label>
                         @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
                     </div>
@@ -95,7 +91,7 @@
             {
             <tr>
                 <td>
-                    M:@Html.DisplayFor(modelItem => item.Household.HouseholdCode)
+                    M:@Html.DisplayFor(modelItem => item.Household.ID)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FullName)

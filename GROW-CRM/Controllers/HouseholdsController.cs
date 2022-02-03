@@ -22,8 +22,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, string CodeSearch,
-            string HouseholdCodeSearch,
+        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, 
             int? HouseholdID, int? HouseholdStatusID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
@@ -32,7 +31,7 @@ namespace GROW_CRM.Controllers
             ViewData["Filtering"] = ""; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "Code","Street", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "#","Street", "City", "Province", "Members", "LICO", "Status" };
 
             PopulateDropDownLists();
 
@@ -40,7 +39,9 @@ namespace GROW_CRM.Controllers
 
             var households = from h in _context.Households
                                 .Include(h => h.HouseholdStatus)
+                                .Include(h => h.City)
                                 .Include(h => h.Province)
+                                .Include(h => h.Members)
 
                              select h;
 
@@ -53,20 +54,15 @@ namespace GROW_CRM.Controllers
             if (!String.IsNullOrEmpty(StreetSearch))
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(StreetSearch.ToUpper())
-                                       || h.City.ToUpper().Contains(StreetSearch.ToUpper()));
+                                       || h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(CitySearch))
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
-                                       || h.City.ToUpper().Contains(CitySearch.ToUpper()));
+                                       || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
                 ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(CodeSearch))
-            {
-                households = households.Where(p => p.HouseholdCode.Contains(CodeSearch));
-                ViewData["Filtering"] = " show";
-            }
+            }            
 
 
             //Before we sort, see if we have called for a change of filtering or sorting
@@ -85,17 +81,17 @@ namespace GROW_CRM.Controllers
             }
 
 
-            if (sortField == "Code")
+            if (sortField == "#")
             {
                 if (sortDirection == "asc")
                 {
                     households = households
-                    .OrderBy(h => h.HouseholdCode);
+                    .OrderBy(h => h.ID);
                 }
                 else
                 {
                     households = households
-                   .OrderByDescending(h => h.HouseholdCode);
+                   .OrderByDescending(h => h.ID);
                 }
             }
             else if (sortField == "Street")
@@ -118,13 +114,13 @@ namespace GROW_CRM.Controllers
                 if (sortDirection == "asc")
                 {
                     households = households
-                    .OrderBy(h => h.City)
+                    .OrderBy(h => h.City.Name)
                     .ThenBy(h => h.StreetName);
                 }
                 else
                 {
                     households = households
-                     .OrderByDescending(h => h.City)
+                     .OrderByDescending(h => h.City.Name)
                     .ThenByDescending(h => h.StreetName);
                 }
             }
@@ -134,14 +130,14 @@ namespace GROW_CRM.Controllers
                 {
                     households = households
                     .OrderBy(h => h.Province.Name)
-                    .ThenBy(h => h.City)
+                    .ThenBy(h => h.City.Name)
                     .ThenBy(h => h.StreetName);
                 }
                 else
                 {
                     households = households
                     .OrderByDescending(h => h.Province.Name)
-                    .ThenByDescending(h => h.City)
+                    .ThenByDescending(h => h.City.Name)
                     .ThenByDescending(h => h.StreetName);
                 }
             }
@@ -151,13 +147,13 @@ namespace GROW_CRM.Controllers
                 {
                     households = households
                     .OrderBy(h => h.NumberOfMembers)
-                    .ThenBy(h => h.City);
+                    .ThenBy(h => h.City.Name);
                 }
                 else
                 {
                     households = households
                      .OrderByDescending(h => h.NumberOfMembers)
-                    .ThenByDescending(h => h.City);
+                    .ThenByDescending(h => h.City.Name);
                 }
             }
             else if (sortField == "LICO")
@@ -166,14 +162,14 @@ namespace GROW_CRM.Controllers
                 {
                     households = households
                     .OrderBy(h => h.LICOVerified)
-                    .ThenBy(h => h.City)
+                    .ThenBy(h => h.City.Name)
                     .ThenBy(h => h.StreetName);
                 }
                 else
                 {
                     households = households
                      .OrderByDescending(h => h.LICOVerified)
-                    .ThenByDescending(h => h.City)
+                    .ThenByDescending(h => h.City.Name)
                     .ThenByDescending(h => h.StreetName);
                 }
             }
@@ -183,14 +179,14 @@ namespace GROW_CRM.Controllers
                 {
                     households = households
                     .OrderBy(h => h.HouseholdStatus.Name)
-                    .ThenBy(h => h.City)
+                    .ThenBy(h => h.City.Name)
                     .ThenBy(h => h.StreetName);
                 }
                 else
                 {
                     households = households
                      .OrderByDescending(h => h.HouseholdStatus.Name)
-                    .ThenByDescending(h => h.City)
+                    .ThenByDescending(h => h.City.Name)
                     .ThenByDescending(h => h.StreetName);
                 }
             }
@@ -215,6 +211,7 @@ namespace GROW_CRM.Controllers
             var household = await _context.Households
                 .Include(h => h.Members).ThenInclude(m => m.IncomeSituation)
                 .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
@@ -239,7 +236,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,NumberOfMembers,LICOVerified,JoinedDate,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
+        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
             try
             {
@@ -272,6 +269,7 @@ namespace GROW_CRM.Controllers
 
             var household = await _context.Households
                 .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(h => h.ID == id);
 
@@ -295,6 +293,7 @@ namespace GROW_CRM.Controllers
             //Go get the Household to update
 
             var householdToUpdate = await _context.Households
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .Include(h => h.HouseholdStatus)
                 .SingleOrDefaultAsync(h => h.ID == id);
@@ -309,14 +308,14 @@ namespace GROW_CRM.Controllers
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
-                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.City, h => h.PostalCode,
-                h => h.HouseholdCode, h => h.YearlyIncome, h => h.LICOVerified, h => h.NumberOfMembers, h => h.JoinedDate,
+                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
+                h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { householdToUpdate.ID });
+                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = householdToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -351,6 +350,7 @@ namespace GROW_CRM.Controllers
 
             var household = await _context.Households
                 .Include(h => h.HouseholdStatus)
+                .Include(h => h.City)
                 .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
@@ -399,7 +399,7 @@ namespace GROW_CRM.Controllers
                     //certain types of files.  I am allowing everything.
                     if (!(fileName == "" || fileLength == 0))//Looks like we have a file!!!
                     {
-                        HouseholdDocument d = new HouseholdDocument();
+                        MemberDocument d = new MemberDocument();
                         using (var memoryStream = new MemoryStream())
                         {
                             await f.CopyToAsync(memoryStream);
@@ -407,11 +407,17 @@ namespace GROW_CRM.Controllers
                         }
                         d.FileContent.MimeType = mimeType;
                         d.FileName = fileName;
-                        household.HouseholdDocuments.Add(d);
+                        //household.HouseholdDocuments.Add(d);
                     };
                 }
             }
         }
+        private SelectList CitySelectList(int? selectedId)
+        {
+            return new SelectList(_context.Cities
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+
         private SelectList ProvinceSelectList(int? selectedId)
         {
             return new SelectList(_context.Provinces
@@ -424,9 +430,9 @@ namespace GROW_CRM.Controllers
         }
         private void PopulateDropDownLists(Household household = null)
         {
+            ViewData["CityID"] = CitySelectList(household?.CityID);
             ViewData["ProvinceID"] = ProvinceSelectList(household?.ProvinceID);
-            ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);
-           
+            ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);           
         }
     }
 }

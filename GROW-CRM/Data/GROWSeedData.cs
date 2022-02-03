@@ -206,6 +206,30 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for Cities
+                if (!context.Cities.Any())
+                {
+                    var cities = new List<City>
+                    {
+                        new City{Name = "Grimsby"},
+                        new City{Name = "Lincoln"},
+                        new City{Name = "West Lincoln"},
+                        new City{Name = "Wainfleet"},
+                        new City{Name = "Pelham"},
+                        new City{Name = "St. Catharines"},
+                        new City{Name = "Throld"},
+                        new City{Name = "Welland"},
+                        new City{Name = "Port Colborne"},
+                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara Falls"},
+                        new City{Name = "Fort Erie"}
+                    };
+
+
+                    context.Cities.AddRange(cities);
+                    context.SaveChanges();                                        
+                }
+
                 //Look for Provinces
                 if (!context.Provinces.Any())
                 {
@@ -240,20 +264,20 @@ namespace GROW_CRM.Data
                     int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
                     int householdStatusesCount = householdStatusesIDs.Count();
 
+                    int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
+                    int citiesCount = citiesIDs.Count();
+
                     //Add Households to context
                     context.Households.AddRange(
                         new Household
                         {
                             StreetNumber = 65,
                             StreetName = "Church St.",
-                            AptNumber = 201,
-                            City = "St. Catherines",
+                            AptNumber = 201,                            
                             PostalCode = "R3E9C8",
-                            HouseholdCode = "A00001",
-                            YearlyIncome = 25000M,
-                            NumberOfMembers = 2,
                             LICOVerified = true,
-                            JoinedDate = DateTime.Now,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 1
                         },
@@ -261,14 +285,11 @@ namespace GROW_CRM.Data
                         {
                             StreetNumber = 1848,
                             StreetName = "Paddock Trail Dr.",
-                            AptNumber = 0,
-                            City = "Niagara Falls",
+                            AptNumber = 0,                            
                             PostalCode = "L2H1W8",
-                            HouseholdCode = "A00002",
-                            YearlyIncome = 28000M,
-                            NumberOfMembers = 3,
                             LICOVerified = false,
-                            JoinedDate = DateTime.Now,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 2
                         }
@@ -302,10 +323,9 @@ namespace GROW_CRM.Data
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];
-                        int[] numberOfMembers = context.Households.Where(h => h.ID == householdIDs[i]).Select(h => h.NumberOfMembers).ToArray();
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
 
-                        for(int j = 0; j < numberOfMembers[0]; j++)
+                        for(int j = 0; j < rnd.Next(5); j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -317,6 +337,7 @@ namespace GROW_CRM.Data
                                     PhoneNumber = "0000000000",
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
+                                    YearlyIncome = 15000d,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i],
                                     IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
@@ -326,7 +347,38 @@ namespace GROW_CRM.Data
                             context.SaveChanges();
                         }
                     }
-                }                
+                }
+
+                //Look for Dietary Restriction Members
+                if (!context.DietaryRestrictionMembers.Any())
+                {
+                    //Foreign Keys
+                    int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
+                    int drCount = drIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();                    
+
+                    foreach(int memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        context.DietaryRestrictionMembers.AddRange(
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            },
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            }
+                        );
+
+                        context.SaveChanges();
+                    }
+                }
             }
         }
     }
