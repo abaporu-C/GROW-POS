@@ -1,0 +1,135 @@
+﻿@model IEnumerable<GROW_CRM.Models.Member>
+
+@{
+    ViewData["Title"] = "Member Index";
+}
+
+<h2>Member Index</h2>
+
+<p>
+    <a asp-action="Create">Create New Member</a>
+</p>
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                   @* <div class="form-group col-md-4">
+                        <label class="control-label">Filter by Household:</label>
+                        @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
+                    </div>*@
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="control-label">Filter by Gender:</label>
+                                @Html.DropDownList("GenderID", null, "All Genders", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search Member Name:</label>
+                        @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search by Household Address:</label>
+                        @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search by Household Code:</label>
+                        @Html.TextBox("HouseholdCodeSearch", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search by Phone:</label>
+                        @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" disabled="disabled" value="Household ID" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
+                    @*@Html.DisplayNameFor(model => model.FullName)*@
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
+                </th>
+
+                <th>
+                    <input type="submit" disabled="disabled" value="Phone Number" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
+                </th>
+
+                
+                <th>
+                    <input type="submit" disabled="disabled" value="Situation" class="btn btn-link" />
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    M:@Html.DisplayFor(modelItem => item.Household.HouseholdCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+               @* <td>
+                    @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
+                    @Html.DisplayFor(modelItem => item.Household.City)
+                    @Html.DisplayFor(modelItem => item.Household.Province)
+                </td>*@
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</form>
