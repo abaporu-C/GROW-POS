@@ -315,7 +315,7 @@ namespace GROW_CRM.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { householdToUpdate.ID });
+                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = householdToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {

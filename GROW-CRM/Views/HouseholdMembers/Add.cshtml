@@ -49,22 +49,54 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
-                    <option value="">Please, choose one</option>
-                </select>
+                <label asp-for="YearlyIncome" class="control-label"></label>
+                <input asp-for="YearlyIncome" class="form-control" />
+                <span asp-validation-for="YearlyIncome" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                    <option value="">No Reason Given</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
+                <div class="col-md-offset-1">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                List<GROW_CRM.ViewModels.OptionVM> checkboxes = ViewBag.RestrictionOptions;
+                                foreach (var checkbox in checkboxes)
+                                {
+                                    if (cnt++ % 3 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedOptions"
+                                               value="@checkbox.ID"
+                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
+                                        @checkbox.DisplayText @:&nbsp;&nbsp;
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GenderID" class="control-label"></label>
+                    <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                        <option value="">Please, choose one</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IncomeSituationID" class="control-label"></label>
+                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                        <option value="">No Reason Given</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
 
-        </div>
+            </div>
     </div>
 </form>
 <div>

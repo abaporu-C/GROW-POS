@@ -130,6 +130,7 @@ namespace GROW_CRM.Models
 
         //O:M Relationships        
 
+        [Display(Name = "Dietary Restrictions")]
         public ICollection<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
 
         public ICollection<MemberDocument> MemberDocuments { get; set; }
