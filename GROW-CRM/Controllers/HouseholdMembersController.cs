@@ -128,7 +128,6 @@ namespace GROW_CRM.Controllers
                 .Include(h => h.Province)
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.Members)
-                .Include(h => h.HouseholdDocuments)
                 .Where(h => h.ID == HouseholdID.GetValueOrDefault()).FirstOrDefault();
             ViewBag.Household = household;
 
@@ -285,7 +284,8 @@ namespace GROW_CRM.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Gender)
-                .Include(m => m.Household)
+                .Include(m => m.Household).ThenInclude(h => h.City)
+                .Include(m => m.Household).ThenInclude(h => h.Province)
                 .Include(m => m.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (member == null)

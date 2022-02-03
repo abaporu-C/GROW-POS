@@ -11,7 +11,6 @@ namespace GROW_CRM.Models
         public Household()
         {
             Members = new HashSet<Member>();
-            HouseholdDocuments = new HashSet<HouseholdDocument>();
             HouseholdNotifications = new HashSet<HouseholdNotification>();            
         }
 
@@ -22,19 +21,10 @@ namespace GROW_CRM.Models
         public string FullAddress
         {
             get
-            {
-                return StreetNumber + " " + StreetName + ", int " + AptNumber + "- " + City.Name + ", " + Province.Code + " " + PostalCode;
+            {                
+                return this?.StreetNumber + " " + this?.StreetName + ", int " + this?.AptNumber + "- " + City?.Name + ", " + Province?.Code + " " + this?.PostalCode;
             }
-        }
-
-        [Display(Name = "H. Code")]
-        public string HCode
-        {
-            get
-            {
-                return "A:" + HouseholdCode.ToString().PadLeft(5, '0');
-            }
-        }
+        }        
 
         [Display(Name = "Number of Members")]        
         public int NumberOfMembers
@@ -44,6 +34,34 @@ namespace GROW_CRM.Models
                 int count = 0;
 
                 foreach (Member m in Members) count++;
+
+                return count;
+            }
+        }
+
+        [Display(Name = "Verification Status")]
+        public string VerificationStatus
+        {
+            get
+            {
+                DateTime now = DateTime.Now;
+                int dateDiff = (now - LastVerification).Days;
+
+                if (dateDiff >= 335) return $"Verification time is near! There is only {dateDiff} days left for the next verification!";
+                if (dateDiff >= 365) return $"Verification needed. Please check members income for LICO verification.";
+
+                return $"There are {dateDiff} until the next LICO verification.";
+            }
+        }
+
+        [Display(Name = "Yearly Income")]
+        public double YearlyIncome
+        {
+            get
+            {
+                double count = 0;
+
+                foreach (Member m in Members) count += m.YearlyIncome;
 
                 return count;
             }
@@ -66,21 +84,13 @@ namespace GROW_CRM.Models
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
         [RegularExpression("[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]")]
-        public string PostalCode { get; set; }
-
-        [Display(Name = "Household Code")]
-        [Required(ErrorMessage = "The 5 digit Code for the Household is required")]
-        [RegularExpression("^\\d{5}$", ErrorMessage = "The Household Code must be exactly 5 numeric digits.")]
-        [StringLength(5)]//DS Note: we only include this to limit the size of the database field to 10
-        public string HouseholdCode { get; set; }
-
-        [Display(Name ="Yearly Income")]
-        [Required(ErrorMessage ="You cannot leave the Yearly Income blank")]
-        [Range(0.1d, 999999999.99d, ErrorMessage = "The yearly income cannot exceed 999,999,999.99")]
-        public decimal YearlyIncome { get; set; }        
+        public string PostalCode { get; set; }                        
 
         [Display(Name ="LICO verification")]
         public bool LICOVerified { get; set; }        
+
+        [Display(Name = "Yearly Verification")]
+        public DateTime LastVerification { get; set; }
 
         //Foreign Keys
         [Display(Name ="City")]
@@ -104,9 +114,7 @@ namespace GROW_CRM.Models
 
         //O:M Relationships        
 
-        public ICollection<Member> Members { get; set; }
-
-        public ICollection<HouseholdDocument> HouseholdDocuments { get; set; }
+        public ICollection<Member> Members { get; set; }        
 
         public ICollection<HouseholdNotification> HouseholdNotifications { get; set; }  
     }

@@ -68,12 +68,7 @@ namespace GROW_CRM.Controllers
                 members = members.Where(p => p.Household.StreetName.ToUpper().Contains(HouseholdSearch.ToUpper())
                                        || p.Household.City.Name.ToUpper().Contains(HouseholdSearch.ToUpper()));
                 ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(HouseholdCodeSearch))
-            {
-                members = members.Where(p => p.Household.HouseholdCode.Contains(HouseholdCodeSearch));
-                ViewData["Filtering"] = " show";
-            }
+            }            
 
 
 

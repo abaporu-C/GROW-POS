@@ -106,16 +106,14 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("HouseholdCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(5);
-
                     b.Property<int>("HouseholdStatusID")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("LICOVerified")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LastVerification")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
@@ -137,9 +135,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasMaxLength(256);
 
                     b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("YearlyIncome")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -291,6 +286,9 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("YearlyIncome")
+                        .HasColumnType("REAL");
 
                     b.HasKey("ID");
 
@@ -524,21 +522,21 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("UploadedFile");
                 });
 
-            modelBuilder.Entity("GROW_CRM.Models.HouseholdDocument", b =>
+            modelBuilder.Entity("GROW_CRM.Models.MemberDocument", b =>
                 {
                     b.HasBaseType("GROW_CRM.Models.Utilities.UploadedFile");
 
                     b.Property<int>("DocumentTypeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("HouseholdID")
+                    b.Property<int>("MemberID")
                         .HasColumnType("INTEGER");
 
                     b.HasIndex("DocumentTypeID");
 
-                    b.HasIndex("HouseholdID");
+                    b.HasIndex("MemberID");
 
-                    b.HasDiscriminator().HasValue("HouseholdDocument");
+                    b.HasDiscriminator().HasValue("MemberDocument");
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestrictionMember", b =>
@@ -667,17 +665,17 @@ namespace GROW_CRM.Data.GROWMigrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GROW_CRM.Models.HouseholdDocument", b =>
+            modelBuilder.Entity("GROW_CRM.Models.MemberDocument", b =>
                 {
                     b.HasOne("GROW_CRM.Models.DocumentType", "DocumentType")
-                        .WithMany("HouseholdDocuments")
+                        .WithMany("MemberDocuments")
                         .HasForeignKey("DocumentTypeID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GROW_CRM.Models.Household", "Household")
-                        .WithMany("HouseholdDocuments")
-                        .HasForeignKey("HouseholdID")
+                    b.HasOne("GROW_CRM.Models.Member", "Member")
+                        .WithMany("MemberDocuments")
+                        .HasForeignKey("MemberID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

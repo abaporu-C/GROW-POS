@@ -225,8 +225,9 @@ namespace GROW_CRM.Data
                         new City{Name = "Fort Erie"}
                     };
 
-                    context.Cities.AddRange();
-                    context.SaveChanges();
+
+                    context.Cities.AddRange(cities);
+                    context.SaveChanges();                                        
                 }
 
                 //Look for Provinces
@@ -274,9 +275,8 @@ namespace GROW_CRM.Data
                             StreetName = "Church St.",
                             AptNumber = 201,                            
                             PostalCode = "R3E9C8",
-                            HouseholdCode = "A00001",
-                            YearlyIncome = 25000M,
                             LICOVerified = true,
+                            LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 1
@@ -287,10 +287,9 @@ namespace GROW_CRM.Data
                             StreetName = "Paddock Trail Dr.",
                             AptNumber = 0,                            
                             PostalCode = "L2H1W8",
-                            HouseholdCode = "A00002",
-                            YearlyIncome = 28000M,
                             LICOVerified = false,
-                            CityID = 1,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 2
                         }
@@ -338,6 +337,7 @@ namespace GROW_CRM.Data
                                     PhoneNumber = "0000000000",
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
+                                    YearlyIncome = 15000d,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i],
                                     IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
@@ -347,7 +347,38 @@ namespace GROW_CRM.Data
                             context.SaveChanges();
                         }
                     }
-                }                
+                }
+
+                //Look for Dietary Restriction Members
+                if (!context.DietaryRestrictionMembers.Any())
+                {
+                    //Foreign Keys
+                    int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
+                    int drCount = drIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();                    
+
+                    foreach(int memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        context.DietaryRestrictionMembers.AddRange(
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            },
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            }
+                        );
+
+                        context.SaveChanges();
+                    }
+                }
             }
         }
     }

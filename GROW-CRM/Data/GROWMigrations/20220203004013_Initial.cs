@@ -202,9 +202,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     AptNumber = table.Column<int>(nullable: true),
                     PostalCode = table.Column<string>(nullable: false),
-                    HouseholdCode = table.Column<string>(maxLength: 5, nullable: false),
-                    YearlyIncome = table.Column<decimal>(nullable: false),
                     LICOVerified = table.Column<bool>(nullable: false),
+                    LastVerification = table.Column<DateTime>(nullable: false),
                     CityID = table.Column<int>(nullable: false),
                     ProvinceID = table.Column<int>(nullable: false),
                     HouseholdStatusID = table.Column<int>(nullable: false)
@@ -273,6 +272,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
                     Email = table.Column<string>(maxLength: 255, nullable: false),
                     Notes = table.Column<string>(maxLength: 2000, nullable: true),
+                    YearlyIncome = table.Column<double>(nullable: false),
                     GenderID = table.Column<int>(nullable: false),
                     HouseholdID = table.Column<int>(nullable: false),
                     IncomeSituationID = table.Column<int>(nullable: false)
@@ -296,38 +296,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         name: "FK_Members_IncomeSituations_IncomeSituationID",
                         column: x => x.IncomeSituationID,
                         principalTable: "IncomeSituations",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UploadedFiles",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true),
-                    FileName = table.Column<string>(maxLength: 255, nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    HouseholdID = table.Column<int>(nullable: true),
-                    DocumentTypeID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UploadedFiles", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_UploadedFiles_DocumentTypes_DocumentTypeID",
-                        column: x => x.DocumentTypeID,
-                        principalTable: "DocumentTypes",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UploadedFiles_Households_HouseholdID",
-                        column: x => x.HouseholdID,
-                        principalTable: "Households",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -391,22 +359,35 @@ namespace GROW_CRM.Data.GROWMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FileContent",
+                name: "UploadedFiles",
                 columns: table => new
                 {
-                    FileContentID = table.Column<int>(nullable: false),
-                    Content = table.Column<byte[]>(nullable: true),
-                    MimeType = table.Column<string>(maxLength: 255, nullable: true)
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    FileName = table.Column<string>(maxLength: 255, nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    MemberID = table.Column<int>(nullable: true),
+                    DocumentTypeID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FileContent", x => x.FileContentID);
+                    table.PrimaryKey("PK_UploadedFiles", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_FileContent_UploadedFiles_FileContentID",
-                        column: x => x.FileContentID,
-                        principalTable: "UploadedFiles",
+                        name: "FK_UploadedFiles_DocumentTypes_DocumentTypeID",
+                        column: x => x.DocumentTypeID,
+                        principalTable: "DocumentTypes",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UploadedFiles_Members_MemberID",
+                        column: x => x.MemberID,
+                        principalTable: "Members",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -432,6 +413,25 @@ namespace GROW_CRM.Data.GROWMigrations
                         name: "FK_OrderItems_Orders_OrderID",
                         column: x => x.OrderID,
                         principalTable: "Orders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FileContent",
+                columns: table => new
+                {
+                    FileContentID = table.Column<int>(nullable: false),
+                    Content = table.Column<byte[]>(nullable: true),
+                    MimeType = table.Column<string>(maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileContent", x => x.FileContentID);
+                    table.ForeignKey(
+                        name: "FK_FileContent_UploadedFiles_FileContentID",
+                        column: x => x.FileContentID,
+                        principalTable: "UploadedFiles",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -512,9 +512,9 @@ namespace GROW_CRM.Data.GROWMigrations
                 column: "DocumentTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UploadedFiles_HouseholdID",
+                name: "IX_UploadedFiles_MemberID",
                 table: "UploadedFiles",
-                column: "HouseholdID");
+                column: "MemberID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -22,8 +22,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, string CodeSearch,
-            string HouseholdCodeSearch,
+        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, 
             int? HouseholdID, int? HouseholdStatusID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
@@ -32,7 +31,7 @@ namespace GROW_CRM.Controllers
             ViewData["Filtering"] = ""; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "Code","Street", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "#","Street", "City", "Province", "Members", "LICO", "Status" };
 
             PopulateDropDownLists();
 
@@ -42,6 +41,7 @@ namespace GROW_CRM.Controllers
                                 .Include(h => h.HouseholdStatus)
                                 .Include(h => h.City)
                                 .Include(h => h.Province)
+                                .Include(h => h.Members)
 
                              select h;
 
@@ -62,12 +62,7 @@ namespace GROW_CRM.Controllers
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
                 ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(CodeSearch))
-            {
-                households = households.Where(p => p.HouseholdCode.Contains(CodeSearch));
-                ViewData["Filtering"] = " show";
-            }
+            }            
 
 
             //Before we sort, see if we have called for a change of filtering or sorting
@@ -86,17 +81,17 @@ namespace GROW_CRM.Controllers
             }
 
 
-            if (sortField == "Code")
+            if (sortField == "#")
             {
                 if (sortDirection == "asc")
                 {
                     households = households
-                    .OrderBy(h => h.HouseholdCode);
+                    .OrderBy(h => h.ID);
                 }
                 else
                 {
                     households = households
-                   .OrderByDescending(h => h.HouseholdCode);
+                   .OrderByDescending(h => h.ID);
                 }
             }
             else if (sortField == "Street")
@@ -241,7 +236,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,City,PostalCode,HouseholdCode,YearlyIncome,LICOVerified,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
+        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
             try
             {
@@ -314,7 +309,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
                 h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
-                h => h.HouseholdCode, h => h.YearlyIncome, h => h.LICOVerified, h => h.NumberOfMembers, h => h.CityID,
+                h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
@@ -404,7 +399,7 @@ namespace GROW_CRM.Controllers
                     //certain types of files.  I am allowing everything.
                     if (!(fileName == "" || fileLength == 0))//Looks like we have a file!!!
                     {
-                        HouseholdDocument d = new HouseholdDocument();
+                        MemberDocument d = new MemberDocument();
                         using (var memoryStream = new MemoryStream())
                         {
                             await f.CopyToAsync(memoryStream);
@@ -412,7 +407,7 @@ namespace GROW_CRM.Controllers
                         }
                         d.FileContent.MimeType = mimeType;
                         d.FileName = fileName;
-                        household.HouseholdDocuments.Add(d);
+                        //household.HouseholdDocuments.Add(d);
                     };
                 }
             }
