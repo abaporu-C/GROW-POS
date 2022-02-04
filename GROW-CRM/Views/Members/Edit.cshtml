@@ -37,11 +37,7 @@
                 <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
                 <span asp-validation-for="GenderID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <label asp-for="YearlyIncome" class="control-label"></label>
                 <input asp-for="YearlyIncome" class="form-control" />
@@ -50,6 +46,11 @@
 
         </div>
         <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
