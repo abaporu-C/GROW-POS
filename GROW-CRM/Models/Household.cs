@@ -83,7 +83,7 @@ namespace GROW_CRM.Models
 
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
-        [RegularExpression("[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]")]
+        [RegularExpression(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]", ErrorMessage = "E.g. A2A 2A2 (with a space)")]
         public string PostalCode { get; set; }                        
 
         [Display(Name ="LICO verification")]

@@ -9,6 +9,7 @@ using GROW_CRM.Data;
 using GROW_CRM.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GROW_CRM.Controllers
 {
@@ -248,6 +249,10 @@ namespace GROW_CRM.Controllers
                     return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });
                 }
             }
+            catch (RetryLimitExceededException /* dex */)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
             catch (DbUpdateException)
             {
 
@@ -314,6 +319,7 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = householdToUpdate.ID });
                 }
