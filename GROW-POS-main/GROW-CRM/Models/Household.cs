@@ -32,7 +32,7 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return "A:" + HouseholdCode.ToString().PadLeft(5, '0');
+                return HouseholdCode.ToString().PadLeft(5, '0');
             }
         }
 

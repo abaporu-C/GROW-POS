@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
+using GROW_CRM.ViewModels;
 
 namespace GROW_CRM.Controllers
 {

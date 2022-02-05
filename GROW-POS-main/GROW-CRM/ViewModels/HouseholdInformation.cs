@@ -10,14 +10,8 @@ namespace GROW_CRM.ViewModels
     {
         public int ID { get; set; }
 
-        [Display(Name = "Member")]
-        public string FullName
-        {
-            get
-            {
-                return LastName + ", " + FirstName;
-            }
-        }
+        [Display(Name = "Household Code")]
+        public string Code { get; set; }
 
         [Display(Name = "Member")]
         public string Name { get; set; }

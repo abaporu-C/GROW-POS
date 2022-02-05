@@ -202,5 +202,7 @@ namespace GROW_CRM.Data
         }
 
         public DbSet<GROW_CRM.ViewModels.HouseholdInformation> HouseholdInformation { get; set; }
+
+        public DbSet<GROW_CRM.ViewModels.YearlyReportVM> YearlyReportVM { get; set; }
     }
 }

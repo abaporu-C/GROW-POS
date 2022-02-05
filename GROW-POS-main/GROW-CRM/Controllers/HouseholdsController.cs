@@ -391,21 +391,20 @@ namespace GROW_CRM.Controllers
             return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
         }
 
-        public IActionResult HouseholdInformation()
+        public IActionResult HouseholdIncomeInformation()
         {
             var sumQ = _context.Members
                 .Include(m => m.Household).ThenInclude(m => m.Province)
                 .Include(m => m.Gender)
                 .Include( m=> m.IncomeSituation)
                 .AsEnumerable()
-                .GroupBy(a => new { a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.Household.PostalCode, a.DietaryRestrictionMembers, a.IncomeSituation.Situation, a.Household.YearlyIncome })
+                .GroupBy(a => new { a.Household.HCode, a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
                 .Select(grp => new HouseholdInformation
                 {
+                    Code = grp.Key.HCode,
                     Name = grp.Key.FullName,
-                    Gender = grp.Key.Name,
                     Age = grp.Key.Age,
-                    PostalCode = grp.Key.PostalCode,
-                    //DietaryConcerns = grp.Key.DietaryRestrictionMembers,
+                    Gender = grp.Key.Name,
                     IncomeSource = grp.Key.Situation,
                     TotalIncome = (int)grp.Key.YearlyIncome
                 });
@@ -413,25 +412,40 @@ namespace GROW_CRM.Controllers
             return View(sumQ.ToList());
         }
 
-        public IActionResult DownloadHouseholds()
+        public IActionResult YearlyAssessment()
+        {
+            var sumQ = _context.Members
+                .Include(m => m.Household).ThenInclude(m => m.Province)
+                .AsEnumerable()
+                .GroupBy(a => new { a.Household })
+                .Select(grp => new YearlyReportVM
+                {
+                    Code = grp.Key.Household.HCode,
+                    Members = grp.Key.Household.NumberOfMembers.ToString(),
+                    Address = grp.Key.Household.FullAddress,
+                    PendingReassessment = grp.Key.Household.JoinedDate.Equals(DateTime.Now).ToString()
+                });
+
+            return View(sumQ.ToList());
+        }
+
+        public IActionResult DownloadIncomes()
         {
             //Get the placements
             var householdInfo = _context.Members
                         .Include(p => p.Household).ThenInclude(p => p.Province)
-                        .Include(p => p.DietaryRestrictionMembers).ThenInclude(p => p.DietaryRestriction)
                         .Include(p => p.Gender)
                         .Include(p => p.IncomeSituation)
                         .AsEnumerable()
-                        .GroupBy(a => new { a.Household, a.FullName, a.Gender.Name, a.Age, a.Household.PostalCode, a.DietaryRestrictionMembers, a.IncomeSituation.Situation, a.Household.YearlyIncome })
+                        .GroupBy(a => new { a.Household, a.Household.HCode, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
                         .Select(grp => new
                         {
+                            Code = grp.Key.HCode,
                             Name = grp.Key.FullName,
-                            Gender = grp.Key.Name,
                             Age = grp.Key.Age,
-                            Postal_Code = grp.Key.PostalCode,
-                            Total_Household_Income = grp.Key.YearlyIncome,
+                            Gender = grp.Key.Name,
                             Income_Source = grp.Key.Situation,
-                            Dietary_Restrictions = grp.Key.DietaryRestrictionMembers
+                            Total_Income = (int)grp.Key.YearlyIncome
                         });
 
             //How many rows?
@@ -458,7 +472,7 @@ namespace GROW_CRM.Controllers
                     //     ExcelPackage package = new ExcelPackage(memStream);
                     // }
 
-                    var workSheet = excel.Workbook.Worksheets.Add("Household Information");
+                    var workSheet = excel.Workbook.Worksheets.Add("Household Income Information");
 
                     //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(householdInfo, true);
@@ -469,20 +483,20 @@ namespace GROW_CRM.Controllers
 
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
-                    using (ExcelRange totals = workSheet.Cells[numRows + 6, 2])
-                    {
-                        totals.Formula = "Sum(" + workSheet.Cells[4, 6].Address + ":" + workSheet.Cells[numRows + 3, 6].Address + ")";
-                        totals.Style.Font.Bold = true;
-                    }
-                    workSheet.Cells[numRows + 5, 1].Value = "Total Number of Athletes";
-                    workSheet.Cells[numRows + 5, 1].Style.Font.Bold = true;
-                    workSheet.Cells[numRows + 5, 2].Value = numRows;
-                    workSheet.Cells[numRows + 5, 2].Style.Font.Bold = true;
-                    workSheet.Cells[numRows + 6, 1].Value = "Total Number of Events";
-                    workSheet.Cells[numRows + 6, 1].Style.Font.Bold = true;
+                    //using (ExcelRange totals = workSheet.Cells[numRows + 6, 2])
+                    //{
+                    //    totals.Formula = "Sum(" + workSheet.Cells[4, 6].Address + ":" + workSheet.Cells[numRows + 3, 6].Address + ")";
+                    //    totals.Style.Font.Bold = true;
+                    //}
+                    //workSheet.Cells[numRows + 5, 1].Value = "Total Number of Athletes";
+                    //workSheet.Cells[numRows + 5, 1].Style.Font.Bold = true;
+                    //workSheet.Cells[numRows + 5, 2].Value = numRows;
+                    //workSheet.Cells[numRows + 5, 2].Style.Font.Bold = true;
+                    //workSheet.Cells[numRows + 6, 1].Value = "Total Number of Events";
+                    //workSheet.Cells[numRows + 6, 1].Style.Font.Bold = true;
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 6])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -492,21 +506,21 @@ namespace GROW_CRM.Controllers
 
                     ////Boy those notes are BIG!
                     ////Lets put them in comments instead.
-                    for (int i = 4; i < numRows + 4; i++)
-                    {
-                        using (ExcelRange Rng = workSheet.Cells[i, 7])
-                        {
-                            string[] commentWords = Rng.Value.ToString().Split(' ');
-                            Rng.Value = commentWords[0] + "...";
-                            //This LINQ adds a newline every 7 words
-                            string comment = string.Join(Environment.NewLine, commentWords
-                                .Select((word, index) => new { word, index })
-                                .GroupBy(x => x.index / 7)
-                                .Select(grp => string.Join(" ", grp.Select(x => x.word))));
-                            ExcelComment cmd = Rng.AddComment(comment, "Dietary Restrictions");
-                            cmd.AutoFit = true;
-                        }
-                    }
+                    //for (int i = 4; i < numRows + 4; i++)
+                    //{
+                    //    using (ExcelRange Rng = workSheet.Cells[i, 7])
+                    //    {
+                    //        string[] commentWords = Rng.Value.ToString().Split(' ');
+                    //        Rng.Value = commentWords[0] + "...";
+                    //        //This LINQ adds a newline every 7 words
+                    //        string comment = string.Join(Environment.NewLine, commentWords
+                    //            .Select((word, index) => new { word, index })
+                    //            .GroupBy(x => x.index / 7)
+                    //            .Select(grp => string.Join(" ", grp.Select(x => x.word))));
+                    //        ExcelComment cmd = Rng.AddComment(comment, "Dietary Restrictions");
+                    //        cmd.AutoFit = true;
+                    //    }
+                    //}
 
                     //Autofit columns
                     workSheet.Cells.AutoFitColumns();
@@ -514,8 +528,8 @@ namespace GROW_CRM.Controllers
                     //workSheet.Column(7).Width = 10;
 
                     //Add a title and timestamp at the top of the report
-                    workSheet.Cells[1, 1].Value = "Household Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 7])
+                    workSheet.Cells[1, 1].Value = "Household Income Report";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
@@ -527,7 +541,7 @@ namespace GROW_CRM.Controllers
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 7])
+                    using (ExcelRange Rng = workSheet.Cells[2, 6])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
@@ -550,7 +564,7 @@ namespace GROW_CRM.Controllers
                         using (var memoryStream = new MemoryStream())
                         {
                             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            Response.Headers["content-disposition"] = "attachment;  filename=HouseholdReport.xlsx";
+                            Response.Headers["content-disposition"] = "attachment;  filename=HouseholdIncomeReport.xlsx";
                             excel.SaveAs(memoryStream);
                             memoryStream.WriteTo(Response.Body);
                         }
@@ -560,7 +574,7 @@ namespace GROW_CRM.Controllers
                         try
                         {
                             Byte[] theData = excel.GetAsByteArray();
-                            string filename = "HouseholdReport.xlsx";
+                            string filename = "HouseholdIncomeReport.xlsx";
                             string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                             return File(theData, mimeType, filename);
                         }
