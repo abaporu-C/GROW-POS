@@ -271,9 +271,9 @@ namespace GROW_CRM.Data
                     context.Households.AddRange(
                         new Household
                         {
-                            StreetNumber = 65,
+                            StreetNumber = "65",
                             StreetName = "Church St.",
-                            AptNumber = 201,                            
+                            AptNumber = "201",                            
                             PostalCode = "R3E9C8",
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
@@ -283,9 +283,9 @@ namespace GROW_CRM.Data
                         },
                         new Household
                         {
-                            StreetNumber = 1848,
+                            StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                            AptNumber = 0,                            
+                            AptNumber = "0",                            
                             PostalCode = "L2H1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,

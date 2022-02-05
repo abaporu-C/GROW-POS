@@ -54,8 +54,12 @@ namespace GROW_CRM.Controllers
             }
             if (!String.IsNullOrEmpty(StreetSearch))
             {
-                households = households.Where(h => h.StreetName.ToUpper().Contains(StreetSearch.ToUpper())
-                                       || h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
+                households = households.Where(h => h.StreetNumber.Contains(StreetSearch.ToString().ToUpper())
+                || (h.StreetNumber + ' ' + h.StreetName.ToUpper()).Contains(StreetSearch.ToString().ToUpper())
+                || (h.StreetNumber + ' ' + h.StreetName.ToUpper() + ' ' + h.City.Name.ToUpper()).Contains(StreetSearch.ToString().ToUpper())
+                ||  h.StreetName.ToUpper().Contains(StreetSearch.ToUpper()) 
+                ||  h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
+
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(CitySearch))

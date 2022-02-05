@@ -24,7 +24,7 @@ namespace GROW_CRM.Controllers
 
         // GET: PatientAppt
         public async Task<IActionResult> Index(int? HouseholdID, int? page, int? pageSizeID, int? IncomeSituationID, string actionButton,
-            string SearchString, string sortDirection = "desc", string sortField = "Member")
+            string NotesSearchString, string MemberSearchString, string sortDirection = "desc", string sortField = "Member")
         {
             //Get the URL with the last filter, sort and page parameters from THE PATIENTS Index View
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, "Households");
@@ -59,9 +59,17 @@ namespace GROW_CRM.Controllers
                 members = members.Where(p => p.IncomeSituationID == IncomeSituationID);
                 ViewData["Filtering"] = "btn-danger";
             }
-            if (!String.IsNullOrEmpty(SearchString))
+            if (!String.IsNullOrEmpty(NotesSearchString))
             {
-                members = members.Where(p => p.Notes.ToUpper().Contains(SearchString.ToUpper()));
+                members = members.Where(p => p.Notes.ToUpper().Contains(NotesSearchString.ToUpper()));
+                ViewData["Filtering"] = "btn-danger";
+            }
+            if (!String.IsNullOrEmpty(MemberSearchString))
+            {
+                members = members.Where(p => p.LastName.ToUpper().Contains(MemberSearchString.ToUpper())
+                                       || p.FirstName.ToUpper().Contains(MemberSearchString.ToUpper()));
+
+                //(p => p.FullName.ToUpper().Contains(MemberSearchString.ToUpper()));
                 ViewData["Filtering"] = "btn-danger";
             }
             //Before we sort, see if we have called for a change of filtering or sorting

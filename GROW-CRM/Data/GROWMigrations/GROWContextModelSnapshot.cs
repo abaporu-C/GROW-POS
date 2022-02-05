@@ -93,8 +93,8 @@ namespace GROW_CRM.Data.GROWMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AptNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AptNumber")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CityID")
                         .HasColumnType("INTEGER");
@@ -127,8 +127,9 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("StreetNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")

@@ -6,9 +6,15 @@
 
 <h2>Member Index</h2>
 
-<p>
-    <a asp-action="Create">Create New Member</a>
-</p>
+<p>Note: To add member to the membership</p>
+<ol>
+    <li>Go to <a class="btn-link" asp-controller="Households" asp-action="Index">Memberships</a></li>
+    <li>Find an existing Membership or <a class="btn-link" asp-controller="Households" asp-action="Create">Create New Membership</a></li>
+    <li>Go to Membership <b>Details</b> ---> Add New Member. </li>
+</ol>
+   
+    
+
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
