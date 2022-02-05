@@ -70,7 +70,8 @@ namespace GROW_CRM.Models
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
-        public int StreetNumber { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
+        public string StreetNumber { get; set; }
 
         [Display(Name ="Street Name")]
         [Required(ErrorMessage ="You can not leave the Street Name blank")]
@@ -79,7 +80,7 @@ namespace GROW_CRM.Models
 
         [Display(Name ="Apartment Number")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
-        public int? AptNumber { get; set; }        
+        public string AptNumber { get; set; }        
 
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]

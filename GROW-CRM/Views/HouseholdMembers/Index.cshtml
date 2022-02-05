@@ -67,17 +67,21 @@
             <div class="form-horizontal">
                 <div class="collapse card card-body bg-light" style="padding-top: 10px; padding-bottom: 0px;" id="collapseFilter">
                     <div class="form-row">
-                        <div class="form-group col-md-4 ml-md-3">
+                        <div class="form-group col-md-3 ml-md-3">
                             <label class="control-label">Reason:</label>
                             @Html.DropDownList("IncomeSituationID", null, "All Situations", htmlAttributes: new { @class = "form-control" })
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4 ml-md-3">
                             <label class="control-label">Search Notes:</label>
-                            @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                            @Html.TextBox("NotesSearchString", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Search Name:</label>
+                            @Html.TextBox("MemberSearchString", null, new { @class = "form-control" })
                         </div>
                         <div class="form-group col-md-3 align-self-end">
                             <input type="submit" name="actionButton" value="Apply" class="btn btn-primary" />
-                            <a asp-action="Index" asp-route-PatientID="@household.ID">Clear</a>
+                            <a asp-action="Index" asp-route-HouseholdID="@household.ID">Clear</a>
                         </div>
                     </div>
                 </div>
