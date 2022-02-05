@@ -22,7 +22,7 @@ namespace GROW_CRM.Models
         {
             get
             {                
-                return this?.StreetNumber + " " + this?.StreetName + ", int " + this?.AptNumber + "- " + City?.Name + ", " + Province?.Code + " " + this?.PostalCode;
+                return this?.StreetNumber + " " + this?.StreetName + " " + this?.AptNumber + " - " + City?.Name + ", " + Province?.Code + ", " + this?.PostalCode;
             }
         }        
 

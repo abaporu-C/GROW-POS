@@ -138,10 +138,11 @@
                                 @Html.DisplayFor(modelItem => item.Age)
                             </td>
                             <td>
-                                @{
-                                    string[] noteWords = item.Notes.Split(' ');
-                                    if (noteWords.Count() > 5)
+                                @{if (!string.IsNullOrEmpty(item.Notes))
                                     {
+                                        string[] noteWords = item.Notes.Split(' ');
+                                        if (noteWords.Count() > 5)
+                                        {
                                         <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
                                             @(string.Join(" ", noteWords.Take(5)) + "...")
                                         </a>
@@ -150,12 +151,13 @@
                                                 @(string.Join(" ", noteWords.Skip(5)))
                                             </div>
                                         </div>
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
                                         @item.Notes
+                                            }
+                                        }
                                     }
-                                }
                                 @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
                             </td>
                             <td>
