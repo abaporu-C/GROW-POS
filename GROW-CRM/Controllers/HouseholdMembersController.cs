@@ -10,6 +10,8 @@ using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GROW_CRM.Controllers
 {
@@ -51,6 +53,7 @@ namespace GROW_CRM.Controllers
                                   .Include(m => m.Gender)
                                   .Include(m => m.Household)
                                   .Include(m => m.IncomeSituation)
+                                  .Include(m => m.MemberDocuments)
                         where m.HouseholdID == HouseholdID.GetValueOrDefault()
                         select m;
 
@@ -178,7 +181,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions)
+        public async Task<IActionResult> Add([Bind("ID,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -196,6 +199,7 @@ namespace GROW_CRM.Controllers
                 }
                 if (ModelState.IsValid)
                 {
+                    await AddDocumentsAsync(member, theFiles);
                     _context.Add(member);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
@@ -205,8 +209,9 @@ namespace GROW_CRM.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
+                string msg = ex.Message;
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
@@ -230,6 +235,7 @@ namespace GROW_CRM.Controllers
                .Include(m => m.Gender)
                .Include(m => m.Household)
                .Include(m => m.IncomeSituation)
+               .Include(m => m.MemberDocuments)
                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -248,7 +254,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, string[] selectedOptions)
+        public async Task<IActionResult> Update(int id, string[] selectedOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -257,6 +263,7 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.Gender)
                 //.Include(m => m.Household)
                 .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberDocuments)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -278,6 +285,7 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
+                    await AddDocumentsAsync(memberToUpdate, theFiles);
                     _context.Update(memberToUpdate);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
@@ -438,6 +446,42 @@ namespace GROW_CRM.Controllers
                         DietaryRestrictionMember dietaryRestrictionToRemove = memberToUpdate.DietaryRestrictionMembers.SingleOrDefault(c => c.DietaryRestrictionID == option.ID);
                         _context.Remove(dietaryRestrictionToRemove);
                     }
+                }
+            }
+        }
+
+        public async Task<FileContentResult> Download(int id)
+        {
+            var theFile = await _context.UploadedFiles
+                .Include(d => d.FileContent)
+                .Where(f => f.ID == id)
+                .FirstOrDefaultAsync();
+            return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
+        }
+
+        private async Task AddDocumentsAsync(Member doctor, List<IFormFile> theFiles)
+        {
+            foreach (var f in theFiles)
+            {
+                if (f != null)
+                {
+                    string mimeType = f.ContentType;
+                    string fileName = Path.GetFileName(f.FileName);
+                    long fileLength = f.Length;
+                    //Note: you could filter for mime types if you only want to allow
+                    //certain types of files.  I am allowing everything.
+                    if (!(fileName == "" || fileLength == 0))//Looks like we have a file!!!
+                    {
+                        MemberDocument d = new MemberDocument();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await f.CopyToAsync(memoryStream);
+                            d.FileContent.Content = memoryStream.ToArray();
+                        }
+                        d.FileContent.MimeType = mimeType;
+                        d.FileName = fileName;
+                        doctor.MemberDocuments.Add(d);
+                    };
                 }
             }
         }
