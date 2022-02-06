@@ -116,13 +116,7 @@ namespace GROW_CRM.Data
                 .HasForeignKey(h => h.CityID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //MemberDocuments
-            modelBuilder.Entity<MemberDocument>()
-                .HasOne(hd => hd.Member)
-                .WithMany(h => h.MemberDocuments)
-                .HasForeignKey(hd => hd.MemberID)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            //MemberDocuments            
             modelBuilder.Entity<MemberDocument>()
                 .HasOne(hd => hd.DocumentType)
                 .WithMany(dt => dt.MemberDocuments)

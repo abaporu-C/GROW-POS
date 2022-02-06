@@ -7,14 +7,12 @@
 
 <h2>Add Member to Household: @ViewData["HouseholdAddress"]</h2>
 <hr />
-<form asp-action="Add">
+<form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
-    <input type="hidden" name="HouseholdAddress" value="@ViewData[" HouseholdAddress"]" />
+    <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
-            <input type="hidden" asp-for="ID" />
-            <input type="hidden" name="PatientID" value="@Model.HouseholdID" />
             <div class="form-group">
                 <div class="form-group">
                     <label asp-for="FirstName" class="control-label"></label>
@@ -97,6 +95,10 @@
                         </table>
                     </div>
                 </div>
+            <div class="form-group">
+                <label class="control-label">Upload Documents:</label>
+                <input type="file" class="" name="theFiles" multiple="multiple" />
+            </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
