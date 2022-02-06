@@ -180,7 +180,7 @@ namespace GROW_CRM.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([Bind("ID,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
@@ -198,9 +198,9 @@ namespace GROW_CRM.Controllers
                     }
                 }
                 if (ModelState.IsValid)
-                {
-                    await AddDocumentsAsync(member, theFiles);
+                {                    
                     _context.Add(member);
+                    await AddDocumentsAsync(member, theFiles);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
                 }
@@ -235,7 +235,7 @@ namespace GROW_CRM.Controllers
                .Include(m => m.Gender)
                .Include(m => m.Household)
                .Include(m => m.IncomeSituation)
-               .Include(m => m.MemberDocuments)
+               .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -253,7 +253,7 @@ namespace GROW_CRM.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, string[] selectedOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
@@ -261,9 +261,9 @@ namespace GROW_CRM.Controllers
 
             var memberToUpdate = await _context.Members
                 .Include(m => m.Gender)
-                //.Include(m => m.Household)
+                .Include(m => m.Household)
                 .Include(m => m.IncomeSituation)
-                .Include(m => m.MemberDocuments)
+                .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -284,9 +284,9 @@ namespace GROW_CRM.Controllers
                 m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.GenderID, m => m.IncomeSituationID))
             {
                 try
-                {
-                    await AddDocumentsAsync(memberToUpdate, theFiles);
+                {                    
                     _context.Update(memberToUpdate);
+                    await AddDocumentsAsync(memberToUpdate, theFiles);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
                 }
@@ -377,6 +377,15 @@ namespace GROW_CRM.Controllers
             return new SelectList(gQuery, "ID", "Name", id);
         }
 
+        private SelectList DocumentTypeSelectList()
+        {
+            var dtQuery = from dt in _context.DocumentTypes
+                          orderby dt.Type
+                          select dt;
+
+            return new SelectList(dtQuery, "ID", "Type");
+        }
+
         private SelectList IncomeSituationSelectList(int? id)
         {
             var incQuery = from inc in _context.IncomeSituations
@@ -388,6 +397,7 @@ namespace GROW_CRM.Controllers
         private void PopulateDropDownLists(Member member = null)
         {
             ViewData["GenderID"] = GenderSelectList(member?.GenderID);
+            ViewData["DocumentTypeID"] = DocumentTypeSelectList();
             ViewData["IncomeSituationID"] = IncomeSituationSelectList(member?.IncomeSituationID);
         }
 
@@ -459,7 +469,7 @@ namespace GROW_CRM.Controllers
             return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
         }
 
-        private async Task AddDocumentsAsync(Member doctor, List<IFormFile> theFiles)
+        private async Task AddDocumentsAsync(Member member, List<IFormFile> theFiles)
         {
             foreach (var f in theFiles)
             {
@@ -480,7 +490,7 @@ namespace GROW_CRM.Controllers
                         }
                         d.FileContent.MimeType = mimeType;
                         d.FileName = fileName;
-                        doctor.MemberDocuments.Add(d);
+                        member.MemberDocuments.Add(d);
                     };
                 }
             }

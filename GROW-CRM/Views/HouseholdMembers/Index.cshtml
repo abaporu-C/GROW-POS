@@ -96,7 +96,8 @@
                         <col span="1" />
                         <col span="1" />
                         <col span="1" />
-                        <col span="1" width="400" />
+                        <col span="1" />
+                        <col span="1" width="300"/>
                         <col span="1" />
                     </colgroup>
                     <tr>
@@ -113,6 +114,9 @@
                             <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
                         </th>
                         <th>
+                            <input type="submit" disabled="disabled" value="Documents" class="btn btn-link" />
+                        </th>
+                        <th>
                             <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
                         </th>
                         <th>
@@ -124,57 +128,87 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FullName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Gender.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Age)
-                            </td>
-                            <td>
-                                @{if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        string[] noteWords = item.Notes.Split(' ');
-                                        if (noteWords.Count() > 5)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td>
+                    @{
+                        int fileCount = item.MemberDocuments.Count;
+                        if (fileCount > 0)
+                        {
+                            var firstFile = item.MemberDocuments.FirstOrDefault(); ;
+                            if (fileCount > 1)
+                            {
+                                <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
+                                    <span class="badge badge-info">@fileCount</span> Current Documents...
+                                </a>
+                                <div class="collapse" id="collapseSum@(item.ID)">
+                                    @{
+                                        foreach (var d in item.MemberDocuments)
                                         {
-                                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
-                                            @(string.Join(" ", noteWords.Take(5)) + "...")
-                                        </a>
-                                        <div class="collapse" id="collapseSum@(item.ID)">
-                                            <div class="well">
-                                                @(string.Join(" ", noteWords.Skip(5)))
-                                            </div>
-                                        </div>
-                                        }
-                                        else
-                                        {
-                                        @item.Notes
-                                            }
+                                            <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
                                         }
                                     }
-                                @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
-                            </td>
-                            <td>
-                                <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
-                                    <span class="btn btn-sm btn-outline-primary">&#x270D;</span>
-                                </a>
-                                <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
-                                    <span class="btn btn-sm btn-outline-danger">&#x274C</span>
-                                </a>
-                            </td>
-                        </tr>
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                            }
+                        }
                     }
-                    <tr>
-                        <td></td>                        
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
+                    </td>
+                    <td>
+                        @{if (!string.IsNullOrEmpty(item.Notes))
+                            {
+                                string[] noteWords = item.Notes.Split(' ');
+                                if (noteWords.Count() > 5)
+                                {
+                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
+                                        @(string.Join(" ", noteWords.Take(5)) + "...")
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(item.ID)">
+                                        <div class="well">
+                                            @(string.Join(" ", noteWords.Skip(5)))
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @item.Notes
+                                }
+                            }
+                        }
+                        @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
+                    </td>
+                    <td>
+                        <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
+                            <span class="btn btn-sm btn-outline-primary">&#x270D;</span>
+                        </a>
+                        <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
+                            <span class="btn btn-sm btn-outline-danger">&#x274C</span>
+                        </a>
+                    </td>
+                </tr>
+                    }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 </table>
             </div>
         </dd>

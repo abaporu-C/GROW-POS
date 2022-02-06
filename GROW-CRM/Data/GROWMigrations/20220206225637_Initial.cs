@@ -387,7 +387,7 @@ namespace GROW_CRM.Data.GROWMigrations
                         column: x => x.MemberID,
                         principalTable: "Members",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

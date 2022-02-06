@@ -9,7 +9,7 @@ namespace GROW_CRM.Models
 
         public Member Member { get; set; }
 
-        public int DocumentTypeID { get; set; }
+        public int? DocumentTypeID { get; set; }
 
         public DocumentType DocumentType { get; set; }
     }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220206220604_Initial")]
+    [Migration("20220206225637_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -529,7 +529,7 @@ namespace GROW_CRM.Data.GROWMigrations
                 {
                     b.HasBaseType("GROW_CRM.Models.Utilities.UploadedFile");
 
-                    b.Property<int>("DocumentTypeID")
+                    b.Property<int?>("DocumentTypeID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MemberID")
@@ -673,13 +673,12 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasOne("GROW_CRM.Models.DocumentType", "DocumentType")
                         .WithMany("MemberDocuments")
                         .HasForeignKey("DocumentTypeID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("GROW_CRM.Models.Member", "Member")
                         .WithMany("MemberDocuments")
                         .HasForeignKey("MemberID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
