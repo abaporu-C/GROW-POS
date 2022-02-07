@@ -96,7 +96,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<string>("AptNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CityID")
+                    b.Property<int?>("CityID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
@@ -106,7 +107,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("HouseholdStatusID")
+                    b.Property<int?>("HouseholdStatusID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("LICOVerified")
@@ -119,7 +121,8 @@ namespace GROW_CRM.Data.GROWMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProvinceID")
+                    b.Property<int?>("ProvinceID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StreetName")
@@ -254,13 +257,15 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<int>("GenderID")
+                    b.Property<int?>("GenderID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HouseholdID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IncomeSituationID")
+                    b.Property<int?>("IncomeSituationID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -391,14 +396,14 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<int>("PaymentTypeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Subtotal")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Taxes")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Taxes")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
