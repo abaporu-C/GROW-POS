@@ -24,7 +24,7 @@ namespace GROW_CRM.Controllers
             _context = context;
         }
 
-        // GET: PatientAppt
+        // GET: Household Members
         public async Task<IActionResult> Index(int? HouseholdID, int? page, int? pageSizeID, int? IncomeSituationID, string actionButton,
             string NotesSearchString, string MemberSearchString, string sortDirection = "desc", string sortField = "Member")
         {
