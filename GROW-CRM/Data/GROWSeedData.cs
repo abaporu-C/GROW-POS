@@ -338,7 +338,7 @@ namespace GROW_CRM.Data
                     {
                         string lastName = lastNames[rnd.Next(lastNames.Count())];                        
 
-                        for(int j = 0; j < rnd.Next(5); j++)
+                        for(int j = 0; j < rnd.Next(5) + 1; j++)
                         {
                             context.Members.Add(
                                 new Member
