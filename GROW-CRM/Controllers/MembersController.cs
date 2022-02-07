@@ -186,7 +186,11 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
                 .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberDocuments)
+                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+
             if (member == null)
             {
                 return NotFound();
@@ -358,6 +362,14 @@ namespace GROW_CRM.Controllers
             return _context.Members.Any(e => e.ID == id);
         }
 
+        public async Task<FileContentResult> Download(int id)
+        {
+            var theFile = await _context.UploadedFiles
+                .Include(d => d.FileContent)
+                .Where(f => f.ID == id)
+                .FirstOrDefaultAsync();
+            return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
+        }
         private SelectList HouseholdSelectList(int? selectedId)
         {
             return new SelectList(_context.Households
