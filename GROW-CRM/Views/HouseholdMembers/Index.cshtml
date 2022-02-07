@@ -7,15 +7,15 @@
 <p> </p>
 <div class="media">    
     <div class="media-body ml-3">
-        <h2><text class="d-none d-sm-inline">Household Address: </text>@household.FullAddress</h2>
+        <h2><text class="d-none d-sm-inline"> Membership #: </text>@household.ID</h2>
         <div class="row">
             <div class="col-sm-6">
                 <dl class="row">
                     <dt class="col-md-4">
-                        Household #
+                        Address:
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.ID)
+                        @Html.DisplayFor(model => household.FullAddress)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.YearlyIncome)
@@ -66,7 +66,7 @@
                         Joined on:
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.CreatedOn)
+                        @household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.HouseholdStatus)

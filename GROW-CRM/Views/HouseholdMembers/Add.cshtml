@@ -5,7 +5,7 @@
 }
 
 
-<h2>Add Member to Household: @ViewData["HouseholdAddress"]</h2>
+<h2>Add Member to Membership# @Model.HouseholdID</h2>
 <hr />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
@@ -112,6 +112,6 @@
     </div>
 </form>
 <div>
-    <a href='@ViewData["returnURL"]'>Back to Household</a>
+    <a href='@ViewData["returnURL"]'>Back to Membership</a>
 </div>
 

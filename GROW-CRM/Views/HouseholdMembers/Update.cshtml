@@ -4,7 +4,7 @@
     ViewData["Title"] = "Update Appointment";
 }
 
-<h2>Update Member for Household:  @Model.Household?.FullAddress</h2>
+<h2>Update Member for Membership#  @Model.Household?.ID</h2>
 
 <hr />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
@@ -132,6 +132,6 @@
         </div>
     </form>
 <div>
-    <a href='@ViewData["returnURL"]'>Back to Household</a>
+    <a href='@ViewData["returnURL"]'>Back to Membership</a>
 </div>
 
