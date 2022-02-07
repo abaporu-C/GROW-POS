@@ -33,13 +33,8 @@
                 <label asp-for="PostalCode" class="control-label"></label>
                 <input asp-for="PostalCode" class="form-control" placeholder="A2B 3C4" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LICOVerified" /> @Html.DisplayNameFor(model => model.LICOVerified)
-                </label>
-            </div>
-
+            </div>            
+                    <input type="hidden" value="false" asp-for="LICOVerified" />                 
         </div>
         <div class="col-md-6">
             <div class="form-group">
