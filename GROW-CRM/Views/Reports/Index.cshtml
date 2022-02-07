@@ -5,12 +5,14 @@
 <h1>Reports</h1>
 
 @using (Html.BeginForm("SelectedReport", "Reports", FormMethod.Get))
-            {
-                <fieldset>
-                    <label for="Reports">Select a Report:</label>
-                    @Html.DropDownList("Reports")
+{
+    <label for="Reports">Select a Report:</label>
 
-                    <input type="submit" value="Submit" />
-                </fieldset>
-            }
-
+    <fieldset>
+        <div>
+            @Html.DropDownList("Reports")
+        </div>
+        <br />
+        <input type="submit" class="btn btn-info" value="Submit" />
+    </fieldset>
+}

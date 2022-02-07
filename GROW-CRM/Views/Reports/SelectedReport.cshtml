@@ -4,21 +4,32 @@
     ViewData["Title"] = "Reports";
 }
 
-<h1>@ViewData["Name"]</h1>
+<h1>Reports</h1>
 
 @using (Html.BeginForm("SelectedReport", "Reports", FormMethod.Get))
 {
-    <fieldset>
-        <label for="Reports">Select a Report:</label>
-        @Html.DropDownList("Reports")
+    <label for="Reports">Select a Report:</label>
 
-        <input type="submit" value="Submit" />
+    <fieldset>
+        <div>
+            @Html.DropDownList("Reports")
+        </div>
+        <br />
+        <input type="submit" class="btn btn-info" value="Submit" />
     </fieldset>
 }
+<br />
+<br />
+
+<h1>@ViewData["Name"]</h1>
+<br />
+
 
 @if ((int)ViewData["Count"] < 1)
 {
-    <h3>Sorry, there is no membership that applies to this report right now.</h3>
+    <br>
+    <h3>Sorry, there are no memberships that apply to this report.</h3>
+    <br>
 }
 
 @{
@@ -92,151 +103,224 @@
     }
     else if ((string)ViewData["ReportType"] == "Demographics Report")
     {
-        <h2>Demographics By Gender</h2>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <h2>Demographics By Gender</h2>
+                        </button>
+                    </h5>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <th>Percentage</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (GenderReport item in ViewBag.GenderReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Gender)
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Gender</th>
-                    <th>Percentage</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (GenderReport item in ViewBag.GenderReport)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Gender)
-                        </td>
-                        <td>
-                            @(Math.Round(item.Percentage, 2) * 100)%
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
         <br />
 
-        <h2>Demographics By Age</h2>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            <h2>Demographics By Age</h2>
+                        </button>
+                    </h5>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Age Range</th>
-                    <th>Percentage</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (AgeReport item in ViewBag.AgeReport)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AgeRange)
-                        </td>
-                        <td>
-                            @(Math.Round(item.Percentage, 2) * 100)%
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Range</th>
+                                        <th>Percentage</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (AgeReport item in ViewBag.AgeReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AgeRange)
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <br />
-        <h2>Demographics By Dietary Restrictions</h2>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Restriction</th>
-                    <th>Percentage</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (DietaryReport item in ViewBag.DietaryReport)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Restriction)
-                        </td>
-                        <td>
-                            @(Math.Round(item.Percentage, 2) * 100)%
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            <h2>Demographics By Dietary Restrictions</h2>
+                        </button>
+                    </h5>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Restriction</th>
+                                        <th>Percentage</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DietaryReport item in ViewBag.DietaryReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Restriction)
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     }
     else if ((string)ViewData["ReportType"] == "Mapping Report")
     {
-        <h2>Demographics By Cities</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>City</th>
-                    <th>Percentage</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (CitiesReport item in ViewBag.CitiesReport)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @(Math.Round(item.Percentage, 2) * 100)%
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                            <h2>Demographics By Cities</h2>
+                        </button>
+                    </h5>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Percentage</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (CitiesReport item in ViewBag.CitiesReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <br />
         foreach (List<CityReport> cs in ViewBag.CityReports)
-        {            
+        {
             @if (cs.Count() > 0)
             {
-                <h2>@cs[0].Name</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Postal Code</th>
-                            <th>Number of Members</th>
-                            <th>Yearly Income</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (CityReport c in cs)
-                        {
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                                    <h2>@cs[0].Name</h2>
+                                </button>
+                            </h5>
+                            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Postal Code</th>
+                                                <th>Number of Members</th>
+                                                <th>Yearly Income</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (CityReport c in cs)
+                                            {
 
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => c.PostalCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => c.NumberOfMembers)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => c.TotalIncome)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.PostalCode)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.NumberOfMembers)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.TotalIncome)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <br />
             }
 
