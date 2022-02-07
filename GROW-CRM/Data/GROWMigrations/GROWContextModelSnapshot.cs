@@ -396,14 +396,14 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<int>("PaymentTypeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Subtotal")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double>("Taxes")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Taxes")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double>("Total")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")

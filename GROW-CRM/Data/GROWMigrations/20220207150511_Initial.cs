@@ -335,9 +335,9 @@ namespace GROW_CRM.Data.GROWMigrations
                     UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    Subtotal = table.Column<double>(nullable: false),
-                    Taxes = table.Column<double>(nullable: false),
-                    Total = table.Column<double>(nullable: false),
+                    Subtotal = table.Column<decimal>(nullable: false),
+                    Taxes = table.Column<decimal>(nullable: false),
+                    Total = table.Column<decimal>(nullable: false),
                     MemberID = table.Column<int>(nullable: false),
                     PaymentTypeID = table.Column<int>(nullable: false)
                 },
