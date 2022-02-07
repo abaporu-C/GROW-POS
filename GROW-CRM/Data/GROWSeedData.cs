@@ -274,7 +274,7 @@ namespace GROW_CRM.Data
                             StreetNumber = "65",
                             StreetName = "Church St.",
                             AptNumber = "201",                            
-                            PostalCode = "R3E9C8",
+                            PostalCode = "R3E 9C8",
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
@@ -285,14 +285,27 @@ namespace GROW_CRM.Data
                         {
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                            AptNumber = "30",                            
-                            PostalCode = "L2H1W8",
+                                                     
+                            PostalCode = "L2H 1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 2
-                        }
+                        },
+                         new Household
+                         {
+                             StreetNumber = "101",
+                             StreetName = "Development Ave.",
+
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                             HouseholdStatusID = 2
+                         }
+
                     );
 
                     //Save changes
@@ -325,7 +338,7 @@ namespace GROW_CRM.Data
                     {
                         string lastName = lastNames[rnd.Next(lastNames.Count())];                        
 
-                        for(int j = 0; j < (rnd.Next(5) + 1); j++)
+                        for(int j = 0; j < rnd.Next(5); j++)
                         {
                             context.Members.Add(
                                 new Member

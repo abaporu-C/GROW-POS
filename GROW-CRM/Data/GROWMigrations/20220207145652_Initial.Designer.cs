@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220206225637_Initial")]
+    [Migration("20220207145652_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<string>("AptNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CityID")
+                    b.Property<int?>("CityID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
@@ -108,7 +109,8 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("HouseholdStatusID")
+                    b.Property<int?>("HouseholdStatusID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("LICOVerified")
@@ -121,7 +123,8 @@ namespace GROW_CRM.Data.GROWMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProvinceID")
+                    b.Property<int?>("ProvinceID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StreetName")
@@ -256,13 +259,15 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<int>("GenderID")
+                    b.Property<int?>("GenderID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HouseholdID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IncomeSituationID")
+                    b.Property<int?>("IncomeSituationID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -393,14 +398,14 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<int>("PaymentTypeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Subtotal")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Subtotal")
+                        .HasColumnType("REAL");
 
-                    b.Property<int>("Taxes")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Taxes")
+                        .HasColumnType("REAL");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Total")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
