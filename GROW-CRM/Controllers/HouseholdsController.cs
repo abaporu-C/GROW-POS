@@ -32,7 +32,7 @@ namespace GROW_CRM.Controllers
             ViewData["Filtering"] = ""; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "#","Street", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "Membership#","Street", "City", "Province", "Members", "LICO", "Status" };
 
             PopulateDropDownLists();
 
@@ -86,7 +86,7 @@ namespace GROW_CRM.Controllers
             }
 
 
-            if (sortField == "#")
+            if (sortField == "Membership#")
             {
                 if (sortDirection == "asc")
                 {
