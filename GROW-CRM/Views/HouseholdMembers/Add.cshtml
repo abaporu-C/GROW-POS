@@ -12,8 +12,7 @@
     <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
+        <div class="col-md-6">            
                 <div class="form-group">
                     <label asp-for="FirstName" class="control-label"></label>
                     <input asp-for="FirstName" class="form-control" />
@@ -32,10 +31,10 @@
                 <div class="form-group">
                     <label asp-for="GenderID" class="control-label"></label>
                     <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
-                        <option value="">Please, choose one</option>
+                        <option value="">Select Gender</option>
                     </select>
-                </div>
-            </div>
+                    <span asp-validation-for="GenderID" class="text-danger"></span>
+                </div>         
             <div class="form-group">
                 <label asp-for="DOB" class="control-label"></label>
                 <input asp-for="DOB" class="form-control" />
@@ -64,10 +63,13 @@
                 <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
                     <option value="">No Reason Given</option>
                 </select>
+                <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
             </div>
+
             <label asp-for="Notes" class="control-label"></label>
             <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
             <span asp-validation-for="Notes" class="text-danger"></span>
+
             <div class="form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
                 <div class="col-md-offset-1">
@@ -98,12 +100,16 @@
             <div class="form-group">
                 <label class="control-label">Upload Documents:</label>
                 <input type="file" class="" name="theFiles" multiple="multiple" />
-            </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
+            </div>                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
+    </div>
 </form>
 <div>
     <a href='@ViewData["returnURL"]'>Back to Household</a>

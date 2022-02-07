@@ -63,7 +63,7 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return "(" + PhoneNumber.Substring(0, 3) + ") " + PhoneNumber.Substring(3, 3) + "-" + PhoneNumber[6..];
+                return "(" + PhoneNumber?.Substring(0, 3) + ") " + PhoneNumber?.Substring(3, 3) + "-" + PhoneNumber?[6..];
             }
         }
 
@@ -114,7 +114,7 @@ namespace GROW_CRM.Models
 
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "You must select the Gender")]
-        public int GenderID { get; set; }
+        public int? GenderID { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -123,8 +123,9 @@ namespace GROW_CRM.Models
 
         public Household Household { get; set; }
 
-        [Display(Name ="Income Situation")]
-        public int IncomeSituationID { get; set; }        
+        [Display(Name ="Income Situation")]   
+        [Required(ErrorMessage = "You must select an Income Situation")]
+        public int? IncomeSituationID { get; set; }        
 
         public IncomeSituation IncomeSituation { get; set; }
 

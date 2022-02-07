@@ -285,7 +285,7 @@ namespace GROW_CRM.Data
                         {
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                            AptNumber = "0",                            
+                            AptNumber = "30",                            
                             PostalCode = "L2H1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
