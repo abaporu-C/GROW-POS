@@ -96,19 +96,19 @@ namespace GROW_CRM.Models
         //Foreign Keys
         [Display(Name ="City")]
         [Required(ErrorMessage = "You must select a City")]
-        public int CityID { get; set; }
+        public int? CityID { get; set; }
 
         public City City { get; set; }
 
         [Display(Name = "Province")]
         [Required(ErrorMessage = "You must select a Province")]
-        public int ProvinceID { get; set; }
+        public int? ProvinceID { get; set; }
 
         public Province Province { get; set; }
 
         [Display(Name ="Household Status")]
         [Required(ErrorMessage ="A Status should be selected")]
-        public int HouseholdStatusID { get; set; }
+        public int? HouseholdStatusID { get; set; }
 
         public HouseholdStatus HouseholdStatus { get; set; }
 
