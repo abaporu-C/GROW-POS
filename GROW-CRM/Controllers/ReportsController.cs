@@ -938,23 +938,23 @@ namespace GROW_CRM.Controllers
                             workSheet.Cells[rows + 1, 1].LoadFromCollection(cr, true);
 
                             //Style first column for dates
-                            workSheet.Cells[rows + 1, 2, count + rows + 1, 3].Style.Numberformat.Format = "0";
-                            workSheet.Cells[rows + 1, 3, count + rows + 1, 3].Style.Numberformat.Format = "$#,##0.00";
+                            workSheet.Cells[rows + 1, 3, count + rows + 1, 3].Style.Numberformat.Format = "0";
+                            workSheet.Cells[rows + 1, 4, count + rows + 1, 4].Style.Numberformat.Format = "$#,##0.00";
 
                             //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                             //Make Date and Patient Bold
                             workSheet.Cells[rows + 1, 1, count + rows + 1, 2].Style.Font.Bold = true;
 
-                            using (ExcelRange totalfees = workSheet.Cells[count + rows + 4, 3])//
+                            using (ExcelRange totalfees = workSheet.Cells[count + rows + 2, 3])//
                             {
-                                totalfees.Formula = "Sum(" + workSheet.Cells[rows + 1, 2].Address + ":" + workSheet.Cells[count + rows + 3, 2].Address + ")";
+                                totalfees.Formula = "Sum(" + workSheet.Cells[rows + 1, 3].Address + ":" + workSheet.Cells[count + rows + 1, 3].Address + ")";
                                 totalfees.Style.Font.Bold = true;
                                 totalfees.Style.Numberformat.Format = "0";
                             }
 
-                            using (ExcelRange totalfees = workSheet.Cells[count + rows + 4, 3])//
+                            using (ExcelRange totalfees = workSheet.Cells[count + rows + 2, 4])//
                             {
-                                totalfees.Formula = "Sum(" + workSheet.Cells[rows + 1, 3].Address + ":" + workSheet.Cells[count + rows + 3, 3].Address + ")";
+                                totalfees.Formula = "Sum(" + workSheet.Cells[rows + 1, 4].Address + ":" + workSheet.Cells[count + rows + 1, 4].Address + ")";
                                 totalfees.Style.Font.Bold = true;
                                 totalfees.Style.Numberformat.Format = "$#,##0.00";
                             }
