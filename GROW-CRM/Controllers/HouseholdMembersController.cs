@@ -200,6 +200,7 @@ namespace GROW_CRM.Controllers
                 if (ModelState.IsValid)
                 {                    
                     _context.Add(member);
+                    await CheckLICO(member);
                     await AddDocumentsAsync(member, theFiles);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
@@ -286,6 +287,7 @@ namespace GROW_CRM.Controllers
                 try
                 {                    
                     _context.Update(memberToUpdate);
+                    await CheckLICO(memberToUpdate);
                     await AddDocumentsAsync(memberToUpdate, theFiles);
                     await _context.SaveChangesAsync();
                     return Redirect(ViewData["returnURL"].ToString());
@@ -494,6 +496,45 @@ namespace GROW_CRM.Controllers
                     };
                 }
             }
+        }
+
+        private async Task CheckLICO(Member m)
+        {
+            var household = await _context.Households
+                            .Include(h => h.Members)
+                            .Where(h => h.ID == m.HouseholdID)
+                            .FirstOrDefaultAsync();
+
+            double totalIncome = m.YearlyIncome;
+            int memberCount = household.Members.Count();
+
+            foreach(Member member in household.Members)
+            {
+                totalIncome += member.YearlyIncome;
+            }
+
+            if (memberCount == 1 && totalIncome > 26426) household.LICOVerified = false;
+            else if (memberCount == 2 && totalIncome > 32898) household.LICOVerified = false;
+            else if (memberCount == 3 && totalIncome > 40444) household.LICOVerified = false;
+            else if (memberCount == 4 && totalIncome > 49106) household.LICOVerified = false;
+            else if (memberCount == 5 && totalIncome > 55694) household.LICOVerified = false;
+            else if (memberCount == 6 && totalIncome > 62814) household.LICOVerified = false;
+            else if (memberCount == 7 && totalIncome > 69934) household.LICOVerified = false;
+            else
+            {
+                if(memberCount > 7)
+                {
+                    double lico = 69934;
+                    for (int i = 0; i < (memberCount - 7); i++) lico += 7120;
+                    
+                    if(totalIncome > lico) household.LICOVerified = false;
+                    else household.LICOVerified = true;
+                }
+                else household.LICOVerified = true;
+            }
+
+            _context.Update(household);
+
         }
 
         private bool MemberExists(int id)

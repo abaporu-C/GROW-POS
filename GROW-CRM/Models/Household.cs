@@ -24,7 +24,7 @@ namespace GROW_CRM.Models
             {                
                 return this?.StreetNumber + " " + this?.StreetName + " " + this?.AptNumber + " - " + City?.Name + ", " + Province?.Code + ", " + this?.PostalCode;
             }
-        }        
+        }                   
 
         [Display(Name = "Number of Members")]        
         public int NumberOfMembers
