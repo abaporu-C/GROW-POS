@@ -78,7 +78,7 @@ namespace GROW_CRM.Controllers
 
             ViewData["ReportType"] = "Renewal Report";
             ViewData["Count"] = renewalReportsFiltered.Count();
-            ViewData["Name"] = $"Memberships up for reacessment";
+            ViewData["Name"] = $"Memberships up for Reassessment";
             ViewBag.Headers = headers;
             ViewBag.Report = renewalReportsFiltered;
 
