@@ -35,6 +35,11 @@
 @{
     if ((string)ViewData["ReportType"] == "Renewal Report")
     {
+        @if((int)ViewData["Count"] > 0)
+                {
+                    <a asp-action="DownloadRenewal" class="btn btn-info float-left">Download Renewal Report</a>
+                }
+        
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -68,6 +73,8 @@
     }
     else if ((string)ViewData["ReportType"] == "New Memberships Report")
     {
+        <a asp-action="DownloadNewMembers" class="btn btn-info float-left">Download New Members Report</a>
+        <br />
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -103,6 +110,7 @@
     }
     else if ((string)ViewData["ReportType"] == "Demographics Report")
     {
+        <a asp-action="DownloadDemographics" class="btn btn-info float-right">Download Demographics Report</a>
         <div id="accordion">
             <div class="card">
                 <div class="card-header" id="headingOne">
@@ -235,6 +243,7 @@
     }
     else if ((string)ViewData["ReportType"] == "Mapping Report")
     {
+        <a asp-action="DownloadMapping" class="btn btn-info float-right">Download Mapping Report</a>
         <div id="accordion">
             <div class="card">
                 <div class="card-header" id="headingFour">
