@@ -16,11 +16,11 @@ namespace GROW_CRM.Models
 
         public DateTime Date { get; set; }
 
-        public double Subtotal { get; set; }
+        public decimal Subtotal { get; set; }
 
-        public double Taxes { get; set; }
+        public decimal Taxes { get; set; }
 
-        public double Total { get; set; }
+        public decimal Total { get; set; }
         
         //Foreign Keys        
 
