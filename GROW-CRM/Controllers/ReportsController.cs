@@ -277,8 +277,8 @@ namespace GROW_CRM.Controllers
             foreach(NewAdditionsReport na in newAdditions)
             {
                 TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
-
-                if (diff.TotalDays < 7) continue;
+                double tds = diff.TotalDays;
+                if (tds > 7) continue;
                 newAdditionsfiltered.Add(na);
             }
 
@@ -314,7 +314,7 @@ namespace GROW_CRM.Controllers
             {
                 TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
 
-                if (diff.TotalDays < 7) continue;
+                if (diff.TotalDays > 7) continue;
                 newAdditionsfiltered.Add(na);
             }
             //How many rows?
