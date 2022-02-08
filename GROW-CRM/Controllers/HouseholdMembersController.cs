@@ -203,6 +203,7 @@ namespace GROW_CRM.Controllers
                     await CheckLICO(member);
                     await AddDocumentsAsync(member, theFiles);
                     await _context.SaveChangesAsync();
+                    ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }

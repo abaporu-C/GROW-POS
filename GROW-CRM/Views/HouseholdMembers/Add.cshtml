@@ -112,6 +112,6 @@
     </div>
 </form>
 <div>
-    <a href='@ViewData["returnURL"]'>Back to Membership</a>
+    <a asp-area="" asp-controller="Households" asp-action="Index">Back to Membership List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Membership Details</a>
 </div>
 

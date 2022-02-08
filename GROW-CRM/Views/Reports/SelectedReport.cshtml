@@ -12,7 +12,7 @@
 
     <fieldset>
         <div>
-            @Html.DropDownList("Reports")
+            @Html.DropDownList("Reports", null, htmlAttributes: new { @style = "width: 25vw; height: 5vh;" })
         </div>
         <br />
         <input type="submit" class="btn btn-info" value="Submit" />
@@ -110,10 +110,10 @@
     }
     else if ((string)ViewData["ReportType"] == "Demographics Report")
     {
-<div class="row">
-    <a asp-action="DownloadDemographics" class="btn btn-info float-left">Download Demographics Report</a>
-</div>
-<br/>
+        <div class="row">
+            <a asp-action="DownloadDemographics" class="btn btn-info float-left">Download Demographics Report</a>
+        </div>
+        <br />
         <div id="accordion">
             <div class="card">
                 <div class="card-header" id="headingOne">
@@ -246,9 +246,9 @@
     }
     else if ((string)ViewData["ReportType"] == "Mapping Report")
     {
-<div class="row">
-    <a asp-action="DownloadMapping" class="btn btn-info float-left">Download Mapping Report</a>
-</div>
+        <div class="row">
+            <a asp-action="DownloadMapping" class="btn btn-info float-left">Download Mapping Report</a>
+        </div>
         <br />
         <div id="accordion">
             <div class="card">
@@ -340,5 +340,46 @@
             }
 
         }
+    }
+    else if ((string)ViewData["ReportType"] == "Income Report")
+    {
+        <p>
+            <a asp-action="DownloadIncomes" class="btn btn-info float-left">Download Household Income</a>
+        </p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    @foreach (string header in (string[])ViewBag.Headers)
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (HouseholdInformation hi in ViewBag.Report)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.Age)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.Gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.IncomeSource)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hi.TotalIncome)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 }
