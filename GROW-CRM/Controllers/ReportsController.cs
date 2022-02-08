@@ -285,7 +285,7 @@ namespace GROW_CRM.Controllers
             string[] headers = new string[] { "Membership #", "Number of Members", "Yearly Income", "Created On", "Created By" };
 
             ViewData["ReportType"] = "New Memberships Report";
-            ViewData["count"] = newAdditionsfiltered.Count();
+            ViewData["Count"] = newAdditionsfiltered.Count();
             ViewData["Name"] = $"New Additions - From: {lastWeek.Month}/{lastWeek.Day}/{lastWeek.Year} To: {DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.Year}";
             ViewBag.Headers = headers;
             ViewBag.Report = newAdditionsfiltered;

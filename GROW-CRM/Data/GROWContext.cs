@@ -182,7 +182,7 @@ namespace GROW_CRM.Data
             {
                 if (entry.Entity is IAuditable trackable)
                 {
-                    var now = DateTime.UtcNow;
+                    var now = DateTime.Now;
                     switch (entry.State)
                     {
                         case EntityState.Modified:
