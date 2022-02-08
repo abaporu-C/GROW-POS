@@ -82,6 +82,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Membership List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.ID">Back To Membership Details</a>
     </form>
 </div>

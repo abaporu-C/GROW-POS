@@ -71,7 +71,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="submit" disabled="disabled" value="Household ID" class="btn btn-link" />
+                    <input type="submit" disabled="disabled" value="Membership #" class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
@@ -132,7 +132,7 @@
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                 </td>

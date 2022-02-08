@@ -26,10 +26,10 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return FirstName[0].ToString().ToUpper() + FirstName.Substring(1)
+                return FirstName?[0].ToString().ToUpper() + FirstName?.Substring(1)
                     + (string.IsNullOrEmpty(MiddleName) ? " " :
-                        (" " + (char?)MiddleName[0] + ". ").ToUpper())
-                    + LastName[0].ToString().ToUpper() + LastName.Substring(1);
+                        (" " + (char?)MiddleName?[0] + ". ").ToUpper())
+                    + LastName?[0].ToString().ToUpper() + LastName?.Substring(1);
             }
         }
 
