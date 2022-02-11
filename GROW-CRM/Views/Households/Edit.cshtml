@@ -2,15 +2,31 @@
 
 @{
     ViewData["Title"] = "Edit";
+   
 }
-<h2>Edit</h2>
-<h2>Membership # : @Html.DisplayFor(model => model.ID)</h2>
 
+<h2 >Edit</h2>
+@{
+
+    if (!String.IsNullOrEmpty(Model.Name))
+    {
+    <h3> @Html.Raw("Household Name : ") @Html.DisplayFor(model => model.Name) </h3>
+    }
+    else
+    {
+<h3> @Html.Raw("Household # ") @Html.DisplayFor(model => model.ID) </h3>
+    }
+}
 
 <hr />
 <form asp-action="Edit">
     <div class="row">
         <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="AptNumber" class="control-label"></label>
                 <input asp-for="AptNumber" class="form-control" />
@@ -31,7 +47,7 @@
 
             <div class="form-group">
                 <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
+                <input asp-for="PostalCode" class="form-control" id="postal-code" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
 
@@ -68,8 +84,8 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            </div>
         </div>
+    </div>
 
 </form>
 <div>
@@ -78,4 +94,18 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+        var input = document.getElementById('postal-code');
+
+        input.onkeyup = function () {
+            this.value = this.value.replace(/\s/g, '').replace(/^(.{3})(.{3})(.*)$/, '$1 $2').trim();
+
+            if (input.value.length > 7) {
+                this.value = this.value.substr(0, 7);
+            }
+            else {
+                this.value = this.value.toUpperCase();
+            }
+        }
+</script>
 }

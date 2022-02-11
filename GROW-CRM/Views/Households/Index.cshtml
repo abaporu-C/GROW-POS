@@ -74,7 +74,7 @@
             <thead>
                 <tr>
                     <th>
-                        <input type="submit" name="actionButton" value="Membership#" class="btn btn-link" />
+                        <input type="submit" name="actionButton" value="Household #" class="btn btn-link" />
                     </th>
                     <th>
                         <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
@@ -112,7 +112,7 @@
                 {
                     <tr>
                         <td>
-                            #@Html.DisplayFor(modelItem => item.ID)
+                            <center> #@Html.DisplayFor(modelItem => item.ID)</center>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.StreetNumber)
@@ -129,34 +129,19 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Province.Name)
                         </td>
-                        <td>
-                            @{
-                                int memberCount = item.NumberOfMembers;
-                                if (memberCount > 0)
-                                {
-                                    string firstSpec = item.Members.FirstOrDefault().FullName;
-                                    if (memberCount > 1)
+                        <td><center>
+                                @{
+                                    int memberCount = item.NumberOfMembers;
+                                    if (memberCount > 0)
                                     {
-                                        string memberList = "";
-                                        var c = item.Members.ToList();
-                                        for (int i = 1; i < memberCount; i++)
-                                        {
-                                            memberList += c[i].FullName + " <br />";
-                                        }
-                                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)"
-                                           aria-expanded="false" aria-controls="collapseSum@(item.ID)">
-                                            @firstSpec... <span class="badge badge-info">@memberCount</span>
-                                        </a>
-                                        <div class="collapse" id="collapseSum@(item.ID)">
-                                            @Html.Raw(memberList)
-                                        </div>
+                                        @Html.Raw(memberCount)
                                     }
                                     else
                                     {
-                                        @firstSpec
+                                        @Html.Raw("0")
                                     }
-                                }
-                            }
+                                 }
+                            </center>
                             @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
                         </td>
                         <td>

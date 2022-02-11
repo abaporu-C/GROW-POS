@@ -159,8 +159,10 @@ namespace GROW_CRM.Controllers
         {
             if (!HouseholdID.HasValue)
             {
-                return RedirectToAction("Index", "Patients");
+                return RedirectToAction("Index", "Members");
             }
+
+         
 
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -181,7 +183,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();

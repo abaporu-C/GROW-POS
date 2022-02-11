@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220208034750_Initial")]
+    [Migration("20220211143345_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,10 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<DateTime>("LastVerification")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
 
                     b.Property<string>("PostalCode")
                         .IsRequired()

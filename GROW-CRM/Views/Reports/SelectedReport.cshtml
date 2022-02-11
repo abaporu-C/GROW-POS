@@ -95,7 +95,7 @@
                             @Html.DisplayFor(modelItem => item.Members)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Income)
+                           $ @Html.DisplayFor(modelItem => item.Income)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -140,7 +140,7 @@
                                                 @Html.DisplayFor(modelItem => item.Gender)
                                             </td>
                                             <td>
-                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                                @(Math.Round(item.Percentage *100 , 2))%
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Total)
@@ -184,7 +184,7 @@
                                                 @Html.DisplayFor(modelItem => item.AgeRange)
                                             </td>
                                             <td>
-                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                                @(Math.Round(item.Percentage * 100, 2))%
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Total)
@@ -228,7 +228,7 @@
                                                 @Html.DisplayFor(modelItem => item.Restriction)
                                             </td>
                                             <td>
-                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                                @(Math.Round(item.Percentage * 100, 2))%
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Total)
@@ -276,7 +276,7 @@
                                                 @Html.DisplayFor(modelItem => item.Name)
                                             </td>
                                             <td>
-                                                @(Math.Round(item.Percentage, 2) * 100)%
+                                                @(Math.Round(item.Percentage * 100, 2))%
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Total)
