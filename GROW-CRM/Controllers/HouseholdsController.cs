@@ -241,7 +241,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
+        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
         {
             try
             {
@@ -317,6 +317,7 @@ namespace GROW_CRM.Controllers
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
+                h => h.Name,
                 h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
                 h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
@@ -431,7 +432,9 @@ namespace GROW_CRM.Controllers
         private SelectList ProvinceSelectList(int? selectedId)
         {
             return new SelectList(_context.Provinces
-                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+
+                .OrderByDescending(d => d.Name == "Ontario")
+                .ThenBy(d => d.Name), "ID", "Name", selectedId);
         }
         private SelectList HouseholdStatusSelectList(int? selectedId)
         {

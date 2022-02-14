@@ -67,6 +67,10 @@ namespace GROW_CRM.Models
             }
         }
 
+        [Display(Name = "Household Name")]
+        [StringLength(20, ErrorMessage = "Household Name can't be longer than 20 symbols")]
+        public string Name { get; set; }
+
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]

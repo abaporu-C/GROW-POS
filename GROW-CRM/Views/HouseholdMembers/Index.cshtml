@@ -7,7 +7,21 @@
 <p> </p>
 <div class="media">    
     <div class="media-body ml-3">
-        <h2><text class="d-none d-sm-inline"> Membership #: </text>@household.ID</h2>
+
+        @{
+
+            if (!String.IsNullOrEmpty(household.Name))
+            {
+                <h2> @Html.Raw("Household Name : ") @household.Name </h2>
+            }
+            else
+            {
+                <h2> @Html.Raw("Household # ") @household.ID </h2>
+            }
+        }
+
+       
+
         <div class="row">
             <div class="col-sm-6">
                 <dl class="row">
@@ -21,7 +35,7 @@
                         @Html.DisplayNameFor(model => household.YearlyIncome)
                     </dt>
                     <dd class="col-md-8">
-                       $ @Html.DisplayFor(model => household.YearlyIncome)
+                        $ @Html.DisplayFor(model => household.YearlyIncome)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.NumberOfMembers)
@@ -75,7 +89,7 @@
                         @Html.DisplayFor(model => household.HouseholdStatus.Name)
                     </dd>
                 </dl>
-            </div>           
+            </div>
         </div>
     </div>
 </div>

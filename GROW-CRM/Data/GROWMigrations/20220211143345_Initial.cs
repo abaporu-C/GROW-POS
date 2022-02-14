@@ -198,6 +198,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     CreatedOn = table.Column<DateTime>(nullable: true),
                     UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 20, nullable: true),
                     StreetNumber = table.Column<string>(nullable: false),
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     AptNumber = table.Column<string>(nullable: true),

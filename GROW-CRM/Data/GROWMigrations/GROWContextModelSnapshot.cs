@@ -117,6 +117,10 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime>("LastVerification")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
+
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("TEXT");

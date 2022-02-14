@@ -6,7 +6,7 @@
 
 
 
-<h2>Create Membership</h2>
+<h2>Create Household</h2>
 <hr />
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="row">
@@ -14,6 +14,11 @@
 
             <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="StreetNumber" class="control-label"></label>
                 <input asp-for="StreetNumber" class="form-control" />
@@ -31,10 +36,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" placeholder="A2B 3C4" />
+                <input asp-for="PostalCode" class="form-control" id="postal-code" placeholder="A2B 3C4" pattern="/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i" title="Example: A2A 2B2" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>            
-                    <input type="hidden" value="false" asp-for="LICOVerified" />                 
+            </div>
+            <input type="hidden" value="false" asp-for="LICOVerified" />
         </div>
         <div class="col-md-6">
             <div class="form-group">
@@ -47,14 +52,12 @@
             <div class="form-group">
                 <label asp-for="ProvinceID" class="control-label"></label>
                 <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
-                    <option value="">Select a Province</option>
                 </select>
                 <span asp-validation-for="ProvinceID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 Membership status
                 <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
-                    <option value="">Select Status</option>
                 </select>
                 <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
             </div>
@@ -72,4 +75,20 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var input = document.getElementById('postal-code');
+
+        input.onkeyup = function () {
+            this.value = this.value.replace(/\s/g, '').replace(/^(.{3})(.{3})(.*)$/, '$1 $2').trim();
+
+            if (input.value.length > 7) {
+                this.value = this.value.substr(0, 7);
+            }
+            else {
+                this.value = this.value.toUpperCase();
+            }
+        }
+    </script>
+
 }

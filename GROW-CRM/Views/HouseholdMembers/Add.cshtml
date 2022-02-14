@@ -4,37 +4,38 @@
     ViewData["Title"] = "Add Member";
 }
 
-
-<h2>Add Member to Membership# @Model.HouseholdID</h2>
+<h3>
+    Add Member to Household : @Html.DisplayFor(model => model.HouseholdID)
+</h3>
 <hr />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
-        <div class="col-md-6">            
-                <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
-                    <input asp-for="MiddleName" class="form-control" />
-                    <span asp-validation-for="MiddleName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="GenderID" class="control-label"></label>
-                    <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
-                        <option value="">Select Gender</option>
-                    </select>
-                    <span asp-validation-for="GenderID" class="text-danger"></span>
-                </div>         
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenderID" class="control-label"></label>
+                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                    <option value="">Select Gender</option>
+                </select>
+                <span asp-validation-for="GenderID" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="DOB" class="control-label"></label>
                 <input asp-for="DOB" class="form-control" />
@@ -42,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="form-control"/>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -97,21 +98,47 @@
                         </table>
                     </div>
                 </div>
-            <div class="form-group">
-                <label class="control-label">Upload Documents:</label>
-                <input type="file" class="" name="theFiles" multiple="multiple" />
-            </div>                
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="form-group">
+                    <label class="control-label">Upload Documents:</label>
+                    <input type="file" class="" name="theFiles" multiple="multiple" />
+                </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
     </div>
-</form>
-<div>
-    <a asp-area="" asp-controller="Households" asp-action="Index">Back to Membership List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Membership Details</a>
-</div>
+
+    @section Scripts {
+       
+        @*Phone Number Formatter - Not used here*@
+        <script>
+      function formatPhoneNumber(value) {
+        if (!value) return value;
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        const phoneNumberLength = phoneNumber.length;
+        if (phoneNumberLength < 4) return phoneNumber;
+        if (phoneNumberLength < 7) {
+          return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+        }
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+          3,
+          6
+        )}-${phoneNumber.slice(6, 9)}`;
+      }
+
+      function phoneNumberFormatter() {
+        const inputField = document.getElementById('phone-number');
+        const formattedInputValue = formatPhoneNumber(inputField.value);
+        inputField.value = formattedInputValue;
+      }
+        </script>
+    }
 
