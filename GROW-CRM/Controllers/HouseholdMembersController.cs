@@ -183,7 +183,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,ConsentGiven,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -293,7 +293,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.GenderID, m => m.IncomeSituationID))
+                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID, m => m.IncomeSituationID))
             {
                 try
                 {                    

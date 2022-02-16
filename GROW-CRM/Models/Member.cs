@@ -110,6 +110,9 @@ namespace GROW_CRM.Models
         [Display(Name = "Yearly Income")]
         public double YearlyIncome { get; set; }
 
+        [Display(Name = "Consent On Giving Information: ")]
+        public bool ConsentGiven { get; set; }
+
         //Foreign Keys        
 
         [Display(Name = "Gender")]
