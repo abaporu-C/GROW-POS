@@ -15,6 +15,11 @@ namespace GROW_CRM.Models
 
         public string Restriction { get; set; }
 
+        //Foreign Keys
+        public int HealthIssueTypeID { get; set; }
+
+        public HealthIssueType HealthIssueType { get; set; }
+
         //O:M Relationships
         public ICollection<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
     }

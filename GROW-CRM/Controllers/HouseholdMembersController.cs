@@ -183,7 +183,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -191,9 +191,17 @@ namespace GROW_CRM.Controllers
             try
             {
                 //Add the selected conditions
-                if (selectedOptions != null)
+                if (selectedIllnessOptions != null)
                 {
-                    foreach (var restriction in selectedOptions)
+                    foreach (var restriction in selectedIllnessOptions)
+                    {
+                        var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
+                        member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                    }
+                }
+                if (selectedConcernOptions != null)
+                {
+                    foreach (var restriction in selectedConcernOptions)
                     {
                         var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
                         member.DietaryRestrictionMembers.Add(restrictionToAdd);
@@ -258,7 +266,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, string[] selectedOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Update(int id, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -280,7 +288,7 @@ namespace GROW_CRM.Controllers
             }
 
             //Update Dietary Restrictions
-            UpdateDietaryRestrictionMembers(selectedOptions, memberToUpdate);
+            UpdateDietaryRestrictionMembers(selectedIllnessOptions, selectedConcernOptions,memberToUpdate);
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
@@ -417,33 +425,51 @@ namespace GROW_CRM.Controllers
 
         private void PopulateAssignedDietaryRestrictionData(Member member)
         {
-            //For this to work, you must have Included the PatientConditions 
-            //in the Patient
-            var allOptions = _context.DietaryRestrictions;
-            var currentOptionIDs = new HashSet<int>(member.DietaryRestrictionMembers.Select(b => b.DietaryRestrictionID));
-            var checkBoxes = new List<OptionVM>();
+            //For this to work, you must have Included the child collection in the parent object
+            var allOptions = _context.DietaryRestrictions.Include(dr => dr.HealthIssueType);
+            var currentOptionsHS = new HashSet<int>(member.DietaryRestrictionMembers.Select(b => b.DietaryRestrictionID));
+            //Instead of one list with a boolean, we will make two lists
+            var selectedIllnesses = new List<ListOptionVM>();
+            var availableIllnesses = new List<ListOptionVM>();
+            var selectedConcerns = new List<ListOptionVM>();
+            var availableConcerns = new List<ListOptionVM>();
+
             foreach (var option in allOptions)
             {
-                checkBoxes.Add(new OptionVM
+                if (currentOptionsHS.Contains(option.ID))
                 {
-                    ID = option.ID,
-                    DisplayText = option.Restriction,
-                    Assigned = currentOptionIDs.Contains(option.ID)
-                });
+                    if(option.HealthIssueType.Type == "Illness") selectedIllnesses.Add(new ListOptionVM{ID = option.ID,DisplayText = option.Restriction});
+                    if (option.HealthIssueType.Type == "Concern") selectedConcerns.Add(new ListOptionVM { ID = option.ID, DisplayText = option.Restriction });
+                }
+                else
+                {
+                    if (option.HealthIssueType.Type == "Illness") availableIllnesses.Add(new ListOptionVM { ID = option.ID, DisplayText = option.Restriction });
+                    if (option.HealthIssueType.Type == "Concern") availableConcerns.Add(new ListOptionVM { ID = option.ID, DisplayText = option.Restriction });
+                }
             }
-            ViewData["RestrictionOptions"] = checkBoxes;
+            ViewData["selIllnessOpts"] = new MultiSelectList(selectedIllnesses.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["availIllnessOpts"] = new MultiSelectList(availableIllnesses.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["selConcernOpts"] = new MultiSelectList(selectedConcerns.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["availConcernOpts"] = new MultiSelectList(availableConcerns.OrderBy(s => s.DisplayText), "ID", "DisplayText");
         }
-        private void UpdateDietaryRestrictionMembers(string[] selectedOptions, Member memberToUpdate)
+        private void UpdateDietaryRestrictionMembers(string[] selectedIllnessOptions, string[] selectedConcernOptions, Member memberToUpdate)
         {
-            if (selectedOptions == null)
+            if (selectedIllnessOptions == null && selectedConcernOptions == null)
             {
                 memberToUpdate.DietaryRestrictionMembers = new List<DietaryRestrictionMember>();
                 return;
             }
 
-            var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var memberOptionsHS = new HashSet<int>
-                (memberToUpdate.DietaryRestrictionMembers.Select(c => c.DietaryRestrictionID));//IDs of the currently selected conditions
+            var selectedOptionsHS = new List<string>();
+
+            if (selectedIllnessOptions != null)
+                selectedOptionsHS.AddRange(selectedIllnessOptions);
+
+            if (selectedConcernOptions != null)
+                selectedOptionsHS.AddRange(selectedConcernOptions);
+
+            var memberOptionsHS = new HashSet<int>(memberToUpdate.DietaryRestrictionMembers.Select(c => c.DietaryRestrictionID));//IDs of the currently selected conditions
+            
             foreach (var option in _context.DietaryRestrictions)
             {
                 if (selectedOptionsHS.Contains(option.ID.ToString())) //It is checked
@@ -462,7 +488,7 @@ namespace GROW_CRM.Controllers
                         _context.Remove(dietaryRestrictionToRemove);
                     }
                 }
-            }
+            }            
         }
 
         public async Task<FileContentResult> Download(int id)
