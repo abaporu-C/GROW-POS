@@ -36,10 +36,15 @@ namespace GROW_CRM.Data.GROWMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("HealthIssueTypeID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Restriction")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("HealthIssueTypeID");
 
                     b.ToTable("DietaryRestrictions");
                 });
@@ -85,6 +90,20 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasKey("ID");
 
                     b.ToTable("Genders");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.HealthIssueType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HealthIssueTypes");
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.Household", b =>
@@ -551,6 +570,15 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasIndex("MemberID");
 
                     b.HasDiscriminator().HasValue("MemberDocument");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.DietaryRestriction", b =>
+                {
+                    b.HasOne("GROW_CRM.Models.HealthIssueType", "HealthIssueType")
+                        .WithMany("DietaryRestrictions")
+                        .HasForeignKey("HealthIssueTypeID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestrictionMember", b =>

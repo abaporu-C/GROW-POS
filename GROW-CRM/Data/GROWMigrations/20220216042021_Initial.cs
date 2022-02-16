@@ -21,19 +21,6 @@ namespace GROW_CRM.Data.GROWMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DietaryRestrictions",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Restriction = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DietaryRestrictions", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DocumentTypes",
                 columns: table => new
                 {
@@ -57,6 +44,19 @@ namespace GROW_CRM.Data.GROWMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genders", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HealthIssueTypes",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HealthIssueTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,6 +160,26 @@ namespace GROW_CRM.Data.GROWMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Provinces", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DietaryRestrictions",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Restriction = table.Column<string>(nullable: true),
+                    HealthIssueTypeID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DietaryRestrictions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DietaryRestrictions_HealthIssueTypes_HealthIssueTypeID",
+                        column: x => x.HealthIssueTypeID,
+                        principalTable: "HealthIssueTypes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -444,6 +464,11 @@ namespace GROW_CRM.Data.GROWMigrations
                 column: "DietaryRestrictionID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DietaryRestrictions_HealthIssueTypeID",
+                table: "DietaryRestrictions",
+                column: "HealthIssueTypeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HouseholdNotifications_NotificationID",
                 table: "HouseholdNotifications",
                 column: "NotificationID");
@@ -547,6 +572,9 @@ namespace GROW_CRM.Data.GROWMigrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "HealthIssueTypes");
 
             migrationBuilder.DropTable(
                 name: "DocumentTypes");
