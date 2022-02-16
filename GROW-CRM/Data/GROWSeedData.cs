@@ -365,6 +365,7 @@ namespace GROW_CRM.Data
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
                                     YearlyIncome = 15000d,
+                                    ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i],
                                     IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
