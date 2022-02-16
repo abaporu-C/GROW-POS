@@ -64,33 +64,23 @@
             <label asp-for="Notes" class="control-label"></label>
             <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
             <span asp-validation-for="Notes" class="text-danger"></span>
-            <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int cnt = 0;
-                                List<GROW_CRM.ViewModels.OptionVM> checkboxes = ViewBag.RestrictionOptions;
-                                foreach (var checkbox in checkboxes)
-                                {
-                                    if (cnt++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedOptions"
-                                               value="@checkbox.ID"
-                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
-                                        @checkbox.DisplayText @:&nbsp;&nbsp;
-                                    @:</td>
-                                }
-                            @:</tr>
-                            }
-                        </table>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Restrictions Accredited</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Restrictions</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
                     </div>
                 </div>
+            </div>
                 <div class="form-group">
                     <label class="control-label"> Current Documents:</label>
                     <div class="ml-md-3">
@@ -126,7 +116,7 @@
                     <input type="file" class="" name="theFiles" multiple="multiple" />
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
         </div>
@@ -135,3 +125,6 @@
     <a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Membership Details</a>
 </div>
 
+@section Scripts{ 
+    <script src="~/js/multiselect.js"></script>
+}

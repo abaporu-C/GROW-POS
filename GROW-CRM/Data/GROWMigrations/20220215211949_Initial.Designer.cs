@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220211143345_Initial")]
+    [Migration("20220215211949_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -511,6 +511,10 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
 
                     b.Property<string>("Discriminator")
                         .IsRequired()

@@ -417,21 +417,33 @@ namespace GROW_CRM.Controllers
 
         private void PopulateAssignedDietaryRestrictionData(Member member)
         {
-            //For this to work, you must have Included the PatientConditions 
-            //in the Patient
+            //For this to work, you must have Included the child collection in the parent object
             var allOptions = _context.DietaryRestrictions;
-            var currentOptionIDs = new HashSet<int>(member.DietaryRestrictionMembers.Select(b => b.DietaryRestrictionID));
-            var checkBoxes = new List<OptionVM>();
+            var currentOptionsHS = new HashSet<int>(member.DietaryRestrictionMembers.Select(b => b.DietaryRestrictionID));
+            //Instead of one list with a boolean, we will make two lists
+            var selected = new List<ListOptionVM>();
+            var available = new List<ListOptionVM>();
             foreach (var option in allOptions)
             {
-                checkBoxes.Add(new OptionVM
+                if (currentOptionsHS.Contains(option.ID))
                 {
-                    ID = option.ID,
-                    DisplayText = option.Restriction,
-                    Assigned = currentOptionIDs.Contains(option.ID)
-                });
+                    selected.Add(new ListOptionVM
+                    {
+                        ID = option.ID,
+                        DisplayText = option.Restriction
+                    });
+                }
+                else
+                {
+                    available.Add(new ListOptionVM
+                    {
+                        ID = option.ID,
+                        DisplayText = option.Restriction
+                    });
+                }
             }
-            ViewData["RestrictionOptions"] = checkBoxes;
+            ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["availOpts"] = new MultiSelectList(available.OrderBy(s => s.DisplayText), "ID", "DisplayText");
         }
         private void UpdateDietaryRestrictionMembers(string[] selectedOptions, Member memberToUpdate)
         {
@@ -442,8 +454,8 @@ namespace GROW_CRM.Controllers
             }
 
             var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var memberOptionsHS = new HashSet<int>
-                (memberToUpdate.DietaryRestrictionMembers.Select(c => c.DietaryRestrictionID));//IDs of the currently selected conditions
+            var memberOptionsHS = new HashSet<int>(memberToUpdate.DietaryRestrictionMembers.Select(c => c.DietaryRestrictionID));//IDs of the currently selected conditions
+            
             foreach (var option in _context.DietaryRestrictions)
             {
                 if (selectedOptionsHS.Contains(option.ID.ToString())) //It is checked

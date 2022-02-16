@@ -370,6 +370,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     UpdatedBy = table.Column<string>(maxLength: 256, nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     FileName = table.Column<string>(maxLength: 255, nullable: true),
+                    Description = table.Column<string>(maxLength: 256, nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
                     MemberID = table.Column<int>(nullable: true),
                     DocumentTypeID = table.Column<int>(nullable: true)
