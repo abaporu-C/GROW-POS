@@ -23,7 +23,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, 
+        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, int? IDSearch, 
             int? HouseholdID, int? HouseholdStatusID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
@@ -32,7 +32,7 @@ namespace GROW_CRM.Controllers
             ViewData["Filtering"] = ""; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "Membership#","Street", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "ID","Street", "City", "Province", "Members", "LICO", "Status" };
 
             PopulateDropDownLists();
 
@@ -67,7 +67,22 @@ namespace GROW_CRM.Controllers
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
                 ViewData["Filtering"] = " show";
-            }            
+            }
+            if (IDSearch != null)
+            {
+                //TODO validation. Display warning if not integer entered.
+                try
+                {
+                    households = households.Where(h => h.ID.Equals(IDSearch));
+                    ViewData["Filtering"] = " show";
+                }
+                catch (Exception)
+                {
+
+                    //TODO
+                }
+                
+            }
 
 
             //Before we sort, see if we have called for a change of filtering or sorting
@@ -86,7 +101,7 @@ namespace GROW_CRM.Controllers
             }
 
 
-            if (sortField == "Membership#")
+            if (sortField == "ID")
             {
                 if (sortDirection == "asc")
                 {
@@ -241,13 +256,32 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles)
+        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles,string NewID)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     await AddDocumentsAsync(household, theFiles);
+                    //See if we can force the NewID
+                    if (!String.IsNullOrEmpty(NewID))
+                    {
+                        if (!Int32.TryParse(NewID, out int newID))
+                        {
+                            throw new DbUpdateException("Invalid ID");
+                        }
+                        if (HouseholdExists(newID))
+                        {
+                            throw new DbUpdateException("ID already used");
+                        }
+                        else //it is not is use so we can use the requested ID value
+                        {
+                            //Note that this works for sqLite.  However, with SQL Server
+                            //you would need to find a different work around such as generating
+                            //new values in a trigger or setting IDENTITY_INSERT in a tranascation.
+                            household.ID = newID;
+                        }
+                    }
                     _context.Add(household);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });
@@ -257,11 +291,27 @@ namespace GROW_CRM.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dex)
+            {
+                string msg = dex.GetBaseException().Message;
+                if (msg.Contains("ID already used"))
+                {
+                    ModelState.AddModelError("", "Another record is already using ID: " + NewID);
+                }
+                else if (msg.Contains("Invalid ID"))
+                {
+                    ModelState.AddModelError("", "Invalid ID: the ID must be numeric.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+          /*  catch (DbUpdateException)
             {
 
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            }
+            }*/
            
            /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/

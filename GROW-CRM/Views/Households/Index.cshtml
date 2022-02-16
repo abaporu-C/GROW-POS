@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<GROW_CRM.Models.Household>
 
 @{
-    ViewData["Title"] = "Memberships Index";
+    ViewData["Title"] = "Households Index";
 }
 
 
 <div class="row ">
     <div class="col-md-6">
-        <h2>Memberships</h2>
+        <h2>Households</h2>
     </div>
 
     <div class="col-md-3 justify-content-end">
@@ -32,37 +32,45 @@
             <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
                 <div class="card card-body bg-light">
                     <div class="row">
-                        @* <div class="form-group col-md-4">
-                                <label class="control-label">Filter by Household:</label>
-                                @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
-                            </div>*@
-
                         <div class="col-md-3">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label class="control-label">Filter by Status:</label>
-                                    @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                                    <label class="control-label">Search by ID:</label>
+                                    @Html.TextBox("IDSearch", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
+                                </div>
+                                <div class="invalid-feedback">
+                                    Only numeric values for ID.
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Filter by Status:</label>
+                                        @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
 
 
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label class="control-label">Search by Household Address:</label>
+                                @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label class="control-label">Search by City:</label>
+                                @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
+                            </div>
+                            <div class="form-group col-md-4 align-self-end pr-3">
+                                <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
+                                <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-5">
-                            <label class="control-label">Search by Household Address:</label>
-                            @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave"})
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label class="control-label">Search by City:</label>
-                            @Html.TextBox("CitySearch", null, new { @class = "form-control" , placeholder = "E.g. St Catharines" })
-                        </div>
-                        <div class="form-group col-md-4 align-self-end">
-                            <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                            <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <table class="table">
@@ -74,7 +82,7 @@
             <thead>
                 <tr>
                     <th>
-                        <input type="submit" name="actionButton" value="Household #" class="btn btn-link" />
+                        <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
                     </th>
                     <th>
                         <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
@@ -112,7 +120,7 @@
                 {
                     <tr>
                         <td>
-                            <center> #@Html.DisplayFor(modelItem => item.ID)</center>
+                             @Html.DisplayFor(modelItem => item.ID)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.StreetNumber)

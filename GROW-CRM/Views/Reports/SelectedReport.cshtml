@@ -28,7 +28,7 @@
 @if ((int)ViewData["Count"] < 1)
 {
     <br>
-    <h3>Sorry, there are no memberships that apply to this report.</h3>
+    <h3>Sorry, there are no households that apply to this report.</h3>
     <br>
 }
 
@@ -71,7 +71,7 @@
             </tbody>
         </table>
     }
-    else if ((string)ViewData["ReportType"] == "New Memberships Report")
+    else if ((string)ViewData["ReportType"] == "New Households Report")
     {
         <a asp-action="DownloadNewMembers" class="btn btn-info float-left">Download New Members Report</a>
         <br />
