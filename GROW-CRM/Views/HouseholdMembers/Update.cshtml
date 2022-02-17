@@ -4,7 +4,7 @@
     ViewData["Title"] = "Update Appointment";
 }
 
-<h2>Update Member for Membership#  @Model.Household?.ID</h2>
+<h2>Update Member for Household :  @Model.Household?.ID</h2>
 
 <hr />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
@@ -143,7 +143,7 @@
         </div>
     </form>
 <div>
-    <a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Membership Details</a>
+    <a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
 </div>
 
 @section Scripts{ 

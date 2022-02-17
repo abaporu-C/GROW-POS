@@ -82,11 +82,11 @@ namespace GROW_CRM.Controllers
                 renewalReportsFiltered.Add(r);
             }
 
-            string[] headers = new string[] { "Membership #", "Number of Members", "Yearly Income", "Last Verification"};
+            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification"};
 
             ViewData["ReportType"] = "Renewal Report";
             ViewData["Count"] = renewalReportsFiltered.Count();
-            ViewData["Name"] = $"Memberships up for Reassessment";
+            ViewData["Name"] = $"Households up for Reassessment";
             ViewBag.Headers = headers;
             ViewBag.Report = renewalReportsFiltered;
 
@@ -140,7 +140,7 @@ namespace GROW_CRM.Controllers
                     //     ExcelPackage package = new ExcelPackage(memStream);
                     // }
 
-                    var workSheet = excel.Workbook.Worksheets.Add("Memberships Up For Renewal");
+                    var workSheet = excel.Workbook.Worksheets.Add("Households Up For Renewal");
 
                     //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(renewalReportsFiltered, true);
@@ -282,9 +282,9 @@ namespace GROW_CRM.Controllers
                 newAdditionsfiltered.Add(na);
             }
 
-            string[] headers = new string[] { "Membership #", "Number of Members", "Yearly Income", "Created On", "Created By" };
+            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Created On", "Created By" };
 
-            ViewData["ReportType"] = "New Memberships Report";
+            ViewData["ReportType"] = "New Households Report";
             ViewData["Count"] = newAdditionsfiltered.Count();
             ViewData["Name"] = $"New Additions - From: {lastWeek.Month}/{lastWeek.Day}/{lastWeek.Year} To: {DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.Year}";
             ViewBag.Headers = headers;
@@ -1077,7 +1077,7 @@ namespace GROW_CRM.Controllers
                     TotalIncome = (int)grp.Key.YearlyIncome
                 });
 
-            string[] headers = new string[] { "Membership #", "Member", "Age", "Gender", "Income Source", "Total Income" };
+            string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Income Source", "Total Income" };
 
             ViewData["ReportType"] = "Income Report";
             ViewData["Count"] = sumQ.Count();
