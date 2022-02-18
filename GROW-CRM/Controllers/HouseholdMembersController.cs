@@ -399,6 +399,12 @@ namespace GROW_CRM.Controllers
             return new SelectList(incQuery, "ID", "Situation", id);
         }
 
+        [HttpGet]
+        public JsonResult GetIncomeSituations(int? id)
+        {
+            return Json(IncomeSituationSelectList(id));
+        }
+
         private void PopulateDropDownLists(Member member = null)
         {
             ViewData["GenderID"] = GenderSelectList(member?.GenderID);
