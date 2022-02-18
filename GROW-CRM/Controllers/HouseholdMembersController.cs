@@ -155,7 +155,7 @@ namespace GROW_CRM.Controllers
 
 
         // GET: PatientAppt/Add
-        public IActionResult Add(int? HouseholdID, string HouseholdAddress)
+        public IActionResult Add(int? HouseholdID, string HouseholdName)
         {
             if (!HouseholdID.HasValue)
             {
@@ -167,7 +167,7 @@ namespace GROW_CRM.Controllers
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
-            ViewData["HouseholdAddress"] = HouseholdAddress;
+            ViewData["HouseholdName"] = HouseholdName;
             Member m = new Member()
             {
                 HouseholdID = HouseholdID.GetValueOrDefault()
@@ -183,7 +183,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,ConsentGiven,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdAddress, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,ConsentGiven,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdName, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -229,7 +229,7 @@ namespace GROW_CRM.Controllers
 
             PopulateAssignedDietaryRestrictionData(member);
             PopulateDropDownLists(member);
-            ViewData["HouseholdAddress"] = HouseholdAddress;
+            ViewData["HouseholdName"] = HouseholdName;
             return View(member);
         }
 
