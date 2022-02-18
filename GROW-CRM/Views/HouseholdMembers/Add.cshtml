@@ -5,12 +5,11 @@
 }
 
 <h3>
-    Add Member to Household : @Html.DisplayFor(model => model.HouseholdID)
+    Add Member to Household : @ViewData["HouseholdName"]
 </h3>
 <hr />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
-    <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">

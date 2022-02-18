@@ -285,9 +285,10 @@ namespace GROW_CRM.Data
                     context.Households.AddRange(
                         new Household
                         {
+                            Name = "House #1",
                             StreetNumber = "65",
                             StreetName = "Church St.",
-                            AptNumber = "201",                            
+                            AptNumber = "201",
                             PostalCode = "R3E 9C8",
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
@@ -297,9 +298,10 @@ namespace GROW_CRM.Data
                         },
                         new Household
                         {
+                            Name = "House #2",
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                                                     
+
                             PostalCode = "L2H 1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
@@ -309,6 +311,7 @@ namespace GROW_CRM.Data
                         },
                          new Household
                          {
+                             Name = "House #3",
                              StreetNumber = "101",
                              StreetName = "Development Ave.",
 
@@ -320,7 +323,7 @@ namespace GROW_CRM.Data
                              HouseholdStatusID = 2
                          }
 
-                    );
+                    ); ;
 
                     //Save changes
                     context.SaveChanges();

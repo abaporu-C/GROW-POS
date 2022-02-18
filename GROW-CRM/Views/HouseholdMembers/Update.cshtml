@@ -4,12 +4,11 @@
     ViewData["Title"] = "Update Appointment";
 }
 
-<h2>Update Member for Household :  @Model.Household?.ID</h2>
+<h2>Update Member for Household :  @Model.Household?.Name</h2>
 
 <hr />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
-    <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
+    <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />    
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
