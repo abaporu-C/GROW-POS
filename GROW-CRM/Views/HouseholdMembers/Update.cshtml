@@ -4,16 +4,19 @@
     ViewData["Title"] = "Update Appointment";
 }
 
-<h2>Update Member for Household :  @Model.Household?.ID</h2>
+<h2>Update Member for Household :  @Model.Household?.Name</h2>
 
 <hr />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
-    <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
+    <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />    
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="ConsentGiven"></label>
+                    <input asp-for="ConsentGiven" />
+                </div>
                 <div class="form-group">
                     <label asp-for="FirstName" class="control-label"></label>
                     <input asp-for="FirstName" class="form-control" />
@@ -64,74 +67,84 @@
             <label asp-for="Notes" class="control-label"></label>
             <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
             <span asp-validation-for="Notes" class="text-danger"></span>
-            <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int cnt = 0;
-                                List<GROW_CRM.ViewModels.OptionVM> checkboxes = ViewBag.RestrictionOptions;
-                                foreach (var checkbox in checkboxes)
-                                {
-                                    if (cnt++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedOptions"
-                                               value="@checkbox.ID"
-                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
-                                        @checkbox.DisplayText @:&nbsp;&nbsp;
-                                    @:</td>
-                                }
-                            @:</tr>
-                            }
-                        </table>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Illness Accredited</label> <button type="button" id="btnIllnessRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 10, @class = "form-control" })
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label"> Current Documents:</label>
-                    <div class="ml-md-3">
-                        @{
-                            int fileCount = Model.MemberDocuments.Count;
-                            if (fileCount > 0)
-                            {
-                                var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
-                                if (fileCount > 1)
-                                {
-                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
-                                        <span class="badge badge-info">@fileCount</span> Current Documents...
-                                    </a>
-                                    <div class="collapse" id="collapseSum@(Model.ID)">
-                                        @{
-                                            foreach (var d in Model.MemberDocuments)
-                                            {
-                                                <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
-                                            }
-                                        }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
-                                }
-                            }
-                        }
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Illness</label> <button type="button" id="btnIllnessLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 10, @class = "form-control" })
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Upload Additional Documents:</label>
-                    <input type="file" class="" name="theFiles" multiple="multiple" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Concerns Accredited</label> <button type="button" id="btnConcernRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Concerns</label> <button type="button" id="btnConcernLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Current Documents:</label>
+                <div class="ml-md-3">
+                    @{
+                        int fileCount = Model.MemberDocuments.Count;
+                        if (fileCount > 0)
+                        {
+                            var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
+                            if (fileCount > 1)
+                            {
+                                <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                                    <span class="badge badge-info">@fileCount</span> Current Documents...
+                                </a>
+                                <div class="collapse" id="collapseSum@(Model.ID)">
+                                    @{
+                                        foreach (var d in Model.MemberDocuments)
+                                        {
+                                            <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Upload Additional Documents:</label>
+                <input type="file" class="" name="theFiles" multiple="multiple" />
+            </div>
+            <div class="form-group">
+                <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
         </div>
     </form>
 <div>
     <a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
 </div>
 
+@section Scripts{ 
+    <script src="~/js/multiselect.js"></script>
+}

@@ -74,7 +74,7 @@ namespace GROW_CRM.Models
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Street number must be numeric")]
         public string StreetNumber { get; set; }
 
         [Display(Name ="Street Name")]

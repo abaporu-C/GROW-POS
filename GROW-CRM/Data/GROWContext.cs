@@ -27,7 +27,7 @@ namespace GROW_CRM.Data
         }
 
         //To give access to IHttpContextAccessor for Audit Data with IAuditable
-        private readonly IHttpContextAccessor _httpContextAccessor;        
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public GROWContext(DbContextOptions<GROWContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
@@ -47,6 +47,8 @@ namespace GROW_CRM.Data
         public DbSet<DocumentType> DocumentTypes { get; set; }
 
         public DbSet<Gender> Genders { get; set; }
+
+        public DbSet<HealthIssueType> HealthIssueTypes { get; set; }
 
         public DbSet<Household> Households { get; set; }
 
@@ -92,10 +94,17 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<HouseholdNotification>()
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
-            
+
 
             //Cascading Delete Behavior
-            
+
+            //DietaryRestrictions
+            modelBuilder.Entity<DietaryRestriction>()
+                .HasOne(dr => dr.HealthIssueType)
+                .WithMany(hit => hit.DietaryRestrictions)
+                .HasForeignKey(dr => dr.HealthIssueTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //DietaryRestriction-Member
             modelBuilder.Entity<DietaryRestrictionMember>()
                 .HasOne(drm => drm.DietaryRestriction)
