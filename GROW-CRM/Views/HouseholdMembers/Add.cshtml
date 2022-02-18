@@ -8,6 +8,7 @@
     Add Member to Household : @ViewData["HouseholdName"]
 </h3>
 <hr />
+<partial name="_addIncomeSituationModal" />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -46,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control"/>
+                <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -64,11 +65,23 @@
 
             <div class="form-group">
                 <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                    <option value="">No Reason Given</option>
-                </select>
-                <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                    </div>
+                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                        <option value="">Select Situation</option>
+                    </select>
+                </div>
             </div>
+
+            @* <div class="form-group">
+                    <label asp-for="IncomeSituationID" class="control-label"></label>
+                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                        <option value="">No Reason Given</option>
+                    </select>
+                    <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
+                </div>*@
 
             <label asp-for="Notes" class="control-label"></label>
             <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
@@ -127,29 +140,32 @@
     </div>
 
     @section Scripts {
-        <script src="~/js/multiselect.js"></script>
-       
-        @*Phone Number Formatter - Not used here*@
-        <script>
-      function formatPhoneNumber(value) {
-        if (!value) return value;
-        const phoneNumber = value.replace(/[^\d]/g, '');
-        const phoneNumberLength = phoneNumber.length;
-        if (phoneNumberLength < 4) return phoneNumber;
-        if (phoneNumberLength < 7) {
-          return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-        }
-        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-          3,
-          6
-        )}-${phoneNumber.slice(6, 9)}`;
-      }
-
-      function phoneNumberFormatter() {
-        const inputField = document.getElementById('phone-number');
-        const formattedInputValue = formatPhoneNumber(inputField.value);
-        inputField.value = formattedInputValue;
-      }
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/js/refreshDDL.js"></script>
+        <script src="~/js/multiselect.js"></script>               
+        <script type="text/javascript">
+            $('#submitIncomeSituationCreate').click(function (event) {
+                event.preventDefault();
+                var form = $('#createIncomeSituationForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#addIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Create Failed.  There was a problem adding the record.");
+                        }
+                    });
+                }
+                return false;
+            });
+            $('#addIncomeSituationModal').on('hide.bs.modal', function () {
+                $('#createIncomeSituationForm').find("input[type=text], textarea, select").val("");//to clear the data in the popup
+                refreshDDL('IncomeSituationID', '/HouseholdMembers/GetIncomeSituations', false, null, true, 'None', true);
+            });
         </script>
     }
 
