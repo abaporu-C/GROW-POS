@@ -1264,5 +1264,75 @@ namespace GROW_CRM.Controllers
         {
             return _context.Households.Any(e => e.ID == id);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetDemoJson()
+        {
+            var members = from m in _context.Members
+                               .Include(m => m.Gender)
+                          select m;
+
+            int memberCount = members.Count();
+
+            var genderReport = _context.Members
+                                    .Include(m => m.Gender)
+                                    .GroupBy(m => new { m.Gender.Name })
+                                    .Select(grp => new GenderReport
+                                    {
+                                        Gender = grp.Key.Name,
+                                        Percentage = grp.Count(),
+                                        Total = grp.Count()
+                                    }).ToList();
+
+            for (int i = 0; i < genderReport.Count(); i++)
+            {
+                genderReport[i].Percentage /= memberCount;
+            }
+
+            DateTime now = DateTime.Now;
+            List<AgeReport> ageReport = new List<AgeReport> {
+                new AgeReport{ AgeRange = "0-12", Percentage = 0, Total = 0},
+                new AgeReport{ AgeRange = "13-18", Percentage = 0, Total = 0},
+                new AgeReport{ AgeRange = "19-64", Percentage = 0, Total = 0},
+                new AgeReport{ AgeRange = "65+", Percentage = 0, Total = 0},
+            };
+
+            foreach (Member m in members)
+            {
+                TimeSpan diff = (TimeSpan)(now - m.DOB);
+                int diffYears = (int)Math.Round(diff.TotalDays / 365);
+
+                if (diffYears < 13) ageReport[0].Total++;
+                if (diffYears < 19) ageReport[1].Total++;
+                if (diffYears < 65) ageReport[2].Total++;
+                else ageReport[3].Total++;
+            }
+
+            ageReport[0].Percentage = ageReport[0].Total / memberCount;
+            ageReport[1].Percentage = ageReport[1].Total / memberCount;
+            ageReport[2].Percentage = ageReport[2].Total / memberCount;
+            ageReport[3].Percentage = ageReport[3].Total / memberCount;
+
+            var dietaryTotal = _context.DietaryRestrictionMembers.Count();
+
+            var dietaryReport = _context.DietaryRestrictionMembers
+                                .Include(dr => dr.DietaryRestriction)
+                                .GroupBy(dr => new { dr.DietaryRestriction.Restriction })
+                                .Select(grp => new DietaryReport
+                                {
+                                    Restriction = grp.Key.Restriction,
+                                    Percentage = grp.Count(),
+                                    Total = grp.Count()
+                                }).ToList();
+
+            for (int i = 0; i < dietaryReport.Count(); i++)
+            {
+                dietaryReport[i].Percentage /= dietaryTotal;
+            }
+
+            List<Object> demoData = new List<object> { genderReport, ageReport, dietaryReport};
+
+            return Json(demoData);
+        }
     }
 }
