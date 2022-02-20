@@ -15,6 +15,7 @@ namespace GROW_CRM.Models
             DietaryRestrictionMembers = new HashSet<DietaryRestrictionMember>();
             MemberDocuments = new HashSet<MemberDocument>();
             Orders = new HashSet<Order>();
+            MemberIncomeSituations = new HashSet<MemberIncomeSituation>();
         }
 
         //Fields
@@ -124,13 +125,7 @@ namespace GROW_CRM.Models
         [Display(Name = "Household")]
         public int HouseholdID { get; set; }
 
-        public Household Household { get; set; }
-
-        [Display(Name ="Income Situation")]   
-        [Required(ErrorMessage = "You must select an Income Situation")]
-        public int? IncomeSituationID { get; set; }        
-
-        public IncomeSituation IncomeSituation { get; set; }
+        public Household Household { get; set; }        
 
         //O:M Relationships        
 
@@ -140,5 +135,7 @@ namespace GROW_CRM.Models
         public ICollection<MemberDocument> MemberDocuments { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<MemberIncomeSituation> MemberIncomeSituations { get; set; }
     }
 }

@@ -62,6 +62,8 @@ namespace GROW_CRM.Data
 
         public DbSet<MemberDocument> MemberDocuments { get; set; }
 
+        public DbSet<MemberIncomeSituation> MemberIncomeSituations { get; set; }
+
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
@@ -94,7 +96,9 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<HouseholdNotification>()
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
-
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
+                .IsUnique();
 
             //Cascading Delete Behavior
 
@@ -143,13 +147,7 @@ namespace GROW_CRM.Data
                 .HasOne(m => m.Household)
                 .WithMany(h => h.Members)
                 .HasForeignKey(m => m.HouseholdID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Member>()
-                .HasOne(m => m.IncomeSituation)
-                .WithMany(i => i.Members)
-                .HasForeignKey(m => m.IncomeSituationID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);            
 
             //Order
             modelBuilder.Entity<Order>()

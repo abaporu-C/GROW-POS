@@ -337,10 +337,7 @@ namespace GROW_CRM.Data
                     int householdCount = householdIDs.Count();                    
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();
-
-                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();
+                    int genderCount = genderIDs.Count();                    
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
@@ -370,8 +367,7 @@ namespace GROW_CRM.Data
                                     YearlyIncome = 15000d,
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
-                                    HouseholdID = householdIDs[i],
-                                    IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
+                                    HouseholdID = householdIDs[i]
                                 }    
                             );
 
@@ -409,6 +405,31 @@ namespace GROW_CRM.Data
 
                         context.SaveChanges();
                     }
+                }
+
+                //Look for Member Income Situation
+                if (!context.MemberIncomeSituations.Any())
+                {
+                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
+                    int incomeSituationCount = incomeSituationIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();
+
+                    List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
+
+                    foreach (var memberID in memberIDs)
+                    {
+                        MemberIncomeSituation s = new MemberIncomeSituation
+                        {
+                            MemberID = memberID,
+                            IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount - 1)],
+                            Income = rnd.Next(10, 10000)
+                        };
+                        mis.Add(s);
+                    }
+                    context.MemberIncomeSituations.AddRange(mis);
+                    context.SaveChanges();
                 }
             }
         }

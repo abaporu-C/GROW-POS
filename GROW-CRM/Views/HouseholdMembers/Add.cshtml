@@ -63,17 +63,25 @@
                 <span asp-validation-for="YearlyIncome" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="IncomeSituationID" class="control-label"></label>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+            <div class="form-group" id="ListMemberIncomeSituations">
+                    <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                    <div class="col-md-offset-1" id="IncomeSituationList">
+                        <table>
+                            @{
+                                foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
+                                {
+                                    @:<tr><td>
+                                        @item.Summary 
+                                    @:</td><td>
+                                        @:&nbsp; &nbsp;
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Summary" type="button">&#x270D;</button>
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Summary" type="button">&#x274C;</button>
+		                            @:</td></tr>
+                                }
+                            }
+                        </table>
                     </div>
-                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                        <option value="">Select Situation</option>
-                    </select>
                 </div>
-            </div>
 
             @* <div class="form-group">
                     <label asp-for="IncomeSituationID" class="control-label"></label>

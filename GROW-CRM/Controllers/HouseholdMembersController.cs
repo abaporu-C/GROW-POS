@@ -52,16 +52,16 @@ namespace GROW_CRM.Controllers
             var members = from m in _context.Members
                                   .Include(m => m.Gender)
                                   .Include(m => m.Household)
-                                  .Include(m => m.IncomeSituation)
+                                  .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                                   .Include(m => m.MemberDocuments)
                         where m.HouseholdID == HouseholdID.GetValueOrDefault()
                         select m;
 
-            if (IncomeSituationID.HasValue)
+            /*if (IncomeSituationID.HasValue)
             {
                 members = members.Where(p => p.IncomeSituationID == IncomeSituationID);
                 ViewData["Filtering"] = "btn-danger";
-            }
+            }*/
             if (!String.IsNullOrEmpty(NotesSearchString))
             {
                 members = members.Where(p => p.Notes.ToUpper().Contains(NotesSearchString.ToUpper()));
@@ -90,7 +90,7 @@ namespace GROW_CRM.Controllers
                 }
             }
             //Now we know which field and direction to sort by.
-            if (sortField == "Income Situation")
+            /*if (sortField == "Income Situation")
             {
                 if (sortDirection == "asc")
                 {
@@ -102,8 +102,8 @@ namespace GROW_CRM.Controllers
                     members = members
                         .OrderByDescending(m => m.IncomeSituation.Situation);
                 }
-            }
-            else if (sortField == "Member")
+            }*/
+            if (sortField == "Member")
             {
                 if (sortDirection == "asc")
                 {
@@ -246,7 +246,7 @@ namespace GROW_CRM.Controllers
             var member = await _context.Members
                .Include(m => m.Gender)
                .Include(m => m.Household)
-               .Include(m => m.IncomeSituation)
+               .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                .FirstOrDefaultAsync(m => m.ID == id);
@@ -274,7 +274,7 @@ namespace GROW_CRM.Controllers
             var memberToUpdate = await _context.Members
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -293,7 +293,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID, m => m.IncomeSituationID))
+                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID))
             {
                 try
                 {                    
@@ -345,7 +345,7 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.Gender)
                 .Include(m => m.Household).ThenInclude(h => h.City)
                 .Include(m => m.Household).ThenInclude(h => h.Province)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (member == null)
             {
@@ -362,7 +362,7 @@ namespace GROW_CRM.Controllers
             var member = await _context.Members
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             //Get the URL with the last filter, sort and page parameters
@@ -417,7 +417,7 @@ namespace GROW_CRM.Controllers
         {
             ViewData["GenderID"] = GenderSelectList(member?.GenderID);
             ViewData["DocumentTypeID"] = DocumentTypeSelectList();
-            ViewData["IncomeSituationID"] = IncomeSituationSelectList(member?.IncomeSituationID);
+            ViewData["IncomeSituationID"] = IncomeSituationSelectList(null);
         }
 
         private string ControllerName()

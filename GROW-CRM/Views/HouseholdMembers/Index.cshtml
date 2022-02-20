@@ -184,7 +184,35 @@
                         <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a> <br />
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                        @{
+                            int theCount = item.MemberIncomeSituations.Count;
+                            if (theCount > 0)
+                            {
+                                string first = item.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                                if (theCount > 1)
+                                {
+                                    string theList = first;
+                                    var c = item.MemberIncomeSituations.ToList();
+                                    for (int i = 1; i < theCount; i++)
+                                    {
+                                        theList += ", " + c[i].IncomeSituation.Situation;
+                                    }
+                                    @:Income Situations:
+                                    <a tabindex="0" class="" role="button" data-toggle="popover"
+                                       data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                                       data-content="@theList">
+                                        @first... <span class="badge badge-info">
+                                            @theCount
+                                        </span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    @:Income Situations:
+                                    @first
+                                }
+                            }
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Gender.Name)
