@@ -386,6 +386,17 @@ namespace GROW_CRM.Controllers
             return new SelectList(_context.IncomeSituations
                 .OrderBy(d => d.Situation), "ID", "Situation", selectedId);
         }
+
+        public PartialViewResult MemberIncomeSituationList(int id)
+        {
+            ViewBag.MemberIncomeSituations = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == id)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+            return PartialView("_MemberIncomeSituationList");
+        }
+
         private void PopulateDropDownLists(Member member = null)
         {
             ViewData["HouseholdID"] = HouseholdSelectList(member?.HouseholdID);

@@ -6,6 +6,7 @@
 
 <h2>Edit Member: @Html.DisplayFor(model => model.FullName)</h2>
 <hr />
+<partial name="_MemberIncomeSituationModal" />
 <form asp-action="Edit">
     <div class="row">
         <div class="col-md-6">
@@ -69,11 +70,11 @@
                 <span asp-validation-for="HouseholdID" class="text-danger"></span>
             </div>
             <div class="form-group" id="ListMemberIncomeSituations">
-                    <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
-                    <div class="col-md-offset-1" id="IncomeSituationList">
-                        <table>
-                            @{
-                                foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
+                <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                <div class="col-md-offset-1" id="MemberIncomeSituationList">
+                    <table>
+                        @{
+                            foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
                                 {
                                     @:<tr><td>
                                         @item.Summary 
@@ -83,10 +84,10 @@
                                         <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Summary" type="button">&#x274C;</button>
 		                            @:</td></tr>
                                 }
-                            }
-                        </table>
-                    </div>
+                        }
+                    </table>
                 </div>
+            </div>
 
 
         </div>
@@ -102,4 +103,46 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+            //New for modal
+            function refreshModal(actionForm, MemberIncomeSituationsID) {
+              switch (actionForm) {
+                  case 'CreateForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/CreateMemberIncomeSituation/' + @Model.ID);
+                    break;
+                  case 'EditForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/EditMemberIncomeSituation/' + MemberIncomeSituationsID);
+                    break;
+                  case 'DeleteForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/DeleteMemberIncomeSituation/' + MemberIncomeSituationsID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var MemberIncomeSituationsID = $(this).attr("tag");
+                refreshModal(actionForm, MemberIncomeSituationsID);
+            });
+            $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {
+                event.preventDefault();
+                var form = $('#theMemberIncomeSituationsForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            console.log($('#theMemberIncomeSituationModal'))
+                            $('#theMemberIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed.  There was a problem maintaing the data.");
+                        }
+                    });
+                }
+                return false;
+            });
+        $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
+            $('#MemberIncomeSituationList').load('/HouseholdMembers/MemberIncomeSituationList/@Model.ID');
+            });
+</script>
 }

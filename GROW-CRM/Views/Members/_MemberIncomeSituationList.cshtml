@@ -1,0 +1,14 @@
+﻿<table>
+@{
+    foreach (var item in ViewBag.MemberIncomeSituations)
+    {
+        @:<tr><td>
+            @item.Summary 
+        @:</td><td>
+            @:&nbsp; &nbsp;
+            <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Summary" type="button">&#x270D;</button>
+            <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Summary" type="button">&#x274C;</button>
+		@:</td></tr>
+    }
+}
+</table>

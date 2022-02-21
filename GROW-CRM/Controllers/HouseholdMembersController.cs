@@ -572,6 +572,16 @@ namespace GROW_CRM.Controllers
 
         }
 
+        public PartialViewResult MemberIncomeSituationList(int id)
+        {
+            ViewBag.MemberIncomeSituations = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == id)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+            return PartialView("_MemberIncomeSituationList");
+        }
+
         private bool MemberExists(int id)
         {
             return _context.Members.Any(e => e.ID == id);
