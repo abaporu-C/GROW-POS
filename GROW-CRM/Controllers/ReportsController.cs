@@ -932,20 +932,18 @@ namespace GROW_CRM.Controllers
             var sumQ = _context.Members
                 .Include(m => m.Household).ThenInclude(m => m.Province)
                 .Include(m => m.Gender)
-                .Include(m => m.IncomeSituation)
                 .AsEnumerable()
-                .GroupBy(a => new { a.Household.ID, a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
+                .GroupBy(a => new { a.Household.ID, a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.Household.YearlyIncome })
                 .Select(grp => new HouseholdInformation
                 {
                     Code = grp.Key.ID,
                     Name = grp.Key.FullName,
                     Age = grp.Key.Age,
                     Gender = grp.Key.Name,
-                    IncomeSource = grp.Key.Situation,
                     TotalIncome = (int)grp.Key.YearlyIncome
                 });
 
-            string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Income Source", "Total Income" };
+            string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Total Income" };
 
             ViewData["ReportType"] = "Income Report";
             ViewData["Count"] = sumQ.Count();
@@ -962,16 +960,14 @@ namespace GROW_CRM.Controllers
             var householdInfo = _context.Members
                         .Include(p => p.Household).ThenInclude(p => p.Province)
                         .Include(p => p.Gender)
-                        .Include(p => p.IncomeSituation)
                         .AsEnumerable()
-                        .GroupBy(a => new { a.Household, a.Household.ID, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
+                        .GroupBy(a => new { a.Household, a.Household.ID, a.FullName, a.Gender.Name, a.Age, a.Household.YearlyIncome })
                         .Select(grp => new
                         {
                             Code = grp.Key.ID,
                             Name = grp.Key.FullName,
                             Age = grp.Key.Age,
                             Gender = grp.Key.Name,
-                            Income_Source = grp.Key.Situation,
                             Total_Income = (int)grp.Key.YearlyIncome
                         });
 

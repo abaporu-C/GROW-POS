@@ -38,7 +38,7 @@ namespace GROW_CRM.Controllers
             var members = from m in _context.Members
                               .Include(m => m.Gender)
                               .Include(m => m.Household).ThenInclude(h => h.City)
-                              .Include(m => m.IncomeSituation)
+                              .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                               select m;
 
 
@@ -147,7 +147,7 @@ namespace GROW_CRM.Controllers
                         .ThenByDescending(p => p.FirstName);
                         }
                             }
-                    else if (sortField == "Situation")
+                    /*else if (sortField == "Situation")
                     {
                         if (sortDirection == "asc")
                         {
@@ -163,7 +163,7 @@ namespace GROW_CRM.Controllers
                         .ThenByDescending(p => p.LastName)
                         .ThenByDescending(p => p.FirstName);
                         }
-                    }
+                    }*/
 
 
 
@@ -185,7 +185,7 @@ namespace GROW_CRM.Controllers
             var member = await _context.Members
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -255,7 +255,7 @@ namespace GROW_CRM.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Household).ThenInclude(h => h.City)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.Gender)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -280,7 +280,7 @@ namespace GROW_CRM.Controllers
             var memberToUpdate = await _context.Members
               .Include(h => h.Household)
               .Include(h => h.Gender)
-              .Include(h => h.IncomeSituation)
+              .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
               .SingleOrDefaultAsync(h => h.ID == id);
 
             //Check that you got it or exit with a not found error
@@ -293,7 +293,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.LastName, m => m.MiddleName, m => m.DOB, m => m.GenderID, m => m.Email,
-                m => m.Notes, m => m.HouseholdID, m => m.IncomeSituationID))
+                m => m.Notes, m => m.HouseholdID))
             {
                 try
                 {
@@ -336,7 +336,7 @@ namespace GROW_CRM.Controllers
             var member = await _context.Members
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
-                .Include(m => m.IncomeSituation)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (member == null)
             {
@@ -386,11 +386,22 @@ namespace GROW_CRM.Controllers
             return new SelectList(_context.IncomeSituations
                 .OrderBy(d => d.Situation), "ID", "Situation", selectedId);
         }
+
+        public PartialViewResult MemberIncomeSituationList(int id)
+        {
+            ViewBag.MemberIncomeSituations = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == id)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+            return PartialView("_MemberIncomeSituationList");
+        }
+
         private void PopulateDropDownLists(Member member = null)
         {
             ViewData["HouseholdID"] = HouseholdSelectList(member?.HouseholdID);
             ViewData["GenderID"] = GenderSelectList(member?.GenderID);
-            ViewData["IncomeSituationID"] = IncomeSelectList(member?.IncomeSituationID);
+            ViewData["IncomeSituationID"] = IncomeSelectList(null);
         }
     }
 }

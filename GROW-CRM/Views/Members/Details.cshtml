@@ -80,10 +80,13 @@
 
         </dd>
         <dt class="col-sm-2">
-            Income Situation
+            Income Sources:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IncomeSituation.Situation)
+            @foreach (var c in Model.MemberIncomeSituations)
+            {
+                @c.IncomeSituation.Situation <br />
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DietaryRestrictionMembers)

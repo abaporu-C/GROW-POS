@@ -91,10 +91,10 @@
                     <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
                 </th>
 
-                
-                <th>
-                    <input type="submit" name="actionButton" value="Situation" class="btn btn-link" />
-                </th>
+
+                @*<th>
+            <input type="submit" name="actionButton" value="Situation" class="btn btn-link" />
+        </th>*@
                 <th></th>
             </tr>
         </thead>
@@ -126,11 +126,11 @@
                     @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
                     @Html.DisplayFor(modelItem => item.Household.City)
                     @Html.DisplayFor(modelItem => item.Household.Province)
-                </td>*@
+                </td>
                 
                 <td>
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                </td>
+                </td>*@
                 <td>
                     <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> |

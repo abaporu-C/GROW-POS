@@ -229,7 +229,7 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
-                .Include(h => h.Members).ThenInclude(m => m.IncomeSituation)
+                .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.City)
                 .Include(h => h.Province)
