@@ -33,7 +33,7 @@ namespace GROW_CRM.Controllers.Helpers
             for (int i = 0; i < genderReport.Count(); i++)
             {
                 genderReport[i].Percentage = Math.Round((double)genderReport[i].Total/memberCount, 2);
-                genderReport[i].PercentageText = $"{genderReport[i].Percentage * 100}%";
+                genderReport[i].PercentageText = $"{Math.Round(genderReport[i].Percentage * 100, 2)}%";
             }
 
             DateTime now = DateTime.Now;            
