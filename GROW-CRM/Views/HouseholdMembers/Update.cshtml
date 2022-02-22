@@ -132,6 +132,7 @@
         </div>
     </form>
 <div>
-    <a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+    @*<a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> |*@
+    <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
 </div>
 

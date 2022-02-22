@@ -2,7 +2,10 @@
 
 @{
     ViewData["Title"] = "Details";
+
 }
+
+
 
 
 <div>
@@ -91,36 +94,44 @@
         <dt class="col-sm-2">
             Current Documents:
         </dt>
-        <dd>                        
-                @{
-                    int fileCount = Model.MemberDocuments.Count;
-                    if (fileCount > 0)
+        <dd>
+            @{
+                int fileCount = Model.MemberDocuments.Count;
+                if (fileCount > 0)
+                {
+                    var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
+                    if (fileCount > 1)
                     {
-                        var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
-                        if (fileCount > 1)
-                        {
-                            <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
-                                <span class="badge badge-info">@fileCount</span> Current Documents...
-                            </a>
-                            <div class="collapse" id="collapseSum@(Model.ID)">
-                                @{
-                                    foreach (var d in Model.MemberDocuments)
-                                    {
-                                        <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
-                                    }
+                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                            <span class="badge badge-info">@fileCount</span> Current Documents...
+                        </a>
+                        <div class="collapse" id="collapseSum@(Model.ID)">
+                            @{
+                                foreach (var d in Model.MemberDocuments)
+                                {
+                                    <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
                                 }
-                            </div>
-                        }
-                        else
-                        {
-                            <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
-                        }
+                            }
+                        </div>
                     }
-                }            
+                    else
+                    {
+                        <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                    }
+                }
+            }
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
 </div>
+
+@*@section Scripts {
+    <script type="text/javascript">
+        $(document).on('click', '#backLink', function () {
+            history.go(-1);
+        });
+    </script>
+}*@

@@ -25,108 +25,131 @@
                 <input asp-for="MiddleName" class="form-control" />
                 <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
-                    <option value="">Select Gender</option>
-                </select>
-                <span asp-validation-for="GenderID" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label asp-for="GenderID" class="control-label"></label>
+                        <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                            <option value="">Select Gender</option>
+                        </select>
+                        <span asp-validation-for="GenderID" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label asp-for="DOB" class="control-label"></label>
+                        <input asp-for="DOB" class="form-control" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
-                <span asp-validation-for="DOB" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+
+            
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="phoneAddon">#</span>
+                </div>
+                <input asp-for="PhoneNumber" class="form-control" aria-describedby="phoneAddon"/>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
+        </div>
+
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="YearlyIncome" class="control-label"></label>
-                <input asp-for="YearlyIncome" class="form-control" />
-                <span asp-validation-for="YearlyIncome" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="IncomeSituationID" class="control-label"></label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                        <span class="input-group-text" id="emailAddon">@@</span>
                     </div>
-                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                        <option value="">Select Situation</option>
-                    </select>
+                    <input asp-for="Email" type="text" placeholder="example@mail.com" class="form-control" aria-describedby="emailAddon" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
 
-            @* <div class="form-group">
-                    <label asp-for="IncomeSituationID" class="control-label"></label>
-                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                        <option value="">No Reason Given</option>
-                    </select>
-                    <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
-                </div>*@
-
-            <label asp-for="Notes" class="control-label"></label>
-            <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
-            <span asp-validation-for="Notes" class="text-danger"></span>
-
-            <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int cnt = 0;
-                                List<GROW_CRM.ViewModels.OptionVM> checkboxes = ViewBag.RestrictionOptions;
-                                foreach (var checkbox in checkboxes)
-                                {
-                                    if (cnt++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedOptions"
-                                               value="@checkbox.ID"
-                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
-                                        @checkbox.DisplayText @:&nbsp;&nbsp;
-                                    @:</td>
-                                }
-                            @:</tr>
-                            }
-                        </table>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Upload Documents:</label>
-                    <input type="file" class="" name="theFiles" multiple="multiple" />
-                </div>
-            </div>
         </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="YearlyIncome" class="control-label"></label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="incomeAddon">$</span>
+                        </div>
+                        <input asp-for="YearlyIncome" class="form-control" aria-describedby="incomeAddon" />
+                        <span asp-validation-for="YearlyIncome" class="text-danger"></span>
+                    </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="IncomeSituationID" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                            </div>
+                            <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                                <option value="">Select Situation</option>
+                            </select>
+                        </div>
+                    </div>
+
+                
+
+                    <label asp-for="Notes" class="control-label"></label>
+                    <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+
+                    <div class="form-group mt-3">
+                        <label class="control-label">@Html.DisplayNameFor(model => model.DietaryRestrictionMembers)</label>
+                        <div class="col-md-offset-1">
+                            <table>
+                                <tr>
+                                    @{
+                                        int cnt = 0;
+                                        List<GROW_CRM.ViewModels.OptionVM> checkboxes = ViewBag.RestrictionOptions;
+                                        foreach (var checkbox in checkboxes)
+                                        {
+                                            if (cnt++ % 3 == 0)
+                                            {
+                                            @:</tr><tr>
+                                            }
+                                            @:<td>
+                                                <input type="checkbox"
+                                                       name="selectedOptions"
+                                                       value="@checkbox.ID"
+                                                       @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
+                                                @checkbox.DisplayText @:&nbsp;&nbsp;
+                                            @:</td>
+                                        }
+                                    @:</tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Upload Documents:</strong></label> <br />
+                            <input type="file" class="" name="theFiles" multiple="multiple" />
+                        </div>
+                    </div>
+            </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
+                    <input class="btn btn-outline-danger" type="reset" name="name" value="Clear"  onclick="return confirm('Are you sure you want to clear all data on this page?');" />
                 </div>
             </div>
         </div>
     </form>
     <div>
-        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back to Details</a>
     </div>
 
     @section Scripts {
