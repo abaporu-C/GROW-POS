@@ -168,6 +168,7 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             ViewData["HouseholdName"] = HouseholdName;
+            ViewData["MISList"] = new List<MemberIncomeSituationVM>();
             Member m = new Member()
             {
                 HouseholdID = HouseholdID.GetValueOrDefault()

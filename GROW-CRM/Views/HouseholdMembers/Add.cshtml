@@ -1,4 +1,5 @@
-﻿@model GROW_CRM.Models.Member
+﻿@using GROW_CRM.ViewModels
+@model GROW_CRM.Models.Member
 
 @{
     ViewData["Title"] = "Add Member";
@@ -64,15 +65,17 @@
                 <span asp-validation-for="YearlyIncome" class="text-danger"></span>
             </div>
 
+            
+
             <div class="form-group" id="ListMemberIncomeSituations">
                 <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
                     </div>
-                    <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
-                    <div class="col-md-offset-1" id="IncomeSituationList">
-                        <table>
-                            @{
-                                foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
+                <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                <div class="col-md-offset-1" id="MemberIncomeSituationList">
+                    <table>
+                        @{
+                            foreach (var item in (List<MemberIncomeSituationVM>)ViewData["MISList"])
                                 {
                                     @:<tr><td>
                                         @item.Summary 
@@ -82,10 +85,10 @@
                                         <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Summary" type="button">&#x274C;</button>
 		                            @:</td></tr>
                                 }
-                            }
-                        </table>
-                    </div>
+                        }
+                    </table>
                 </div>
+            </div>
 
             @* <div class="form-group">
                     <label asp-for="IncomeSituationID" class="control-label"></label>
@@ -183,7 +186,7 @@
             //New for modal
             function refreshModal(actionForm, MemberIncomeSituationsID) {
               switch (actionForm) {
-                  case 'CreateForm': $('#formMemberIncomeSituationBody').load(`/MemberIncomeSituations/CreateMemberIncomeSituation/@Model.ID`);
+                  case 'CreateForm': $('#formMemberIncomeSituationBody').load(`/MemberIncomeSituations/CreateFakerMemberIncomeSituation/`);
                     break;
                   case 'EditForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/EditMemberIncomeSituation/' + MemberIncomeSituationsID);
                     break;
@@ -194,8 +197,9 @@
             return;
             };
             $(document).on("click", ".modal-link", function () {
+                console.log(this)
                 var actionForm = $(this).attr("name");
-                var MemberIncomeSituationsID = $(this).attr("tag");
+                var MemberIncomeSituationsID = $(this).attr("tag");                
                 refreshModal(actionForm, MemberIncomeSituationsID);
             });
             $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {

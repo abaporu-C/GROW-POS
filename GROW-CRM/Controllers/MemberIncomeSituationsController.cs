@@ -13,7 +13,6 @@ namespace GROW_CRM.Controllers
     public class MemberIncomeSituationsController : Controller
     {
         private readonly GROWContext _context;
-
         public MemberIncomeSituationsController(GROWContext context)
         {
             _context = context;
@@ -45,6 +44,23 @@ namespace GROW_CRM.Controllers
             ViewData["MemberID"] = ID.GetValueOrDefault();
 
             return PartialView("_CreateMemberIncomeSituation");
+        }
+
+        [HttpPost]
+        public PartialViewResult CreateFakerMemberIncomeSituation()
+        {
+            //For this action, the ID parameter is the ID of the Athlete
+
+            //This is a classic NOT IN query done in LINQ
+            //So we don't offer options already taken
+            var unusedSponsors = from mis in _context.IncomeSituations
+                                 select mis;
+
+            ViewBag.IncomeSituationID = new
+                SelectList(unusedSponsors
+                .OrderBy(a => a.Situation), "ID", "Situation");
+
+            return PartialView("_CreateFakerMemberIncomeSituation");
         }
 
         public PartialViewResult EditMemberIncomeSituation(int ID)
