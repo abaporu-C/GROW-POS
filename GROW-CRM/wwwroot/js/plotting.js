@@ -2,10 +2,6 @@ var [gender, age, restriction] = await $.getJSON("/Reports/GetDemoJson", functio
     return data;
 })
 
-console.log(gender);
-console.log(age);
-console.log(restriction);
-
 // Assign the specification to a local variable vlSpec.
 var vlGender = {
     "data": {
