@@ -374,6 +374,7 @@ namespace GROW_CRM.Controllers
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
+                
                 h => h.Name,
                 h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
                 h => h.LICOVerified, h => h.LastVerification, h => h.CityID,

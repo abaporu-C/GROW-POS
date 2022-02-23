@@ -19,7 +19,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="ConsentGiven"></label>
-                <input asp-for="ConsentGiven"/>                
+                <input asp-for="ConsentGiven" />
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -50,13 +50,25 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="phoneAddon">#</span>
+                    </div>
+                    <input asp-for="PhoneNumber" class="form-control" aria-describedby="phoneAddon" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="emailAddon">@@</span>
+                    </div>
+                    <input asp-for="Email" type="text" placeholder="example@mail.com" class="form-control" aria-describedby="emailAddon" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
@@ -138,14 +150,15 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label">Upload Documents:</label>
-                <input type="file" class="" name="theFiles" multiple="multiple" />
+                <label for="uploadControl" class="control-label">Upload Documents:</label>
+                <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
             </div>
         </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
+                    <input class="btn btn-lg btn-outline-danger  mr-3" type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
                     <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
@@ -226,4 +239,3 @@
             });
         </script>
     }
-

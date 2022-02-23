@@ -127,8 +127,8 @@
                             @Html.TextBox("MemberSearchString", null, new { @class = "form-control" })
                         </div>
                         <div class="form-group col-md-3 align-self-end">
-                            <input type="submit" name="actionButton" value="Apply" class="btn btn-primary" />
-                            <a asp-action="Index" asp-route-HouseholdID="@household.ID">Clear</a>
+                            <input type="submit" name="actionButton" value="Apply" class="btn btn-primary mr-3" />
+                            <a asp-action="Index" asp-route-HouseholdID="@household.ID" class="btn btn-outline-secondary">Clear</a>
                         </div>
                     </div>
                 </div>
@@ -140,12 +140,14 @@
             <div>
                 <table class="table">
                     <colgroup>
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
                     </colgroup>
                     <tr>
                         <th>
@@ -186,8 +188,8 @@
                     <td>
                         @{
                             var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
-                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault().MemberID == item.ID).Select(mis => mis).ToList();
-                            int theCount = misList.FirstOrDefault().Count;
+                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault()?.MemberID == item.ID).Select(mis => mis).ToList();
+                            int theCount = misList.FirstOrDefault() == null ? 0 : misList.FirstOrDefault().Count;
                             if (theCount > 0)
                             {
                                 string first = misList.FirstOrDefault().FirstOrDefault().Summary;
@@ -277,15 +279,19 @@
                     </td>
                     <td>
                         <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
-                            <span class="btn btn-sm btn-outline-primary">&#x270D;</span>
+                            <span class="btn btn btn-outline-primary">Edit</span>
                         </a>
+                       
+                    </td>
+                    <td>
                         <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
-                            <span class="btn btn-sm btn-outline-danger">&#x274C</span>
+                            <span class="btn btn btn-outline-danger">Delete</span>
                         </a>
                     </td>
                 </tr>
                     }
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

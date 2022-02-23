@@ -7,6 +7,7 @@
 <h2>Update Member for Household :  @Model.Household?.Name</h2>
 
 <hr />
+<partial name="_addIncomeSituationModal" />
 <partial name="_MemberIncomeSituationModal" />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
@@ -45,13 +46,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="phoneAddon">#</span>
+                    </div>
+                    <input asp-for="PhoneNumber" class="form-control" aria-describedby="phoneAddon" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="emailAddon">@@</span>
+                    </div>
+                    <input asp-for="Email" type="text" placeholder="example@mail.com" class="form-control" aria-describedby="emailAddon" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
@@ -62,6 +74,9 @@
             </div>
 
             <div class="form-group" id="ListMemberIncomeSituations">
+                <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                    </div>
                 <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
                 <div class="col-md-offset-1" id="MemberIncomeSituationList">
                     <table>
@@ -152,6 +167,7 @@
                 <input type="file" class="" name="theFiles" multiple="multiple" />
             </div>
             <div class="form-group">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg mr-3">Cancel</a>
                 <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
             </div>
         </div>
@@ -163,7 +179,32 @@
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/multiselect.js"></script>    
+    <script src="~/js/refreshDDL.js"></script>
+    <script src="~/js/multiselect.js"></script> 
+    <script type="text/javascript">
+        $('#submitIncomeSituationCreate').click(function (event) {
+            event.preventDefault();
+            var form = $('#createIncomeSituationForm');
+            if (form.valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function () {
+                        $('#addIncomeSituationModal').modal('hide');
+                    },
+                    error: function () {
+                        alert("Create Failed.  There was a problem adding the record.");
+                    }
+                });
+            }
+            return false;
+        });
+        $('#addIncomeSituationModal').on('hide.bs.modal', function () {
+            $('#createIncomeSituationForm').find("input[type=text], textarea, select").val("");//to clear the data in the popup
+            refreshDDL('IncomeSituationID', '/HouseholdMembers/GetIncomeSituations', false, null, true, 'None', true);
+        });
+    </script>   
     <script>
             //New for modal
             function refreshModal(actionForm, MemberIncomeSituationsID) {

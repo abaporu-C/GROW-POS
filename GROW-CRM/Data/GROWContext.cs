@@ -140,7 +140,7 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<MemberIncomeSituation>()
                 .HasOne(m => m.Member)
                 .WithMany(ics => ics.MemberIncomeSituations)
-                .HasForeignKey(m => m.IncomeSituationID)
+                .HasForeignKey(m => m.MemberID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MemberIncomeSituation>()
