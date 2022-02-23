@@ -171,9 +171,9 @@
                         <th>
                             <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
                         </th>
-                        <th colspan="2" >
-                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdAddress="@household.FullAddress">
-                                <span class="btn btn-lg btn-block btn-outline-success"><strong>&#x271A; Add</strong></span>
+                        <th>
+                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
+                                <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
                             </a>
                         </th>
                     </tr>
@@ -186,7 +186,35 @@
                         <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a> <br />
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
+                        @{
+                            var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
+                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault()?.MemberID == item.ID).Select(mis => mis).ToList();
+                            int theCount = misList.FirstOrDefault() == null ? 0 : misList.FirstOrDefault().Count;
+                            if (theCount > 0)
+                            {
+                                string first = misList.FirstOrDefault().FirstOrDefault().Summary;
+                                if (theCount > 1)
+                                {
+                                    string theList = first;
+                                    var c = misList.ToList();
+                                    for (int i = 1; i < theCount; i++)
+                                    {
+                                        theList += ", \n" + c.FirstOrDefault()[i].Summary;
+                                    }
+                                    <a tabindex="0" class="" role="button" data-toggle="popover"
+                                       data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                                       data-content="@theList">
+                                        @first... <span class="badge badge-info">
+                                            @theCount
+                                        </span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    @first
+                                }
+                            }
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Gender.Name)

@@ -229,7 +229,7 @@ namespace GROW_CRM.Controllers
             }
 
             var household = await _context.Households
-                .Include(h => h.Members).ThenInclude(m => m.IncomeSituation)
+                .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.City)
                 .Include(h => h.Province)
@@ -256,7 +256,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles,string NewID)
+        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles, string NewID)
         {
             try
             {
@@ -282,6 +282,13 @@ namespace GROW_CRM.Controllers
                             household.ID = newID;
                         }
                     }
+                    //Create default household name if Name is empty
+                    if(household.Name == null || household.Name == "")
+                    {
+                        int lastID = _context.Households.ToList().Last().ID;
+                        household.Name = $"House #{lastID + 1}";
+                    }
+
                     _context.Add(household);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });

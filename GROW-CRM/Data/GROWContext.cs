@@ -27,7 +27,7 @@ namespace GROW_CRM.Data
         }
 
         //To give access to IHttpContextAccessor for Audit Data with IAuditable
-        private readonly IHttpContextAccessor _httpContextAccessor;        
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public GROWContext(DbContextOptions<GROWContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
@@ -48,6 +48,8 @@ namespace GROW_CRM.Data
 
         public DbSet<Gender> Genders { get; set; }
 
+        public DbSet<HealthIssueType> HealthIssueTypes { get; set; }
+
         public DbSet<Household> Households { get; set; }
 
         public DbSet<HouseholdNotification> HouseholdNotifications { get; set; }
@@ -59,6 +61,8 @@ namespace GROW_CRM.Data
         public DbSet<Member> Members { get; set; }
 
         public DbSet<MemberDocument> MemberDocuments { get; set; }
+
+        public DbSet<MemberIncomeSituation> MemberIncomeSituations { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 
@@ -92,10 +96,19 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<HouseholdNotification>()
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
-            
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
+                .IsUnique();
 
             //Cascading Delete Behavior
-            
+
+            //DietaryRestrictions
+            modelBuilder.Entity<DietaryRestriction>()
+                .HasOne(dr => dr.HealthIssueType)
+                .WithMany(hit => hit.DietaryRestrictions)
+                .HasForeignKey(dr => dr.HealthIssueTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //DietaryRestriction-Member
             modelBuilder.Entity<DietaryRestrictionMember>()
                 .HasOne(drm => drm.DietaryRestriction)
@@ -123,6 +136,19 @@ namespace GROW_CRM.Data
                 .HasForeignKey(hd => hd.DocumentTypeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //MemberIncomeSituations
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(m => m.Member)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(m => m.MemberID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(mis => mis.IncomeSituation)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(mis => mis.IncomeSituationID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Members
             modelBuilder.Entity<Member>()
                 .HasOne(m => m.Gender)
@@ -134,13 +160,7 @@ namespace GROW_CRM.Data
                 .HasOne(m => m.Household)
                 .WithMany(h => h.Members)
                 .HasForeignKey(m => m.HouseholdID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Member>()
-                .HasOne(m => m.IncomeSituation)
-                .WithMany(i => i.Members)
-                .HasForeignKey(m => m.IncomeSituationID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);            
 
             //Order
             modelBuilder.Entity<Order>()

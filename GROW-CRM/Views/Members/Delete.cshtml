@@ -56,10 +56,38 @@
             $@Html.DisplayFor(model => model.YearlyIncome)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IncomeSituation)
+            Income Situations:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IncomeSituation.Situation)
+            @{
+                int theCount = Model.MemberIncomeSituations.Count;
+                if (theCount > 0)
+                {
+                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                    if (theCount > 1)
+                    {
+                        string theList = first;
+                        var c = Model.MemberIncomeSituations.ToList();
+                        for (int i = 1; i < theCount; i++)
+                        {
+                            theList += ", " + c[i].IncomeSituation.Situation;
+                        }
+                        @:Income Situations:
+                        <a tabindex="0" class="" role="button" data-toggle="popover"
+                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                           data-content="@theList">
+                            @first... <span class="badge badge-info">
+                                @theCount
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        @:Income Situations:
+                        @first
+                    }
+                }
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Notes)

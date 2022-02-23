@@ -163,7 +163,7 @@
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                             <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">Details</a> |
-                            <a asp-action="Add" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdAddress="@item.FullAddress">Add Member</a>
+                            <a asp-action="Add" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">Add Member</a>
                         </td>
                     </tr>
                 }

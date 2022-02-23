@@ -122,25 +122,53 @@
                             <th>
                                 @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().Age)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().IncomeSituation.Situation)
-                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().MemberIncomeSituations)
+        </th>*@
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Members)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FullName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Age)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Age)
+                            </td>
+                            @*<td>
+            @{
+                int theCount = Model.Members.MemberIncomeSituations.Count;
+                if (theCount > 0)
+                {
+                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                    if (theCount > 1)
+                    {
+                        string theList = first;
+                        var c = Model.MemberIncomeSituations.ToList();
+                        for (int i = 1; i < theCount; i++)
+                        {
+                            theList += ", " + c[i].IncomeSituation.Situation;
+                        }
+                        @:Income Situations:
+                        <a tabindex="0" class="" role="button" data-toggle="popover"
+                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                           data-content="@theList">
+                            @first... <span class="badge badge-info">
+                                @theCount
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        @:Income Situations:
+                        @first
+                    }
+                }
+            }
+        </td>*@
+                        </tr>
                         }
                     </tbody>
                 </table>

@@ -74,7 +74,7 @@ namespace GROW_CRM.Models
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Street number must be numeric")]
         public string StreetNumber { get; set; }
 
         [Display(Name ="Street Name")]
@@ -88,7 +88,7 @@ namespace GROW_CRM.Models
 
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
-        [RegularExpression(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]", ErrorMessage = "E.g. A2A 2A2 (with a space)")]
+        [RegularExpression(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$", ErrorMessage = "E.g. A2A 2A2 (with a space)")]
         public string PostalCode { get; set; }                        
 
         [Display(Name ="LICO verification")]

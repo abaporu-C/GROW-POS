@@ -456,3 +456,6 @@ $RECYCLE.BIN/
 
 #Database
 *.db
+
+#Migrations
+GROW-CRM/Data/GROWMigrations

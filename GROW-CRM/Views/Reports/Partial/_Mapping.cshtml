@@ -1,0 +1,101 @@
+﻿@using GROW_CRM.ViewModels.ReportsViewModels
+
+<div class="row">
+    <a asp-action="DownloadMapping" class="btn btn-info float-left">Download Mapping Report</a>
+</div>
+<br />
+
+<div class="accordion" id="accordion">
+    @{
+        <div>
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                            <h2>Demographics By Cities</h2>
+                        </button>
+                    </h5>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Percentage</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (CitiesReport item in ViewBag.CitiesReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Percentage * 100, 2))%
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        foreach (List<CityReport>
+            cs in ViewBag.CityReports)
+        {
+            @if (cs.Count() > 0)
+            {
+                <div>
+                    <div class="card">
+                        <div class="card-header" id="@($"heading{cs[0].Name.Substring(0,2)}")">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#@cs[0].Name.Substring(0,2)" aria-expanded="true" aria-controls="@cs[0].Name.Substring(0,2)">
+                                    <h2>@cs[0].Name</h2>
+                                </button>
+                            </h5>
+                            <div id="@cs[0].Name.Substring(0,2)" class="collapse" aria-labelledby="@($"heading{cs[0].Name.Substring(0,2)}")" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Postal Code</th>
+                                                <th>Number of Members</th>
+                                                <th>Yearly Income</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (CityReport c in cs)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.PostalCode)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.NumberOfMembers)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => c.TotalIncome)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+        }
+    }
+</div>

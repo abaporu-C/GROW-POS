@@ -21,20 +21,34 @@ namespace GROW_CRM.Data
                 //5 random strings
                 string[] baconNotes = new string[] { "Bacon ipsum dolor amet meatball corned beef kevin, alcatra kielbasa biltong drumstick strip steak spare ribs swine. Pastrami shank swine leberkas bresaola, prosciutto frankfurter porchetta ham hock short ribs short loin andouille alcatra. Andouille shank meatball pig venison shankle ground round sausage kielbasa. Chicken pig meatloaf fatback leberkas venison tri-tip burgdoggen tail chuck sausage kevin shank biltong brisket.", "Sirloin shank t-bone capicola strip steak salami, hamburger kielbasa burgdoggen jerky swine andouille rump picanha. Sirloin porchetta ribeye fatback, meatball leberkas swine pancetta beef shoulder pastrami capicola salami chicken. Bacon cow corned beef pastrami venison biltong frankfurter short ribs chicken beef. Burgdoggen shank pig, ground round brisket tail beef ribs turkey spare ribs tenderloin shankle ham rump. Doner alcatra pork chop leberkas spare ribs hamburger t-bone. Boudin filet mignon bacon andouille, shankle pork t-bone landjaeger. Rump pork loin bresaola prosciutto pancetta venison, cow flank sirloin sausage.", "Porchetta pork belly swine filet mignon jowl turducken salami boudin pastrami jerky spare ribs short ribs sausage andouille. Turducken flank ribeye boudin corned beef burgdoggen. Prosciutto pancetta sirloin rump shankle ball tip filet mignon corned beef frankfurter biltong drumstick chicken swine bacon shank. Buffalo kevin andouille porchetta short ribs cow, ham hock pork belly drumstick pastrami capicola picanha venison.", "Picanha andouille salami, porchetta beef ribs t-bone drumstick. Frankfurter tail landjaeger, shank kevin pig drumstick beef bresaola cow. Corned beef pork belly tri-tip, ham drumstick hamburger swine spare ribs short loin cupim flank tongue beef filet mignon cow. Ham hock chicken turducken doner brisket. Strip steak cow beef, kielbasa leberkas swine tongue bacon burgdoggen beef ribs pork chop tenderloin.", "Kielbasa porchetta shoulder boudin, pork strip steak brisket prosciutto t-bone tail. Doner pork loin pork ribeye, drumstick brisket biltong boudin burgdoggen t-bone frankfurter. Flank burgdoggen doner, boudin porchetta andouille landjaeger ham hock capicola pork chop bacon. Landjaeger turducken ribeye leberkas pork loin corned beef. Corned beef turducken landjaeger pig bresaola t-bone bacon andouille meatball beef ribs doner. T-bone fatback cupim chuck beef ribs shank tail strip steak bacon." };
 
+                if (!context.HealthIssueTypes.Any())
+                {
+                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> { 
+                        new HealthIssueType{Type = "Illness"},
+                        new HealthIssueType{Type = "Concern"}
+                    });
+
+                    //Save changes
+                    context.SaveChanges();
+                }
 
                 //Look For Dietary Restrictions
                 if (!context.DietaryRestrictions.Any())
                 {
                     //Restrictions Array
-                    string[] restrictions = new string[] { "Diabetes", "Obesity", "Lactose Intolerant", "Gluten Intolerance/Sensitivity", 
-                                                            "Cancer", "Heart Disease", "Osteoporosis", "Digestive Disorders", "Food Allergies"};
+                    string[] illnesses = new string[] { "Diabetes", "Obesity", "Cancer", "Heart Disease", "Osteoporosis" };
+
+                    string[] concerns = new string[] { "Lactose Intolerant", "Gluten Intolerance/Sensitivity", "Digestive Disorders", "Food Allergies" };
 
                     //List of new Dietary Restriction Objects
                     List<DietaryRestriction> dietaryRestrictions = new List<DietaryRestriction>();
 
                     //Add DietaryRestrictions to dietaryRestrictions List
-                    for (int i = 0; i < restrictions.Count(); i++)
-                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = restrictions[i] });
+                    for (int i = 0; i < illnesses.Count(); i++)
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1});
+
+                    for (int i = 0; i < concerns.Count(); i++)
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = concerns[i], HealthIssueTypeID = 2 });
 
                     //Add Objects to context
                     context.DietaryRestrictions.AddRange(dietaryRestrictions);
@@ -271,9 +285,10 @@ namespace GROW_CRM.Data
                     context.Households.AddRange(
                         new Household
                         {
+                            Name = "House #1",
                             StreetNumber = "65",
                             StreetName = "Church St.",
-                            AptNumber = "201",                            
+                            AptNumber = "201",
                             PostalCode = "R3E 9C8",
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
@@ -283,9 +298,10 @@ namespace GROW_CRM.Data
                         },
                         new Household
                         {
+                            Name = "House #2",
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                                                     
+
                             PostalCode = "L2H 1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
@@ -295,6 +311,7 @@ namespace GROW_CRM.Data
                         },
                          new Household
                          {
+                             Name = "House #3",
                              StreetNumber = "101",
                              StreetName = "Development Ave.",
 
@@ -306,7 +323,7 @@ namespace GROW_CRM.Data
                              HouseholdStatusID = 2
                          }
 
-                    );
+                    ); ;
 
                     //Save changes
                     context.SaveChanges();
@@ -320,10 +337,7 @@ namespace GROW_CRM.Data
                     int householdCount = householdIDs.Count();                    
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();
-
-                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();
+                    int genderCount = genderIDs.Count();                    
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
@@ -351,9 +365,9 @@ namespace GROW_CRM.Data
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
                                     YearlyIncome = 15000d,
+                                    ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
-                                    HouseholdID = householdIDs[i],
-                                    IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
+                                    HouseholdID = householdIDs[i]
                                 }    
                             );
 
@@ -391,6 +405,31 @@ namespace GROW_CRM.Data
 
                         context.SaveChanges();
                     }
+                }
+
+                //Look for Member Income Situation
+                if (!context.MemberIncomeSituations.Any())
+                {
+                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
+                    int incomeSituationCount = incomeSituationIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();
+
+                    List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
+
+                    foreach (var memberID in memberIDs)
+                    {
+                        MemberIncomeSituation s = new MemberIncomeSituation
+                        {
+                            MemberID = memberID,
+                            IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount - 1)],
+                            Income = rnd.Next(10, 10000)
+                        };
+                        mis.Add(s);
+                    }
+                    context.MemberIncomeSituations.AddRange(mis);
+                    context.SaveChanges();
                 }
             }
         }
