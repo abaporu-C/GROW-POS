@@ -627,6 +627,40 @@ namespace GROW_CRM.Controllers
             return PartialView("_MemberIncomeSituationList");
         }
 
+        public async Task<IActionResult> CancelMember(string direction, int MemberID, int? HouseholdID)
+        {
+            var member = await _context.Members
+                .Include(m => m.Gender)
+                .Include(m => m.Household)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
+                .FirstOrDefaultAsync(m => m.ID == MemberID);
+
+            try
+            {
+                _context.Members.Remove(member);
+                await _context.SaveChangesAsync();
+
+                switch (direction)
+                {
+                    case "households":
+                        return RedirectToAction("Index", "Households");
+                    case "householdDetails":
+                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={HouseholdID}";
+                        return Redirect(ViewData["returnURL"].ToString());
+                    default:
+                        break;
+                }
+
+                return Redirect(ViewData["returnURL"].ToString());
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
+            ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={HouseholdID}";
+            return Redirect(ViewData["returnURL"].ToString());
+        }
         private bool MemberExists(int id)
         {
             return _context.Members.Any(e => e.ID == id);

@@ -152,7 +152,7 @@
         </div>
     </form>
     <div>
-        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+        <a asp-area="" asp-controller="HouseholdMembers" asp-route-MemberID="@Model.ID" asp-action="CancelMember" asp-route-direction="households" asp-route-HouseholdID="@null">Back to Households List</a> | <a asp-controller="HouseholdMembers" asp-action="CancelMember" asp-route-MemberID="@Model.ID" asp-route-direction="householdDetails" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
     </div>
 
     @section Scripts {
