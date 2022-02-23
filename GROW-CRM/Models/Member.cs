@@ -45,6 +45,21 @@ namespace GROW_CRM.Models
             }
         }
 
+        [Display(Name = "Yearly Income")]
+        public double YearlyIncome { get 
+            {
+                double income = 0;
+
+                foreach(MemberIncomeSituation mis in MemberIncomeSituations)
+                {
+                    income += mis.Income;
+                }
+
+
+                return income;
+            } 
+        }
+
         [Display(Name = "Age (DOB)")]
         public string AgeSummary
         {
@@ -106,10 +121,7 @@ namespace GROW_CRM.Models
         
         [StringLength(2000, ErrorMessage = "Only 2000 characters for notes.")]
         [DataType(DataType.MultilineText)]
-        public string Notes { get; set; }
-
-        [Display(Name = "Yearly Income")]
-        public double YearlyIncome { get; set; }
+        public string Notes { get; set; }        
 
         [Display(Name = "Consent On Giving Information: ")]
         public bool ConsentGiven { get; set; }
