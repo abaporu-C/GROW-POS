@@ -12,6 +12,7 @@ using GROW_CRM.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GROW_CRM.Controllers
 {
@@ -52,10 +53,25 @@ namespace GROW_CRM.Controllers
             var members = from m in _context.Members
                                   .Include(m => m.Gender)
                                   .Include(m => m.Household)
-                                  .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                                   .Include(m => m.MemberDocuments)
+                                  .Include(m => m.MemberIncomeSituations)
                         where m.HouseholdID == HouseholdID.GetValueOrDefault()
                         select m;
+
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
+
+            foreach(Member m in members)
+            {
+                var v = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == m.ID)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+
+                misList.Add(v);
+            }
+
+            ViewBag.MisList = misList;
 
             /*if (IncomeSituationID.HasValue)
             {
@@ -155,7 +171,7 @@ namespace GROW_CRM.Controllers
 
 
         // GET: PatientAppt/Add
-        public IActionResult Add(int? HouseholdID, string HouseholdName)
+        public async Task<IActionResult> Add(int? HouseholdID, string HouseholdName)
         {
             if (!HouseholdID.HasValue)
             {
@@ -171,8 +187,17 @@ namespace GROW_CRM.Controllers
             ViewData["MISList"] = new List<MemberIncomeSituationVM>();
             Member m = new Member()
             {
+                FirstName = "",
+                LastName = "",
+                DOB = DateTime.Now,
+                PhoneNumber = "",
+                Email = "",
+                GenderID = 1,
                 HouseholdID = HouseholdID.GetValueOrDefault()
             };
+
+            _context.Add(m);
+            await _context.SaveChangesAsync();            
 
             PopulateAssignedDietaryRestrictionData(m);
             PopulateDropDownLists();
@@ -208,11 +233,22 @@ namespace GROW_CRM.Controllers
                         member.DietaryRestrictionMembers.Add(restrictionToAdd);
                     }
                 }
-                if (ModelState.IsValid)
-                {                    
-                    _context.Add(member);
-                    await CheckLICO(member);
-                    await AddDocumentsAsync(member, theFiles);
+
+                var memberToUpdate = await _context.Members
+                .Include(m => m.Gender)
+                .Include(m => m.Household)
+                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
+                .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
+                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
+                .FirstOrDefaultAsync(m => m.ID == member.ID);
+
+                if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
+                m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
+                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID))
+                {
+                    _context.Update(memberToUpdate);
+                    await CheckLICO(memberToUpdate);
+                    await AddDocumentsAsync(memberToUpdate, theFiles);
                     await _context.SaveChangesAsync();
                     ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
                     return Redirect(ViewData["returnURL"].ToString());
@@ -247,10 +283,18 @@ namespace GROW_CRM.Controllers
             var member = await _context.Members
                .Include(m => m.Gender)
                .Include(m => m.Household)
-               .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
+               .Include(m => m.MemberIncomeSituations)
                .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                .FirstOrDefaultAsync(m => m.ID == id);
+
+            List<MemberIncomeSituation> misList = _context.MemberIncomeSituations
+                                                            .Include(s => s.IncomeSituation)
+                                                            .Where(s => s.MemberID == member.ID)
+                                                            .OrderBy(s => s.IncomeSituation.Situation)
+                                                            .ToList();            
+
+            ViewBag.MisList = misList;
 
             if (member == null)
             {
