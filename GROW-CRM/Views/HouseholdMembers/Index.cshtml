@@ -185,19 +185,20 @@
                     </td>
                     <td>
                         @{
-                            int theCount = item.MemberIncomeSituations.Count;
+                            var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
+                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault().MemberID == item.ID).Select(mis => mis).ToList();
+                            int theCount = misList.FirstOrDefault().Count;
                             if (theCount > 0)
                             {
-                                string first = item.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                                string first = misList.FirstOrDefault().FirstOrDefault().Summary;
                                 if (theCount > 1)
                                 {
                                     string theList = first;
-                                    var c = item.MemberIncomeSituations.ToList();
+                                    var c = misList.ToList();
                                     for (int i = 1; i < theCount; i++)
                                     {
-                                        theList += ", " + c[i].IncomeSituation.Situation;
+                                        theList += ", \n" + c.FirstOrDefault()[i].Summary;
                                     }
-                                    @:Income Situations:
                                     <a tabindex="0" class="" role="button" data-toggle="popover"
                                        data-trigger="focus" title="IncomeSituations" data-placement="bottom"
                                        data-content="@theList">
@@ -208,7 +209,6 @@
                                 }
                                 else
                                 {
-                                    @:Income Situations:
                                     @first
                                 }
                             }

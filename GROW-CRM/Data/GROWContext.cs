@@ -136,6 +136,19 @@ namespace GROW_CRM.Data
                 .HasForeignKey(hd => hd.DocumentTypeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //MemberIncomeSituations
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(m => m.Member)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(m => m.IncomeSituationID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(mis => mis.IncomeSituation)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(mis => mis.IncomeSituationID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Members
             modelBuilder.Entity<Member>()
                 .HasOne(m => m.Gender)

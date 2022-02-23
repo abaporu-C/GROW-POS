@@ -12,6 +12,7 @@
 <partial name="_addIncomeSituationModal" />
 <partial name="_MemberIncomeSituationModal" />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="ID" value="@Model.ID" />
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
@@ -64,18 +65,16 @@
                 <input asp-for="YearlyIncome" class="form-control" />
                 <span asp-validation-for="YearlyIncome" class="text-danger"></span>
             </div>
-
             
-
-            <div class="form-group" id="ListMemberIncomeSituations">
-                <div class="input-group-prepend">
+                <div class="form-group" id="ListMemberIncomeSituations">
+                    <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
                     </div>
                 <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
                 <div class="col-md-offset-1" id="MemberIncomeSituationList">
                     <table>
                         @{
-                            foreach (var item in (List<MemberIncomeSituationVM>)ViewData["MISList"])
+                            foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
                                 {
                                     @:<tr><td>
                                         @item.Summary 
@@ -89,6 +88,8 @@
                     </table>
                 </div>
             </div>
+
+            
 
             @* <div class="form-group">
                     <label asp-for="IncomeSituationID" class="control-label"></label>
@@ -151,7 +152,7 @@
         </div>
     </form>
     <div>
-        <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+        <a asp-area="" asp-controller="HouseholdMembers" asp-route-MemberID="@Model.ID" asp-action="CancelMember" asp-route-direction="households" asp-route-HouseholdID="@null">Back to Households List</a> | <a asp-controller="HouseholdMembers" asp-action="CancelMember" asp-route-MemberID="@Model.ID" asp-route-direction="householdDetails" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
     </div>
 
     @section Scripts {
@@ -186,7 +187,7 @@
             //New for modal
             function refreshModal(actionForm, MemberIncomeSituationsID) {
               switch (actionForm) {
-                  case 'CreateForm': $('#formMemberIncomeSituationBody').load(`/MemberIncomeSituations/CreateFakerMemberIncomeSituation/`);
+                  case 'CreateForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/CreateMemberIncomeSituation/' + @Model.ID);
                     break;
                   case 'EditForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/EditMemberIncomeSituation/' + MemberIncomeSituationsID);
                     break;
@@ -197,9 +198,8 @@
             return;
             };
             $(document).on("click", ".modal-link", function () {
-                console.log(this)
                 var actionForm = $(this).attr("name");
-                var MemberIncomeSituationsID = $(this).attr("tag");                
+                var MemberIncomeSituationsID = $(this).attr("tag");
                 refreshModal(actionForm, MemberIncomeSituationsID);
             });
             $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {
@@ -211,7 +211,8 @@
                         url: form.attr('action'),
                         data: form.serialize(),
                         success: function () {
-                            $('#theMemberIncomeSituationsModal').modal('hide');
+                            console.log($('#theMemberIncomeSituationModal'))
+                            $('#theMemberIncomeSituationModal').modal('hide');
                         },
                         error: function () {
                             alert("Operation Failed.  There was a problem maintaing the data.");
@@ -220,8 +221,8 @@
                 }
                 return false;
             });
-            $('#theMemberIncomeSituationsModal').on('hide.bs.modal', function () {
-                $('#MemberIncomeSituationsList').load('/HouseholdMembers/MemberIncomeSituationsList/@Model.ID');
+        $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
+            $('#MemberIncomeSituationList').load('/HouseholdMembers/MemberIncomeSituationList/@Model.ID');
             });
         </script>
     }
