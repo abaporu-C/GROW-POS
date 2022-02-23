@@ -209,7 +209,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,YearlyIncome,ConsentGiven,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdName, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
+        public async Task<IActionResult> Add([Bind("ID,Name,FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,Notes,ConsentGiven,GenderID,HouseholdID,IncomeSituationID")] Member member, string HouseholdName, string[] selectedIllnessOptions, string[] selectedConcernOptions, List<IFormFile> theFiles)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -244,7 +244,7 @@ namespace GROW_CRM.Controllers
 
                 if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID))
+                m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
                 {
                     _context.Update(memberToUpdate);
                     await CheckLICO(memberToUpdate);
@@ -338,7 +338,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.YearlyIncome, m => m.ConsentGiven, m => m.GenderID))
+                m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
             {
                 try
                 {                    
@@ -581,7 +581,7 @@ namespace GROW_CRM.Controllers
         private async Task CheckLICO(Member m)
         {
             var household = await _context.Households
-                            .Include(h => h.Members)
+                            .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations)
                             .Where(h => h.ID == m.HouseholdID)
                             .FirstOrDefaultAsync();
 
@@ -593,7 +593,8 @@ namespace GROW_CRM.Controllers
                 totalIncome += member.YearlyIncome;
             }
 
-            if (memberCount == 1 && totalIncome > 26426) household.LICOVerified = false;
+            if (totalIncome == 0) household.LICOVerified = true;
+            else if (memberCount == 1 && totalIncome > 26426) household.LICOVerified = false;
             else if (memberCount == 2 && totalIncome > 32898) household.LICOVerified = false;
             else if (memberCount == 3 && totalIncome > 40444) household.LICOVerified = false;
             else if (memberCount == 4 && totalIncome > 49106) household.LICOVerified = false;
@@ -602,12 +603,12 @@ namespace GROW_CRM.Controllers
             else if (memberCount == 7 && totalIncome > 69934) household.LICOVerified = false;
             else
             {
-                if(memberCount > 7)
+                if (memberCount > 7)
                 {
                     double lico = 69934;
                     for (int i = 0; i < (memberCount - 7); i++) lico += 7120;
-                    
-                    if(totalIncome > lico) household.LICOVerified = false;
+
+                    if (totalIncome > lico) household.LICOVerified = false;
                     else household.LICOVerified = true;
                 }
                 else household.LICOVerified = true;

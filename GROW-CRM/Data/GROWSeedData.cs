@@ -124,7 +124,7 @@ namespace GROW_CRM.Data
                 {
                     //array of situations
                     string[] situations = new string[] { "ODSP", "Ontario Works", "CPP-Disability", "EI", "GAINS", "Post. Sec. Student",
-                                                         "Other", "Volunteer"};
+                                                         "Other", "Volunteer", "Employed", "WSIB"};
 
                     //List of IncomeSituation Objects
                     List<IncomeSituation> incomeSituations = new List<IncomeSituation>();
@@ -364,7 +364,6 @@ namespace GROW_CRM.Data
                                     PhoneNumber = "0000000000",
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
-                                    YearlyIncome = 15000d,
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i]
