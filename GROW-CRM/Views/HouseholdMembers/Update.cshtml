@@ -4,63 +4,99 @@
     ViewData["Title"] = "Update Appointment";
 }
 
-<h2>Update Member for Household :  @Model.Household?.ID</h2>
+<h3>Update Member for Household :  @Model.Household?.ID</h3>
 
 <hr />
+<partial name="_addIncomeSituationModal" />
 <form asp-action="Update" method="post" enctype="multipart/form-data">
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <input type="hidden" name="HouseholdAddress" value="@ViewData["HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
+
             <div class="form-group">
-                <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
-                    <input asp-for="MiddleName" class="form-control" />
-                    <span asp-validation-for="MiddleName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="GenderID" class="control-label"></label>
-                    <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
-                </div>
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
-                <span asp-validation-for="DOB" class="text-danger"></span>
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="YearlyIncome" class="control-label"></label>
-                <input asp-for="YearlyIncome" class="form-control" />
-                <span asp-validation-for="YearlyIncome" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-7">
+
+                    <div class="form-group">
+                        <label asp-for="GenderID" class="control-label"></label>
+                        <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+
+                    <div class="form-group">
+                        <label asp-for="DOB" class="control-label"></label>
+                        <input asp-for="DOB" class="form-control" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
-                <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID"></select>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="phoneAddon">#</span>
+                    </div>
+                    <input asp-for="PhoneNumber" class="form-control" aria-describedby="phoneAddon" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="emailAddon">@@</span>
+                    </div>
+                    <input asp-for="Email" type="text" placeholder="example@mail.com" class="form-control" aria-describedby="emailAddon" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label asp-for="YearlyIncome" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="incomeAddon">$</span>
+                    </div>
+                    <input asp-for="YearlyIncome" class="form-control" aria-describedby="incomeAddon" />
+                    <span asp-validation-for="YearlyIncome" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="IncomeSituationID" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                    </div>
+                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                    </select>
+                </div>
+            </div>
+
+
+
             <label asp-for="Notes" class="control-label"></label>
             <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
             <span asp-validation-for="Notes" class="text-danger"></span>
@@ -122,17 +158,55 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Upload Additional Documents:</label>
-                    <input type="file" class="" name="theFiles" multiple="multiple" />
+                    <label for="uploadControl" class="control-label"><strong>Upload Documents:</strong></label> <br />
+                    <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
                 </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg mr-3">Cancel</a>
+                    <input type="submit" value="Save" class="btn btn-primary btn-lg" />
                 </div>
             </div>
         </div>
     </form>
-<div>
-    @*<a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> |*@
-    <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
-</div>
+    <div class="mt-3">
+        @*<a asp-area="" asp-controller="Members" asp-action="Index">Back to Members List</a> |*@
+        <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+    </div>
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script src="~/js/refreshDDL.js"></script>
+
+        <script type="text/javascript">
+            $('#submitIncomeSituationCreate').click(function (event) {
+                event.preventDefault();
+                var form = $('#createIncomeSituationForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#addIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Create Failed.  There was a problem adding the record.");
+                        }
+                    });
+                }
+                return false;
+            });
+            $('#addIncomeSituationModal').on('hide.bs.modal', function () {
+                $('#createIncomeSituationForm').find("input[type=text], textarea, select").val("");//to clear the data in the popup
+                refreshDDL('IncomeSituationID', '/HouseholdMembers/GetIncomeSituations', false, null, true, 'None', true);
+            });
+        </script>
+    }
 

@@ -134,21 +134,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label"><strong>Upload Documents:</strong></label> <br />
-                            <input type="file" class="" name="theFiles" multiple="multiple" />
+                            <label for="uploadControl" class="control-label"><strong>Upload Documents:</strong></label> <br />
+                            <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
                         </div>
                     </div>
             </div>
+    <hr />
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <input class="btn btn-outline-danger" type="reset" name="name" value="Clear"  onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+
+                    <input class="btn btn-lg btn-outline-danger  mr-3" type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+                    <input type="submit" value="Save" class="btn btn-lg btn-primary " />
                 </div>
             </div>
         </div>
     </form>
-    <div>
+    <div class="mt-3">
         <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.HouseholdID">Back to Details</a>
     </div>
 
