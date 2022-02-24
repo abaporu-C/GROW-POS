@@ -28,7 +28,7 @@ namespace GROW_CRM.Controllers
         // GET: Household Members
         public async Task<IActionResult> Index(int? HouseholdID, int? page, int? pageSizeID, int? IncomeSituationID, string actionButton,
             string NotesSearchString, string MemberSearchString, string sortDirection = "desc", string sortField = "Member")
-        {
+        {            
             //Get the URL with the last filter, sort and page parameters from THE PATIENTS Index View
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, "Households");
 
@@ -59,6 +59,16 @@ namespace GROW_CRM.Controllers
                         select m;
 
             List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
+
+            foreach(Member m in members)
+            {
+                if(m.FirstName == "" && m.LastName == "")
+                {
+                    _context.Remove(m);
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             foreach(Member m in members)
             {
@@ -184,7 +194,7 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             ViewData["HouseholdName"] = HouseholdName;
-            ViewData["MISList"] = new List<MemberIncomeSituationVM>();
+            //ViewData["MISList"] = new List<MemberIncomeSituationVM>();
             Member m = new Member()
             {
                 FirstName = "",
