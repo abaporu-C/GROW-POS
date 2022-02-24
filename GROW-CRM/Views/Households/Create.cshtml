@@ -11,7 +11,8 @@
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-6">
-
+            <label for="noFixedAddr" class="control-label">No Fixed Address:</label>
+            <input type="checkbox" id="noFixedAddr"/>
             <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -81,7 +82,7 @@
     <hr />
     <div class="form-group mt-3">
         <input class="btn btn-lg btn-outline-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
-        <input type="submit" value="Create" class="btn btn-lg btn-primary " />
+        <input type="submit" id="submitForm" value="Create" class="btn btn-lg btn-primary " />
 
     </div>
 </form>
@@ -105,6 +106,35 @@
                 this.value = this.value.toUpperCase();
             }
         }
+    </script>
+    <script>
+        $('#noFixedAddr').on('click', function () {
+            if ($(this).prop('checked')) {
+                $('#AptNumber').prop("value", "").prop('disabled', true)
+                $('#StreetNumber').prop("value", "4377").prop('disabled', true)
+                $('#StreetName').prop("value", "Fourth Ave.").prop('disabled', true)
+                $('#postal-code').prop("value", "L2E 4N1").prop('disabled', true)
+                $('#CityID').prop("value", "1").prop('disabled', true)
+                $('#ProvinceID').prop("value", "12").prop('disabled', true)
+            }
+            else {
+                $('#AptNumber').val("").prop('disabled', false)
+                $('#StreetNumber').val("").prop('disabled', false)
+                $('#StreetName').val("").prop('disabled', false)
+                $('#postal-code').val("").prop('disabled', false)
+                $('#CityID').val("").prop('disabled', false)
+                $('#ProvinceID').val("").prop('disabled', false)
+            }
+        })
+
+        $('#submitForm').on('click', function () {
+            $('#AptNumber').prop('disabled', false)
+            $('#StreetNumber').prop('disabled', false)
+            $('#StreetName').prop('disabled', false)
+            $('#postal-code').prop('disabled', false)
+            $('#CityID').prop('disabled', false)
+            $('#ProvinceID').prop('disabled', false)
+        })
     </script>
 
 }
