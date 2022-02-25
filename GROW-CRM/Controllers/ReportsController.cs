@@ -654,66 +654,9 @@ namespace GROW_CRM.Controllers
 
         public void GetMapping()
         {
-            var householdCount = _context.Households.Count();
+            List<CitiesReport> citiesReport = (List<CitiesReport>)ReportsHelper.GetCitiesData(_context);
 
-            var citiesReport = _context.Households
-                        .Include(h => h.City)
-                        .GroupBy(h => new { h.City.Name })
-                        .Select(grp => new CitiesReport
-                        {
-                            Name = grp.Key.Name,
-                            Percentage = grp.Count(),
-                            Total = grp.Count()
-                        }).ToList();
-
-            for(int i = 0; i < citiesReport.Count(); i++)
-            {
-                citiesReport[i].Percentage /= householdCount;
-            }
-
-            List<List<CityReport>> cityReports = new List<List<CityReport>>();
-
-            var cities = _context.Cities.ToList();
-
-            //This can get better
-            //Tripple Loops are not a good idea
-            foreach(City c in cities)
-            {
-                var h = _context.Members
-                        .Include(h => h.MemberIncomeSituations)
-                        .Include(h => h.Household).ThenInclude(hh => hh.City)
-                        .Where(h => h.Household.City.Name == c.Name)
-                        .GroupBy(h => new { h.Household.PostalCode, h.Household.City.Name })
-                        .Select(grp => new CityReport
-                        {
-                            Name = grp.Key.Name,
-                            PostalCode = grp.Key.PostalCode,
-                            NumberOfMembers = grp.Count(),
-                            TotalIncome = 0//grp.Sum(h => )
-                        }).ToList();
-                
-                for(int i = 0; i < h.Count(); i++)
-                {
-                    CityReport cr = h.ElementAt(i);
-
-                    var members = _context.Members
-                                  .Include(m => m.MemberIncomeSituations)
-                                  .Include(m => m.Household).ThenInclude(h => h.City)
-                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode)
-                                  .Select(m => m).ToList();
-
-                    double inc = 0;
-
-                    foreach(Member m in members)
-                    {
-                        inc += m.YearlyIncome;
-                    }
-
-                    cr.TotalIncome = inc;
-                }
-                
-                cityReports.Add(h);
-            }
+            List<List<CityReport>> cityReports = (List<List<CityReport>>)ReportsHelper.GetCityReports(_context);
 
             ViewData["ReportType"] = "Mapping Report";
             ViewData["Count"] = citiesReport.Count();
@@ -1186,7 +1129,7 @@ namespace GROW_CRM.Controllers
         [HttpGet]
         public async Task<ActionResult> GetMapJson()
         {
-            var mapData = ReportsHelper.GetMapData(_context);
+            var mapData = ReportsHelper.GetCitiesData(_context);
 
             return Json(mapData);
         }

@@ -87,7 +87,7 @@ namespace GROW_CRM.Controllers.Helpers
             return new List<IEnumerable> { genderReport, ageReport, dietaryReport };
         }
 
-        public static IEnumerable GetMapData(GROWContext _context)
+        public static IEnumerable GetCitiesData(GROWContext _context)
         {
             var householdCount = _context.Households.Count();
 
@@ -107,6 +107,55 @@ namespace GROW_CRM.Controllers.Helpers
             }
 
             return citiesReport;
+        }
+
+        public static IEnumerable GetCityReports(GROWContext _context)
+        {
+            List<List<CityReport>> cityReports = new List<List<CityReport>>();
+
+            var cities = _context.Cities.ToList();
+
+            //This can get better
+            //Tripple Loops are not a good idea
+            foreach (City c in cities)
+            {
+                var h = _context.Members
+                        .Include(h => h.MemberIncomeSituations)
+                        .Include(h => h.Household).ThenInclude(hh => hh.City)
+                        .Where(h => h.Household.City.Name == c.Name)
+                        .GroupBy(h => new { h.Household.PostalCode, h.Household.City.Name })
+                        .Select(grp => new CityReport
+                        {
+                            Name = grp.Key.Name,
+                            PostalCode = grp.Key.PostalCode,
+                            NumberOfMembers = grp.Count(),
+                            TotalIncome = 0//grp.Sum(h => )
+                        }).ToList();
+
+                for (int i = 0; i < h.Count(); i++)
+                {
+                    CityReport cr = h.ElementAt(i);
+
+                    var members = _context.Members
+                                  .Include(m => m.MemberIncomeSituations)
+                                  .Include(m => m.Household).ThenInclude(h => h.City)
+                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode)
+                                  .Select(m => m).ToList();
+
+                    double inc = 0;
+
+                    foreach (Member m in members)
+                    {
+                        inc += m.YearlyIncome;
+                    }
+
+                    cr.TotalIncome = inc;
+                }
+
+                cityReports.Add(h);
+            }
+
+            return cityReports;
         }
     }
 }
