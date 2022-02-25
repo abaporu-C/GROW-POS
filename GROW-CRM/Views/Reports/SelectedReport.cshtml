@@ -88,7 +88,14 @@
     }
     else if ((string)ViewData["ReportType"] == "Mapping Report")
     {
+        <div id="mapping"></div>
         <partial name="~/Views/Reports/Partial/_Mapping.cshtml" />
+        @section Scripts{
+            <script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.2"></script>
+            <script type="module" src="~/js/mapping.js"></script>
+        }
     }
     else if ((string)ViewData["ReportType"] == "Income Report")
     {
