@@ -291,7 +291,7 @@ namespace GROW_CRM.Controllers
 
                     _context.Add(household);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "HouseholdMembers", new { HouseholdID = household.ID });
+                    return RedirectToAction("Add", "HouseholdMembers", new { HouseholdID = household.ID, HouseholdName = household.Name });
                 }
             }
             catch (RetryLimitExceededException /* dex */)
