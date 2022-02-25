@@ -86,5 +86,27 @@ namespace GROW_CRM.Controllers.Helpers
 
             return new List<IEnumerable> { genderReport, ageReport, dietaryReport };
         }
+
+        public static IEnumerable GetMapData(GROWContext _context)
+        {
+            var householdCount = _context.Households.Count();
+
+            var citiesReport = _context.Households
+                        .Include(h => h.City)
+                        .GroupBy(h => new { h.City.Name })
+                        .Select(grp => new CitiesReport
+                        {
+                            Name = grp.Key.Name,
+                            Percentage = grp.Count(),
+                            Total = grp.Count()
+                        }).ToList();
+
+            for (int i = 0; i < citiesReport.Count(); i++)
+            {
+                citiesReport[i].Percentage /= householdCount;
+            }
+
+            return citiesReport;
+        }
     }
 }
