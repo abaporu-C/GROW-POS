@@ -87,7 +87,7 @@ namespace GROW_CRM.Controllers.Helpers
             return new List<IEnumerable> { genderReport, ageReport, dietaryReport };
         }
 
-        public static IEnumerable GetMapData(GROWContext _context)
+        public static IEnumerable GetCitiesData(GROWContext _context)
         {
             var householdCount = _context.Households.Count();
 
@@ -107,6 +107,133 @@ namespace GROW_CRM.Controllers.Helpers
             }
 
             return citiesReport;
+        }
+
+        public static IEnumerable GetCityReports(GROWContext _context)
+        {
+            List<List<CityReport>> cityReports = new List<List<CityReport>>();
+
+            var cities = _context.Cities.ToList();
+
+            //This can get better
+            //Tripple Loops are not a good idea
+            foreach (City c in cities)
+            {
+                var h = _context.Members
+                        .Include(h => h.MemberIncomeSituations)
+                        .Include(h => h.Household).ThenInclude(hh => hh.City)
+                        .Where(h => h.Household.City.Name == c.Name)
+                        .GroupBy(h => new { h.Household.PostalCode, h.Household.City.Name })
+                        .Select(grp => new CityReport
+                        {
+                            Name = grp.Key.Name,
+                            PostalCode = grp.Key.PostalCode,
+                            NumberOfMembers = grp.Count(),
+                            TotalIncome = 0//grp.Sum(h => )
+                        }).ToList();
+
+                for (int i = 0; i < h.Count(); i++)
+                {
+                    CityReport cr = h.ElementAt(i);
+
+                    var members = _context.Members
+                                  .Include(m => m.MemberIncomeSituations)
+                                  .Include(m => m.Household).ThenInclude(h => h.City)
+                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode)
+                                  .Select(m => m).ToList();
+
+                    double inc = 0;
+
+                    foreach (Member m in members)
+                    {
+                        inc += m.YearlyIncome;
+                    }
+
+                    cr.TotalIncome = inc;
+                }
+
+                cityReports.Add(h);
+            }
+
+            return cityReports;
+        }
+
+        public static IEnumerable GetIncomeData(GROWContext _context)
+        {
+            var members = _context.Members
+                .Include(m => m.MemberIncomeSituations)
+                .Include(m => m.Gender)
+                .Select(m => m).ToList();
+
+            List<HouseholdInformation> misList = new List<HouseholdInformation>();
+
+            foreach (Member m in members)
+            {
+                misList.Add(new HouseholdInformation 
+                {
+                    Code = m.HouseholdID,
+                    Name = m.FullName,
+                    Gender = m.Gender.Name,
+                    Age = m.Age,
+                    TotalIncome = m.YearlyIncome
+                });
+            }
+
+            return misList;
+        }
+
+        public static IEnumerable GetNewAdditions(GROWContext _context)
+        {
+            var newAdditions = _context.Households
+                                .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations)
+                                .Select(na => new NewAdditionsReport
+                                {
+                                    ID = na.ID,
+                                    Members = na.Members.Count,
+                                    Income = na.YearlyIncome,
+                                    CreatedOn = na.CreatedOn,
+                                    CreatedBy = na.CreatedBy
+                                }).ToList();
+
+            List<NewAdditionsReport> newAdditionsfiltered = new List<NewAdditionsReport>();
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            foreach (NewAdditionsReport na in newAdditions)
+            {
+                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
+                double tds = diff.TotalDays;
+                if (tds > 7) continue;
+                newAdditionsfiltered.Add(na);
+            }
+
+            return newAdditionsfiltered;
+        }
+
+        public static IEnumerable GetRenewals(GROWContext _context)
+        {
+            DateTime now = DateTime.Now;
+
+            var renewalReports = _context.Households
+                                .Include(h => h.Members)
+                                .Select(rr => new RenewalReport
+                                {
+                                    ID = rr.ID,
+                                    Members = rr.Members.Count,
+                                    Income = rr.YearlyIncome,
+                                    LastVerified = rr.LastVerification
+                                }).ToList();
+
+            List<RenewalReport> renewalReportsFiltered = new List<RenewalReport>();
+
+            foreach (RenewalReport r in renewalReports)
+            {
+                int diff = (now - r.LastVerified).Days;
+                if (diff < 365) continue;
+                renewalReportsFiltered.Add(r);
+            }
+
+            return renewalReportsFiltered;
         }
     }
 }
