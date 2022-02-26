@@ -60,28 +60,9 @@ namespace GROW_CRM.Controllers
         }
         
         //Get Renewal Report
-        public async void GetRenewalReport()
-        {
-            DateTime now = DateTime.Now;
-
-            var renewalReports =  await _context.Households
-                                .Include(h => h.Members)                                
-                                .Select(rr => new RenewalReport
-                                {
-                                    ID = rr.ID,
-                                    Members = rr.Members.Count,
-                                    Income = rr.YearlyIncome,
-                                    LastVerified = rr.LastVerification
-                                }).ToListAsync();
-
-            List<RenewalReport> renewalReportsFiltered = new List<RenewalReport>();
-
-            foreach(RenewalReport r in renewalReports)
-            {
-                int diff = (now - r.LastVerified).Days;
-                if (diff < 365) continue;
-                renewalReportsFiltered.Add(r);
-            }
+        public void GetRenewalReport()
+        {            
+            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);
 
             string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification"};
 
@@ -95,27 +76,8 @@ namespace GROW_CRM.Controllers
         }
 
         public IActionResult DownloadRenewal()
-        {
-            DateTime now = DateTime.Now;
-
-            var renewalReports = _context.Households
-                                .Include(h => h.Members)
-                                .Select(rr => new RenewalReport
-                                {
-                                    ID = rr.ID,
-                                    Members = rr.Members.Count,
-                                    Income = rr.YearlyIncome,
-                                    LastVerified = rr.LastVerification
-                                }).ToList();
-
-            List<RenewalReport> renewalReportsFiltered = new List<RenewalReport>();
-
-            foreach (RenewalReport r in renewalReports)
-            {
-                int diff = (now - r.LastVerified).Days;
-                if (diff < 365) continue;
-                renewalReportsFiltered.Add(r);
-            }
+        {            
+            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);            
             
             //How many rows?
             int reportRows = renewalReportsFiltered.Count();
@@ -258,30 +220,11 @@ namespace GROW_CRM.Controllers
             return NotFound();
         }
 
-        public async void GetNewAdditions()
-        {
-            var newAdditions = await _context.Households
-                                .Include(h => h.Members)
-                                .Select(na => new NewAdditionsReport
-                                {
-                                    ID = na.ID,
-                                    Members = na.Members.Count,
-                                    Income = na.YearlyIncome,
-                                    CreatedOn = na.CreatedOn,
-                                    CreatedBy = na.CreatedBy
-                                }).ToListAsync();
-
-            List<NewAdditionsReport> newAdditionsfiltered = new List<NewAdditionsReport>();
+        public void GetNewAdditions()
+        {            
+            List<NewAdditionsReport> newAdditionsfiltered = (List<NewAdditionsReport>)ReportsHelper.GetNewAdditions(_context);
             
-            DateTime lastWeek = DateTime.Now.AddDays(-7);
-
-            foreach(NewAdditionsReport na in newAdditions)
-            {
-                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
-                double tds = diff.TotalDays;
-                if (tds > 7) continue;
-                newAdditionsfiltered.Add(na);
-            }
+            DateTime lastWeek = DateTime.Now.AddDays(-7);            
 
             string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Created On", "Created By" };
 
@@ -296,28 +239,7 @@ namespace GROW_CRM.Controllers
 
         public IActionResult DownloadNewMembers()
         {
-            var newAdditions = _context.Households
-                                .Include(h => h.Members)
-                                .Select(na => new NewAdditionsReport
-                                {
-                                    ID = na.ID,
-                                    Members = na.Members.Count,
-                                    Income = na.YearlyIncome,
-                                    CreatedOn = na.CreatedOn,
-                                    CreatedBy = na.CreatedBy
-                                }).ToList();
-
-            List<NewAdditionsReport> newAdditionsfiltered = new List<NewAdditionsReport>();
-
-            DateTime lastWeek = DateTime.Now.AddDays(-7);
-
-            foreach (NewAdditionsReport na in newAdditions)
-            {
-                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
-
-                if (diff.TotalDays > 7) continue;
-                newAdditionsfiltered.Add(na);
-            }
+            List<NewAdditionsReport> newAdditionsfiltered = (List<NewAdditionsReport>)ReportsHelper.GetNewAdditions(_context);
             //How many rows?
             int numRows = newAdditionsfiltered.Count();
 
@@ -672,64 +594,9 @@ namespace GROW_CRM.Controllers
             //Get the appointments
             var householdCount = _context.Households.Count();
 
-            var citiesReport = _context.Households
-                        .Include(h => h.City)
-                        .GroupBy(h => new { h.City.Name })
-                        .Select(grp => new CitiesReport
-                        {
-                            Name = grp.Key.Name,
-                            Percentage = grp.Count(),
-                            Total = grp.Count()
-                        }).ToList();
+            var citiesReport = (List<CitiesReport>)ReportsHelper.GetCitiesData(_context);
 
-            for (int i = 0; i < citiesReport.Count(); i++)
-            {
-                citiesReport[i].Percentage /= householdCount;
-            }
-
-            List<List<CityReport>> cityReports = new List<List<CityReport>>();
-
-            var cities = _context.Cities.ToList();
-
-            //This can get better
-            //Tripple Loops are not a good idea
-            foreach (City c in cities)
-            {
-                var h = _context.Members
-                        .Include(h => h.MemberIncomeSituations)
-                        .Include(h => h.Household).ThenInclude(hh => hh.City)
-                        .Where(h => h.Household.City.Name == c.Name)
-                        .GroupBy(h => new { h.Household.PostalCode, h.Household.City.Name })
-                        .Select(grp => new CityReport
-                        {
-                            Name = grp.Key.Name,
-                            PostalCode = grp.Key.PostalCode,
-                            NumberOfMembers = grp.Count(),
-                            TotalIncome = 0//grp.Sum(h => )
-                        }).ToList();
-
-                for (int i = 0; i < h.Count(); i++)
-                {
-                    CityReport cr = h.ElementAt(i);
-
-                    var members = _context.Members
-                                  .Include(m => m.MemberIncomeSituations)
-                                  .Include(m => m.Household).ThenInclude(h => h.City)
-                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode)
-                                  .Select(m => m).ToList();
-
-                    double inc = 0;
-
-                    foreach (Member m in members)
-                    {
-                        inc += m.YearlyIncome;
-                    }
-
-                    cr.TotalIncome = inc;
-                }
-
-                cityReports.Add(h);
-            }
+            List<List<CityReport>> cityReports = (List<List<CityReport>>)ReportsHelper.GetCityReports(_context);
             //How many rows?
             int citiesRows = citiesReport.Count();
 
@@ -737,23 +604,7 @@ namespace GROW_CRM.Controllers
             {
                 //Create a new spreadsheet from scratch.
                 using (ExcelPackage excel = new ExcelPackage())
-                {
-
-                    //Note: you can also pull a spreadsheet out of the database if you
-                    //have saved it in the normal way we do, as a Byte Array in a Model
-                    //such as the UploadedFile class.
-                    //
-                    // Suppose...
-                    //
-                    // var theSpreadsheet = _context.UploadedFiles.Include(f => f.FileContent).Where(f => f.ID == id).SingleOrDefault();
-                    //
-                    //    //Pass the Byte[] FileContent to a MemoryStream
-                    //
-                    // using (MemoryStream memStream = new MemoryStream(theSpreadsheet.FileContent.Content))
-                    // {
-                    //     ExcelPackage package = new ExcelPackage(memStream);
-                    // }
-
+                {                    
                     var workSheet = excel.Workbook.Worksheets.Add("Mapping");
 
                     workSheet.Cells[3, 1].Value = "CITIES REPORT";
@@ -918,19 +769,7 @@ namespace GROW_CRM.Controllers
 
         public void GetIncomeInfo()
         {
-            var sumQ = _context.Members
-                .Include(m => m.Household).ThenInclude(m => m.Province)
-                .Include(m => m.Gender)
-                .AsEnumerable()
-                .GroupBy(a => new { a.Household.ID, a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.Household.YearlyIncome })
-                .Select(grp => new HouseholdInformation
-                {
-                    Code = grp.Key.ID,
-                    Name = grp.Key.FullName,
-                    Age = grp.Key.Age,
-                    Gender = grp.Key.Name,
-                    TotalIncome = (int)grp.Key.YearlyIncome
-                });
+            var sumQ = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Total Income" };
 
@@ -946,19 +785,7 @@ namespace GROW_CRM.Controllers
         public IActionResult DownloadIncomes()
         {
             //Get the placements
-            var householdInfo = _context.Members
-                        .Include(p => p.Household).ThenInclude(p => p.Province)
-                        .Include(p => p.Gender)
-                        .AsEnumerable()
-                        .GroupBy(a => new { a.Household, a.Household.ID, a.FullName, a.Gender.Name, a.Age, a.Household.YearlyIncome })
-                        .Select(grp => new
-                        {
-                            Code = grp.Key.ID,
-                            Name = grp.Key.FullName,
-                            Age = grp.Key.Age,
-                            Gender = grp.Key.Name,
-                            Total_Income = (int)grp.Key.YearlyIncome
-                        });
+            var householdInfo = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             //How many rows?
             int numRows = householdInfo.Count();

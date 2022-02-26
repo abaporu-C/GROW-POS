@@ -33,6 +33,6 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
 
         [Display(Name = "Total Household Income")]
         [DataType(DataType.Currency)]
-        public int TotalIncome { get; set; }
+        public double TotalIncome { get; set; }
     }
 }
