@@ -1,0 +1,171 @@
+﻿@model IEnumerable<GROW_CRM.Models.Item>
+
+@{
+    ViewData["Title"] = "Item Index";
+}
+
+<h1>Item Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-success"> <i class="fa-solid fa-circle-plus"></i> New Item</a>
+</p>
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            <i class="fa-solid fa-filter"></i> Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Select by Category:</label>
+                        @Html.DropDownList("CategoryID", null, "All Categories", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Item Name:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Select by Price Status:</label>
+                        <div class="border-top pt-2">
+                            <div class="form-check form-check-inline pr-2">
+                                @Html.RadioButton("ProductPriceStatus", "false", htmlAttributes: new { @class = "mr-1", @id = "ProductPriceStatus1",  @checked = "checked" })
+                                <label class="form-check-label" for="ProductPriceStatus1"> All Items</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButton("ProductPriceStatus", "true", htmlAttributes: new { @class = "mr-1", @id="ProductPriceStatus2" });
+                                <label class="form-check-label" for="ProductPriceStatus2"> Items On Sale</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <button type="submit" class="btn btn-outline-primary" name="actionButton">
+                            <i class='fa-solid fa-filter'></i> Filter
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-dark"> <i class="fa-solid fa-arrows-rotate"></i> Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        @{
+            string bold = "font-weight-bold";
+            string field = ViewData["sortField"].ToString();
+
+            string direction = "▼";
+            if (ViewData["sortDirection"].ToString() == "desc")
+            {
+                direction = "▲";
+            }
+        }
+        <thead>
+            <tr>
+                <th>
+                    @if (field == "Code")
+                    {
+                        <input type="submit" name="actionButton" value="Code" class="btn btn-link @bold" />
+                        <span class="text-primary">@direction</span>
+                    }
+                    else
+                    {
+                        <input type="submit" name="actionButton" value="Code" class="btn btn-link" />
+                    }
+                </th>
+                <th>
+                    @if (field == "Name")
+                    {
+                        <input type="submit" name="actionButton" value="Name" class="btn btn-link @bold" />
+                        <span class="text-primary">@direction</span>
+                    }
+                    else
+                    {
+                        <input type="submit" name="actionButton" value="Name" class="btn btn-link" />
+                    }
+                </th>
+                <th>
+                    @if (field == "Category")
+                    {
+                        <input type="submit" name="actionButton" value="Category" class="btn btn-link  @bold" />
+                        <span class="text-primary">@direction</span>
+                    }
+                    else
+                    {
+                        <input type="submit" name="actionButton" value="Category" class="btn btn-link" />
+                    }
+                </th>
+                <th>
+                    @if (field == "Discount (%)")
+                    {
+                        <input type="submit" name="actionButton" value="Discount (%)" class="btn btn-link  @bold" />
+                        <span class="text-primary">@direction</span>
+                    }
+                    else
+                    {
+                        <input type="submit" name="actionButton" value="Discount (%)" class="btn btn-link" />
+                    }
+                </th>
+                <th>
+                    @if (field == "Price ($)")
+                    {
+                        <input type="submit" name="actionButton" value="Price ($)" class="btn btn-link  @bold" />
+                        <span class="text-primary">@direction</span>
+                    }
+                    else
+                    {
+                        <input type="submit" name="actionButton" value="Price ($)" class="btn btn-link" />
+                    }
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discount)
+                    </td>
+                    <td>
+                        @{
+                            string setRedText = "";
+                            if (item.Discount.HasValue)
+                            {
+                                <del class="d-block">@Html.DisplayFor(modelItem => item.Price)</del>
+                                setRedText = " text-danger font-weight-bold";
+                            }
+                        }
+                        <span class="@setRedText">
+                            @Html.DisplayFor(modelItem => item.PriceAfterDiscount)
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-warning"> <i class="fa-solid fa-pen-to-square"></i> Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-sm btn-info"> <i class="fa-solid fa-circle-info"></i> Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-danger"> <i class="fa-solid fa-trash-can"></i> Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+}

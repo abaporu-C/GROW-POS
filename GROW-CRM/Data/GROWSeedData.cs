@@ -139,25 +139,230 @@ namespace GROW_CRM.Data
                     //Save changes
                     context.SaveChanges();
                 }
+
+                //Look for Categories
+                if (!context.Categories.Any())
+                {
+                    var categories = new List<Category>
+                    {
+                        new Category { Name = "Produce"},
+                        new Category { Name = "Freezer"},
+                        new Category { Name = "Dairy/Eggs/Bread"},
+                        new Category { Name = "Pantry"},
+                        new Category { Name = "Specials"}
+                    };
+                    context.Categories.AddRange(categories);
+                    context.SaveChanges();
+                }
                 
                 //Looks for Items
                 if (!context.Items.Any())
                 {
-                    //array of items fields
-                    string[] names = new string[] { "Carrot", "Flour", "Pork Chops", "Olive Oil", "White Rice", "Avocado"};                    
-                    decimal[] prices = new decimal[] { 3.99M, 1.50M, 5.99M, 3.50M };
+                    var produceItems = new List<Item> {
+                            new Item { Code = "148", Name = "Anise / Fennel", Price = 1.50 },
+                            new Item { Code = "101", Name = "Apples", Price = 0.10 },
+                            new Item { Code = "102", Name = "Avocado large*", Price = 1.00 },
+                            new Item { Code = "103", Name = "Avocado small*", Price = 0.50 },
+                            new Item { Code = "104", Name = "Bananas", Price = 0.10 },
+                            new Item { Code = "105", Name = "Blueberries / Blackberries", Price = 1.50 },
+                            new Item { Code = "106", Name = "Broccoli", Price = 2.00 },
+                            new Item { Code = "147", Name = "Brussel Sprouts", Price = 1.00 },
+                            new Item { Code = "127", Name = "Cabbage *", Price = 2.00 },
+                            new Item { Code = "107", Name = "Cantaloupe", Price = 1.50 },
+                            new Item { Code = "108", Name = "Carrots", Price = 0.05 },
+                            new Item { Code = "109", Name = "Cauliflower", Price = 2.50 },
+                            new Item { Code = "110", Name = "Celery", Price = 1.50 },
+                            new Item { Code = "111", Name = "Clementine", Price = 0.10 },
+                            new Item { Code = "112", Name = "Corn", Price = 0.25 },
+                            new Item { Code = "113", Name = "Cucumber", Price = 1.00 },
+                            new Item { Code = "114", Name = "Cucumber Mini", Price = 0.05 },
+                            new Item { Code = "115", Name = "Eggplant", Price = 0.10 },
+                            new Item { Code = "116", Name = "Garlic *", Price = 0.25 },
+                            new Item { Code = "117", Name = "Grapes *", Price = 1.00 },
+                            new Item { Code = "118", Name = "Green Onions", Price = 0.25 },
+                            new Item { Code = "119", Name = "Kale", Price = 0.50 },
+                            new Item { Code = "120", Name = "Kiwi", Price = 0.25 },
+                            new Item { Code = "121", Name = "Lemon *", Price = 0.25 },
+                            new Item { Code = "122", Name = "Lettuce Romaine Hearts", Price = 0.50 },
+                            new Item { Code = "123", Name = "Limes", Price = 0.05 },
+                            new Item { Code = "124", Name = "Mango", Price = 1.00 },
+                            new Item { Code = "125", Name = "Micro Greens", Price = 0.25 },
+                            new Item { Code = "126", Name = "Mushrooms *", Price = 1.50 },
+                            new Item { Code = "128", Name = "Onion", Price = 0.05 },
+                            new Item { Code = "129", Name = "Oranges", Price = 0.20 },
+                            new Item { Code = "130", Name = "Peaches / Nectarines", Price = 0.10 },
+                            new Item { Code = "131", Name = "Pear", Price = 0.10 },
+                            new Item { Code = "132", Name = "Peppers", Price = 0.50 },
+                            new Item { Code = "133", Name = "Peppers Hot 3 / 0.05", Price = 0.05 },
+                            new Item { Code = "134", Name = "Peppers Mini", Price = 0.05 },
+                            new Item { Code = "135", Name = "Plums", Price = 0.05 },
+                            new Item { Code = "136", Name = "Potatoes", Price = 0.05 },
+                            new Item { Code = "136", Name = "Bag of Potatoes", Price = 1.50 },
+                            new Item { Code = "137", Name = "Potatoes Baby Basket", Price = 0.50 },
+                            new Item { Code = "138", Name = "Potatoes Sweet(Yam)", Price = 0.75 },
+                            new Item { Code = "139", Name = "Raspberries", Price = 1.50 },
+                            new Item { Code = "147", Name = "Shallots", Price = 0.05 },
+                            new Item { Code = "140", Name = "Squash", Price = 2.50 },
+                            new Item { Code = "141", Name = "Strawberries", Price = 1.50 },
+                            new Item { Code = "142", Name = "Swiss Chard", Price = 0.50 },
+                            new Item { Code = "143", Name = "Tomato Cherry / Grape Basket", Price = 0.50 },
+                            new Item { Code = "144", Name = "Tomatoes", Price = 0.10 },
+                            new Item { Code = "145", Name = "Watermelon", Price = 2.50 },
+                            new Item { Code = "146", Name = "Zucchini", Price = 0.50 }
+                            };
 
-                    //List of Item Objects
-                    List<Item> items = new List<Item>();                    
+                    var freezerItems = new List<Item> {
+                            new Item { Code = "201", Name = "Chicken Legs(2)", Price =  1.00 },
+                            new Item { Code = "202", Name = "Chicken Drumsticks 4lbs", Price = 3.00 },
+                            new Item { Code = "203", Name = "Chicken Thighs 4lbs", Price = 3.00 },
+                            new Item { Code = "204", Name = "Chicken Wings 2lbs", Price = 2.00 },
+                            new Item { Code = "205", Name = "Ground Beef", Price =  2.75 },
+                            new Item { Code = "206", Name = "Veggie Burger 2pc", Price = 2.00 },
+                            new Item { Code = "207", Name = "Fish(Haddock / Basa)", Price = 1.00 }
+                            };
 
-                    //add items to list
-                    for (int i = 0; i < names.Count(); i++)
-                        items.Add(new Item { Name = names[i], Price = prices[rnd.Next(0, prices.Length)]});
+                    var dairyItems = new List<Item> {
+                            new Item { Code = "301", Name = "Almond Milk 2L",   Price = 2.00 },
+                            new Item { Code = "323", Name = "Bread Commisso's", Price = 1.00 },
+                            new Item { Code = "302", Name = "Bread Costco", Price = 0.50 },
+                            new Item { Code = "303", Name = "Butter",   Price = 1.00 },
+                            new Item { Code = "304", Name = "Cheese Large", Price = 3.00 },
+                            new Item { Code = "305", Name = "Cream Cheese", Price = 2.00 },
+                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 2.00 },
+                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 3.00 },
+                            new Item { Code = "307", Name = "Goat Milk 1l", Price = 2.00 },
+                            new Item { Code = "308", Name = "Hummus",   Price = 2.50 },
+                            new Item { Code = "309", Name = "Hummus Mini",  Price = 0.25 },
+                            new Item { Code = "310", Name = "Margerine",    Price = 1.50 },
+                            new Item { Code = "311", Name = "Milk - 1L",    Price = 1.00 },
+                            new Item { Code = "312", Name = "Milk - 4L",    Price = 3.00 },
+                            new Item { Code = "313", Name = "Oat Milk 1l",  Price = 2.00 },
+                            new Item { Code = "314", Name = "Orange Juice", Price = 2.00 },
+                            new Item { Code = "315", Name = "Pizza Dough",  Price = 2.00 },
+                            new Item { Code = "316", Name = "Sour Crème",   Price = 2.00 },
+                            new Item { Code = "317", Name = "Soy Milk 1l",  Price = 2.00 },
+                            new Item { Code = "318", Name = "Tofu", Price = 2.50 },
+                            new Item { Code = "319", Name = "Yogurt 4 pack",    Price = 1.00 },
+                            new Item { Code = "322", Name = "Yogurt 6 pack",    Price = 1.50 },
+                            new Item { Code = "320", Name = "Yogurt Greek", Price = 3.00 },
+                            new Item { Code = "321", Name = "Yogurt Tub",   Price = 2.00 },
+                            new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
+                            };
 
-                    //add list to context
-                    context.Items.AddRange(items);
+                    var pantryItems = new List<Item> {
+                            new Item { Code = "401", Name = " Apple Sauce", Price = 1.00 },
+                            new Item { Code = "402", Name = " Baking Powder", Price =   2.00 },
+                            new Item { Code = "403", Name = " Bars Cereal. Protein. Cookie", Price =    0.50 },
+                            new Item { Code = "404", Name = " BBQ Sauce", Price =   1.00 },
+                            new Item { Code = "405", Name = " Bleach", Price =  2.00 },
+                            new Item { Code = "406", Name = " Broth", Price =   1.00 },
+                            new Item { Code = "407", Name = " Canned Beans. Veggies. and Fruit", Price =    0.75 },
+                            new Item { Code = "408", Name = " Canola Oil", Price =  3.00 },
+                            new Item { Code = "409", Name = " Cereal all other", Price =    2.00 },
+                            new Item { Code = "410", Name = " Cereal Rice Krispies", Price =    3.00 },
+                            new Item { Code = "445", Name = " Coconut Milk", Price =    1.00 },
+                            new Item { Code = "445", Name = " Coffee", Price =  4.00 },
+                            new Item { Code = "411", Name = " Crackers ", Price =   2.00 },
+                            new Item { Code = "412", Name = " Dried Legumes/Beans", Price = 1.50 },
+                            new Item { Code = "413", Name = " Flour", Price =   2.00 },
+                            new Item { Code = "414", Name = " Garden Cocktail", Price = 0.75 },
+                            new Item { Code = "415", Name = " Granola Bars 6 pack", Price = 1.00 },
+                            new Item { Code = "446", Name = " Gummies", Price = 0.10 },
+                            new Item { Code = "416", Name = " Jam", Price = 2.00 },
+                            new Item { Code = "417", Name = " Kraft Dinner", Price =    1.00 },
+                            new Item { Code = "418", Name = " Laundry Soap large", Price =  6.00 },
+                            new Item { Code = "419", Name = " Laundry Soap small", Price =  3.00 },
+                            new Item { Code = "420", Name = " Miracle Whip", Price =    3.00 },
+                            new Item { Code = "421", Name = " Nuts", Price =    2.00 },
+                            new Item { Code = "422", Name = " Oats", Price =    2.00 },
+                            new Item { Code = "423", Name = " Olive Oil", Price =   6.00 },
+                            new Item { Code = "424", Name = " Passata", Price = 0.75 },
+                            new Item { Code = "425", Name = " Pasta", Price =   0.75 },
+                            new Item { Code = "426", Name = " Pasta Sauce", Price = 0.75 },
+                            new Item { Code = "427", Name = " Peanut Butter", Price =   2.50 },
+                            new Item { Code = "428", Name = " Polenta", Price = 3.00 },
+                            new Item { Code = "445", Name = " Protein Drink", Price =   0.50 },
+                            new Item { Code = "446", Name = " Raisins", Price = 4.00 },
+                            new Item { Code = "429", Name = " Rice", Price =    1.50 },
+                            new Item { Code = "430", Name = " Salad Dressing", Price =  1.00 },
+                            new Item { Code = "445", Name = " Salsa", Price =   1.50 },
+                            new Item { Code = "431", Name = " Soap ", Price =   0.50 },
+                            new Item { Code = "432", Name = " Soup Small", Price =  0.50 },
+                            new Item { Code = "433", Name = " Spices", Price =  1.00 },
+                            new Item { Code = "434", Name = " Sugar White and Brown", Price =   2.00 },
+                            new Item { Code = "435", Name = " Tea", Price = 2.00 },
+                            new Item { Code = "436", Name = " Tea Green Tea", Price =   4.50 },
+                            new Item { Code = "437", Name = " Tea Orange Pekoe", Price =    3.00 },
+                            new Item { Code = "438", Name = " Tea Red Rose", Price =    5.00 },
+                            new Item { Code = "439", Name = " Toilet Paper", Price =    5.00 },
+                            new Item { Code = "440", Name = " Tomato Paste", Price =    0.75 },
+                            new Item { Code = "441", Name = " Tooth Paste / Brush / Floss", Price = 0.75 },
+                            new Item { Code = "442", Name = " Tuna", Price =    1.00 },
+                            new Item { Code = "443", Name = " Wild Rice Blend", Price = 0.25 },
+                            new Item { Code = "444", Name = " Yeast", Price =   0.50 },
+                            };
 
-                    //save changes
+
+                    var specialsItems = new List<Item> {
+                            new Item { Code = "501", Name = "Cat Food (wet)", Price = 0.50 },
+                            new Item { Code = "502", Name = "Sweets (Cotco)", Price = 2.00 },
+                            new Item { Code = "503", Name = "Drinks ", Price = 0.50 },
+                            new Item { Code = "504", Name = "GROW Soup", Price = 2.50 },
+                            new Item { Code = "505", Name = "Deoderant", Price = 1.00 },
+                            new Item { Code = "506", Name = "Polenta", Price = 3.00 },
+                            new Item { Code = "507", Name = "Orzo", Price = 0.75 },
+                            new Item { Code = "508", Name = "Ramen / Rice Krispies", Price = 0.25 }
+                            };
+
+                    foreach (var category in context.Categories)
+                    {
+                        switch (category.Name)
+                        {
+                            case "Produce":
+                                foreach (var item in produceItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(produceItems);
+                                break;
+                            case "Freezer":
+                                foreach (var item in freezerItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(freezerItems);
+                                break;
+                            case "Dairy/Eggs/Bread":
+                                foreach (var item in dairyItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(dairyItems);
+                                break;
+                            case "Pantry":
+                                foreach (var item in pantryItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(pantryItems);
+                                break;
+                            case "Specials":
+                                foreach (var item in specialsItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(specialsItems);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     context.SaveChanges();
                 }
 
