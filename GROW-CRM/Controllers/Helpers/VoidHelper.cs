@@ -2,11 +2,15 @@
 using GROW_CRM.Models;
 using System.Linq;
 
+//This Class is deprecated by refactoring. It was a dangerous task and created too many problems trying to solve one.
+//It is not deleted because it might be useful in a future schedule background task.
+//Vinicius Pereira
+
 namespace GROW_CRM.Controllers.Helpers
 {
     public static class VoidHelper
     {
-        public async static void CheckVoidMembers(GROWContext _context)
+        /*public async static void CheckVoidMembers(GROWContext _context)
         {
             var members = from m in _context.Members select m;
 
@@ -32,6 +36,6 @@ namespace GROW_CRM.Controllers.Helpers
             }
 
             await _context.SaveChangesAsync();
-        }
+        }*/
     }
 }

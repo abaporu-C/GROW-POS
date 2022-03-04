@@ -56,12 +56,10 @@ namespace GROW_CRM.Controllers
                                   .Include(m => m.Household)
                                   .Include(m => m.MemberDocuments)
                                   .Include(m => m.MemberIncomeSituations)
-                        where m.HouseholdID == HouseholdID.GetValueOrDefault()
+                        where m.HouseholdID == HouseholdID.GetValueOrDefault() && m.FirstName != "" && m.LastName != ""
                         select m;
 
-            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
-
-            VoidHelper.CheckVoidMembers(members, _context);
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();            
 
             foreach(Member m in members)
             {

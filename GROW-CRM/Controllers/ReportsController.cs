@@ -32,7 +32,7 @@ namespace GROW_CRM.Controllers
         {
             GetReportsDDLItems();
 
-            VoidHelper.CheckVoidMembers(_context);
+            //VoidHelper.CheckVoidMembers(_context);
 
             return View();
         }

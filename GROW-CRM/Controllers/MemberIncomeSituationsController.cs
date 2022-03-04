@@ -47,7 +47,7 @@ namespace GROW_CRM.Controllers
             return PartialView("_CreateMemberIncomeSituation");
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public PartialViewResult CreateFakerMemberIncomeSituation()
         {
             //For this action, the ID parameter is the ID of the Athlete
@@ -62,7 +62,7 @@ namespace GROW_CRM.Controllers
                 .OrderBy(a => a.Situation), "ID", "Situation");
 
             return PartialView("_CreateFakerMemberIncomeSituation");
-        }
+        }*/
 
         public PartialViewResult EditMemberIncomeSituation(int ID)
         {

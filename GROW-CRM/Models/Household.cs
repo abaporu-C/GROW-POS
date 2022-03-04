@@ -33,7 +33,10 @@ namespace GROW_CRM.Models
             {
                 int count = 0;
 
-                foreach (Member m in Members) count++;
+                foreach (Member m in Members) 
+                {
+                    if(m.FirstName != "" && m.LastName != "") count++;
+                } 
 
                 return count;
             }
