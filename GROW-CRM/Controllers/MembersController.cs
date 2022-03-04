@@ -40,9 +40,8 @@ namespace GROW_CRM.Controllers
                               .Include(m => m.Gender)
                               .Include(m => m.Household).ThenInclude(h => h.City)
                               .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
-                              select m;
-
-            VoidHelper.CheckVoidMembers(members, _context);
+                          where m.FirstName != "" && m.LastName != ""
+                          select m;
 
             //Add as many filters as needed
             if (HouseholdID.HasValue)

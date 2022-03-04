@@ -16,6 +16,7 @@ namespace GROW_CRM.Controllers.Helpers
         {
             var members = from m in _context.Members
                               .Include(m => m.Gender)
+                          where m.FirstName != "" && m.LastName != ""
                           select m;
 
             int memberCount = members.Count();
@@ -122,7 +123,7 @@ namespace GROW_CRM.Controllers.Helpers
                 var h = _context.Members
                         .Include(h => h.MemberIncomeSituations)
                         .Include(h => h.Household).ThenInclude(hh => hh.City)
-                        .Where(h => h.Household.City.Name == c.Name)
+                        .Where(h => h.Household.City.Name == c.Name && h.FirstName != "" && h.LastName != "")
                         .GroupBy(h => new { h.Household.PostalCode, h.Household.City.Name })
                         .Select(grp => new CityReport
                         {
@@ -139,7 +140,7 @@ namespace GROW_CRM.Controllers.Helpers
                     var members = _context.Members
                                   .Include(m => m.MemberIncomeSituations)
                                   .Include(m => m.Household).ThenInclude(h => h.City)
-                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode)
+                                  .Where(m => m.Household.City.Name == cr.Name && m.Household.PostalCode == cr.PostalCode && m.FirstName != "" && m.LastName != "")
                                   .Select(m => m).ToList();
 
                     double inc = 0;
@@ -163,6 +164,7 @@ namespace GROW_CRM.Controllers.Helpers
             var members = _context.Members
                 .Include(m => m.MemberIncomeSituations)
                 .Include(m => m.Gender)
+                .Where(m => m.FirstName != "" && m.LastName != "")
                 .Select(m => m).ToList();
 
             List<HouseholdInformation> misList = new List<HouseholdInformation>();

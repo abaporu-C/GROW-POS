@@ -33,13 +33,13 @@ namespace GROW_CRM.Controllers
             //Then in each "test" for filtering, add ViewData["Filtering"] = " show" if true;
 
             ViewData["MemberID"] = new SelectList(_context.Members
+                .Where(d => d.FirstName != "" && d.LastName != "")
                 .OrderBy(d => d.LastName)
                 .ThenBy(d => d.FirstName), "ID", "FullName");
 
             var documents = from d in _context.MemberDocuments.Include(a => a.Member)
-                            select d;
-
-            VoidHelper.CheckVoidMembers(_context);
+                            where d.Member.FirstName != "" && d.Member.LastName != ""
+                            select d;            
 
             if (MemberID.HasValue)
             {
