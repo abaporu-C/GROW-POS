@@ -61,7 +61,7 @@ namespace GROW_CRM.Controllers.Helpers
             for (int i = 0; i < ageReport.Count(); i++)
             {
                 ageReport[i].Total = totals[i];
-                double per = Math.Round((double)(totals[i] / memberCount), 2);
+                double per = Math.Round((double)(totals[i] / (double)memberCount), 2);
                 ageReport[i].Percentage = per;
                 ageReport[i].PercentageText = $"{per * 100}%";
             }
