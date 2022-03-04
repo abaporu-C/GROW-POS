@@ -38,6 +38,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<Category> Categories { get; set; }
+
         public DbSet<City> Cities { get; set; }
 
         public DbSet<DietaryRestriction> DietaryRestrictions { get; set; }
@@ -102,6 +104,7 @@ namespace GROW_CRM.Data
 
             //Cascading Delete Behavior
 
+
             //DietaryRestrictions
             modelBuilder.Entity<DietaryRestriction>()
                 .HasOne(dr => dr.HealthIssueType)
@@ -114,6 +117,13 @@ namespace GROW_CRM.Data
                 .HasOne(drm => drm.DietaryRestriction)
                 .WithMany(dr => dr.DietaryRestrictionMembers)
                 .HasForeignKey(drm => drm.DietaryRestrictionID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Items
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.Category)
+                .WithMany(c => c.Items)
+                .HasForeignKey(i => i.CategoryID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHold
