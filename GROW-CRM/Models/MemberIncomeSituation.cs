@@ -11,7 +11,7 @@ namespace GROW_CRM.Models
         public int ID { get; set; }
 
         [Display(Name = "Member")]
-        public int MemberID { get; set; }
+        public int? MemberID { get; set; }
         public Member Member { get; set; }
 
         [Display(Name = "IncomeSituation")]
