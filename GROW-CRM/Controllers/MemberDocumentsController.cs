@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
+using GROW_CRM.Controllers.Helpers;
 
 namespace GROW_CRM.Controllers
 {
@@ -37,6 +38,8 @@ namespace GROW_CRM.Controllers
 
             var documents = from d in _context.MemberDocuments.Include(a => a.Member)
                             select d;
+
+            VoidHelper.CheckVoidMembers(_context);
 
             if (MemberID.HasValue)
             {
