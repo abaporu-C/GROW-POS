@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using GROW_CRM.Controllers.Helpers;
 
 namespace GROW_CRM.Controllers
 {
@@ -60,15 +61,7 @@ namespace GROW_CRM.Controllers
 
             List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
 
-            foreach(Member m in members)
-            {
-                if(m.FirstName == "" && m.LastName == "")
-                {
-                    _context.Remove(m);
-                }
-            }
-
-            await _context.SaveChangesAsync();
+            VoidHelper.CheckVoidMembers(members, _context);
 
             foreach(Member m in members)
             {
