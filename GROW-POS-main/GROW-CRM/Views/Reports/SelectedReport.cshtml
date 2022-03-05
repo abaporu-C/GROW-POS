@@ -1,0 +1,104 @@
+@using GROW_CRM.ViewModels.ReportsViewModels
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+@using (Html.BeginForm("SelectedReport", "Reports", FormMethod.Get))
+{
+    <label for="Reports">Select a Report:</label>
+
+    <fieldset>
+        <div>
+            @Html.DropDownList("Reports", null, htmlAttributes: new { @style = "width: 25vw; height: 5vh;" })
+        </div>
+        <br />
+        <input type="submit" class="btn btn-info" value="Submit" />
+    </fieldset>
+}
+<br />
+<br />
+
+<h1>@ViewData["Name"]</h1>
+<br />
+
+
+@if ((int)ViewData["Count"] < 1)
+{
+    <br>
+    <h3>Sorry, there are no households that apply to this report.</h3>
+    <br>
+}
+
+@{
+    if ((string)ViewData["ReportType"] == "Renewal Report")
+    {
+        <partial name="~/Views/Reports/Partial/_Renewal.cshtml" />
+    }
+    else if ((string)ViewData["ReportType"] == "New Households Report")
+    {
+        <partial name="~/Views/Reports/Partial/_Additions.cshtml" />
+    }
+    else if ((string)ViewData["ReportType"] == "Demographics Report")
+    {
+        <label>
+            <input type="radio" name="chart"
+                   value="genderPie" checked> By Gender
+        </label>
+        <label>
+            <input type="radio" name="chart"
+                   value="agePie"> By Age
+        </label>
+        <label>
+            <input type="radio" name="chart"
+                   value="restrictionPie"> By Restriction
+        </label>
+
+        <div id="genderPie" class="selectt"></div>
+        <div id="agePie" class="selectt"></div>
+        <div id="restrictionPie" class="selectt"></div>
+
+
+
+        <partial name="~/Views/Reports/Partial/_Demographics.cshtml" />
+
+
+
+        @section Scripts{
+            <script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.2"></script>
+            <script type="module" src="~/js/plotting.js"></script>
+            <script>
+                $("#agePie").hide();
+                $("#restrictionPie").hide();
+
+                $(document).ready(function () {
+                    $('input[type="radio"]').click(function () {
+                        var inputValue = $(this).attr("value");
+                        var targetBox = $("#" + inputValue);
+                        $(".selectt").not(targetBox).hide();
+                        $(targetBox).show();
+                    });
+                });
+            </script>
+        }
+    }
+    else if ((string)ViewData["ReportType"] == "Mapping Report")
+    {
+        <div id="mapping"></div>
+        <partial name="~/Views/Reports/Partial/_Mapping.cshtml" />
+        @section Scripts{
+            <script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.2"></script>
+            <script type="module" src="~/js/mapping.js"></script>
+        }
+    }
+    else if ((string)ViewData["ReportType"] == "Income Report")
+    {
+        <partial name="~/Views/Reports/Partial/_Income.cshtml" />
+    }
+}

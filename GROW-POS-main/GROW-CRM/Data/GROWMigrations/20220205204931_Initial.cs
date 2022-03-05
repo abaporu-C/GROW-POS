@@ -47,6 +47,28 @@ namespace GROW_CRM.Data.GROWMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HouseholdInformation",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Code = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Gender = table.Column<string>(nullable: true),
+                    Age = table.Column<string>(nullable: true),
+                    PostalCode = table.Column<string>(nullable: true),
+                    DietaryConcerns = table.Column<string>(nullable: true),
+                    IncomeSource = table.Column<string>(nullable: true),
+                    TotalIncome = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HouseholdInformation", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HouseholdStatuses",
                 columns: table => new
                 {
@@ -147,6 +169,23 @@ namespace GROW_CRM.Data.GROWMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Provinces", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "YearlyReportVM",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Code = table.Column<string>(nullable: true),
+                    Members = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    LastVerification = table.Column<DateTime>(nullable: false),
+                    PendingReassessment = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_YearlyReportVM", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -494,7 +533,6 @@ namespace GROW_CRM.Data.GROWMigrations
                 name: "IX_UploadedFiles_HouseholdID",
                 table: "UploadedFiles",
                 column: "HouseholdID");
-            ExtraMigration.Steps(migrationBuilder);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -506,10 +544,16 @@ namespace GROW_CRM.Data.GROWMigrations
                 name: "FileContent");
 
             migrationBuilder.DropTable(
+                name: "HouseholdInformation");
+
+            migrationBuilder.DropTable(
                 name: "HouseholdNotifications");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "YearlyReportVM");
 
             migrationBuilder.DropTable(
                 name: "DietaryRestrictions");

@@ -1,0 +1,6 @@
+﻿Read and add to this file if you know how to work around known issue. 
+
+====================================================================
+
+1. Creating Household not working.
+ Solution: Delete database and migration. Create a new one, DON'T use ExtraMigrations. 

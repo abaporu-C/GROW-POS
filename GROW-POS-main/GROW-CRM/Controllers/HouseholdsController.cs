@@ -398,6 +398,7 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.Gender)
                 .Include( m=> m.IncomeSituation)
                 .AsEnumerable()
+                .OrderBy(m => m.Household.HCode).ThenByDescending(m => m.FirstName)
                 .GroupBy(a => new { a.Household.HCode, a.FirstName, a.LastName, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
                 .Select(grp => new HouseholdInformation
                 {
@@ -417,6 +418,7 @@ namespace GROW_CRM.Controllers
             var sumQ = _context.Members
                 .Include(m => m.Household).ThenInclude(m => m.Province)
                 .AsEnumerable()
+                .OrderBy(m => m.Household.HCode).ThenByDescending(m => m.FirstName)
                 .GroupBy(a => new { a.Household })
                 .Select(grp => new YearlyReportVM
                 {
@@ -437,6 +439,7 @@ namespace GROW_CRM.Controllers
                         .Include(p => p.Gender)
                         .Include(p => p.IncomeSituation)
                         .AsEnumerable()
+                        .OrderBy(m => m.Household.HCode).ThenByDescending(m => m.FirstName)
                         .GroupBy(a => new { a.Household, a.Household.HCode, a.FullName, a.Gender.Name, a.Age, a.IncomeSituation.Situation, a.Household.YearlyIncome })
                         .Select(grp => new
                         {
@@ -587,6 +590,28 @@ namespace GROW_CRM.Controllers
             }
             return NotFound();
         }
+
+        public IActionResult SalesReceipt()
+        {
+            var sumQ = _context.Members
+                .Include(m => m.Household)
+                .Include(m => m.Order).ThenInclude(m => m.OrderItem)
+                .AsEnumerable()
+                .OrderBy(m => m) //order by purchase date
+                .GroupBy(a => new { a.Household, a.Order, a.Order.OrderItem, a.Order.OrderItem.Item })
+                .Select(grp => new Sales
+                {
+                    Household = grp.Key.Household.HCode,
+                    PurchaseDate = grp.Key.Order.Date, //purchase date
+                    Purchases = grp.Key.Item.Name + " (" + grp.Key.OrderItem.Quantity.ToString() + ")", //purchases and quantity
+                    Taxes = grp.Key.Order.Taxes,
+                    Total = grp.Key.Order.Total, //purchase total
+                    Volunteer = grp.Key.Household.Members.ToString() //volunteer
+                });
+
+            return View(sumQ.ToList());
+        }
+
 
         private async Task AddDocumentsAsync(Household household, List<IFormFile> theFiles)
         {

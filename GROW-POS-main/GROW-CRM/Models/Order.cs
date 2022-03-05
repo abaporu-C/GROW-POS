@@ -34,5 +34,8 @@ namespace GROW_CRM.Models
 
         //O:M Relationships
         public ICollection<OrderItem> OrderItems { get; set; }
+
+        public int OrderItemID { get; set; }
+        public OrderItem OrderItem { get; set; }
     }
 }

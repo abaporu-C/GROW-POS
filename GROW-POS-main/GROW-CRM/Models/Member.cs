@@ -124,6 +124,11 @@ namespace GROW_CRM.Models
 
         public IncomeSituation IncomeSituation { get; set; }
 
+        [Display(Name = "Order")]
+        public int OrderID { get; set; }
+
+        public Order Order { get; set; }
+
         //O:M Relationships        
 
         public ICollection<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }

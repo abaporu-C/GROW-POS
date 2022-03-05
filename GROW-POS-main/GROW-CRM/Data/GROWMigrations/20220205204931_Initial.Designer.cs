@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GROW_CRM.Data.GROWMigrations
 {
     [DbContext(typeof(GROWContext))]
-    [Migration("20220131204830_Initial")]
+    [Migration("20220205204931_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -521,6 +521,73 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.ToTable("UploadedFiles");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("UploadedFile");
+                });
+
+            modelBuilder.Entity("GROW_CRM.ViewModels.HouseholdInformation", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DietaryConcerns")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IncomeSource")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TotalIncome")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HouseholdInformation");
+                });
+
+            modelBuilder.Entity("GROW_CRM.ViewModels.YearlyReportVM", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastVerification")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Members")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PendingReassessment")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("YearlyReportVM");
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.HouseholdDocument", b =>

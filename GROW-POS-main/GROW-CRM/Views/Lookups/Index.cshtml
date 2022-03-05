@@ -1,0 +1,99 @@
+﻿@{
+	ViewData["Title"] = "Lookup Index";
+}
+
+<h2>Lookup Values</h2>
+
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+        <li class="nav-item">
+            <a href="#DefaultPanel" aria-controls="DefaultTab" role="tab" class="nav-link active" name="DefaultTab" data-toggle="tab" aria-selected="false"> </a>
+        </li>
+        <li class="nav-item">
+            <a href="#DietaryRestrictionsPanel" id="DietaryRestrictionsTab" aria-controls="DietaryRestrictionsTab" role="tab" class="nav-link" name="DietaryRestrictionsPanel" data-toggle="tab" aria-selected="false">Dietary Restrictions</a>
+        </li>
+        <li class="nav-item">
+            <a href="#GendersPanel" id="GendersTab" aria-controls="GendersTab" role="tab" class="nav-link" name="GendersPanel" data-toggle="tab" aria-selected="false">Genders</a>
+        </li>
+        <li class="nav-item">
+            <a href="#NotificationTypesPanel" id="NotificationTypesTab" aria-controls="NotificationTypesTab" role="tab" class="nav-link" name="NotificationTypesPanel" data-toggle="tab" aria-selected="false">Notification Types</a>
+        </li>
+        <li class="nav-item">
+            <a href="#PaymentTypesPanel" id="PaymentTypesTab" aria-controls="PaymentTypesTab" role="tab" class="nav-link" name="PaymentTypesPanel" data-toggle="tab" aria-selected="false">Payment Types</a>
+        </li>
+        <li class="nav-item">
+            <a href="#ProvincesPanel" id="ProvincesTab" aria-controls="ProvincesTab" role="tab" class="nav-link" name="ProvincesPanel" data-toggle="tab" aria-selected="false">Provinces</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade ml-3 show active" id="DefaultPanel">
+            <br />
+            <h4>
+                Select the lookup value to maintian from the tabs.
+            </h4>
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="DietaryRestrictionsPanel" aria-labelledby="DietaryRestrictions-Panel">
+            <br />
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="GendersPanel" aria-labelledby="Genders-Panel">
+            <br />
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="NotificationTypesPanel" aria-labelledby="NotificationTypes-Panel">
+            <br />
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="PaymentTypesPanel" aria-labelledby="PaymentTypes-Panel">
+            <br />
+        </div>
+                <div role="tabpanel" class="tab-pane fade ml-3" id="ProvincesPanel" aria-labelledby="Provinces-Panel">
+            <br />
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function refreshTab(activeTab) {
+            switch (activeTab) {
+                case 'DietaryRestrictionsPanel': $('#DietaryRestrictionsPanel').load('/Lookups/DietaryRestrictions');
+                    break;
+                case 'GendersPanel': $('#GendersPanel').load('/Lookups/Genders');
+                    break;
+                case 'NotificationTypesPanel': $('#NotificationTypesPanel').load('/Lookups/NotificationTypes');
+                    break;
+                case 'PaymentTypesPanel': $('#PaymentTypesPanel').load('/Lookups/PaymentTypes');
+                    break;
+                case 'ProvincesPanel': $('#ProvincesPanel').load('/Lookups/Provinces');
+                    break;
+                default: break;
+            };
+            return;
+        };
+        $('.nav-link').click( function () {
+            var activeTab = $(this).attr("name");
+            refreshTab(activeTab);
+        });
+        $(".tab-content").on("click",".linkClick", function (event) {
+            event.preventDefault();
+            var address = $(this).attr("href");
+            var lookup = address.split("/")[1];
+            var id = $("#" + lookup + "ID").val();
+            var caption = $("#" + lookup).html();
+            if (id == null) {
+                alert("Error: no value selected from the " + caption + " list!");
+            } else {
+                window.location.href = address + "/" + id;
+            }
+        });
+        $(function () {
+            setTimeout(function () {
+                $("#@ViewData["Tab"]").trigger('click');
+            }, 10);
+        });
+    </script>
+}

@@ -1,0 +1,22 @@
+﻿@model GROW_CRM.Models.IncomeSituation
+
+<form asp-controller="IncomeSituations"  asp-action="Create" id="createIncomeSituationForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="Situation" class="control-label"></label>
+                <input asp-for="Situation" class="form-control" />
+                <span asp-validation-for="Situation" class="text-danger"></span>
+            </div>
+            <div class="row justify-content-end mr-2">
+                <div class="form-group">
+                    <input type="submit" value="Create" id="submitIncomeSituationCreate" class="btn btn-outline-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+

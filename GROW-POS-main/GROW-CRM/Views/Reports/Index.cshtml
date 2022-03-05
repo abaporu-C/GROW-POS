@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+@using (Html.BeginForm("SelectedReport", "Reports", FormMethod.Get))
+{
+    <label for="Reports">Select a Report:</label>
+
+    <fieldset>
+        <div>
+            @Html.DropDownList("Reports", null, htmlAttributes: new { @style="width: 25vw; height: 5vh;" })
+        </div>
+        <br />
+        <input type="submit" class="btn btn-info" value="Submit" />
+    </fieldset>
+}
