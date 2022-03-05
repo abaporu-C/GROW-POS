@@ -1,3 +1,4 @@
+using GROW_CRM.BackgroundTasks;
 using GROW_CRM.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,11 @@ namespace GROW_CRM
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<DeleteTempMembers>();
+                    services.AddScoped<IScopedDeleteEmptyMembers, ScopedDeleteEmptyMembers>();
                 });
     }
 }
