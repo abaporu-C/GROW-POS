@@ -19,21 +19,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index"> <h5>Home</h5> </a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link  display-4" asp-area="" asp-controller="Households" asp-action="Index"> <h5>Households</h5> </a>
+                            <a class="nav-link" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
                         </li>
                 <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <h5>Member Menu</h5><b class="caret"></b>
+                                Member Menu<b class="caret"></b>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
-                            </div>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
+     
+                                </div>
                 </li>
                         @*<li class="nav-item">
                             <a class="nav-link  display-4" asp-area="" asp-controller="Reports" asp-action="Index"> <h5>Reports</h5> </a>

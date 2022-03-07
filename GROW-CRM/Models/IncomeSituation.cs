@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GROW_CRM.Models
 {
@@ -13,6 +14,7 @@ namespace GROW_CRM.Models
         //Fields
         public int ID { get; set; }
 
+        [Display(Name = "Income Situation")]
         public string Situation { get; set; }
 
         //O:M Relationships
