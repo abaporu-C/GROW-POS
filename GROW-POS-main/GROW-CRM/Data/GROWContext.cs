@@ -1,4 +1,4 @@
-﻿using GROW_CRM.Models;
+using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
 using GROW_CRM.Models.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +28,7 @@ namespace GROW_CRM.Data
         }
 
         //To give access to IHttpContextAccessor for Audit Data with IAuditable
-        private readonly IHttpContextAccessor _httpContextAccessor;        
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public GROWContext(DbContextOptions<GROWContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
@@ -39,6 +39,10 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<DietaryRestriction> DietaryRestrictions { get; set; }
 
         public DbSet<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
@@ -47,9 +51,9 @@ namespace GROW_CRM.Data
 
         public DbSet<Gender> Genders { get; set; }
 
-        public DbSet<Household> Households { get; set; }
+        public DbSet<HealthIssueType> HealthIssueTypes { get; set; }
 
-        public DbSet<HouseholdDocument> HouseholdDocuments { get; set; }
+        public DbSet<Household> Households { get; set; }
 
         public DbSet<HouseholdNotification> HouseholdNotifications { get; set; }
 
@@ -57,8 +61,12 @@ namespace GROW_CRM.Data
 
         public DbSet<Item> Items { get; set; }        
 
-        public DbSet<Member> Members { get; set; }   
-        
+        public DbSet<Member> Members { get; set; }
+
+        public DbSet<MemberDocument> MemberDocuments { get; set; }
+
+        public DbSet<MemberIncomeSituation> MemberIncomeSituations { get; set; }
+
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
@@ -91,15 +99,32 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<HouseholdNotification>()
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
-            
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
+                .IsUnique();
 
             //Cascading Delete Behavior
-            
+
+
+            //DietaryRestrictions
+            modelBuilder.Entity<DietaryRestriction>()
+                .HasOne(dr => dr.HealthIssueType)
+                .WithMany(hit => hit.DietaryRestrictions)
+                .HasForeignKey(dr => dr.HealthIssueTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //DietaryRestriction-Member
             modelBuilder.Entity<DietaryRestrictionMember>()
                 .HasOne(drm => drm.DietaryRestriction)
                 .WithMany(dr => dr.DietaryRestrictionMembers)
                 .HasForeignKey(drm => drm.DietaryRestrictionID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Items
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.Category)
+                .WithMany(c => c.Items)
+                .HasForeignKey(i => i.CategoryID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHold
@@ -109,18 +134,30 @@ namespace GROW_CRM.Data
                   .HasForeignKey(h => h.ProvinceID)
                   .OnDelete(DeleteBehavior.Restrict);
 
-
-            //HouseHoldDocuments
-            modelBuilder.Entity<HouseholdDocument>()
-                .HasOne(hd => hd.Household)
-                .WithMany(h => h.HouseholdDocuments)
-                .HasForeignKey(hd => hd.HouseholdID)
+            modelBuilder.Entity<Household>()
+                .HasOne(h => h.City)
+                .WithMany(c => c.Households)
+                .HasForeignKey(h => h.CityID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<HouseholdDocument>()
+            //MemberDocuments            
+            modelBuilder.Entity<MemberDocument>()
                 .HasOne(hd => hd.DocumentType)
-                .WithMany(dt => dt.HouseholdDocuments)
+                .WithMany(dt => dt.MemberDocuments)
                 .HasForeignKey(hd => hd.DocumentTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //MemberIncomeSituations
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(m => m.Member)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(m => m.MemberID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MemberIncomeSituation>()
+                .HasOne(mis => mis.IncomeSituation)
+                .WithMany(ics => ics.MemberIncomeSituations)
+                .HasForeignKey(mis => mis.IncomeSituationID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Members
@@ -134,13 +171,7 @@ namespace GROW_CRM.Data
                 .HasOne(m => m.Household)
                 .WithMany(h => h.Members)
                 .HasForeignKey(m => m.HouseholdID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Member>()
-                .HasOne(m => m.IncomeSituation)
-                .WithMany(i => i.Members)
-                .HasForeignKey(m => m.IncomeSituationID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);            
 
             //Order
             modelBuilder.Entity<Order>()
@@ -160,6 +191,12 @@ namespace GROW_CRM.Data
                 .HasOne(oi => oi.Item)
                 .WithMany(i => i.OrderItems)
                 .HasForeignKey(oi => oi.ItemID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderItems)
+                .HasForeignKey(oi => oi.OrderID)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
@@ -182,7 +219,7 @@ namespace GROW_CRM.Data
             {
                 if (entry.Entity is IAuditable trackable)
                 {
-                    var now = DateTime.UtcNow;
+                    var now = DateTime.Now;
                     switch (entry.State)
                     {
                         case EntityState.Modified:
@@ -201,8 +238,6 @@ namespace GROW_CRM.Data
             }
         }
 
-        public DbSet<GROW_CRM.ViewModels.HouseholdInformation> HouseholdInformation { get; set; }
-
-        public DbSet<GROW_CRM.ViewModels.YearlyReportVM> YearlyReportVM { get; set; }
+        public DbSet<GROW_CRM.ViewModels.Sales> Sales { get; set; }
     }
 }

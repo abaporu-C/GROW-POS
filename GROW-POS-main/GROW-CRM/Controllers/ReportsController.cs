@@ -771,7 +771,7 @@ namespace GROW_CRM.Controllers
 
         public void GetIncomeInfo()
         {
-            var sumQ = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
+            var sumQ = (List<ViewModels.HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Total Income" };
 
@@ -787,7 +787,7 @@ namespace GROW_CRM.Controllers
         public IActionResult DownloadIncomes()
         {
             //Get the placements
-            var householdInfo = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
+            var householdInfo = (List<ViewModels.HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             //How many rows?
             int numRows = householdInfo.Count();

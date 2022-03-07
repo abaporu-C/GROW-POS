@@ -6,9 +6,15 @@
 
 <h2>Member Index</h2>
 
-<p>
-    <a asp-action="Create">Create New Member</a>
-</p>
+<p>Note: To add member to the household</p>
+<ol>
+    <li>Go to <a class="btn-link" asp-controller="Households" asp-action="Index">Households</a></li>
+    <li>Find an existing Household or <a class="btn-link" asp-controller="Households" asp-action="Create">Create New Household</a></li>
+    <li>Go to Household <b>Details</b> ---> Add New Member. </li>
+</ol>
+   
+    
+
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
@@ -16,6 +22,7 @@
         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
         </button>
+        <br/>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
@@ -36,21 +43,22 @@
                 <div class="row">
 
                     <div class="form-group col-md-5">
-                        <label class="control-label">Search Member Name:</label>
+                        <label class="control-label">Search by Member Name:</label>
                         @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search by Phone:</label>
+                        @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-5">
                         <label class="control-label">Search by Household Address:</label>
                         @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-5">
-                        <label class="control-label">Search by Household Code:</label>
-                        @Html.TextBox("HouseholdCodeSearch", null, new { @class = "form-control" })
+                        <label class="control-label">Search by Household ID:</label>
+                        @Html.TextBox("HouseholdIDSearch", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-5">
-                        <label class="control-label">Search by Phone:</label>
-                        @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
-                    </div>
+
                     <div class="form-group col-md-4 align-self-end">
                         <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
                         <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
@@ -63,7 +71,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="submit" disabled="disabled" value="Household ID" class="btn btn-link" />
+                    <input type="submit" disabled="disabled" value="Household ID: " class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
@@ -83,10 +91,10 @@
                     <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
                 </th>
 
-                
-                <th>
-                    <input type="submit" disabled="disabled" value="Situation" class="btn btn-link" />
-                </th>
+
+                @*<th>
+            <input type="submit" name="actionButton" value="Situation" class="btn btn-link" />
+        </th>*@
                 <th></th>
             </tr>
         </thead>
@@ -95,7 +103,7 @@
             {
             <tr>
                 <td>
-                    M:@Html.DisplayFor(modelItem => item.Household.HouseholdCode)
+                    <center># @Html.DisplayFor(modelItem => item.HouseholdID)</center>  
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FullName)
@@ -118,13 +126,13 @@
                     @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
                     @Html.DisplayFor(modelItem => item.Household.City)
                     @Html.DisplayFor(modelItem => item.Household.Province)
-                </td>*@
+                </td>
                 
                 <td>
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                </td>
+                </td>*@
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                 </td>

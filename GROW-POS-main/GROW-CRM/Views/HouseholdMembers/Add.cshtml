@@ -1,37 +1,47 @@
-﻿@model GROW_CRM.Models.Member
+﻿@using GROW_CRM.ViewModels
+@model GROW_CRM.Models.Member
 
 @{
     ViewData["Title"] = "Add Member";
 }
 
-
-<h2>Add Member to Household: @ViewData["HouseholdAddress"]</h2>
+<h3>
+    Add Member to Household : @ViewData["HouseholdName"]
+</h3>
 <hr />
-<form asp-action="Add">
+<partial name="_addIncomeSituationModal" />
+<partial name="_MemberIncomeSituationModal" />
+<form asp-action="Add" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="ID" value="@Model.ID" />
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
-    <input type="hidden" name="HouseholdAddress" value="@ViewData[" HouseholdAddress"]" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group">
-                <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
-                    <input asp-for="MiddleName" class="form-control" />
-                    <span asp-validation-for="MiddleName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-                <label asp-for="Notes" class="control-label"></label>
-                <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
+                <label asp-for="ConsentGiven"></label>
+                <input asp-for="ConsentGiven" />
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenderID" class="control-label"></label>
+                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                    <option value="">Select Gender</option>
+                </select>
+                <span asp-validation-for="GenderID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DOB" class="control-label"></label>
@@ -40,34 +50,187 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="phoneAddon">#</span>
+                    </div>
+                    <input asp-for="PhoneNumber" class="form-control" aria-describedby="phoneAddon" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="emailAddon">@@</span>
+                    </div>
+                    <input asp-for="Email" type="text" placeholder="example@mail.com" class="form-control" aria-describedby="emailAddon" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
-                    <option value="">Please, choose one</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IncomeSituationID" class="control-label"></label>
-                <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
-                    <option value="">No Reason Given</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-
         </div>
-    </div>
-</form>
-<div>
-    <a href='@ViewData["returnURL"]'>Back to Household</a>
-</div>
+        <div class="col-md-6">
+            
+                <div class="form-group" id="ListMemberIncomeSituations">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
+                    </div>
+                <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                <div class="col-md-offset-1" id="MemberIncomeSituationList">
+                    <table>
+                        @{
+                            foreach (var item in Model.MemberIncomeSituations.OrderBy(s=>s.IncomeSituation.Situation))
+                                {
+                                    @:<tr><td>
+                                        @item.Summary 
+                                    @:</td><td>
+                                        @:&nbsp; &nbsp;
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Summary" type="button">&#x270D;</button>
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Summary" type="button">&#x274C;</button>
+		                            @:</td></tr>
+                                }
+                        }
+                    </table>
+                </div>
+            </div>
 
+            
+
+            @* <div class="form-group">
+                    <label asp-for="IncomeSituationID" class="control-label"></label>
+                    <select asp-for="IncomeSituationID" class="form-control" asp-items="ViewBag.IncomeSituationID">
+                        <option value="">No Reason Given</option>
+                    </select>
+                    <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
+                </div>*@
+
+            <label asp-for="Notes" class="control-label"></label>
+            <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Illness Accredited</label> <button type="button" id="btnIllnessRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Illness</label> <button type="button" id="btnIllnessLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Concerns Accredited</label> <button type="button" id="btnConcernRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Concerns</label> <button type="button" id="btnConcernLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="uploadControl" class="control-label">Upload Documents:</label>
+                <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input class="btn btn-lg btn-outline-danger  mr-3" type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+                    <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <a asp-area="" asp-controller="HouseholdMembers" asp-route-MemberID="@Model.ID" asp-action="CancelMember" asp-route-direction="households" asp-route-HouseholdID="@null">Back to Households List</a> | <a asp-controller="HouseholdMembers" asp-action="CancelMember" asp-route-MemberID="@Model.ID" asp-route-direction="householdDetails" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/js/refreshDDL.js"></script>
+        <script src="~/js/multiselect.js"></script>               
+        <script type="text/javascript">
+            $('#submitIncomeSituationCreate').click(function (event) {
+                event.preventDefault();
+                var form = $('#createIncomeSituationForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#addIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Create Failed.  There was a problem adding the record.");
+                        }
+                    });
+                }
+                return false;
+            });
+            $('#addIncomeSituationModal').on('hide.bs.modal', function () {
+                $('#createIncomeSituationForm').find("input[type=text], textarea, select").val("");//to clear the data in the popup
+                refreshDDL('IncomeSituationID', '/HouseholdMembers/GetIncomeSituations', false, null, true, 'None', true);
+            });
+        </script>
+        <script>
+            //New for modal
+            function refreshModal(actionForm, MemberIncomeSituationsID) {
+              switch (actionForm) {
+                  case 'CreateForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/CreateMemberIncomeSituation/' + @Model.ID);
+                    break;
+                  case 'EditForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/EditMemberIncomeSituation/' + MemberIncomeSituationsID);
+                    break;
+                  case 'DeleteForm': $('#formMemberIncomeSituationBody').load('/MemberIncomeSituations/DeleteMemberIncomeSituation/' + MemberIncomeSituationsID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var MemberIncomeSituationsID = $(this).attr("tag");
+                refreshModal(actionForm, MemberIncomeSituationsID);
+            });
+            $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {
+                event.preventDefault();
+                var form = $('#theMemberIncomeSituationsForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            console.log($('#theMemberIncomeSituationModal'))
+                            $('#theMemberIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed.  There was a problem maintaing the data.");
+                        }
+                    });
+                }
+                return false;
+            });
+        $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
+            $('#MemberIncomeSituationList').load('/HouseholdMembers/MemberIncomeSituationList/@Model.ID');
+            });
+        </script>
+    }

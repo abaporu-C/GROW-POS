@@ -7,7 +7,7 @@ namespace GROW_CRM.Models
         //Constructor
         public IncomeSituation()
         {
-            Members = new HashSet<Member>();
+            MemberIncomeSituations = new HashSet<MemberIncomeSituation>();
         }
 
         //Fields
@@ -16,6 +16,6 @@ namespace GROW_CRM.Models
         public string Situation { get; set; }
 
         //O:M Relationships
-        public ICollection<Member> Members { get; set; }
+        public ICollection<MemberIncomeSituation> MemberIncomeSituations { get; set; }
     }
 }

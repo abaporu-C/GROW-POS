@@ -16,16 +16,51 @@ namespace GROW_CRM.Data.GROWMigrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.21");
 
+            modelBuilder.Entity("GROW_CRM.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.City", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestriction", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("HealthIssueTypeID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Restriction")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("HealthIssueTypeID");
 
                     b.ToTable("DietaryRestrictions");
                 });
@@ -73,19 +108,32 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.ToTable("Genders");
                 });
 
+            modelBuilder.Entity("GROW_CRM.Models.HealthIssueType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HealthIssueTypes");
+                });
+
             modelBuilder.Entity("GROW_CRM.Models.Household", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AptNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AptNumber")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("City")
+                    b.Property<int?>("CityID")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(255);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT")
@@ -94,42 +142,36 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("HouseholdCode")
+                    b.Property<int?>("HouseholdStatusID")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(5);
-
-                    b.Property<int>("HouseholdStatusID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("JoinedDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LICOVerified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("NumberOfMembers")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("LastVerification")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProvinceID")
+                    b.Property<int?>("ProvinceID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("StreetNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -138,10 +180,9 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("YearlyIncome")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ID");
+
+                    b.HasIndex("CityID");
 
                     b.HasIndex("HouseholdStatusID");
 
@@ -199,6 +240,13 @@ namespace GROW_CRM.Data.GROWMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
@@ -209,12 +257,16 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<double?>("Discount")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(150);
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -225,6 +277,8 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("CategoryID");
+
                     b.ToTable("Items");
                 });
 
@@ -232,6 +286,9 @@ namespace GROW_CRM.Data.GROWMigrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ConsentGiven")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
@@ -255,13 +312,11 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<int>("GenderID")
+                    b.Property<int?>("GenderID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HouseholdID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IncomeSituationID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -276,6 +331,12 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<string>("Notes")
                         .HasColumnType("TEXT")
                         .HasMaxLength(2000);
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("OrderID1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -295,9 +356,34 @@ namespace GROW_CRM.Data.GROWMigrations
 
                     b.HasIndex("HouseholdID");
 
-                    b.HasIndex("IncomeSituationID");
+                    b.HasIndex("OrderID1");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.MemberIncomeSituation", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Income")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("IncomeSituationID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("IncomeSituationID");
+
+                    b.HasIndex("MemberID", "IncomeSituationID")
+                        .IsUnique();
+
+                    b.ToTable("MemberIncomeSituations");
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.Message", b =>
@@ -383,20 +469,53 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("HouseMember")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("HouseholdCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("HouseholdID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ItemID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MemberID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderItemID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("OrderItemID1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Payment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PaymentTypeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Subtotal")
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Purchases")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Taxes")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Taxes")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT")
@@ -405,9 +524,19 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Volunteer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ID");
 
+                    b.HasIndex("HouseholdID");
+
+                    b.HasIndex("ItemID");
+
                     b.HasIndex("MemberID");
+
+                    b.HasIndex("OrderItemID1");
 
                     b.HasIndex("PaymentTypeID");
 
@@ -424,9 +553,6 @@ namespace GROW_CRM.Data.GROWMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("OrderID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
@@ -499,6 +625,10 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -521,88 +651,99 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("UploadedFile");
                 });
 
-            modelBuilder.Entity("GROW_CRM.ViewModels.HouseholdInformation", b =>
+            modelBuilder.Entity("GROW_CRM.ViewModels.Sales", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Age")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DietaryConcerns")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("IncomeSource")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TotalIncome")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("HouseholdInformation");
-                });
-
-            modelBuilder.Entity("GROW_CRM.ViewModels.YearlyReportVM", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("LastVerification")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Members")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PendingReassessment")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("YearlyReportVM");
-                });
-
-            modelBuilder.Entity("GROW_CRM.Models.HouseholdDocument", b =>
-                {
-                    b.HasBaseType("GROW_CRM.Models.Utilities.UploadedFile");
-
-                    b.Property<int>("DocumentTypeID")
+                    b.Property<int>("HouseholdCode")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HouseholdID")
                         .HasColumnType("INTEGER");
 
-                    b.HasIndex("DocumentTypeID");
+                    b.Property<int>("ItemID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Payment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PaymentID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PaymentTypeID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Purchases")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Taxes")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Volunteer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("HouseholdID");
 
-                    b.HasDiscriminator().HasValue("HouseholdDocument");
+                    b.HasIndex("ItemID");
+
+                    b.HasIndex("MemberID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("PaymentTypeID");
+
+                    b.ToTable("Sales");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.MemberDocument", b =>
+                {
+                    b.HasBaseType("GROW_CRM.Models.Utilities.UploadedFile");
+
+                    b.Property<int?>("DocumentTypeID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("DocumentTypeID");
+
+                    b.HasIndex("MemberID");
+
+                    b.HasDiscriminator().HasValue("MemberDocument");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.DietaryRestriction", b =>
+                {
+                    b.HasOne("GROW_CRM.Models.HealthIssueType", "HealthIssueType")
+                        .WithMany("DietaryRestrictions")
+                        .HasForeignKey("HealthIssueTypeID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.DietaryRestrictionMember", b =>
@@ -622,6 +763,12 @@ namespace GROW_CRM.Data.GROWMigrations
 
             modelBuilder.Entity("GROW_CRM.Models.Household", b =>
                 {
+                    b.HasOne("GROW_CRM.Models.City", "City")
+                        .WithMany("Households")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("GROW_CRM.Models.HouseholdStatus", "HouseholdStatus")
                         .WithMany("Households")
                         .HasForeignKey("HouseholdStatusID")
@@ -650,6 +797,15 @@ namespace GROW_CRM.Data.GROWMigrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GROW_CRM.Models.Item", b =>
+                {
+                    b.HasOne("GROW_CRM.Models.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("GROW_CRM.Models.Member", b =>
                 {
                     b.HasOne("GROW_CRM.Models.Gender", "Gender")
@@ -664,11 +820,23 @@ namespace GROW_CRM.Data.GROWMigrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("GROW_CRM.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderID1");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.MemberIncomeSituation", b =>
+                {
                     b.HasOne("GROW_CRM.Models.IncomeSituation", "IncomeSituation")
-                        .WithMany("Members")
+                        .WithMany("MemberIncomeSituations")
                         .HasForeignKey("IncomeSituationID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.Member", "Member")
+                        .WithMany("MemberIncomeSituations")
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GROW_CRM.Models.Notification", b =>
@@ -688,11 +856,27 @@ namespace GROW_CRM.Data.GROWMigrations
 
             modelBuilder.Entity("GROW_CRM.Models.Order", b =>
                 {
+                    b.HasOne("GROW_CRM.Models.Household", "Household")
+                        .WithMany()
+                        .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GROW_CRM.Models.Member", "Member")
                         .WithMany("Orders")
                         .HasForeignKey("MemberID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.OrderItem", "OrderItem")
+                        .WithMany()
+                        .HasForeignKey("OrderItemID1");
 
                     b.HasOne("GROW_CRM.Models.PaymentType", "PaymentType")
                         .WithMany("Orders")
@@ -712,7 +896,7 @@ namespace GROW_CRM.Data.GROWMigrations
                     b.HasOne("GROW_CRM.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -725,18 +909,48 @@ namespace GROW_CRM.Data.GROWMigrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GROW_CRM.Models.HouseholdDocument", b =>
+            modelBuilder.Entity("GROW_CRM.ViewModels.Sales", b =>
                 {
-                    b.HasOne("GROW_CRM.Models.DocumentType", "DocumentType")
-                        .WithMany("HouseholdDocuments")
-                        .HasForeignKey("DocumentTypeID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("GROW_CRM.Models.Household", "Household")
+                        .WithMany()
+                        .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GROW_CRM.Models.Household", "Household")
-                        .WithMany("HouseholdDocuments")
-                        .HasForeignKey("HouseholdID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("GROW_CRM.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GROW_CRM.Models.PaymentType", "PaymentType")
+                        .WithMany()
+                        .HasForeignKey("PaymentTypeID");
+                });
+
+            modelBuilder.Entity("GROW_CRM.Models.MemberDocument", b =>
+                {
+                    b.HasOne("GROW_CRM.Models.DocumentType", "DocumentType")
+                        .WithMany("MemberDocuments")
+                        .HasForeignKey("DocumentTypeID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GROW_CRM.Models.Member", "Member")
+                        .WithMany("MemberDocuments")
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

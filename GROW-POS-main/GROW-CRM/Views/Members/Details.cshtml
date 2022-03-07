@@ -4,78 +4,140 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
 <div>
-    <h4>Member</h4>
+
+    <h2>Details</h2>
+
+    <h2>Member : @Html.DisplayFor(model => model.FullName) </h2>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MiddleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MiddleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DOB)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DOB)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Household)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ConsentGiven)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Household.AptNumber)
-            @Html.DisplayFor(model => model.Household.StreetNumber) - @Html.DisplayFor(model => model.Household.StreetName)
-            @Html.DisplayFor(model => model.Household.City) @Html.DisplayFor(model => model.Household.PostalCode)
-            @Html.DisplayFor(model => model.Household.Province)
+            @Html.DisplayFor(model => model.ConsentGiven)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IncomeSituation)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IncomeSituation.Situation)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MiddleName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DOB)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DOB)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.YearlyIncome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.YearlyIncome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Gender.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Household ID:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Household.ID)
+
+        </dd>
+        <dt class="col-sm-2">
+            Income Sources:
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var c in Model.MemberIncomeSituations)
+            {
+                @c.IncomeSituation.Situation <br />
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DietaryRestrictionMembers)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var c in Model.DietaryRestrictionMembers)
+            {
+                @c.DietaryRestriction.Restriction <br />
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Current Documents:
+        </dt>
+        <dd>
+            @{
+                int fileCount = Model.MemberDocuments.Count;
+                if (fileCount > 0)
+                {
+                    var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
+                    if (fileCount > 1)
+                    {
+                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                            <span class="badge badge-info">@fileCount</span> Current Documents...
+                        </a>
+                        <div class="collapse" id="collapseSum@(Model.ID)">
+                            @{
+                                foreach (var d in Model.MemberDocuments)
+                                {
+                                    <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                    }
+                }
+            }
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
 </div>
+
+@*@section Scripts {
+        <script type="text/javascript">
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
+        </script>
+    }*@

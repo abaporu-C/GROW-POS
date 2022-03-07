@@ -7,21 +7,41 @@
 <p> </p>
 <div class="media">    
     <div class="media-body ml-3">
-        <h2><text class="d-none d-sm-inline">Household Address: </text>@household.FullAddress</h2>
+
+        @{
+
+            if (!String.IsNullOrEmpty(household.Name))
+            {
+                <h2> @Html.Raw("Household Name : ") @household.Name </h2>
+            }
+            else
+            {
+                <h2> @Html.Raw("Household # ") @household.ID </h2>
+            }
+        }
+
+       
+
         <div class="row">
             <div class="col-sm-6">
                 <dl class="row">
                     <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.HouseholdCode)
+                        ID:
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.HouseholdCode)
+                        @Html.DisplayFor(model => household.ID)
+                    </dd>
+                    <dt class="col-md-4">
+                        Address:
+                    </dt>
+                    <dd class="col-md-8">
+                        @Html.DisplayFor(model => household.FullAddress)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.YearlyIncome)
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.YearlyIncome)
+                        $ @Html.DisplayFor(model => household.YearlyIncome)
                     </dd>
                     <dt class="col-md-4">
                         @Html.DisplayNameFor(model => household.NumberOfMembers)
@@ -33,22 +53,49 @@
                         @Html.DisplayNameFor(model => household.LICOVerified)
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.LICOVerified)
+                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </symbol>
+                            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </symbol>
+                        </svg>
+                        @{
+                            if (!household.LICOVerified)
+                            {
+                                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+                                    <div>
+                                        Not LICO Verified
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-success d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                                    <div>
+                                        Verified
+                                    </div>
+                                </div>
+                            }
+                        }
                     </dd>
                     <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.JoinedDate)
+                        Joined on:
                     </dt>
                     <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.JoinedDate)
+                        @household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year
                     </dd>
                     <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.HouseholdStatus)
+                        Household Status
                     </dt>
                     <dd class="col-md-8">
                         @Html.DisplayFor(model => household.HouseholdStatus.Name)
                     </dd>
                 </dl>
-            </div>           
+            </div>
         </div>
     </div>
 </div>
@@ -67,17 +114,21 @@
             <div class="form-horizontal">
                 <div class="collapse card card-body bg-light" style="padding-top: 10px; padding-bottom: 0px;" id="collapseFilter">
                     <div class="form-row">
-                        <div class="form-group col-md-4 ml-md-3">
+                        <div class="form-group col-md-3 ml-md-3">
                             <label class="control-label">Reason:</label>
                             @Html.DropDownList("IncomeSituationID", null, "All Situations", htmlAttributes: new { @class = "form-control" })
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4 ml-md-3">
                             <label class="control-label">Search Notes:</label>
-                            @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                            @Html.TextBox("NotesSearchString", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Search Name:</label>
+                            @Html.TextBox("MemberSearchString", null, new { @class = "form-control" })
                         </div>
                         <div class="form-group col-md-3 align-self-end">
-                            <input type="submit" name="actionButton" value="Apply" class="btn btn-primary" />
-                            <a asp-action="Index" asp-route-PatientID="@household.ID">Clear</a>
+                            <input type="submit" name="actionButton" value="Apply" class="btn btn-primary mr-3" />
+                            <a asp-action="Index" asp-route-HouseholdID="@household.ID" class="btn btn-outline-secondary">Clear</a>
                         </div>
                     </div>
                 </div>
@@ -89,11 +140,14 @@
             <div>
                 <table class="table">
                     <colgroup>
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" />
-                        <col span="1" width="400" />
-                        <col span="1" />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
                     </colgroup>
                     <tr>
                         <th>
@@ -109,10 +163,16 @@
                             <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
                         </th>
                         <th>
+                            <input type="submit" name="disabled" value="Yearly Income" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Documents" class="btn btn-link" />
+                        </th>
+                        <th>
                             <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
                         </th>
                         <th>
-                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdAddress="@household.FullAddress">
+                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
                                 <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
                             </a>
                         </th>
@@ -120,55 +180,127 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FullName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Gender.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Age)
-                            </td>
-                            <td>
-                                @{
-                                    string[] noteWords = item.Notes.Split(' ');
-                                    if (noteWords.Count() > 5)
+                <tr>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.FullName)*@
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a> <br />
+                    </td>
+                    <td>
+                        @{
+                            var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
+                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault()?.MemberID == item.ID).Select(mis => mis).ToList();
+                            int theCount = misList.FirstOrDefault() == null ? 0 : misList.FirstOrDefault().Count;
+                            if (theCount > 0)
+                            {
+                                string first = misList.FirstOrDefault().FirstOrDefault().Summary;
+                                if (theCount > 1)
+                                {
+                                    string theList = first;
+                                    var c = misList.ToList();
+                                    for (int i = 1; i < theCount; i++)
                                     {
-                                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
-                                            @(string.Join(" ", noteWords.Take(5)) + "...")
-                                        </a>
-                                        <div class="collapse" id="collapseSum@(item.ID)">
-                                            <div class="well">
-                                                @(string.Join(" ", noteWords.Skip(5)))
-                                            </div>
-                                        </div>
+                                        theList += ", \n" + c.FirstOrDefault()[i].Summary;
                                     }
-                                    else
-                                    {
-                                        @item.Notes
-                                    }
+                                    <a tabindex="0" class="" role="button" data-toggle="popover"
+                                       data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                                       data-content="@theList">
+                                        @first... <span class="badge badge-info">
+                                            @theCount
+                                        </span>
+                                    </a>
                                 }
-                                @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
-                            </td>
-                            <td>
-                                <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
-                                    <span class="btn btn-sm btn-outline-primary">&#x270D;</span>
-                                </a>
-                                <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
-                                    <span class="btn btn-sm btn-outline-danger">&#x274C</span>
-                                </a>
-                            </td>
-                        </tr>
+                                else
+                                {
+                                    @first
+                                }
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td>
+                       $ @Html.DisplayFor(modelItem => item.YearlyIncome)
+                    </td>
+                    <td>
+                        @{
+                            int fileCount = item.MemberDocuments.Count;
+                            if (fileCount > 0)
+                            {
+                                var firstFile = item.MemberDocuments.FirstOrDefault(); ;
+                                if (fileCount > 1)
+                                {
+                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
+                                        <span class="badge badge-info">@fileCount</span> Current Documents...
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(item.ID)">
+                                        @{
+                                            foreach (var d in item.MemberDocuments)
+                                            {
+                                                <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                            }
+
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                                }
+                            }
+                        }
+                        @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
+                    </td>
+                    <td>
+                        @{if (!string.IsNullOrEmpty(item.Notes))
+                            {
+                                string[] noteWords = item.Notes.Split(' ');
+                                if (noteWords.Count() > 5)
+                                {
+                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
+                                        @(string.Join(" ", noteWords.Take(5)) + "...")
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(item.ID)">
+                                        <div class="well">
+                                            @(string.Join(" ", noteWords.Skip(5)))
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @item.Notes
+                                }
+                            }
+                        }
+                        @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
+                    </td>
+                    <td>
+                        <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
+                            <span class="btn btn btn-outline-primary">Edit</span>
+                        </a>
+                       
+                    </td>
+                    <td>
+                        <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
+                            <span class="btn btn btn-outline-danger">Delete</span>
+                        </a>
+                    </td>
+                </tr>
                     }
-                    <tr>
-                        <td></td>                        
-                        <td></td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 </table>
             </div>
         </dd>
@@ -176,7 +308,7 @@
     <partial name="_PagingNavBar" />
 </form>
 <div>
-    <a asp-action="Edit" asp-controller="Households" asp-route-id="@household.ID">Edit</a> |
+    <a asp-action="Edit" asp-controller="Households" asp-route-id="@household.ID">Edit</a> | <a asp-action="Delete" asp-controller="Households" asp-route-id="@household.ID">Delete</a> | 
     <a href='@ViewData["returnURL"]'>Back to Households List</a>
 </div>
 @section Scripts {

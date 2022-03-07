@@ -4,73 +4,97 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete member : @Html.DisplayFor(model => model.FullName) ?</h3>
 <div>
-    <h4>Member</h4>
+    
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MiddleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MiddleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DOB)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DOB)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Gender)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender.ID)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Household)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Gender.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Household.City)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IncomeSituation)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IncomeSituation.ID)
-        </dd class>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt class="col-sm-2">
+            Household ID:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Household.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.YearlyIncome)
+        </dt>
+        <dd class="col-sm-10">
+            $@Html.DisplayFor(model => model.YearlyIncome)
+        </dd>
+        <dt class="col-sm-2">
+            Income Situations:
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                int theCount = Model.MemberIncomeSituations.Count;
+                if (theCount > 0)
+                {
+                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                    if (theCount > 1)
+                    {
+                        string theList = first;
+                        var c = Model.MemberIncomeSituations.ToList();
+                        for (int i = 1; i < theCount; i++)
+                        {
+                            theList += ", " + c[i].IncomeSituation.Situation;
+                        }
+                        @:Income Situations:
+                        <a tabindex="0" class="" role="button" data-toggle="popover"
+                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                           data-content="@theList">
+                            @first... <span class="badge badge-info">
+                                @theCount
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        @:Income Situations:
+                        @first
+                    }
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

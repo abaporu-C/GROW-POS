@@ -13,7 +13,9 @@ namespace GROW_CRM.Models
         public Member()
         {
             DietaryRestrictionMembers = new HashSet<DietaryRestrictionMember>();
+            MemberDocuments = new HashSet<MemberDocument>();
             Orders = new HashSet<Order>();
+            MemberIncomeSituations = new HashSet<MemberIncomeSituation>();
         }
 
         //Fields
@@ -25,10 +27,10 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return FirstName
+                return FirstName?[0].ToString().ToUpper() + FirstName?.Substring(1)
                     + (string.IsNullOrEmpty(MiddleName) ? " " :
-                        (" " + (char?)MiddleName[0] + ". ").ToUpper())
-                    + LastName;
+                        (" " + (char?)MiddleName?[0] + ". ").ToUpper())
+                    + LastName?[0].ToString().ToUpper() + LastName?.Substring(1);
             }
         }
 
@@ -41,6 +43,21 @@ namespace GROW_CRM.Models
                     - ((today.Month < DOB?.Month || (today.Month == DOB?.Month && today.Day < DOB?.Day) ? 1 : 0));
                 return a?.ToString();
             }
+        }
+
+        [Display(Name = "Yearly Income")]
+        public double YearlyIncome { get 
+            {
+                double income = 0;
+
+                foreach(MemberIncomeSituation mis in MemberIncomeSituations)
+                {
+                    income += mis.Income;
+                }
+
+
+                return income;
+            } 
         }
 
         [Display(Name = "Age (DOB)")]
@@ -62,7 +79,7 @@ namespace GROW_CRM.Models
         {
             get
             {
-                return "(" + PhoneNumber.Substring(0, 3) + ") " + PhoneNumber.Substring(3, 3) + "-" + PhoneNumber[6..];
+                return "(" + PhoneNumber?.Substring(0, 3) + ") " + PhoneNumber?.Substring(3, 3) + "-" + PhoneNumber?[6..];
             }
         }
 
@@ -104,26 +121,24 @@ namespace GROW_CRM.Models
         
         [StringLength(2000, ErrorMessage = "Only 2000 characters for notes.")]
         [DataType(DataType.MultilineText)]
-        public string Notes { get; set; }
+        public string Notes { get; set; }        
+
+        [Display(Name = "Consent On Giving Information: ")]
+        public bool ConsentGiven { get; set; }
 
         //Foreign Keys        
 
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "You must select the Gender")]
-        public int GenderID { get; set; }
+        public int? GenderID { get; set; }
 
         public Gender Gender { get; set; }
 
         [Display(Name = "Household")]
         public int HouseholdID { get; set; }
 
-        public Household Household { get; set; }
-
-        [Display(Name ="Income Situation")]
-        public int IncomeSituationID { get; set; }        
-
-        public IncomeSituation IncomeSituation { get; set; }
-
+        public Household Household { get; set; }   
+        
         [Display(Name = "Order")]
         public int OrderID { get; set; }
 
@@ -131,8 +146,13 @@ namespace GROW_CRM.Models
 
         //O:M Relationships        
 
+        [Display(Name = "Dietary Restrictions")]
         public ICollection<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
 
+        public ICollection<MemberDocument> MemberDocuments { get; set; }
+
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<MemberIncomeSituation> MemberIncomeSituations { get; set; }
     }
 }

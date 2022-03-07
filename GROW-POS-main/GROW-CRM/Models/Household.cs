@@ -11,7 +11,6 @@ namespace GROW_CRM.Models
         public Household()
         {
             Members = new HashSet<Member>();
-            HouseholdDocuments = new HashSet<HouseholdDocument>();
             HouseholdNotifications = new HashSet<HouseholdNotification>();            
         }
 
@@ -22,24 +21,64 @@ namespace GROW_CRM.Models
         public string FullAddress
         {
             get
-            {
-                return StreetNumber + " " + StreetName + ", Unit " + AptNumber + "- " + City + ", " + Province.Name + " " + PostalCode;
+            {                
+                return this?.StreetNumber + " " + this?.StreetName + " " + this?.AptNumber + " - " + City?.Name + ", " + Province?.Code + ", " + this?.PostalCode;
             }
-        }
+        }                   
 
-        [Display(Name = "H. Code")]
-        public string HCode
+        [Display(Name = "Number of Members")]        
+        public int NumberOfMembers
         {
             get
             {
-                return HouseholdCode.ToString().PadLeft(5, '0');
+                int count = 0;
+
+                foreach (Member m in Members) 
+                {
+                    if(m.FirstName != "" && m.LastName != "") count++;
+                } 
+
+                return count;
             }
         }
+
+        [Display(Name = "Verification Status")]
+        public string VerificationStatus
+        {
+            get
+            {
+                DateTime now = DateTime.Now;
+                int dateDiff = (now - LastVerification).Days;
+
+                if (dateDiff >= 335) return $"Verification time is near! There is only {dateDiff} days left for the next verification!";
+                if (dateDiff >= 365) return $"Verification needed. Please check members income for LICO verification.";
+
+                return $"There are {dateDiff} until the next LICO verification.";
+            }
+        }
+
+        [Display(Name = "Yearly Income")]
+        public double YearlyIncome
+        {
+            get
+            {
+                double count = 0;
+
+                foreach (Member m in Members) count += m.YearlyIncome;
+
+                return count;
+            }
+        }
+
+        [Display(Name = "Household Name")]
+        [StringLength(20, ErrorMessage = "Household Name can't be longer than 20 symbols")]
+        public string Name { get; set; }
 
 
         [Display(Name="Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
-        public int StreetNumber { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Street number must be numeric")]
+        public string StreetNumber { get; set; }
 
         [Display(Name ="Street Name")]
         [Required(ErrorMessage ="You can not leave the Street Name blank")]
@@ -48,65 +87,42 @@ namespace GROW_CRM.Models
 
         [Display(Name ="Apartment Number")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
-        public int? AptNumber { get; set; }
-
-        [Display(Name = "City Name")]
-        [Required(ErrorMessage = "You cannot leave the name of the city blank.")]
-        [StringLength(255, ErrorMessage = "City name cannot be more than 255 characters long.")]
-        public string City { get; set; }
+        public string AptNumber { get; set; }        
 
         [Display(Name ="Postal Code")]
         [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
-        [RegularExpression("[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]")]
-        public string PostalCode { get; set; }
-
-        [Display(Name = "Household Code")]
-        [Required(ErrorMessage = "The 5 digit Code for the Household is required")]
-        [RegularExpression("^\\d{5}$", ErrorMessage = "The Household Code must be exactly 5 numeric digits.")]
-        [StringLength(5)]//DS Note: we only include this to limit the size of the database field to 10
-        public string HouseholdCode { get; set; }
-
-        [Display(Name ="Yearly Income")]
-        [Required(ErrorMessage ="You cannot leave the Yearly Income blank")]
-        [Range(0.1d, 999999999.99d, ErrorMessage = "The yearly income cannot exceed 999,999,999.99")]
-        public decimal YearlyIncome { get; set; }
-
-        [Display(Name ="Members in the Household")]
-        [Required(ErrorMessage ="You must provide the number of people living in you household")]
-        [Range(1,10,ErrorMessage ="Members in the household cannot exceed 10 people")]
-        public int NumberOfMembers { get; set; }
+        [RegularExpression(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$", ErrorMessage = "E.g. A2A 2A2 (with a space)")]
+        public string PostalCode { get; set; }                        
 
         [Display(Name ="LICO verification")]
-        public bool LICOVerified { get; set; }
+        public bool LICOVerified { get; set; }        
 
-        [Display(Name ="Join Date")]
-        public DateTime JoinedDate { get; set; } = DateTime.Now;
+        [Display(Name = "Yearly Verification")]
+        public DateTime LastVerification { get; set; }
 
         //Foreign Keys
-        //[Display(Name ="City")]
+        [Display(Name ="City")]
+        [Required(ErrorMessage = "You must select a City")]
+        public int? CityID { get; set; }
+
+        public City City { get; set; }
 
         [Display(Name = "Province")]
         [Required(ErrorMessage = "You must select a Province")]
-        public int ProvinceID { get; set; }
+        public int? ProvinceID { get; set; }
 
         public Province Province { get; set; }
 
         [Display(Name ="Household Status")]
         [Required(ErrorMessage ="A Status should be selected")]
-        public int HouseholdStatusID { get; set; }
+        public int? HouseholdStatusID { get; set; }
 
         public HouseholdStatus HouseholdStatus { get; set; }
 
 
-        //O:M Relationships
+        //O:M Relationships        
 
-        [ScaffoldColumn(false)]
-        [Timestamp]
-        public Byte[] RowVersion { get; set; }//Added for concurrency
-
-        public ICollection<Member> Members { get; set; }
-
-        public ICollection<HouseholdDocument> HouseholdDocuments { get; set; }
+        public ICollection<Member> Members { get; set; }        
 
         public ICollection<HouseholdNotification> HouseholdNotifications { get; set; }  
     }

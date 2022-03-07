@@ -21,20 +21,34 @@ namespace GROW_CRM.Data
                 //5 random strings
                 string[] baconNotes = new string[] { "Bacon ipsum dolor amet meatball corned beef kevin, alcatra kielbasa biltong drumstick strip steak spare ribs swine. Pastrami shank swine leberkas bresaola, prosciutto frankfurter porchetta ham hock short ribs short loin andouille alcatra. Andouille shank meatball pig venison shankle ground round sausage kielbasa. Chicken pig meatloaf fatback leberkas venison tri-tip burgdoggen tail chuck sausage kevin shank biltong brisket.", "Sirloin shank t-bone capicola strip steak salami, hamburger kielbasa burgdoggen jerky swine andouille rump picanha. Sirloin porchetta ribeye fatback, meatball leberkas swine pancetta beef shoulder pastrami capicola salami chicken. Bacon cow corned beef pastrami venison biltong frankfurter short ribs chicken beef. Burgdoggen shank pig, ground round brisket tail beef ribs turkey spare ribs tenderloin shankle ham rump. Doner alcatra pork chop leberkas spare ribs hamburger t-bone. Boudin filet mignon bacon andouille, shankle pork t-bone landjaeger. Rump pork loin bresaola prosciutto pancetta venison, cow flank sirloin sausage.", "Porchetta pork belly swine filet mignon jowl turducken salami boudin pastrami jerky spare ribs short ribs sausage andouille. Turducken flank ribeye boudin corned beef burgdoggen. Prosciutto pancetta sirloin rump shankle ball tip filet mignon corned beef frankfurter biltong drumstick chicken swine bacon shank. Buffalo kevin andouille porchetta short ribs cow, ham hock pork belly drumstick pastrami capicola picanha venison.", "Picanha andouille salami, porchetta beef ribs t-bone drumstick. Frankfurter tail landjaeger, shank kevin pig drumstick beef bresaola cow. Corned beef pork belly tri-tip, ham drumstick hamburger swine spare ribs short loin cupim flank tongue beef filet mignon cow. Ham hock chicken turducken doner brisket. Strip steak cow beef, kielbasa leberkas swine tongue bacon burgdoggen beef ribs pork chop tenderloin.", "Kielbasa porchetta shoulder boudin, pork strip steak brisket prosciutto t-bone tail. Doner pork loin pork ribeye, drumstick brisket biltong boudin burgdoggen t-bone frankfurter. Flank burgdoggen doner, boudin porchetta andouille landjaeger ham hock capicola pork chop bacon. Landjaeger turducken ribeye leberkas pork loin corned beef. Corned beef turducken landjaeger pig bresaola t-bone bacon andouille meatball beef ribs doner. T-bone fatback cupim chuck beef ribs shank tail strip steak bacon." };
 
+                if (!context.HealthIssueTypes.Any())
+                {
+                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> { 
+                        new HealthIssueType{Type = "Illness"},
+                        new HealthIssueType{Type = "Concern"}
+                    });
+
+                    //Save changes
+                    context.SaveChanges();
+                }
 
                 //Look For Dietary Restrictions
                 if (!context.DietaryRestrictions.Any())
                 {
                     //Restrictions Array
-                    string[] restrictions = new string[] { "Diabetes", "Obesity", "Lactose Intolerant", "Gluten Intolerance/Sensitivity", 
-                                                            "Cancer", "Heart Disease", "Osteoporosis", "Digestive Disorders", "Food Allergies"};
+                    string[] illnesses = new string[] { "Diabetes", "Obesity", "Cancer", "Heart Disease", "Osteoporosis" };
+
+                    string[] concerns = new string[] { "Lactose Intolerant", "Gluten Intolerance/Sensitivity", "Digestive Disorders", "Food Allergies" };
 
                     //List of new Dietary Restriction Objects
                     List<DietaryRestriction> dietaryRestrictions = new List<DietaryRestriction>();
 
                     //Add DietaryRestrictions to dietaryRestrictions List
-                    for (int i = 0; i < restrictions.Count(); i++)
-                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = restrictions[i] });
+                    for (int i = 0; i < illnesses.Count(); i++)
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1});
+
+                    for (int i = 0; i < concerns.Count(); i++)
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = concerns[i], HealthIssueTypeID = 2 });
 
                     //Add Objects to context
                     context.DietaryRestrictions.AddRange(dietaryRestrictions);
@@ -110,7 +124,7 @@ namespace GROW_CRM.Data
                 {
                     //array of situations
                     string[] situations = new string[] { "ODSP", "Ontario Works", "CPP-Disability", "EI", "GAINS", "Post. Sec. Student",
-                                                         "Other", "Volunteer"};
+                                                         "Other", "Volunteer", "Employed", "WSIB"};
 
                     //List of IncomeSituation Objects
                     List<IncomeSituation> incomeSituations = new List<IncomeSituation>();
@@ -125,25 +139,230 @@ namespace GROW_CRM.Data
                     //Save changes
                     context.SaveChanges();
                 }
+
+                //Look for Categories
+                if (!context.Categories.Any())
+                {
+                    var categories = new List<Category>
+                    {
+                        new Category { Name = "Produce"},
+                        new Category { Name = "Freezer"},
+                        new Category { Name = "Dairy/Eggs/Bread"},
+                        new Category { Name = "Pantry"},
+                        new Category { Name = "Specials"}
+                    };
+                    context.Categories.AddRange(categories);
+                    context.SaveChanges();
+                }
                 
                 //Looks for Items
                 if (!context.Items.Any())
                 {
-                    //array of items fields
-                    string[] names = new string[] { "Carrot", "Flour", "Pork Chops", "Olive Oil", "White Rice", "Avocado"};                    
-                    decimal[] prices = new decimal[] { 3.99M, 1.50M, 5.99M, 3.50M };
+                    var produceItems = new List<Item> {
+                            new Item { Code = "148", Name = "Anise / Fennel", Price = 1.50 },
+                            new Item { Code = "101", Name = "Apples", Price = 0.10 },
+                            new Item { Code = "102", Name = "Avocado large*", Price = 1.00 },
+                            new Item { Code = "103", Name = "Avocado small*", Price = 0.50 },
+                            new Item { Code = "104", Name = "Bananas", Price = 0.10 },
+                            new Item { Code = "105", Name = "Blueberries / Blackberries", Price = 1.50 },
+                            new Item { Code = "106", Name = "Broccoli", Price = 2.00 },
+                            new Item { Code = "147", Name = "Brussel Sprouts", Price = 1.00 },
+                            new Item { Code = "127", Name = "Cabbage *", Price = 2.00 },
+                            new Item { Code = "107", Name = "Cantaloupe", Price = 1.50 },
+                            new Item { Code = "108", Name = "Carrots", Price = 0.05 },
+                            new Item { Code = "109", Name = "Cauliflower", Price = 2.50 },
+                            new Item { Code = "110", Name = "Celery", Price = 1.50 },
+                            new Item { Code = "111", Name = "Clementine", Price = 0.10 },
+                            new Item { Code = "112", Name = "Corn", Price = 0.25 },
+                            new Item { Code = "113", Name = "Cucumber", Price = 1.00 },
+                            new Item { Code = "114", Name = "Cucumber Mini", Price = 0.05 },
+                            new Item { Code = "115", Name = "Eggplant", Price = 0.10 },
+                            new Item { Code = "116", Name = "Garlic *", Price = 0.25 },
+                            new Item { Code = "117", Name = "Grapes *", Price = 1.00 },
+                            new Item { Code = "118", Name = "Green Onions", Price = 0.25 },
+                            new Item { Code = "119", Name = "Kale", Price = 0.50 },
+                            new Item { Code = "120", Name = "Kiwi", Price = 0.25 },
+                            new Item { Code = "121", Name = "Lemon *", Price = 0.25 },
+                            new Item { Code = "122", Name = "Lettuce Romaine Hearts", Price = 0.50 },
+                            new Item { Code = "123", Name = "Limes", Price = 0.05 },
+                            new Item { Code = "124", Name = "Mango", Price = 1.00 },
+                            new Item { Code = "125", Name = "Micro Greens", Price = 0.25 },
+                            new Item { Code = "126", Name = "Mushrooms *", Price = 1.50 },
+                            new Item { Code = "128", Name = "Onion", Price = 0.05 },
+                            new Item { Code = "129", Name = "Oranges", Price = 0.20 },
+                            new Item { Code = "130", Name = "Peaches / Nectarines", Price = 0.10 },
+                            new Item { Code = "131", Name = "Pear", Price = 0.10 },
+                            new Item { Code = "132", Name = "Peppers", Price = 0.50 },
+                            new Item { Code = "133", Name = "Peppers Hot 3 / 0.05", Price = 0.05 },
+                            new Item { Code = "134", Name = "Peppers Mini", Price = 0.05 },
+                            new Item { Code = "135", Name = "Plums", Price = 0.05 },
+                            new Item { Code = "136", Name = "Potatoes", Price = 0.05 },
+                            new Item { Code = "136", Name = "Bag of Potatoes", Price = 1.50 },
+                            new Item { Code = "137", Name = "Potatoes Baby Basket", Price = 0.50 },
+                            new Item { Code = "138", Name = "Potatoes Sweet(Yam)", Price = 0.75 },
+                            new Item { Code = "139", Name = "Raspberries", Price = 1.50 },
+                            new Item { Code = "147", Name = "Shallots", Price = 0.05 },
+                            new Item { Code = "140", Name = "Squash", Price = 2.50 },
+                            new Item { Code = "141", Name = "Strawberries", Price = 1.50 },
+                            new Item { Code = "142", Name = "Swiss Chard", Price = 0.50 },
+                            new Item { Code = "143", Name = "Tomato Cherry / Grape Basket", Price = 0.50 },
+                            new Item { Code = "144", Name = "Tomatoes", Price = 0.10 },
+                            new Item { Code = "145", Name = "Watermelon", Price = 2.50 },
+                            new Item { Code = "146", Name = "Zucchini", Price = 0.50 }
+                            };
 
-                    //List of Item Objects
-                    List<Item> items = new List<Item>();                    
+                    var freezerItems = new List<Item> {
+                            new Item { Code = "201", Name = "Chicken Legs(2)", Price =  1.00 },
+                            new Item { Code = "202", Name = "Chicken Drumsticks 4lbs", Price = 3.00 },
+                            new Item { Code = "203", Name = "Chicken Thighs 4lbs", Price = 3.00 },
+                            new Item { Code = "204", Name = "Chicken Wings 2lbs", Price = 2.00 },
+                            new Item { Code = "205", Name = "Ground Beef", Price =  2.75 },
+                            new Item { Code = "206", Name = "Veggie Burger 2pc", Price = 2.00 },
+                            new Item { Code = "207", Name = "Fish(Haddock / Basa)", Price = 1.00 }
+                            };
 
-                    //add items to list
-                    for (int i = 0; i < names.Count(); i++)
-                        items.Add(new Item { Name = names[i], Price = prices[rnd.Next(0, prices.Length)]});
+                    var dairyItems = new List<Item> {
+                            new Item { Code = "301", Name = "Almond Milk 2L",   Price = 2.00 },
+                            new Item { Code = "323", Name = "Bread Commisso's", Price = 1.00 },
+                            new Item { Code = "302", Name = "Bread Costco", Price = 0.50 },
+                            new Item { Code = "303", Name = "Butter",   Price = 1.00 },
+                            new Item { Code = "304", Name = "Cheese Large", Price = 3.00 },
+                            new Item { Code = "305", Name = "Cream Cheese", Price = 2.00 },
+                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 2.00 },
+                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 3.00 },
+                            new Item { Code = "307", Name = "Goat Milk 1l", Price = 2.00 },
+                            new Item { Code = "308", Name = "Hummus",   Price = 2.50 },
+                            new Item { Code = "309", Name = "Hummus Mini",  Price = 0.25 },
+                            new Item { Code = "310", Name = "Margerine",    Price = 1.50 },
+                            new Item { Code = "311", Name = "Milk - 1L",    Price = 1.00 },
+                            new Item { Code = "312", Name = "Milk - 4L",    Price = 3.00 },
+                            new Item { Code = "313", Name = "Oat Milk 1l",  Price = 2.00 },
+                            new Item { Code = "314", Name = "Orange Juice", Price = 2.00 },
+                            new Item { Code = "315", Name = "Pizza Dough",  Price = 2.00 },
+                            new Item { Code = "316", Name = "Sour Crème",   Price = 2.00 },
+                            new Item { Code = "317", Name = "Soy Milk 1l",  Price = 2.00 },
+                            new Item { Code = "318", Name = "Tofu", Price = 2.50 },
+                            new Item { Code = "319", Name = "Yogurt 4 pack",    Price = 1.00 },
+                            new Item { Code = "322", Name = "Yogurt 6 pack",    Price = 1.50 },
+                            new Item { Code = "320", Name = "Yogurt Greek", Price = 3.00 },
+                            new Item { Code = "321", Name = "Yogurt Tub",   Price = 2.00 },
+                            new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
+                            };
 
-                    //add list to context
-                    context.Items.AddRange(items);
+                    var pantryItems = new List<Item> {
+                            new Item { Code = "401", Name = " Apple Sauce", Price = 1.00 },
+                            new Item { Code = "402", Name = " Baking Powder", Price =   2.00 },
+                            new Item { Code = "403", Name = " Bars Cereal. Protein. Cookie", Price =    0.50 },
+                            new Item { Code = "404", Name = " BBQ Sauce", Price =   1.00 },
+                            new Item { Code = "405", Name = " Bleach", Price =  2.00 },
+                            new Item { Code = "406", Name = " Broth", Price =   1.00 },
+                            new Item { Code = "407", Name = " Canned Beans. Veggies. and Fruit", Price =    0.75 },
+                            new Item { Code = "408", Name = " Canola Oil", Price =  3.00 },
+                            new Item { Code = "409", Name = " Cereal all other", Price =    2.00 },
+                            new Item { Code = "410", Name = " Cereal Rice Krispies", Price =    3.00 },
+                            new Item { Code = "445", Name = " Coconut Milk", Price =    1.00 },
+                            new Item { Code = "445", Name = " Coffee", Price =  4.00 },
+                            new Item { Code = "411", Name = " Crackers ", Price =   2.00 },
+                            new Item { Code = "412", Name = " Dried Legumes/Beans", Price = 1.50 },
+                            new Item { Code = "413", Name = " Flour", Price =   2.00 },
+                            new Item { Code = "414", Name = " Garden Cocktail", Price = 0.75 },
+                            new Item { Code = "415", Name = " Granola Bars 6 pack", Price = 1.00 },
+                            new Item { Code = "446", Name = " Gummies", Price = 0.10 },
+                            new Item { Code = "416", Name = " Jam", Price = 2.00 },
+                            new Item { Code = "417", Name = " Kraft Dinner", Price =    1.00 },
+                            new Item { Code = "418", Name = " Laundry Soap large", Price =  6.00 },
+                            new Item { Code = "419", Name = " Laundry Soap small", Price =  3.00 },
+                            new Item { Code = "420", Name = " Miracle Whip", Price =    3.00 },
+                            new Item { Code = "421", Name = " Nuts", Price =    2.00 },
+                            new Item { Code = "422", Name = " Oats", Price =    2.00 },
+                            new Item { Code = "423", Name = " Olive Oil", Price =   6.00 },
+                            new Item { Code = "424", Name = " Passata", Price = 0.75 },
+                            new Item { Code = "425", Name = " Pasta", Price =   0.75 },
+                            new Item { Code = "426", Name = " Pasta Sauce", Price = 0.75 },
+                            new Item { Code = "427", Name = " Peanut Butter", Price =   2.50 },
+                            new Item { Code = "428", Name = " Polenta", Price = 3.00 },
+                            new Item { Code = "445", Name = " Protein Drink", Price =   0.50 },
+                            new Item { Code = "446", Name = " Raisins", Price = 4.00 },
+                            new Item { Code = "429", Name = " Rice", Price =    1.50 },
+                            new Item { Code = "430", Name = " Salad Dressing", Price =  1.00 },
+                            new Item { Code = "445", Name = " Salsa", Price =   1.50 },
+                            new Item { Code = "431", Name = " Soap ", Price =   0.50 },
+                            new Item { Code = "432", Name = " Soup Small", Price =  0.50 },
+                            new Item { Code = "433", Name = " Spices", Price =  1.00 },
+                            new Item { Code = "434", Name = " Sugar White and Brown", Price =   2.00 },
+                            new Item { Code = "435", Name = " Tea", Price = 2.00 },
+                            new Item { Code = "436", Name = " Tea Green Tea", Price =   4.50 },
+                            new Item { Code = "437", Name = " Tea Orange Pekoe", Price =    3.00 },
+                            new Item { Code = "438", Name = " Tea Red Rose", Price =    5.00 },
+                            new Item { Code = "439", Name = " Toilet Paper", Price =    5.00 },
+                            new Item { Code = "440", Name = " Tomato Paste", Price =    0.75 },
+                            new Item { Code = "441", Name = " Tooth Paste / Brush / Floss", Price = 0.75 },
+                            new Item { Code = "442", Name = " Tuna", Price =    1.00 },
+                            new Item { Code = "443", Name = " Wild Rice Blend", Price = 0.25 },
+                            new Item { Code = "444", Name = " Yeast", Price =   0.50 },
+                            };
 
-                    //save changes
+
+                    var specialsItems = new List<Item> {
+                            new Item { Code = "501", Name = "Cat Food (wet)", Price = 0.50 },
+                            new Item { Code = "502", Name = "Sweets (Cotco)", Price = 2.00 },
+                            new Item { Code = "503", Name = "Drinks ", Price = 0.50 },
+                            new Item { Code = "504", Name = "GROW Soup", Price = 2.50 },
+                            new Item { Code = "505", Name = "Deoderant", Price = 1.00 },
+                            new Item { Code = "506", Name = "Polenta", Price = 3.00 },
+                            new Item { Code = "507", Name = "Orzo", Price = 0.75 },
+                            new Item { Code = "508", Name = "Ramen / Rice Krispies", Price = 0.25 }
+                            };
+
+                    foreach (var category in context.Categories)
+                    {
+                        switch (category.Name)
+                        {
+                            case "Produce":
+                                foreach (var item in produceItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(produceItems);
+                                break;
+                            case "Freezer":
+                                foreach (var item in freezerItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(freezerItems);
+                                break;
+                            case "Dairy/Eggs/Bread":
+                                foreach (var item in dairyItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(dairyItems);
+                                break;
+                            case "Pantry":
+                                foreach (var item in pantryItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(pantryItems);
+                                break;
+                            case "Specials":
+                                foreach (var item in specialsItems)
+                                {
+                                    item.CategoryID = category.ID;
+                                }
+
+                                context.Items.AddRange(specialsItems);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     context.SaveChanges();
                 }
 
@@ -206,6 +425,30 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for Cities
+                if (!context.Cities.Any())
+                {
+                    var cities = new List<City>
+                    {
+                        new City{Name = "Grimsby"},
+                        new City{Name = "Lincoln"},
+                        new City{Name = "West Lincoln"},
+                        new City{Name = "Wainfleet"},
+                        new City{Name = "Pelham"},
+                        new City{Name = "St. Catharines"},
+                        new City{Name = "Throld"},
+                        new City{Name = "Welland"},
+                        new City{Name = "Port Colborne"},
+                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara Falls"},
+                        new City{Name = "Fort Erie"}
+                    };
+
+
+                    context.Cities.AddRange(cities);
+                    context.SaveChanges();                                        
+                }
+
                 //Look for Provinces
                 if (!context.Provinces.Any())
                 {
@@ -240,39 +483,52 @@ namespace GROW_CRM.Data
                     int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
                     int householdStatusesCount = householdStatusesIDs.Count();
 
+                    int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
+                    int citiesCount = citiesIDs.Count();
+
                     //Add Households to context
                     context.Households.AddRange(
                         new Household
                         {
-                            StreetNumber = 65,
+                            Name = "House #1",
+                            StreetNumber = "65",
                             StreetName = "Church St.",
-                            AptNumber = 201,
-                            City = "St. Catherines",
-                            PostalCode = "R3E9C8",
-                            HouseholdCode = "A00001",
-                            YearlyIncome = 25000M,
-                            NumberOfMembers = 2,
+                            AptNumber = "201",
+                            PostalCode = "R3E 9C8",
                             LICOVerified = true,
-                            JoinedDate = DateTime.Now,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 1
                         },
                         new Household
                         {
-                            StreetNumber = 1848,
+                            Name = "House #2",
+                            StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-                            AptNumber = 0,
-                            City = "Niagara Falls",
-                            PostalCode = "L2H1W8",
-                            HouseholdCode = "A00002",
-                            YearlyIncome = 28000M,
-                            NumberOfMembers = 3,
+
+                            PostalCode = "L2H 1W8",
                             LICOVerified = false,
-                            JoinedDate = DateTime.Now,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
                             HouseholdStatusID = 2
-                        }
-                    );
+                        },
+                         new Household
+                         {
+                             Name = "House #3",
+                             StreetNumber = "101",
+                             StreetName = "Development Ave.",
+
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                             HouseholdStatusID = 2
+                         }
+
+                    ); ;
 
                     //Save changes
                     context.SaveChanges();
@@ -286,10 +542,7 @@ namespace GROW_CRM.Data
                     int householdCount = householdIDs.Count();                    
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();
-
-                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();
+                    int genderCount = genderIDs.Count();                    
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
@@ -302,10 +555,9 @@ namespace GROW_CRM.Data
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];
-                        int[] numberOfMembers = context.Households.Where(h => h.ID == householdIDs[i]).Select(h => h.NumberOfMembers).ToArray();
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
 
-                        for(int j = 0; j < numberOfMembers[0]; j++)
+                        for(int j = 0; j < rnd.Next(5) + 1; j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -317,16 +569,72 @@ namespace GROW_CRM.Data
                                     PhoneNumber = "0000000000",
                                     Email = "mail@mail.com",
                                     Notes = baconNotes[rnd.Next(5)],
+                                    ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
-                                    HouseholdID = householdIDs[i],
-                                    IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount)]
+                                    HouseholdID = householdIDs[i]
                                 }    
                             );
 
                             context.SaveChanges();
                         }
                     }
-                }                
+                }
+
+                //Look for Dietary Restriction Members
+                if (!context.DietaryRestrictionMembers.Any())
+                {
+                    //Foreign Keys
+                    int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
+                    int drCount = drIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();                    
+
+                    foreach(int memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        context.DietaryRestrictionMembers.AddRange(
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            },
+                            new DietaryRestrictionMember
+                            {
+                                MemberID = memberID,
+                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
+                            }
+                        );
+
+                        context.SaveChanges();
+                    }
+                }
+
+                //Look for Member Income Situation
+                if (!context.MemberIncomeSituations.Any())
+                {
+                    int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
+                    int incomeSituationCount = incomeSituationIDs.Count();
+
+                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                    int memberCount = memberIDs.Count();
+
+                    List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
+
+                    foreach (var memberID in memberIDs)
+                    {
+                        MemberIncomeSituation s = new MemberIncomeSituation
+                        {
+                            MemberID = memberID,
+                            IncomeSituationID = incomeSituationIDs[rnd.Next(incomeSituationCount - 1)],
+                            Income = rnd.Next(10, 10000)
+                        };
+                        mis.Add(s);
+                    }
+                    context.MemberIncomeSituations.AddRange(mis);
+                    context.SaveChanges();
+                }
             }
         }
     }

@@ -4,7 +4,17 @@
     ViewData["Title"] = "Household Details";
 }
 
-<h2>Household # : @Html.DisplayFor(model => model.HouseholdCode)</h2>
+@{
+
+    if (!String.IsNullOrEmpty(Model.Name))
+    {
+    <h2> @Html.Raw("Household Name: ")  @Html.DisplayFor(model => model.Name) </h2>
+    }
+    else
+    {
+<h2> @Html.Raw("Household ID: ")  @Html.DisplayFor(model => model.ID) </h2>
+    }
+}
 
 <h4>Details</h4>
 <hr />
@@ -12,7 +22,13 @@
     <div class="col-sm-5">
         <dl class="row">
             <dt class="col-sm-4">
-                Street Number: 
+                Household Name:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-4">
+                Street Number:
                 @*@Html.DisplayNameFor(model => model.StreetNumber)*@
             </dt>
             <dd class="col-sm-8">
@@ -47,10 +63,10 @@
     <div class="col-sm-7">
         <dl class="row">
             <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.HouseholdCode):
+                @Html.DisplayNameFor(model => model.LastVerification):
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.HouseholdCode)
+                @Html.DisplayFor(model => model.LastVerification)
             </dd>
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.YearlyIncome):
@@ -71,10 +87,10 @@
                 @Html.DisplayFor(model => model.LICOVerified)
             </dd>
             <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.JoinedDate):
+                @Html.DisplayNameFor(model => model.CreatedOn):
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.JoinedDate)
+                @Html.DisplayFor(model => model.CreatedOn)
             </dd>
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.Province):
@@ -83,7 +99,7 @@
                 @Html.DisplayFor(model => model.Province.Name)
             </dd>
             <dt class="col-sm-4">
-                Household Status:         
+                Household Status:
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.HouseholdStatus.Name)
@@ -106,25 +122,53 @@
                             <th>
                                 @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().Age)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().IncomeSituation.Situation)
-                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(modelItem => Model.Members.FirstOrDefault().MemberIncomeSituations)
+        </th>*@
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Members)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FullName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Age)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Age)
+                            </td>
+                            @*<td>
+            @{
+                int theCount = Model.Members.MemberIncomeSituations.Count;
+                if (theCount > 0)
+                {
+                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                    if (theCount > 1)
+                    {
+                        string theList = first;
+                        var c = Model.MemberIncomeSituations.ToList();
+                        for (int i = 1; i < theCount; i++)
+                        {
+                            theList += ", " + c[i].IncomeSituation.Situation;
+                        }
+                        @:Income Situations:
+                        <a tabindex="0" class="" role="button" data-toggle="popover"
+                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                           data-content="@theList">
+                            @first... <span class="badge badge-info">
+                                @theCount
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        @:Income Situations:
+                        @first
+                    }
+                }
+            }
+        </td>*@
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -132,8 +176,8 @@
 
         </dl>
     </div>
-    </div>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

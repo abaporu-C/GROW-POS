@@ -14,6 +14,11 @@ namespace GROW_CRM.Models.Utilities
         [Display(Name = "File Name")]
         public string FileName { get; set; }
 
+        [StringLength(256, ErrorMessage = "Description cannot be more than 256 characters long.")]
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+
+
         public FileContent FileContent { get; set; }
     }
 }

@@ -4,18 +4,19 @@
     ViewData["Title"] = "Remove Member";
 }
 
-<h2>Remove Member from Household: @Model.Household.FullAddress</h2>
+<h2>Remove Member from Household: @Model.Household.ID</h2>
 
-<h3>Are you sure you want to delete this Appointment?</h3>
+<h3>Are you sure you want to delete this Member?</h3>
 <div>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <hr />
     <dl class="dl-horizontal">
+
         <dt>
-            @Html.DisplayNameFor(model => model.Notes)
+            @Html.DisplayNameFor(model => model.ConsentGiven)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Notes)
+            @Html.DisplayFor(model => model.ConsentGiven)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.FullName)
@@ -36,10 +37,50 @@
             @Html.DisplayFor(model => model.Gender.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IncomeSituation)
+            @Html.DisplayNameFor(model => model.YearlyIncome)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IncomeSituation.Situation)
+            $ @Html.DisplayFor(model => model.YearlyIncome)
+        </dd>
+        <dt>
+            Income Situations:
+        </dt>
+        <dd>
+            @{
+                int theCount = Model.MemberIncomeSituations.Count;
+                if (theCount > 0)
+                {
+                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
+                    if (theCount > 1)
+                    {
+                        string theList = first;
+                        var c = Model.MemberIncomeSituations.ToList();
+                        for (int i = 1; i < theCount; i++)
+                        {
+                            theList += ", " + c[i].IncomeSituation.Situation;
+                        }
+                        @:Income Situations:
+                        <a tabindex="0" class="" role="button" data-toggle="popover"
+                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                           data-content="@theList">
+                            @first... <span class="badge badge-info">
+                                @theCount
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        @:Income Situations:
+                        @first
+                    }
+                }
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
         </dd>
     </dl>
 
