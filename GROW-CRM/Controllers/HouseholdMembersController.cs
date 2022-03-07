@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using GROW_CRM.Controllers.Helpers;
 
 namespace GROW_CRM.Controllers
 {
@@ -55,20 +56,10 @@ namespace GROW_CRM.Controllers
                                   .Include(m => m.Household)
                                   .Include(m => m.MemberDocuments)
                                   .Include(m => m.MemberIncomeSituations)
-                        where m.HouseholdID == HouseholdID.GetValueOrDefault()
+                        where m.HouseholdID == HouseholdID.GetValueOrDefault() && m.FirstName != "" && m.LastName != ""
                         select m;
 
-            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
-
-            foreach(Member m in members)
-            {
-                if(m.FirstName == "" && m.LastName == "")
-                {
-                    _context.Remove(m);
-                }
-            }
-
-            await _context.SaveChangesAsync();
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();            
 
             foreach(Member m in members)
             {
@@ -226,23 +217,7 @@ namespace GROW_CRM.Controllers
 
             try
             {
-                //Add the selected conditions
-                if (selectedIllnessOptions != null)
-                {
-                    foreach (var restriction in selectedIllnessOptions)
-                    {
-                        var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                        member.DietaryRestrictionMembers.Add(restrictionToAdd);
-                    }
-                }
-                if (selectedConcernOptions != null)
-                {
-                    foreach (var restriction in selectedConcernOptions)
-                    {
-                        var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                        member.DietaryRestrictionMembers.Add(restrictionToAdd);
-                    }
-                }
+                
 
                 var memberToUpdate = await _context.Members
                 .Include(m => m.Gender)
@@ -252,17 +227,95 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == member.ID);
 
-                if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
-                m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
+                if(memberToUpdate != null)
                 {
-                    _context.Update(memberToUpdate);
-                    await CheckLICO(memberToUpdate);
-                    await AddDocumentsAsync(memberToUpdate, theFiles);
-                    await _context.SaveChangesAsync();
-                    ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
-                    return Redirect(ViewData["returnURL"].ToString());
+                    if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
+                    m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
+                    m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
+                    {
+                        //Add the selected conditions
+                        if (selectedIllnessOptions != null)
+                        {
+                            foreach (var restriction in selectedIllnessOptions)
+                            {
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                            }
+                        }
+                        if (selectedConcernOptions != null)
+                        {
+                            foreach (var restriction in selectedConcernOptions)
+                            {
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                            }
+                        }
+
+                        //Update Member
+                        _context.Update(memberToUpdate);
+                        await CheckLICO(memberToUpdate);
+                        await AddDocumentsAsync(memberToUpdate, theFiles);
+                        await _context.SaveChangesAsync();
+                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
+                        return Redirect(ViewData["returnURL"].ToString());
+                    }
                 }
+                else
+                {
+                    Member m = new Member()
+                    {
+                        FirstName = member.FirstName,
+                        MiddleName = member.MiddleName,
+                        LastName = member.LastName,
+                        DOB = member.DOB,
+                        PhoneNumber = member.PhoneNumber,
+                        Email = member.Email,
+                        Notes = member.Notes,
+                        ConsentGiven = member.ConsentGiven,
+                        GenderID = member.GenderID,
+                        HouseholdID = member.HouseholdID,
+                    };
+
+                    _context.Add(m);
+                    await _context.SaveChangesAsync();
+
+                    //Add the selected conditions
+                    if (selectedIllnessOptions != null)
+                    {
+                        foreach (var restriction in selectedIllnessOptions)
+                        {
+                            var restrictionToAdd = new DietaryRestrictionMember { MemberID = m.ID, DietaryRestrictionID = int.Parse(restriction) };
+                            m.DietaryRestrictionMembers.Add(restrictionToAdd);
+                        }
+                    }
+                    if (selectedConcernOptions != null)
+                    {
+                        foreach (var restriction in selectedConcernOptions)
+                        {
+                            var restrictionToAdd = new DietaryRestrictionMember { MemberID = m.ID, DietaryRestrictionID = int.Parse(restriction) };
+                            m.DietaryRestrictionMembers.Add(restrictionToAdd);
+                        }
+                    }
+
+                    //Update MemberIncomeSituations
+                    var mis = from mistu in _context.MemberIncomeSituations
+                              where mistu.MemberID == member.ID
+                              select mistu;
+
+                    foreach(MemberIncomeSituation memberIncomeSituation in mis)
+                    {
+                        memberIncomeSituation.MemberID = m.ID;
+                        _context.Update(memberIncomeSituation);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={m.HouseholdID}";
+                    return Redirect(ViewData["returnURL"].ToString());
+
+                }
+
+                
             }
             catch (RetryLimitExceededException /* dex */)
             {

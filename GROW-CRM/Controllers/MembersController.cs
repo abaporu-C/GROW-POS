@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
 using Microsoft.EntityFrameworkCore.Storage;
+using GROW_CRM.Controllers.Helpers;
 
 namespace GROW_CRM.Controllers
 {
@@ -39,8 +40,8 @@ namespace GROW_CRM.Controllers
                               .Include(m => m.Gender)
                               .Include(m => m.Household).ThenInclude(h => h.City)
                               .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
-                              select m;
-
+                          where m.FirstName != "" && m.LastName != ""
+                          select m;
 
             //Add as many filters as needed
             if (HouseholdID.HasValue)

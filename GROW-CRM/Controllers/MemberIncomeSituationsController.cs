@@ -1,5 +1,6 @@
 ﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
+using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,7 @@ namespace GROW_CRM.Controllers
             return PartialView("_CreateMemberIncomeSituation");
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public PartialViewResult CreateFakerMemberIncomeSituation()
         {
             //For this action, the ID parameter is the ID of the Athlete
@@ -61,7 +62,7 @@ namespace GROW_CRM.Controllers
                 .OrderBy(a => a.Situation), "ID", "Situation");
 
             return PartialView("_CreateFakerMemberIncomeSituation");
-        }
+        }*/
 
         public PartialViewResult EditMemberIncomeSituation(int ID)
         {
@@ -101,23 +102,34 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,IncomeSituationID,Income")] MemberIncomeSituation sponsorship)
+        public async Task<IActionResult> Create([Bind("MemberID,IncomeSituationID,Income")] MemberIncomeSituation incomeSource)
         {
             try
             {
+                var member = _context.Members.Where(m => m.ID == incomeSource.MemberID).FirstOrDefault();
+
+                if(member == null)
+                {
+                    throw new ForeignKeyException();
+                }
+
                 if (ModelState.IsValid)
                 {
-                    _context.Add(sponsorship);
+                    _context.Add(incomeSource);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
             }
+            catch (ForeignKeyException)
+            {
+                ModelState.AddModelError("", "There was a problem during the creation of this member. Please, start the process again.");
+            }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            }
+            }            
 
-            return View(sponsorship);
+            return View(incomeSource);
         }
 
         // POST: Sponsorships/Edit/5
