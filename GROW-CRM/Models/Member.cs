@@ -126,6 +126,9 @@ namespace GROW_CRM.Models
         [Display(Name = "Consent On Giving Information: ")]
         public bool ConsentGiven { get; set; }
 
+        [Display(Name = "Is this member a Dependant?")]
+        public bool? DependantMember { get; set; }
+
         //Foreign Keys        
 
         [Display(Name = "Gender")]
