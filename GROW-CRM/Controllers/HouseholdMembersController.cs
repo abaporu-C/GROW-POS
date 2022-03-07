@@ -238,16 +238,16 @@ namespace GROW_CRM.Controllers
                         {
                             foreach (var restriction in selectedIllnessOptions)
                             {
-                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = memberToUpdate.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                memberToUpdate.DietaryRestrictionMembers.Add(restrictionToAdd);
                             }
                         }
                         if (selectedConcernOptions != null)
                         {
                             foreach (var restriction in selectedConcernOptions)
                             {
-                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = memberToUpdate.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                memberToUpdate.DietaryRestrictionMembers.Add(restrictionToAdd);
                             }
                         }
 
@@ -256,7 +256,7 @@ namespace GROW_CRM.Controllers
                         await CheckLICO(memberToUpdate);
                         await AddDocumentsAsync(memberToUpdate, theFiles);
                         await _context.SaveChangesAsync();
-                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
+                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={memberToUpdate.HouseholdID}";
                         return Redirect(ViewData["returnURL"].ToString());
                     }
                 }
