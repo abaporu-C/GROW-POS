@@ -4,102 +4,153 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete member : @Html.DisplayFor(model => model.FullName) ?</h3>
+<h2 class="btn btn-danger">Are you sure you want to delete member : @Html.DisplayFor(model => model.FullName) ?</h2>
 <div>
     
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DOB)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DOB)
-        </dd>
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt class="col-sm-2">
-            Household ID:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Household.ID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.YearlyIncome)
-        </dt>
-        <dd class="col-sm-10">
-            $@Html.DisplayFor(model => model.YearlyIncome)
-        </dd>
-        <dt class="col-sm-2">
-            Income Situations:
-        </dt>
-        <dd class="col-sm-10">
-            @{
-                int theCount = Model.MemberIncomeSituations.Count;
-                if (theCount > 0)
-                {
-                    string first = Model.MemberIncomeSituations.FirstOrDefault().IncomeSituation.Situation;
-                    if (theCount > 1)
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 border-right border-left">
+                <label for="name">Full Name:</label>
+                <span id="name">@Html.DisplayFor(model => model.FullName)</span><br />
+                <label for="gender">Gender:</label>
+                <span id="gender">@Html.DisplayFor(model => model.Gender.Name)</span><br />
+                <label for="addr">Address:</label>
+                <span id="addr">@Html.DisplayFor(model => model.Household.FullAddress)</span>
+            </div>
+            <div class="col-md-4 border-right">
+                <label for="dob">@Html.DisplayNameFor(model => model.DOB):</label>
+                <span id="dob">@Html.DisplayFor(model => model.DOB)</span><br />
+                <label for="age">@Html.DisplayNameFor(model => model.Age):</label>
+                <span id="age">@Html.DisplayFor(model => model.Age)</span><br />
+                <label for="consent">Gave Consent:</label>
+                @{
+                    if (Model.ConsentGiven)
                     {
-                        string theList = first;
-                        var c = Model.MemberIncomeSituations.ToList();
-                        for (int i = 1; i < theCount; i++)
-                        {
-                            theList += ", " + c[i].IncomeSituation.Situation;
-                        }
-                        @:Income Situations:
-                        <a tabindex="0" class="" role="button" data-toggle="popover"
-                           data-trigger="focus" title="IncomeSituations" data-placement="bottom"
-                           data-content="@theList">
-                            @first... <span class="badge badge-info">
-                                @theCount
-                            </span>
-                        </a>
+                        <span id="consent">Yes</span>
                     }
                     else
                     {
-                        @:Income Situations:
-                        @first
+                        <span id="consent">No</span>
+                    }
+
+                }
+            </div>
+            <div class="col-md-4 border-right">
+                <label for="phone">@Html.DisplayNameFor(model => model.PhoneFormatted):</label>
+                <span id="phone">@Html.DisplayFor(model => model.PhoneFormatted)</span><br />
+                <label for="email">@Html.DisplayNameFor(model => model.Email):</label>
+                <span id="email">@Html.DisplayFor(model => model.Email)</span>
+            </div>
+        </div>
+        <div class="row border-bottom mt-2 mb-2">
+            <div class="col-12">
+            <label for="notes">Notes:</label>
+                <p id="notes">@Html.DisplayFor(model => model.Notes)</p>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+        <div class=col-md-4>
+            <label for="income-source">Income Source</label>
+            <ul id="income-source" class="list-group list-group-flush">
+                @{
+                    if(Model.MemberIncomeSituations.Count < 1)
+                    {
+                        <li class="list-group-item">No Income Source</li>
+                    }
+                    else
+                    {
+                        foreach (MemberIncomeSituation mis in Model.MemberIncomeSituations)
+                {
+                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> $@mis.Income</li>
+                        }
+                    }
+                }                
+            </ul>
+        </div>
+        <div class="col-md-4">            
+            @{
+                var illness = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 0).Select(drm => drm); 
+                var concerns = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 1).Select(drm => drm); 
+
+                <label for="illness">Illnesses</label>
+                <ul id="illness" class="list-group list-group-flush">
+                @{
+                    if(illness.Count() < 1)
+                    {
+                        <li class="list-group-item">No Illness</li>
+                    }
+                    else
+                    {
+                        foreach (DietaryRestrictionMember drm in illness)
+                {
+                    <li class="list-group-item">@drm.DietaryRestriction.Restriction</li>
+                }
+                    }
+                }                
+            </ul>
+
+            <label for="concerns">Health Concerns</label>
+                <ul id="concerns" class="list-group list-group-flush">
+                @{
+                    if(concerns.Count() < 1)
+                    {
+                        <li class="list-group-item">No Health Concerns</li>
+                    }
+                    else
+                    {
+                        foreach (DietaryRestrictionMember drm in concerns)
+                {
+                    <li class="list-group-item">@drm.DietaryRestriction.Restriction</li>
+                }
+                    }
+                }                
+            </ul>
+
+            }
+        </div>
+        <div class="col-md-4">
+            <label for="documents">Documents</label>
+            <ul id="documents" class="list-group list-group-flush">
+                @{
+                int fileCount = Model.MemberDocuments.Count;
+                if (fileCount > 0)
+                {
+                    var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
+                    if (fileCount > 1)
+                    {
+                        <li class="list-group-item">
+                        <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                            <span class="badge badge-info">@fileCount</span> Current Documents...
+                        </a>
+                        <div class="collapse" id="collapseSum@(Model.ID)">
+                            @{
+                                foreach (var d in Model.MemberDocuments)
+                                {
+                                    <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                }
+                            }
+                        </div>
+                        </li>
+                    }
+                    else
+                    {
+                            <li class="list-group-item"><a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">No Documents</li>
                     }
                 }
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-    </dl>
+            </ul>
+        </div>        
+</div>
+    </div>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <button asp-action="Index" class="btn btn-secondary">Cancel</button>
     </form>
 </div>
