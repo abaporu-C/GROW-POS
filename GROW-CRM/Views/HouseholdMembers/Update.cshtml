@@ -16,6 +16,7 @@
         <div class="form-group">
                     <label asp-for="ConsentGiven"></label>
                     <input asp-for="ConsentGiven" />
+                    <a href="#"  data-toggle="popover" title="Consent" data-content="Member's consent on giving information.'"><b>?</b></a>
          </div>
     </div>
     <div class="row">
@@ -26,32 +27,32 @@
                 
                 
                 <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
+                    <label asp-for="FirstName" class="control-label"></label><a href="#"  data-toggle="popover" title="First Name" data-content="Member's first name.'"><b>?</b></a>
                     <input asp-for="FirstName" class="form-control" />
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
+                    <label asp-for="MiddleName" class="control-label"></label><a href="#"  data-toggle="popover" title="Middle Name" data-content="Member's middle name.'"><b>?</b></a>
                     <input asp-for="MiddleName" class="form-control" />
                     <span asp-validation-for="MiddleName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="LastName" class="control-label"></label>
+                    <label asp-for="LastName" class="control-label"></label><a href="#"  data-toggle="popover" title="Last Name" data-content="Member's last name.'"><b>?</b></a>
                     <input asp-for="LastName" class="form-control" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="GenderID" class="control-label"></label>
+                    <label asp-for="GenderID" class="control-label"></label><a href="#"  data-toggle="popover" title="Gender" data-content="Member's gender.'"><b>?</b></a>
                     <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
+                <label asp-for="DOB" class="control-label"></label><a href="#"  data-toggle="popover" title="Date of Birth" data-content="Member's date of birth.'"><b>?</b></a>
                 <input asp-for="DOB" class="form-control" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Phone Number" data-content="Member's phone number. Plese, input all 10 digits'"><b>?</b></a>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="phoneAddon">#</span>
@@ -62,7 +63,7 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label"></label><a href="#"  data-toggle="popover" title="Email" data-content="Member's email.'"><b>?</b></a>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="emailAddon">@@</span>
@@ -72,7 +73,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
+                <label asp-for="Notes" class="control-label"></label><a href="#" data-toggle="popover" title="Notes" data-content="Member's special information.'"><b>?</b></a>
                 <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
@@ -84,7 +85,7 @@
             <div class="form-group" id="ListMemberIncomeSituations">                
                 <label class="control-label">
                         <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
-                    <strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                    <strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button><a href="#" data-toggle="popover" title="Income Sources" data-content="Member's income sources.'"><b>?</b></a>
                 <div class="col-md-offset-1" id="MemberIncomeSituationList">
                     <table>
                         @{
@@ -103,7 +104,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label"> Current Documents:</label>
+                <label class="control-label"> Current Documents:</label><a href="#"  data-toggle="popover" title="Documents" data-content="Member's Documents.'"><b>?</b></a>
                 <div class="ml-md-3">
                     @{
                         int fileCount = Model.MemberDocuments.Count;
@@ -154,7 +155,7 @@
                         <div class="m-2">
                         <label class="control-label"> Choose Illness</label> <button type="button" id="btnIllnessLeft" class="btn btn-success btn-sm">
                             <strong>+</strong>
-                        </button>
+                        </button><a href="#"  data-toggle="popover" title="Illness" data-content="Member's illnesses.'"><b>?</b></a>
                         </div>
                         @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 5, @class = "form-control" })
                     </div>
@@ -175,7 +176,7 @@
                         <div class="m-2">
                         <label class="control-label"> Choose Concerns</label> <button type="button" id="btnConcernLeft" class="btn btn-success btn-sm">
                             <strong>+</strong>
-                        </button>
+                        </button><a href="#"  data-toggle="popover" title="Health Concerns" data-content="Member's health concerns.'"><b>?</b></a>
                         </div>
                         @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 5, @class = "form-control"})
                     </div>
@@ -263,4 +264,9 @@
             $('#MemberIncomeSituationList').load('/HouseholdMembers/MemberIncomeSituationList/@Model.ID');
             });
     </script>
+    <script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();
+});
+</script>
 }
