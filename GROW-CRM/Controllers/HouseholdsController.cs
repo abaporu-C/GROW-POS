@@ -376,8 +376,7 @@ namespace GROW_CRM.Controllers
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
                 
                 h => h.Name,
-                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
-                h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
+                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
@@ -421,7 +420,32 @@ namespace GROW_CRM.Controllers
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.City)
                 .Include(h => h.Province)
+                .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            var members = from m in _context.Members
+                                  .Include(m => m.Gender)
+                                  .Include(m => m.Household)
+                                  .Include(m => m.MemberDocuments)
+                                  .Include(m => m.MemberIncomeSituations)
+                          where m.HouseholdID == id && m.FirstName != "" && m.LastName != ""
+                          select m;
+
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
+
+            foreach (Member m in members)
+            {
+                var v = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == m.ID)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+
+                misList.Add(v);
+            }
+
+            ViewBag.MisList = misList;
+
             if (household == null)
             {
                 return NotFound();
@@ -436,9 +460,18 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var household = await _context.Households.FindAsync(id);
-            _context.Households.Remove(household);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Households.Remove(household);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Delete All Members before deleting Household.");
+            }
+
+            return RedirectToAction("Delete", id);
         }
 
         private bool HouseholdExists(int id)
