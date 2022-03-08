@@ -51,7 +51,7 @@ namespace GROW_CRM.Controllers
                         .Include(o => o.Member)
                         .Include(o => o.Household)
                         .Include(o => o.PaymentType)
-                        .Include(o => o.Item).ThenInclude(o => o.OrderItems)
+                        .Include(o => o.OrderItems)
                         .AsNoTracking()
                          select o;
 
@@ -164,7 +164,7 @@ namespace GROW_CRM.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.Household)
-                .Include(o => o.Item)
+                .Include(o => o.OrderItems)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -259,7 +259,7 @@ namespace GROW_CRM.Controllers
 
             UpdateOrderItems(selectedOptions, orderToUpdate);
 
-            if (await TryUpdateModelAsync<Order>(orderToUpdate, "", o => o.HouseholdCode, o => o.HouseMember, o => o.Date, o => o.Purchases, o => o.Quantity, o => o.Price, o => o.Payment, o => o.Volunteer, o => o.Subtotal, o => o.Taxes, o => o.Total))
+            if (await TryUpdateModelAsync<Order>(orderToUpdate, "", o => o.HouseholdCode, o => o.HouseMember, o => o.Date, o => o.Purchases, o => o.Price, o => o.Payment, o => o.Volunteer, o => o.Subtotal, o => o.Taxes, o => o.Total))
             {
                 try
                 {
@@ -303,7 +303,7 @@ namespace GROW_CRM.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.Household)
-                .Include(o => o.Item)
+                .Include(o => o.OrderItems)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
