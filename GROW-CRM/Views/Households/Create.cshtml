@@ -11,8 +11,8 @@
 <form asp-action="Create" method="post" enctype="multipart/form-data">   
     <div class="row">
         <div class="col-md-6">    
-            <fieldset class="border border-dark rounded">
-                <legend>Address</legend>
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Address</legend>
             <label for="noFixedAddr" class="control-label">No Fixed Address:</label>
             <input type="checkbox" id="noFixedAddr" /><a href="#"  data-toggle="popover" title="No Fixed Address" data-content="Members with no fixed address will be registered with grow's address.'"><b>?</b></a> 
             <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
@@ -62,8 +62,8 @@
             </fieldset>
         </div>
         <div class="col-md-6">
-            <fieldset class="border border-dark rounded">
-                <legend>Other Info</legend>
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Other Info</legend>
             <div class="form-group">
                 <label id="NewIDLabel" class="control-label">Custom ID:</label><a href="#"  data-toggle="popover" title="Custom ID" data-content="Customized Member ID."><b>?</b></a> 
                 @Html.TextBox("NewID", null, new { @class = "form-control" })
