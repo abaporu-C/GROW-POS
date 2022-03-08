@@ -11,6 +11,9 @@
             <a href="#DefaultPanel" aria-controls="DefaultTab" role="tab" class="nav-link active" name="DefaultTab" data-toggle="tab" aria-selected="false"> </a>
         </li>
         <li class="nav-item">
+            <a href="#HealthIssueTypesPanel" id="HealthIssueTypesTab" aria-controls="HealthIssueTypesTab" role="tab" class="nav-link" name="HealthIssueTypesPanel" data-toggle="tab" aria-selected="false">Health Issue Types</a>
+        </li>
+        <li class="nav-item">
             <a href="#DietaryRestrictionsPanel" id="DietaryRestrictionsTab" aria-controls="DietaryRestrictionsTab" role="tab" class="nav-link" name="DietaryRestrictionsPanel" data-toggle="tab" aria-selected="false">Dietary Restrictions</a>
         </li>
         <li class="nav-item">
@@ -34,6 +37,9 @@
             <h4>
                 Select the lookup value to maintian from the tabs.
             </h4>
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="HealthIssueTypesPanel" aria-labelledby="HealthIssueTypes-Panel">
+            <br />
         </div>
         <div role="tabpanel" class="tab-pane fade ml-3" id="DietaryRestrictionsPanel" aria-labelledby="DietaryRestrictions-Panel">
             <br />
@@ -60,6 +66,8 @@
     <script type="text/javascript">
         function refreshTab(activeTab) {
             switch (activeTab) {
+                case 'HealthIssueTypesPanel': $('#HealthIssueTypesPanel').load('/Lookups/HealthIssueTypes');
+                    break;
                 case 'DietaryRestrictionsPanel': $('#DietaryRestrictionsPanel').load('/Lookups/DietaryRestrictions');
                     break;
                 case 'GendersPanel': $('#GendersPanel').load('/Lookups/Genders');

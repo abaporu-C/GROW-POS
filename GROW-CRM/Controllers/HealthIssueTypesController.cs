@@ -10,22 +10,22 @@ using GROW_CRM.Models;
 
 namespace GROW_CRM.Controllers
 {
-    public class DietaryRestrictionsController : Controller
+    public class HealthIssueTypesController : Controller
     {
         private readonly GROWContext _context;
 
-        public DietaryRestrictionsController(GROWContext context)
+        public HealthIssueTypesController(GROWContext context)
         {
             _context = context;
         }
 
-        // GET: DietaryRestrictions
-        public IActionResult Index()
+        // GET: HealthIssueTypes
+        public async Task<IActionResult> Index()
         {
             return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
         }
 
-        // GET: DietaryRestrictions/Details/5
+        // GET: HealthIssueTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,39 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var dietaryRestriction = await _context.DietaryRestrictions
-                .Include(m => m.HealthIssueType)
+            var healthIssueType = await _context.HealthIssueTypes
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (dietaryRestriction == null)
+            if (healthIssueType == null)
             {
                 return NotFound();
             }
 
-            return View(dietaryRestriction);
+            return View(healthIssueType);
         }
 
-        // GET: DietaryRestrictions/Create
+        // GET: HealthIssueTypes/Create
         public IActionResult Create()
         {
-            new DietaryRestriction();
-            ViewData["HealthIssueTypeID"] = new SelectList(_context.HealthIssueTypes, "ID", "Type");
             return View();
         }
 
-        // POST: DietaryRestrictions/Create
+        // POST: HealthIssueTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Restriction")] DietaryRestriction dietaryRestriction)
+        public async Task<IActionResult> Create([Bind("ID,Type")] HealthIssueType healthIssueType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dietaryRestriction);
+                _context.Add(healthIssueType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
-            return View(dietaryRestriction);
+            return View(healthIssueType);
         }
 
-        // GET: DietaryRestrictions/Edit/5
+        // GET: HealthIssueTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,24 +73,22 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var dietaryRestriction = await _context.DietaryRestrictions
-                .Include(m => m.HealthIssueType)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (dietaryRestriction == null)
+            var healthIssueType = await _context.HealthIssueTypes.FindAsync(id);
+            if (healthIssueType == null)
             {
                 return NotFound();
             }
-            return View(dietaryRestriction);
+            return View(healthIssueType);
         }
 
-        // POST: DietaryRestrictions/Edit/5
+        // POST: HealthIssueTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Restriction")] DietaryRestriction dietaryRestriction)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Type")] HealthIssueType healthIssueType)
         {
-            if (id != dietaryRestriction.ID)
+            if (id != healthIssueType.ID)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
-                    _context.Update(dietaryRestriction);
+                    _context.Update(healthIssueType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DietaryRestrictionExists(dietaryRestriction.ID))
+                    if (!HealthIssueTypeExists(healthIssueType.ID))
                     {
                         return NotFound();
                     }
@@ -118,10 +113,10 @@ namespace GROW_CRM.Controllers
                 }
                 return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
-            return View(dietaryRestriction);
+            return View(healthIssueType);
         }
 
-        // GET: DietaryRestrictions/Delete/5
+        // GET: HealthIssueTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,24 +124,23 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var dietaryRestriction = await _context.DietaryRestrictions
-                .Include(m=>m.HealthIssueType)
+            var healthIssueType = await _context.HealthIssueTypes
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (dietaryRestriction == null)
+            if (healthIssueType == null)
             {
                 return NotFound();
             }
 
-            return View(dietaryRestriction);
+            return View(healthIssueType);
         }
 
-        // POST: DietaryRestrictions/Delete/5
+        // POST: HealthIssueTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dietaryRestriction = await _context.DietaryRestrictions.FindAsync(id);
-            _context.DietaryRestrictions.Remove(dietaryRestriction);
+            var healthIssueType = await _context.HealthIssueTypes.FindAsync(id);
+            _context.HealthIssueTypes.Remove(healthIssueType);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
         }
@@ -156,10 +150,9 @@ namespace GROW_CRM.Controllers
             return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
-        private bool DietaryRestrictionExists(int id)
+        private bool HealthIssueTypeExists(int id)
         {
-            return _context.DietaryRestrictions.Any(e => e.ID == id);
+            return _context.HealthIssueTypes.Any(e => e.ID == id);
         }
-
     }
 }
