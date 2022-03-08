@@ -26,6 +26,14 @@ namespace GROW_CRM.Controllers
             return View();
         }
 
+        public PartialViewResult HealthIssueTypes()
+        {
+            ViewData["HealthIssueTypesID"] = new
+                SelectList(_context.HealthIssueTypes
+                .OrderBy(a => a.Type), "ID", "Type");
+            return PartialView("_HealthIssueTypes");
+        }
+
         public PartialViewResult DietaryRestrictions()
         {
             ViewData["DietaryRestrictionsID"] = new
