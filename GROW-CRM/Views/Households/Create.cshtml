@@ -8,23 +8,28 @@
 
 <h3>Create Household</h3>
 <hr />
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-action="Create" method="post" enctype="multipart/form-data">   
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6">    
+            <fieldset class="border border-dark rounded">
+                <legend>Address</legend>
             <label for="noFixedAddr" class="control-label">No Fixed Address:</label>
-            <input type="checkbox" id="noFixedAddr"/>
+            <input type="checkbox" id="noFixedAddr" /> 
             <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label id="NewIDLabel" class="control-label">Custom ID:</label>
-                @Html.TextBox("NewID", null, new { @class = "form-control" })
+                <label asp-for="CityID" class="control-label"></label>
+                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                    <option value="">Select a City</option>
+                </select>
+                <span asp-validation-for="CityID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-
+                <label asp-for="ProvinceID" class="control-label"></label>
+                <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
+                </select>
+                <span asp-validation-for="ProvinceID" class="text-danger"></span>
+            </div>            
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -54,35 +59,32 @@
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <input type="hidden" value="false" asp-for="LICOVerified" />
+            </fieldset>
         </div>
         <div class="col-md-6">
+            <fieldset class="border border-dark rounded">
+                <legend>Other Info</legend>
             <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label>
-                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
-                    <option value="">Select a City</option>
-                </select>
-                <span asp-validation-for="CityID" class="text-danger"></span>
+                <label id="NewIDLabel" class="control-label">Custom ID:</label>
+                @Html.TextBox("NewID", null, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                <label asp-for="ProvinceID" class="control-label"></label>
-                <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
-                </select>
-                <span asp-validation-for="ProvinceID" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                Household status
+                <label asp-for="HouseholdStatusID">Household status</label>
                 <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
                 </select>
                 <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
             </div>
-
-
+            </fieldset>
         </div>
-    </div>
-    <hr />
+    </div>    
     <div class="form-group mt-3">
-        <input class="btn btn-lg btn-outline-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
-        <input type="submit" id="submitForm" value="Next Step" class="btn btn-lg btn-primary " />
+        <input class="btn btn-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+        <input type="submit" id="submitForm" value="Next Step" class="btn btn-primary " />
 
     </div>
 </form>

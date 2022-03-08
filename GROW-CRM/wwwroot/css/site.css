@@ -87,12 +87,6 @@ body {
 */
 
 fieldset{
-    border: 1px solid black;
-    border-radius: 2%;
     margin: 10px;
     padding: 25px;
-}
-
-legend{
-    display: inline-block;
 }

@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">     
-            <fieldset>
+            <fieldset class="border border-dark rounded">
                 <legend>Personal Info</legend>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -82,7 +82,7 @@
             </fieldset>
         </div>
         <div class="col-md-6">
-            <fieldset>
+            <fieldset class="border border-dark rounded">
                 <legend>Income & Documents</legend>
                 <div class="form-group" id="ListMemberIncomeSituations">
                 <label class="control-label"><button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
@@ -118,7 +118,7 @@
                     </select>
                     <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
                 </div>*@
-            <fieldset>
+            <fieldset class="border border-dark rounded">
             <legend>Health Info</legend>
             <div class="col-md-12 mt-2">
                 <div class="row">
