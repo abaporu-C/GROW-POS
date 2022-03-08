@@ -39,7 +39,19 @@
                 <label for="phone">@Html.DisplayNameFor(model => model.PhoneFormatted):</label>
                 <span id="phone">@Html.DisplayFor(model => model.PhoneFormatted)</span><br />
                 <label for="email">@Html.DisplayNameFor(model => model.Email):</label>
-                <span id="email">@Html.DisplayFor(model => model.Email)</span>
+                <span id="email">@Html.DisplayFor(model => model.Email)</span><br />
+                 <label for="consent">Is Dependant:</label>
+                @{
+                    if (Model.DependantMember)
+                    {
+                        <span id="consent">Yes</span>
+                    }
+                    else
+                    {
+                        <span id="consent">No</span>
+                    }
+
+                }
             </div>
         </div>
         <div class="row border-bottom mt-2 mb-2">
