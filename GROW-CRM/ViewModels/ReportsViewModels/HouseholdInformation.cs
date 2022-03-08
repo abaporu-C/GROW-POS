@@ -6,7 +6,7 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
     {
         public int ID { get; set; }
 
-        [Display(Name = "Membership #")]
+        [Display(Name = "Household Number")]
         public int Code { get; set; }
 
         [Display(Name = "Member")]

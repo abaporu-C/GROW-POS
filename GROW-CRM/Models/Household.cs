@@ -72,6 +72,7 @@ namespace GROW_CRM.Models
 
         [Display(Name = "Household Name")]
         [StringLength(20, ErrorMessage = "Household Name can't be longer than 20 symbols")]
+        [Required]
         public string Name { get; set; }
 
 

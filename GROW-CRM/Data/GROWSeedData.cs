@@ -498,7 +498,7 @@ namespace GROW_CRM.Data
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            ProvinceID = 13,
                             HouseholdStatusID = 1
                         },
                         new Household
@@ -511,7 +511,7 @@ namespace GROW_CRM.Data
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            ProvinceID = 13,
                             HouseholdStatusID = 2
                         },
                          new Household
@@ -524,7 +524,7 @@ namespace GROW_CRM.Data
                              LICOVerified = false,
                              LastVerification = DateTime.Now,
                              CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                             ProvinceID = 13,
                              HouseholdStatusID = 2
                          }
 

@@ -21,8 +21,8 @@
 <form asp-action="Edit">
     <div class="row">
         <div class="col-md-6">    
-            <fieldset class="border border-dark rounded">
-                <legend>Address</legend>
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Address</legend>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CityID" class="control-label"></label><a href="#"  data-toggle="popover" title="City" data-content="Members city name."><b>?</b></a> 
@@ -69,8 +69,8 @@
             </fieldset>
         </div>
         <div class="col-md-6">
-            <fieldset class="border border-dark rounded">
-                <legend>Other Info</legend>
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Other Info</legend>
             <div class="form-group">
                 <label id="NewIDLabel" class="control-label">Custom ID:</label><a href="#"  data-toggle="popover" title="Custom ID" data-content="Customized Member ID."><b>?</b></a> 
                 @Html.TextBox("NewID", null, new { @class = "form-control" })
