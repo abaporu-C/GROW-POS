@@ -59,8 +59,8 @@ document.getElementById("btnSubmit").addEventListener("click", function () {
 })
 
 //Order Items
-let DDLforChosenItem = document.getElementById("selectedItemOptions");
-let DDLforAvailItem = document.getElementById("availItemOptions");
+let DDLforChosenItem = document.getElementById("selectedOptions");
+let DDLforAvailItem = document.getElementById("availOptions");
 
 /*function to switch list items from one ddl to another
 use the sender param for the DDL from which the user is multi-selecting

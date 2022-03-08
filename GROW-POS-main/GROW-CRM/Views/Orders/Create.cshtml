@@ -33,13 +33,13 @@
         </div>
         <div class="col-md-8">
             <div class="form-group col-md-4">
-                <label class="control-label">Items Purchased</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                <label class="control-label">Items Purchased</label> <button type="button" id="btnItemRight" class="btn btn-danger btn-sm">
                     <strong>-</strong>
                 </button>
                 @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
             </div>
             <div class="form-group col-md-4">
-                <label class="control-label">Choose Items</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                <label class="control-label">Choose Items</label> <button type="button" id="btnItemLeft" class="btn btn-success btn-sm">
                     <strong>+</strong>
                 </button>
                 @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
@@ -86,7 +86,7 @@
     </div>
 </form>
 <div>
-    <a asp-action="Index">Back to List of Doctors</a>
+    <a href='@ViewData["returnURL"]'>Back to List of Doctors</a>
 </div>
 
 @section Scripts {

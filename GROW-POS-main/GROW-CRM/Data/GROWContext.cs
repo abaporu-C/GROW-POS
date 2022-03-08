@@ -237,7 +237,5 @@ namespace GROW_CRM.Data
                 }
             }
         }
-
-        public DbSet<GROW_CRM.ViewModels.Sales> Sales { get; set; }
     }
 }

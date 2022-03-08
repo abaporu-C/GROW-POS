@@ -179,9 +179,11 @@ namespace GROW_CRM.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
+            ViewDataReturnURL();
+
             Order order = new Order();
-            PopulateSalesItems(order);
             PopulateDropDownLists(order);
+            PopulateSalesItems(order);
             return View();
         }
 
@@ -190,13 +192,13 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Quantity,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID,ItemID,OrderItemID")] Order order, string[] selectedOptions)
+        public async Task<IActionResult> Create([Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Quantity,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID,ItemID,OrderItemID")] Order order, string[] selectedItemOptions)
         {
             ViewDataReturnURL();
 
             try
             {
-                UpdateOrderItems(selectedOptions, order);
+                UpdateOrderItems(selectedItemOptions, order);
                 if (ModelState.IsValid)
                 {
                     _context.Add(order);
@@ -207,6 +209,10 @@ namespace GROW_CRM.Controllers
             catch (RetryLimitExceededException /* dex */)
             {
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
             PopulateSalesItems(order);
@@ -239,7 +245,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Quantity,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID,ItemID,OrderItemID")] Order order, string[] selectedOptions)
+        public async Task<IActionResult> Edit(int id, string[] selectedOptions)
         {
             var orderToUpdate = await _context.Orders
                 .Include(d => d.OrderItems)
@@ -253,8 +259,7 @@ namespace GROW_CRM.Controllers
 
             UpdateOrderItems(selectedOptions, orderToUpdate);
 
-            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
-                o=>o.HouseholdCode, o=>o.HouseMember, o=>o.Date, o=>o.Purchases, o=>o.Quantity, o=>o.Price, o=>o.Payment, o=>o.Volunteer, o=>o.Subtotal, o=>o.Taxes, o=>o.Total))
+            if (await TryUpdateModelAsync<Order>(orderToUpdate, "", o=>o.HouseholdCode, o=>o.HouseMember, o=>o.Date, o=>o.Purchases, o=>o.Quantity, o=>o.Price, o=>o.Payment, o=>o.Volunteer, o=>o.Subtotal, o=>o.Taxes, o=>o.Total))
             {
                 try
                 {
