@@ -6,6 +6,8 @@
 
 <h2>Create Order</h2>
 <hr />
+<partial name="_addItemModal" />
+<partial name="_OrderIemsModal" />
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
@@ -31,6 +33,54 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Items</legend>
+                <div class="form-group" id="ListOrderItems">
+                    <label class="control-label">
+                        <button class=" btn btn-outline-secondary" id="nowAddItem" data-toggle="modal" data-target="#addItemModal" type="button">
+                            <strong>+</strong>
+                        </button>
+                        <strong>
+                            Items
+                        </strong>
+                        &nbsp; &nbsp;
+                    </label>
+                    <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theOrderItemsModal" title="Add Item" type="button">
+                        &#x271A;
+                    </button>
+                    <a href="#" data-toggle="popover" title="Items" data-content="Purchases:"><b>?</b></a>
+                    <div class="col-md-offset-1" id="OrderItemsList">
+                        <table>
+                            @{ 
+                                foreach(var item in Model.OrderItems.OrderBy(i => i.Item.Name))
+                                    {
+                                        @:<tr><td>
+                                            @item.Item.Name
+                                        @:</td><td>
+                                            @:&nbsp; &nbsp;
+                                            <button>
+                                                
+                                            </button>
+                                            <button>
+
+                                            </button>
+                                    }
+                            }
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+
+
+
+
+
+
+
         <div class="col-md-8">
             <div class="form-group col-md-4">
                 <label class="control-label">Items Purchased</label> <button type="button" id="btnItemRight" class="btn btn-danger btn-sm">

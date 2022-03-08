@@ -13,14 +13,6 @@ namespace GROW_CRM.Models
             OrderItems = new HashSet<OrderItem>();
         }
 
-        public string Sales
-        {
-            get
-            {
-                return Purchases + " (" + Quantity + ")";
-            }
-        }
-
         //Fields 
         public int ID { get; set; }
 
@@ -39,8 +31,6 @@ namespace GROW_CRM.Models
 
         [Required]
         public string Purchases { get; set; }
-
-        public int Quantity { get; set; }
 
         public double Price { get; set; }
 
@@ -69,12 +59,6 @@ namespace GROW_CRM.Models
 
         public int PaymentTypeID { get; set; }
         public PaymentType PaymentType { get; set; }
-
-        public int ItemID { get; set; }
-        public Item Item { get; set; }
-
-        public int OrderItemID { get; set; }
-        public OrderItem OrderItem { get; set; }
 
         //O:M Relationships
         public ICollection<OrderItem> OrderItems { get; set; }
