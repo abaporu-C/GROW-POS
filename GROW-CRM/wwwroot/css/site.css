@@ -12,6 +12,10 @@ a {
   color: #0366d6;
 }
 
+label{
+    font-weight: 700;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
@@ -68,4 +72,21 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+/*
+    Labels and tooltips
+*/
+.label-tab{
+    border: 1px 1px 0 1px medium #000;
+    margin-top: 10px;
+}
+
+/*
+    Fieldsets
+*/
+
+fieldset{
+    margin: 10px;
+    padding: 25px;
 }

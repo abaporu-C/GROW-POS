@@ -5,12 +5,11 @@
    
 }
 
-<h2 >Edit</h2>
 @{
 
     if (!String.IsNullOrEmpty(Model.Name))
     {
-    <h3> @Html.Raw("Household Name : ") @Html.DisplayFor(model => model.Name) </h3>
+    <h3> @Html.Raw("Edit ") @Html.DisplayFor(model => model.Name) </h3>
     }
     else
     {
@@ -21,85 +20,75 @@
 <hr />
 <form asp-action="Edit">
     <div class="row">
-        <div class="col-md-6">
-
+        <div class="col-md-6">    
+            <fieldset class="border border-dark rounded">
+                <legend>Address</legend>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="CityID" class="control-label"></label><a href="#"  data-toggle="popover" title="City" data-content="Members city name."><b>?</b></a> 
+                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                    <option value="">Select a City</option>
+                </select>
+                <span asp-validation-for="CityID" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="ProvinceID" class="control-label"></label><a href="#"  data-toggle="popover" title="Province" data-content="Members province name."><b>?</b></a> 
+                <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
+                </select>
+                <span asp-validation-for="ProvinceID" class="text-danger"></span>
+            </div>            
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="AptNumber" class="control-label"></label>
+                        <label asp-for="AptNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Apartment Number" data-content="Members apartment number (if there is one)."><b>?</b></a> 
                         <input asp-for="AptNumber" class="form-control" />
                         <span asp-validation-for="AptNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="ID" />
                     <div class="form-group">
-                        <label asp-for="StreetNumber" class="control-label"></label>
+                        <label asp-for="StreetNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Street Number" data-content="Members street number."><b>?</b></a> 
                         <input asp-for="StreetNumber" class="form-control" />
                         <span asp-validation-for="StreetNumber" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
 
+            </div>
             <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label>
+                <label asp-for="StreetName" class="control-label"></label><a href="#"  data-toggle="popover" title="Street Name" data-content="Members street name."><b>?</b></a> 
                 <input asp-for="StreetName" class="form-control" />
                 <span asp-validation-for="StreetName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" id="postal-code" />
+                <label asp-for="PostalCode" class="control-label"></label><a href="#"  data-toggle="popover" title="Postal Code" data-content="Members postal code."><b>?</b></a> 
+                <input asp-for="PostalCode" class="form-control" id="postal-code" placeholder="Example: A2B 3C4" pattern="/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i" title="Example: A2A 2B2" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
-
-
-            <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label>
-                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID"></select>
-                <span asp-validation-for="CityID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProvinceID" class="control-label"></label>
-                <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID"></select>
-                <span asp-validation-for="ProvinceID" class="text-danger"></span>
-            </div>
-
+            <input type="hidden" value="false" asp-for="LICOVerified" />
+            </fieldset>
         </div>
-
-        <div class="col-md-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="HouseholdStatusID" class="control-label"></label>
-                        <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID"></select>
-                        <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="LastVerification" class="control-label"></label>
-                        <input asp-for="LastVerification" type="date" class="form-control" />
-                        <span asp-validation-for="LastVerification" class="text-danger"></span>
-                    </div>
-                </div>
+        <div class="col-md-6">
+            <fieldset class="border border-dark rounded">
+                <legend>Other Info</legend>
+            <div class="form-group">
+                <label id="NewIDLabel" class="control-label">Custom ID:</label><a href="#"  data-toggle="popover" title="Custom ID" data-content="Customized Member ID."><b>?</b></a> 
+                @Html.TextBox("NewID", null, new { @class = "form-control" })
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LICOVerified" /> @Html.DisplayNameFor(model => model.LICOVerified)
-                </label>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label><a href="#"  data-toggle="popover" title="Household Name" data-content="Household Name."><b>?</b></a> 
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
-
+            <div class="form-group">
+                <label asp-for="HouseholdStatusID">Household status</label><a href="#"  data-toggle="popover" title="Household Status" data-content="Household status with grow."><b>?</b></a> 
+                <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
+                </select>
+                <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
+            </div>
+            </fieldset>
         </div>
-    </div>
+    </div>   
     <hr />
     
         <div class="form-group mt-3">
@@ -127,5 +116,10 @@
                 this.value = this.value.toUpperCase();
             }
         }
+</script>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();
+});
 </script>
 }

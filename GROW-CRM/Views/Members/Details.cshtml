@@ -5,109 +5,132 @@
 }
 
 
-<div>
-
-    <h2>Details</h2>
-
     <h2>Member : @Html.DisplayFor(model => model.FullName) </h2>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ConsentGiven)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ConsentGiven)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MiddleName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MiddleName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DOB)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DOB)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.YearlyIncome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.YearlyIncome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender.Name)
-        </dd>
-        <dt class="col-sm-2">
-            Household ID:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Household.ID)
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 border-right border-left">
+                <label for="name">Full Name:</label>
+                <span id="name">@Html.DisplayFor(model => model.FullName)</span><br />
+                <label for="gender">Gender:</label>
+                <span id="gender">@Html.DisplayFor(model => model.Gender.Name)</span><br />
+                <label for="addr">Address:</label>
+                <span id="addr">@Html.DisplayFor(model => model.Household.FullAddress)</span>
+            </div>
+            <div class="col-md-4 border-right">
+                <label for="dob">@Html.DisplayNameFor(model => model.DOB):</label>
+                <span id="dob">@Html.DisplayFor(model => model.DOB)</span><br />
+                <label for="age">@Html.DisplayNameFor(model => model.Age):</label>
+                <span id="age">@Html.DisplayFor(model => model.Age)</span><br />
+                <label for="consent">Gave Consent:</label>
+                @{
+                    if (Model.ConsentGiven)
+                    {
+                        <span id="consent">Yes</span>
+                    }
+                    else
+                    {
+                        <span id="consent">No</span>
+                    }
 
-        </dd>
-        <dt class="col-sm-2">
-            Income Sources:
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var c in Model.MemberIncomeSituations)
-            {
-                @c.IncomeSituation.Situation <br />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DietaryRestrictionMembers)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var c in Model.DietaryRestrictionMembers)
-            {
-                @c.DietaryRestriction.Restriction <br />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            Current Documents:
-        </dt>
-        <dd>
+                }
+            </div>
+            <div class="col-md-4 border-right">
+                <label for="phone">@Html.DisplayNameFor(model => model.PhoneFormatted):</label>
+                <span id="phone">@Html.DisplayFor(model => model.PhoneFormatted)</span><br />
+                <label for="email">@Html.DisplayNameFor(model => model.Email):</label>
+                <span id="email">@Html.DisplayFor(model => model.Email)</span><br />
+                 <label for="consent">Is Dependant:</label>
+                @{
+                    if (Model.DependantMember)
+                    {
+                        <span id="consent">Yes</span>
+                    }
+                    else
+                    {
+                        <span id="consent">No</span>
+                    }
+
+                }
+            </div>
+        </div>
+        <div class="row border-bottom mt-2 mb-2">
+            <div class="col-12">
+            <label for="notes">Notes:</label>
+                <p id="notes">@Html.DisplayFor(model => model.Notes)</p>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+        <div class=col-md-4>
+            <label for="income-source">Income Source</label>
+            <ul id="income-source" class="list-group list-group-flush">
+                @{
+                    if(Model.MemberIncomeSituations.Count < 1)
+                    {
+                        <li class="list-group-item">No Income Source</li>
+                    }
+                    else
+                    {
+                        foreach (MemberIncomeSituation mis in Model.MemberIncomeSituations)
+                {
+                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> $@mis.Income</li>
+                        }
+                    }
+                }                
+            </ul>
+        </div>
+        <div class="col-md-4">            
             @{
+                var illness = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 0).Select(drm => drm); 
+                var concerns = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 1).Select(drm => drm); 
+
+                <label for="illness">Illnesses</label>
+                <ul id="illness" class="list-group list-group-flush">
+                @{
+                    if(illness.Count() < 1)
+                    {
+                        <li class="list-group-item">No Illness</li>
+                    }
+                    else
+                    {
+                        foreach (DietaryRestrictionMember drm in illness)
+                {
+                    <li class="list-group-item">@drm.DietaryRestriction.Restriction</li>
+                }
+                    }
+                }                
+            </ul>
+
+            <label for="concerns">Health Concerns</label>
+                <ul id="concerns" class="list-group list-group-flush">
+                @{
+                    if(concerns.Count() < 1)
+                    {
+                        <li class="list-group-item">No Health Concerns</li>
+                    }
+                    else
+                    {
+                        foreach (DietaryRestrictionMember drm in concerns)
+                {
+                    <li class="list-group-item">@drm.DietaryRestriction.Restriction</li>
+                }
+                    }
+                }                
+            </ul>
+
+            }
+        </div>
+        <div class="col-md-4">
+            <label for="documents">Documents</label>
+            <ul id="documents" class="list-group list-group-flush">
+                @{
                 int fileCount = Model.MemberDocuments.Count;
                 if (fileCount > 0)
                 {
                     var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
                     if (fileCount > 1)
                     {
+                        <li class="list-group-item">
                         <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
                             <span class="badge badge-info">@fileCount</span> Current Documents...
                         </a>
@@ -119,16 +142,22 @@
                                 }
                             }
                         </div>
+                        </li>
                     }
                     else
                     {
-                        <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                            <li class="list-group-item"><a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">No Documents</li>
                     }
                 }
-            }
-        </dd>
-    </dl>
+            </ul>
+        </div>        
 </div>
+    </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
