@@ -1,6 +1,8 @@
 using GROW_CRM.Models.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GROW_CRM.Models
 {
@@ -11,26 +13,68 @@ namespace GROW_CRM.Models
             OrderItems = new HashSet<OrderItem>();
         }
 
+        public string Sales
+        {
+            get
+            {
+                return Purchases + " (" + Quantity + ")";
+            }
+        }
+
         //Fields 
         public int ID { get; set; }
 
+        [Required]
+        [Display(Name = "Household")]
+        public int HouseholdCode { get; set; }
+
+        [Required]
+        [Display(Name = "Member")]
+        public string HouseMember { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
+        [Required]
+        public string Purchases { get; set; }
+
+        public int Quantity { get; set; }
+
+        public double Price { get; set; }
+
+        [Required]
+        public string Payment { get; set; }
+
+        [Required]
+        public string Volunteer { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal Subtotal { get; set; }
 
-        public decimal Taxes { get; set; }
+        [DataType(DataType.Currency)]
+        public double Taxes { get; set; }
 
-        public decimal Total { get; set; }
-        
+        [DataType(DataType.Currency)]
+        public double Total { get; set; }
+
         //Foreign Keys        
 
         public int MemberID { get; set; }
-
         public Member Member { get; set; }
 
-        public int PaymentTypeID { get; set; }
+        public int HouseholdID { get; set; }
+        public Household Household { get; set; }
 
+        public int PaymentTypeID { get; set; }
         public PaymentType PaymentType { get; set; }
+
+        public int ItemID { get; set; }
+        public Item Item { get; set; }
+
+        public int OrderItemID { get; set; }
+        public OrderItem OrderItem { get; set; }
 
         //O:M Relationships
         public ICollection<OrderItem> OrderItems { get; set; }

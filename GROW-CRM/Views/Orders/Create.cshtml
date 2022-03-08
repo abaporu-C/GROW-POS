@@ -1,0 +1,95 @@
+﻿@model GROW_CRM.Models.Order
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create Order</h2>
+<hr />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="HouseholdID" class="control-label"></label>
+                    <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.HouseholdID">
+                        <option value="0">Select the Household</option>
+                    </select>
+                    <span asp-validation-for="HouseholdID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MemberID" class="control-label"></label>
+                    <select asp-for="MemberID" class="form-control" asp-items="ViewBag.MemberID">
+                        <option value="">Select Household First</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group col-md-4">
+                <label class="control-label">Items Purchased</label> <button type="button" id="btnItemRight" class="btn btn-danger btn-sm">
+                    <strong>-</strong>
+                </button>
+                @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label class="control-label">Choose Items</label> <button type="button" id="btnItemLeft" class="btn btn-success btn-sm">
+                    <strong>+</strong>
+                </button>
+                @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Taxes" class="control-label"></label>
+                <input asp-for="Taxes" class="form-control" />
+                <span asp-validation-for="Taxes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Payment" class="control-label"></label>
+                <select asp-for="Payment" class="form-control" asp-items="ViewBag.PaymentTypeID">
+                    <option value="">Select Payment Type</option>
+                </select>
+                <span asp-validation-for="Payment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Volunteer" class="control-label"></label>
+                <input asp-for="Volunteer" class="form-control" />
+                <span asp-validation-for="Volunteer" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+<div>
+    <a href='@ViewData["returnURL"]'>Back to List of Doctors</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/multiselect.js"></script>
+}
