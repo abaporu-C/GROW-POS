@@ -51,7 +51,7 @@ namespace GROW_CRM.Controllers
                         .Include(o => o.Member)
                         .Include(o => o.Household)
                         .Include(o => o.PaymentType)
-                        .Include(o => o.OrderItems)
+                        .Include(o => o.OrderItems).ThenInclude(i => i.Item)
                         .AsNoTracking()
                          select o;
 
@@ -164,7 +164,7 @@ namespace GROW_CRM.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.Household)
-                .Include(o => o.OrderItems)
+                .Include(o => o.OrderItems).ThenInclude(i => i.Item)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -192,7 +192,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Quantity,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID,ItemID,OrderItemID")] Order order, string[] selectedItemOptions)
+        public async Task<IActionResult> Create([Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID")] Order order, string[] selectedItemOptions)
         {
             ViewDataReturnURL();
 
@@ -303,7 +303,7 @@ namespace GROW_CRM.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.Household)
-                .Include(o => o.OrderItems)
+                .Include(o => o.OrderItems).ThenInclude(i => i.Item)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -355,12 +355,19 @@ namespace GROW_CRM.Controllers
                         select c;
             return new SelectList(query.OrderBy(p => p.LastName), "ID", "FullName", selectedId);
         }
+        private SelectList ItemSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Items
+                .OrderBy(i => i.ID)
+                .ThenBy(i => i.Name), "ID", "Name", selectedId);
+        }
 
         private void PopulateDropDownLists(Order order = null)
         {
             ViewData["HouseholdID"] = HouseholdSelectList(order?.HouseholdID);
             ViewData["MemberID"] = MemberSelectList(order?.HouseholdID, order?.MemberID);
             ViewData["PaymentTypeID"] = PaymentSelectList(order?.PaymentTypeID);
+            //ViewData["ItemID"] = ItemSelectList(order?.ItemID);
         }
 
         private void PopulateSalesItems(Order order)

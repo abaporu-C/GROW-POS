@@ -48,13 +48,13 @@
                     <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.HouseMember)
+                    <input type="submit" disabled="disabled" value="Member" class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Sales)
+                    <input type="submit" disabled="disabled" value="Purchases" class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
@@ -63,7 +63,7 @@
                     <input type="submit" name="actionButton" value="Payment" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Volunteer)
+                    <input type="submit" disabled="disabled" value="Volunteer" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -82,19 +82,19 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Sales)
+                        @Html.DisplayFor(modelItem => item.Purchases)
                     </td>
                     <td>
-                        Primary: <strong>@Html.DisplayFor(modelItem => item.Sales)</strong><br />
+                        Primary: <strong>@Html.DisplayFor(modelItem => item.Purchases)</strong><br />
                         @{
                             int theCount = item.Purchases.Count();
                             if (theCount > 0)
                             {
-                                string first = item.Sales.FirstOrDefault().ToString();
+                                string first = item.Purchases.FirstOrDefault().ToString();
                                 if (theCount > 1)
                                 {
                                     string theList = first;
-                                    var c = item.Sales.ToList();
+                                    var c = item.Purchases.ToList();
                                     for (int i = 1; i < theCount; i++)
                                     {
                                         theList += ", " + c[i];
