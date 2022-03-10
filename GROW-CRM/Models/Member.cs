@@ -123,11 +123,15 @@ namespace GROW_CRM.Models
         [DataType(DataType.MultilineText)]
         public string Notes { get; set; }        
 
-        [Display(Name = "Consent On Giving Information: ")]
+        [Display(Name = "Member consents giving information: ")]
         public bool ConsentGiven { get; set; }
 
         [Display(Name = "Is this member a Dependant?")]
+<<<<<<< HEAD
         public bool? DependantMember { get; set; }
+=======
+        public bool DependantMember { get; set; }
+>>>>>>> main
 
         //Foreign Keys        
 

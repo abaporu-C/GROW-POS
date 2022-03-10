@@ -16,6 +16,7 @@
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
+<<<<<<< HEAD
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="ConsentGiven"></label>
@@ -25,35 +26,50 @@
                 <label asp-for="DependantMember"></label>
                 <input asp-for="DependantMember"/>
             </div>
+=======
+        <div class="form-group">
+                    <label asp-for="ConsentGiven"></label>
+                    <input asp-for="ConsentGiven" />
+                    
+<a href="#"  data-toggle="popover" title="Consent" data-content="Member's consent on giving information.'"><b>?</b></a><br />
+                <label asp-for="DependantMember"></label>
+                <input asp-for="DependantMember"/><a href="#"  data-toggle="popover" title="Dependant Member" data-content="Member is dependent financialy."><b>?</b></a>
+         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">     
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Personal Info</legend>
+>>>>>>> main
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
+                <label asp-for="FirstName" class="control-label"></label><a href="#"  data-toggle="popover" title="First Name" data-content="Member's first name.'"><b>?</b></a>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MiddleName" class="control-label"></label>
+                <label asp-for="MiddleName" class="control-label"></label><a href="#"  data-toggle="popover" title="Middle Name" data-content="Member's middle name.'"><b>?</b></a>
                 <input asp-for="MiddleName" class="form-control" />
                 <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
+                <label asp-for="LastName" class="control-label"></label><a href="#"  data-toggle="popover" title="Last Name" data-content="Member's last name.'"><b>?</b></a>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
+                <label asp-for="GenderID" class="control-label"></label><a href="#"  data-toggle="popover" title="Gender" data-content="Member's gender.'"><b>?</b></a>
                 <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
                     <option value="">Select Gender</option>
                 </select>
                 <span asp-validation-for="GenderID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
+                <label asp-for="DOB" class="control-label"></label><a href="#"  data-toggle="popover" title="Date of Birth" data-content="Member's date of birth.'"><b>?</b></a>
                 <input asp-for="DOB" class="form-control" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Phone Number" data-content="Member's phone number. Plese, input all 10 digits'"><b>?</b></a>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="phoneAddon">#</span>
@@ -65,7 +81,7 @@
 
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label"></label><a href="#"  data-toggle="popover" title="Email" data-content="Member's email.'"><b>?</b></a>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="emailAddon">@@</span>
@@ -74,14 +90,18 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label><a href="#" data-toggle="popover" title="Notes" data-content="Member's special information.'"><b>?</b></a>
+                <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            </fieldset>
         </div>
         <div class="col-md-6">
-            
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Income & Documents</legend>
                 <div class="form-group" id="ListMemberIncomeSituations">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button>
-                    </div>
-                <label class="control-label"><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button>
+                <label class="control-label"><button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button"><strong>+</strong></button><strong>Income Situations</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Income Situation" type="button">&#x271A;</button><a href="#" data-toggle="popover" title="Income Sources" data-content="Member's income sources.'"><b>?</b></a>
                 <div class="col-md-offset-1" id="MemberIncomeSituationList">
                     <table>
                         @{
@@ -99,6 +119,11 @@
                     </table>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="uploadControl" class="control-label">Upload Documents:</label><a href="#"  data-toggle="popover" title="Documents" data-content="Member's Documents.'"><b>?</b></a>
+                <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
+            </div>
+            </fieldset>
 
             
 
@@ -109,55 +134,57 @@
                     </select>
                     <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
                 </div>*@
-
-            <label asp-for="Notes" class="control-label"></label>
-            <textarea asp-for="Notes" rows="5" cols="40" class="form-control"></textarea>
-            <span asp-validation-for="Notes" class="text-danger"></span>
-
-            <div class="col-md-8">
+            <fieldset class="form-group border p-4 rounded">
+            <legend class="w-auto">Health Info</legend>
+            <div class="col-md-12 mt-2">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <div class="m-2">
                         <label class="control-label"> Illness Accredited</label> <button type="button" id="btnIllnessRight" class="btn btn-danger btn-sm">
                             <strong>-</strong>
                         </button>
-                        @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 10, @class = "form-control" })
+                        </div>
+                        @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 5, @class = "form-control" })
                     </div>
 
                     <div class="form-group col-md-6">
+                        <div class="m-2">
                         <label class="control-label"> Choose Illness</label> <button type="button" id="btnIllnessLeft" class="btn btn-success btn-sm">
                             <strong>+</strong>
-                        </button>
-                        @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 10, @class = "form-control" })
+                        </button><a href="#"  data-toggle="popover" title="Illness" data-content="Member's illnesses.'"><b>?</b></a>
+                        </div>
+                        @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 5, @class = "form-control" })
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-12 mt-2">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <div class="m-2">
                         <label class="control-label"> Concerns Accredited</label> <button type="button" id="btnConcernRight" class="btn btn-danger btn-sm">
                             <strong>-</strong>
                         </button>
-                        @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 10, @class = "form-control" })
+                        </div>
+                        @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 5, @class = "form-control" })
                     </div>
 
                     <div class="form-group col-md-6">
+                        <div class="m-2">
                         <label class="control-label"> Choose Concerns</label> <button type="button" id="btnConcernLeft" class="btn btn-success btn-sm">
                             <strong>+</strong>
-                        </button>
-                        @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 10, @class = "form-control" })
+                        </button><a href="#"  data-toggle="popover" title="Health Concerns" data-content="Member's health concerns.'"><b>?</b></a>
+                        </div>
+                        @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 5, @class = "form-control" })
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="uploadControl" class="control-label">Upload Documents:</label>
-                <input id="uploadControl" type="file" class="" name="theFiles" multiple="multiple" />
-            </div>
+            </fieldset>
         </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input class="btn btn-lg btn-outline-danger  mr-3" type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+                    <input class="btn btn-danger  mr-3" type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
                     <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
@@ -238,4 +265,9 @@
             });
 
         </script>
+        <script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();
+});
+</script>
     }

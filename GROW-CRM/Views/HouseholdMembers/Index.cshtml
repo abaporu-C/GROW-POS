@@ -12,7 +12,7 @@
 
             if (!String.IsNullOrEmpty(household.Name))
             {
-                <h2> @Html.Raw("Household Name : ") @household.Name </h2>
+                <h2>@household.Name </h2>
             }
             else
             {
@@ -21,39 +21,85 @@
         }
 
        
+        <a asp-action="Delete" class="btn-danger btn" asp-controller="Households" asp-route-id="@household.ID">Delete</a>
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Lico Info
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">LICO Table</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+            <tr>
+                <th>Size of Family</th>
+                <th>LICO 12 Months</th>
+                <th>LICO 6 Months</th>
+            </tr>
+            <tr>
+                <td>one person</td>
+                <td>$27,589</td>
+                <td>$13,794</td>
+            </tr>
+            <tr>
+                <td>two persons</td>
+                <td>$34,346</td>
+                <td>$17,173</td>
+            </tr>
+            <tr>
+                <td>three persons</td>
+                <td>$42,224</td>
+                <td>$21,112</td>
+            </tr>
+            <tr>
+                <td>four persons</td>
+                <td>$51,267</td>
+                <td>$25,633</td>
+            </tr>
+            <tr>
+                <td>five persons</td>
+                <td>$58,145</td>
+                <td>$29,072</td>
+            </tr>
+            <tr>
+                <td>six persons</td>
+                <td>$65,578</td>
+                <td>$32,789</td>
+            </tr>
+            <tr>
+                <td>seven persons</td>
+                <td>$73,011</td>
+                <td>$36,506</td>
+            </tr>
+            <tr>
+                <td>for each additional member after seven</td>
+                <td>$7,433</td>
+                <td>$3,717</td>
+            </tr>
+        </table>
+      </div>      
+    </div>
+  </div>
+</div>
 
         <div class="row">
-            <div class="col-sm-6">
-                <dl class="row">
-                    <dt class="col-md-4">
-                        ID:
-                    </dt>
-                    <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.ID)
-                    </dd>
-                    <dt class="col-md-4">
-                        Address:
-                    </dt>
-                    <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.FullAddress)
-                    </dd>
-                    <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.YearlyIncome)
-                    </dt>
-                    <dd class="col-md-8">
-                        $ @Html.DisplayFor(model => household.YearlyIncome)
-                    </dd>
-                    <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.NumberOfMembers)
-                    </dt>
-                    <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.NumberOfMembers)
-                    </dd>
-                    <dt class="col-md-4">
-                        @Html.DisplayNameFor(model => household.LICOVerified)
-                    </dt>
-                    <dd class="col-md-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <div class="col-md-6">
+                <label for="membership">Membership#</label>
+                <span id="membership">#@Html.DisplayFor(model => household.ID)</span><br />
+                <label for="addr">Address:</label>
+                <span id="addr">@Html.DisplayFor(model => household.FullAddress)</span><br />                
+                <label for="income">@Html.DisplayNameFor(model => household.YearlyIncome)</label>
+                <span id="income">$@Html.DisplayFor(model => household.YearlyIncome)</span><br />
+                <label for="lico">LICO Verified:</label>
+                <div id="lico"><svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
                             <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                             </symbol>
@@ -67,7 +113,7 @@
                                 <div class="alert alert-danger d-flex align-items-center" role="alert">
                                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
                                     <div>
-                                        Not LICO Verified
+                                          <b>Not LICO Verified</b>
                                     </div>
                                 </div>
                             }
@@ -76,26 +122,59 @@
                                 <div class="alert alert-success d-flex align-items-center" role="alert">
                                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
                                     <div>
-                                        Verified
+                                          <b>Verified</b>
                                     </div>
                                 </div>
                             }
-                        }
-                    </dd>
-                    <dt class="col-md-4">
-                        Joined on:
-                    </dt>
-                    <dd class="col-md-8">
-                        @household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year
-                    </dd>
-                    <dt class="col-md-4">
-                        Household Status
-                    </dt>
-                    <dd class="col-md-8">
-                        @Html.DisplayFor(model => household.HouseholdStatus.Name)
-                    </dd>
-                </dl>
+                        }</div>
             </div>
+            <div class="col-md-6">
+                <label for="num">@Html.DisplayNameFor(model => household.NumberOfMembers)</label>
+                <span id="num">@Html.DisplayFor(model => household.NumberOfMembers)</span><br />
+                <label for="join">Joined On:</label>
+                <span id="join">@household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year</span><br />
+                <label for="status">Status</label>
+                <span id="status">@Html.DisplayFor(model => household.HouseholdStatus.Name)</span><br />
+                <label for="verification">Yearly Verification:</label>
+                <div id="verification"><svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </symbol>
+                            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </symbol>
+                        </svg>
+                        @{
+                            DateTime now = DateTime.Now;
+                            int dateDiff = (now - @household.LastVerification).Days;
+                            if (dateDiff >= 365)
+                        {
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+  <div>
+    <b>@household.VerificationStatus</b>
+  </div>
+</div>    
+                        }                                                        
+                        else if (dateDiff >= 335){
+                                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+                                    <div>
+                                          <b>@household.VerificationStatus</b>
+                                    </div>
+                            </div>
+                        } 
+                        else
+                            {
+                                <div class="alert alert-success d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                                    <div>
+                                          <b>@household.VerificationStatus</b>
+                                    </div>
+                                </div>
+                            }
+                        }</div>
+            </div>            
         </div>
     </div>
 </div>
@@ -308,7 +387,7 @@
     <partial name="_PagingNavBar" />
 </form>
 <div>
-    <a asp-action="Edit" asp-controller="Households" asp-route-id="@household.ID">Edit</a> | <a asp-action="Delete" asp-controller="Households" asp-route-id="@household.ID">Delete</a> | 
+    <a asp-action="Edit" asp-controller="Households" asp-route-id="@household.ID">Edit</a> | 
     <a href='@ViewData["returnURL"]'>Back to Households List</a>
 </div>
 @section Scripts {

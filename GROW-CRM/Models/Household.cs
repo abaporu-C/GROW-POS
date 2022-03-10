@@ -50,10 +50,10 @@ namespace GROW_CRM.Models
                 DateTime now = DateTime.Now;
                 int dateDiff = (now - LastVerification).Days;
 
-                if (dateDiff >= 335) return $"Verification time is near! There is only {dateDiff} days left for the next verification!";
                 if (dateDiff >= 365) return $"Verification needed. Please check members income for LICO verification.";
+                if (dateDiff >= 335) return $"Verification time is near! There is only {365 - dateDiff} days left for the next verification!";                
 
-                return $"There are {dateDiff} until the next LICO verification.";
+                return $"There are {365 - dateDiff} days until the next LICO verification.";
             }
         }
 
