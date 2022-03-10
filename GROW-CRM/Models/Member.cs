@@ -128,10 +128,14 @@ namespace GROW_CRM.Models
 
         [Display(Name = "Is this member a Dependant?")]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public bool? DependantMember { get; set; }
 =======
         public bool DependantMember { get; set; }
 >>>>>>> main
+=======
+        public bool DependantMember { get; set; }
+>>>>>>> 6a52877fb10132778fa2e6b971a1d75195621f64
 
         //Foreign Keys        
 

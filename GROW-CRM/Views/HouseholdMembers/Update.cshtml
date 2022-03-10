@@ -13,6 +13,7 @@
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
+<<<<<<< HEAD
         <div class="form-group">
                     <label asp-for="ConsentGiven"></label>
                     <input asp-for="ConsentGiven" />
@@ -29,6 +30,16 @@
             <div class="form-group">
                 
                 
+=======
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="form-group">
+                <label asp-for="ConsentGiven"></label>
+                <input asp-for="ConsentGiven" /><br />
+                <label asp-for="DependantMember"></label>
+                <input asp-for="DependantMember"/>
+                </div>
+>>>>>>> 6a52877fb10132778fa2e6b971a1d75195621f64
                 <div class="form-group">
                     <label asp-for="FirstName" class="control-label"></label><a href="#"  data-toggle="popover" title="First Name" data-content="Member's first name.'"><b>?</b></a>
                     <input asp-for="FirstName" class="form-control" />
