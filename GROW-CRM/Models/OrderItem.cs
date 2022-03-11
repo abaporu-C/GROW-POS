@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GROW_CRM.Models
 {
     public class OrderItem
@@ -14,13 +16,10 @@ namespace GROW_CRM.Models
 
         public int Quantity { get; set; }
 
-        //Foreign Keys
         public int OrderID { get; set; }
-
         public Order Order { get; set; }
 
         public int ItemID { get; set; }
-
         public Item Item { get; set; }
     }
 }
