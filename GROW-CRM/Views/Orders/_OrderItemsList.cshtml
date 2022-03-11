@@ -1,0 +1,14 @@
+﻿<table>
+    @{
+        foreach (var item in ViewBag.OrderItems)
+        {
+            @:<tr><td>
+                    @item.Item.Name
+                @:</td><td>
+                    @:&nbsp; &nbsp;
+                    <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theOrderItemsModal" title="Edit @item.Item.Name" type="button">&#x270D;</button>
+                    <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theOrderItemsModal" title="Delete @item.Item.Name" type="button">&#x274C;</button>
+                @:</td></tr>
+            }
+    }
+</table>
