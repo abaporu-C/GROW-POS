@@ -191,12 +191,6 @@ namespace GROW_CRM.Data
                 .WithMany(i => i.OrderItems)
                 .HasForeignKey(oi => oi.ItemID)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Order)
-                .WithMany(o => o.OrderItems)
-                .HasForeignKey(oi => oi.OrderID)
-                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

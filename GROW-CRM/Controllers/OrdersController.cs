@@ -7,13 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using System.Drawing;
-using System.IO;
-using Microsoft.AspNetCore.Http.Features;
 using GROW_CRM.Utilities;
-using GROW_CRM.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GROW_CRM.Controllers
@@ -28,130 +22,12 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index(string MemberSearch, string VolunteerSearch,
-            int? HouseholdID, int? page, int? pageSizeID, string actionButton,
-            string sortDirection = "asc", string sortField = "Household")
+        public async Task<IActionResult> Index()
         {
-            //Clear the sort/filter/paging URL Cookie for Controller
-            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
-
-            //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = ""; //Asume not filtering
-            //Then in each "test" for filtering, add ViewData["Filtering"] = " show" if true;
-
-            //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "Household", "Date", "Payment", "Total" };
-
-            PopulateDropDownLists();
-
-            //Start with Includes but make sure your expression returns an
-            //IQueryable<Athlete> so we can add filter and sort 
-            //options later.
-            var orders = from o in _context.Orders
-                        .Include(o => o.Member)
-                        .Include(o => o.Household)
-                        .Include(o => o.PaymentType)
-                        .Include(o => o.OrderItems).ThenInclude(i => i.Item)
-                        .AsNoTracking()
-                         select o;
-
-            //Add as many filters as needed
-            if (HouseholdID.HasValue)
-            {
-                orders = orders.Where(p => p.HouseholdID == HouseholdID);
-                ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(MemberSearch))
-            {
-                orders = orders.Where(p => p.Member.LastName.ToUpper().Contains(MemberSearch.ToUpper())
-                                       || p.Member.FirstName.ToUpper().Contains(MemberSearch.ToUpper()));
-                ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(VolunteerSearch))
-            {
-                orders = orders.Where(p => p.Volunteer.ToUpper().Contains(VolunteerSearch.ToUpper()));
-                ViewData["Filtering"] = " show";
-            }
-
-            //Before we sort, see if we have called for a change of filtering or sorting
-            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted!
-            {
-                page = 1;//Reset page to start
-
-                if (sortOptions.Contains(actionButton))//Change of sort is requested
-                {
-                    if (actionButton == sortField) //Reverse order on same field
-                    {
-                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
-                    }
-                    sortField = actionButton;//Sort by the button clicked
-                }
-            }
-            //Now we know which field and direction to sort by
-            if (sortField == "Household")
-            {
-                if (sortDirection == "asc")
-                {
-                    orders = orders
-                        .OrderBy(p => p.Household.ID);
-                }
-                else
-                {
-                    orders = orders
-                        .OrderByDescending(p => p.Household.PostalCode);
-                }
-            }
-            else if (sortField == "Purchase Date")
-            {
-                if (sortDirection == "asc")
-                {
-                    orders = orders
-                        .OrderByDescending(p => p.Date);
-                }
-                else
-                {
-                    orders = orders
-                        .OrderBy(p => p.Date);
-                }
-            }
-            else if (sortField == "Payment")
-            {
-                if (sortDirection == "asc")
-                {
-                    orders = orders
-                        .OrderBy(p => p.PaymentType.Type);
-                }
-                else
-                {
-                    orders = orders
-                        .OrderByDescending(p => p.PaymentType.Type);
-                }
-            }
-            else //Sorting by Athlete Name
-            {
-                if (sortDirection == "Total")
-                {
-                    orders = orders
-                        .OrderBy(p => p.Total);
-                }
-                else
-                {
-                    orders = orders
-                        .OrderByDescending(p => p.Total);
-                }
-            }
-            //Set sort for next time
-            ViewData["sortField"] = sortField;
-            ViewData["sortDirection"] = sortDirection;
-
-            //Handle Paging
-            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
-            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
-
-            var pagedData = await PaginatedList<Order>.CreateAsync(orders.AsNoTracking(), page ?? 1, pageSize);
-
-            return View(pagedData);
+            var gROWContext = _context.Orders.Include(o => o.Member).Include(o => o.PaymentType);
+            return View(await gROWContext.ToListAsync());
         }
+
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
