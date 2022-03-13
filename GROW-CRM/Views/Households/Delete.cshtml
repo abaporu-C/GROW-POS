@@ -255,7 +255,7 @@
     <form asp-action="Delete">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input id="deleteBtn" type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-area="" asp-controller="Households" asp-action="Index">Back to Households List</a> | <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.ID">Back To Household Details</a>
     </form>
 </div>
@@ -266,4 +266,15 @@
                 $('[data-toggle="popover"]').popover();
             });
     </script>
+<script type="text/javascript">
+    $("#deleteBtn").click(function () {
+        if (@Model.Members.Count > 0) {
+            alert("This household is not empty. Households with members can't be deleted.")
+        }
+        else { alert("Are you sure you want ot delete this household?") }  
+    })
+
+</script>
+
+
 }

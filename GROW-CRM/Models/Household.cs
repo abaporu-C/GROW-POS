@@ -119,6 +119,7 @@ namespace GROW_CRM.Models
         public int? HouseholdStatusID { get; set; }
 
         public HouseholdStatus HouseholdStatus { get; set; }
+        public About About { get; set; }
 
 
         //O:M Relationships        

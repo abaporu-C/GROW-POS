@@ -8,6 +8,7 @@ namespace GROW_CRM.Models
         public Province()
         {
             Households = new HashSet<Household>();
+            Abouts = new HashSet<About>();
         }
 
         //Fields
@@ -19,5 +20,6 @@ namespace GROW_CRM.Models
 
         //O:M Relationships
         public ICollection<Household> Households { get; set; }
+        public ICollection<About> Abouts { get; set; }
     }
 }

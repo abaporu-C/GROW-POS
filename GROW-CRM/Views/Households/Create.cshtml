@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create Household";
+    @*GROW_CRM.Models.About about = (GROW_CRM.Models.About)ViewBag.About;*@
 }
 
 
@@ -13,55 +14,67 @@
         <div class="col-md-6">    
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Address</legend>
-            <label for="noFixedAddr" class="control-label">No Fixed Address:</label>
-            <input type="checkbox" id="noFixedAddr" /><a href="#"  data-toggle="popover" title="No Fixed Address" data-content="Members with no fixed address will be registered with grow's address.'"><b>?</b></a> 
-            <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label><a href="#"  data-toggle="popover" title="City" data-content="Members city name."><b>?</b></a> 
-                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
-                    <option value="">Select a City</option>
-                </select>
-                <span asp-validation-for="CityID" class="text-danger"></span>
+                @*<h3 class="text-danger fix-addr-edit" hidden>Fixed Address Edit Mode</h3>*@
+
+            <div id="fixedAddrControls" class="addr-mode-hide form-check">
+
+                <input type="checkbox" id="noFixedAddr" class="form-check-input pt-2" />
+                <label for="noFixedAddr" class="form-check-label ml-1 ">No Fixed Address</label>
+                <a href="#" data-toggle="popover" title="No Fixed Address" data-content="Members with no fixed address will be registered with grow's address.'"><b>?</b></a>
+                <a id="btnFixedAddrSettings" class="btn btn-sm btn-outline-secondary mb-1 ml-2" asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Edit" onclick="return confirm('You will enter Fixed Address Edit Mode. Procced only if you know what you are doing.');"> &#9881;</a>
             </div>
-            <div class="form-group">
-                <label asp-for="ProvinceID" class="control-label"></label><a href="#"  data-toggle="popover" title="Province" data-content="Members province name."><b>?</b></a> 
-                <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
-                </select>
-                <span asp-validation-for="ProvinceID" class="text-danger"></span>
-            </div>            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="AptNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Apartment Number" data-content="Members apartment number (if there is one)."><b>?</b></a> 
-                        <input asp-for="AptNumber" class="form-control" />
-                        <span asp-validation-for="AptNumber" class="text-danger"></span>
-                    </div>
+               
+
+
+                <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CityID" class="control-label"></label><a href="#" data-toggle="popover" title="City" data-content="Members city name."><b>?</b></a>
+                    <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                        <option value="">Select a City</option>
+                    </select>
+                    <span asp-validation-for="CityID" class="text-danger"></span>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="StreetNumber" class="control-label"></label><a href="#"  data-toggle="popover" title="Street Number" data-content="Members street number."><b>?</b></a> 
-                        <input asp-for="StreetNumber" class="form-control" />
-                        <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="ProvinceID" class="control-label"></label><a href="#" data-toggle="popover" title="Province" data-content="Members province name."><b>?</b></a>
+                    <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID">
+                    </select>
+                    <span asp-validation-for="ProvinceID" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="AptNumber" class="control-label"></label><a href="#" data-toggle="popover" title="Apartment Number" data-content="Members apartment number (if there is one)."><b>?</b></a>
+                            <input asp-for="AptNumber" class="form-control" />
+                            <span asp-validation-for="AptNumber" class="text-danger"></span>
+                        </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="StreetNumber" class="control-label"></label><a href="#" data-toggle="popover" title="Street Number" data-content="Members street number."><b>?</b></a>
+                            <input asp-for="StreetNumber" class="form-control" />
+                            <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="StreetName" class="control-label"></label><a href="#" data-toggle="popover" title="Street Name" data-content="Members street name."><b>?</b></a>
+                    <input asp-for="StreetName" class="form-control" />
+                    <span asp-validation-for="StreetName" class="text-danger"></span>
                 </div>
 
-            </div>
-            <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label><a href="#"  data-toggle="popover" title="Street Name" data-content="Members street name."><b>?</b></a> 
-                <input asp-for="StreetName" class="form-control" />
-                <span asp-validation-for="StreetName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label><a href="#"  data-toggle="popover" title="Postal Code" data-content="Members postal code."><b>?</b></a> 
-                <input asp-for="PostalCode" class="form-control" id="postal-code" placeholder="Example: A2B 3C4" pattern="/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i" title="Example: A2A 2B2" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <input type="hidden" value="false" asp-for="LICOVerified" />
+                <div class="form-group">
+                    <label asp-for="PostalCode" class="control-label"></label><a href="#" data-toggle="popover" title="Postal Code" data-content="Members postal code."><b>?</b></a>
+                    <input asp-for="PostalCode" class="form-control" id="postal-code" placeholder="Example: A2B 3C4" pattern="/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i" title="Example: A2A 2B2" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <input type="hidden" value="false" asp-for="LICOVerified" />
+              @*  <div id="btnSaveNewAddr" hidden class="btn btn-block btn-lg btn-success fix-addr-edit">Save New Fixed Address</div>
+                <div id="btnCancelNewAddr" hidden class="btn btn-block btn-lg btn-secondary fix-addr-edit">Cancel</div>*@
             </fieldset>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 addr-mode-hide" id="otherInfo">
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Other Info</legend>
             <div class="form-group">
@@ -82,7 +95,7 @@
             </fieldset>
         </div>
     </div>    
-    <div class="form-group mt-3">
+    <div class="form-group mt-3 addr-mode-hide">
         <input class="btn btn-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
         <input type="submit" id="submitForm" value="Next Step" class="btn btn-primary " />
 
@@ -110,32 +123,61 @@
         }
     </script>
     <script>
+       @* let aptNum;
+        let strNum = "4377";
+        let strName = "Fourth Ave.";
+        let postalCode = "L2E 4N1";
+        let cityID = "2";
+        let provinceID = "13";*@
+
+
         $('#noFixedAddr').on('click', function () {
             if ($(this).prop('checked')) {
-                $('#AptNumber').prop("value", "").prop('disabled', true)
-                $('#StreetNumber').prop("value", "4377").prop('disabled', true)
-                $('#StreetName').prop("value", "Fourth Ave.").prop('disabled', true)
-                $('#postal-code').prop("value", "L2E 4N1").prop('disabled', true)
-                $('#CityID').prop("value", "2").prop('disabled', true)
-                $('#ProvinceID').prop("value", "13").prop('disabled', true)
+                $('#AptNumber').prop('disabled', true);
+                $('#StreetNumber').val(@Html.ViewData["StreetNumber"].ToString()).prop('disabled', true);
+                $('#StreetName').val("@Html.ViewData["StreetName"]").prop('disabled', true);
+                $('#postal-code').prop("value", "@Html.ViewData["PostalCode"]").prop('disabled', true);
+                $('#CityID').val(7).prop('disabled', true);
+                $('#ProvinceID').val(13).prop('disabled', true);
+
             }
             else {
-                $('#AptNumber').val("").prop('disabled', false)
-                $('#StreetNumber').val("").prop('disabled', false)
-                $('#StreetName').val("").prop('disabled', false)
-                $('#postal-code').val("").prop('disabled', false)
-                $('#CityID').val("").prop('disabled', false)
-                $('#ProvinceID').val("").prop('disabled', false)
+                $('#AptNumber').val("").prop('disabled', false);
+                $('#StreetNumber').val("").prop('disabled', false);
+                $('#StreetName').val("").prop('disabled', false);
+                $('#postal-code').val("").prop('disabled', false);
+                $('#CityID').val("").prop('disabled', false);
+                $('#ProvinceID').val("").prop('disabled', false);
             }
-        })
+        });
+
+       @*$("#btnFixedAddrSettings").click(function () {
+           if (confirm("You are entering Fixed Address Edit Mode. Are you sure you want to continue?"))
+           {
+                return 
+           }
+        })*@
+                @*
+
+                $("#btnCancelNewAddr").click(function() {
+                    if (confirm("Changes will not be saved. Do you want to cancel changes to Fixed Address?"))
+                    {
+                        $(".addr-mode-hide").prop('hidden', false);
+                        $(".fix-addr-edit").prop('hidden', true);
+                    }
+                }
+                )
+
+            }
+        })*@
 
         $('#submitForm').on('click', function () {
-            $('#AptNumber').prop('disabled', false)
-            $('#StreetNumber').prop('disabled', false)
-            $('#StreetName').prop('disabled', false)
-            $('#postal-code').prop('disabled', false)
-            $('#CityID').prop('disabled', false)
-            $('#ProvinceID').prop('disabled', false)
+            aptNum.prop('disabled', false)
+            strNum.prop('disabled', false)
+            strName.prop('disabled', false)
+            postalCode.prop('disabled', false)
+            cityID.prop('disabled', false)
+            provinceID.prop('disabled', false)
         })
     </script>
     <script>
