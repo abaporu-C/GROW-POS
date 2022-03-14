@@ -123,18 +123,22 @@
         }
     </script>
     <script>
-       @* let aptNum;
-        let strNum = "4377";
-        let strName = "Fourth Ave.";
-        let postalCode = "L2E 4N1";
-        let cityID = "2";
-        let provinceID = "13";*@
 
+        $("#submitForm").click(function () {
+            $('#AptNumber').prop('disabled', false);
+            $('#StreetNumber').prop('disabled', false);
+            $('#StreetName').prop('disabled', false);
+            $('#postal-code').prop('disabled', false);
+            $('#CityID').val(7).prop('disabled', false);
+            $('#ProvinceID').val(13).prop('disabled', false);
+            $("#noFixedAddr").prop('checked', false);
+
+        })
 
         $('#noFixedAddr').on('click', function () {
             if ($(this).prop('checked')) {
                 $('#AptNumber').prop('disabled', true);
-                $('#StreetNumber').val(@Html.ViewData["StreetNumber"].ToString()).prop('disabled', true);
+                $('#StreetNumber').val("@Html.ViewData["StreetNumber"]").prop('disabled', true);
                 $('#StreetName').val("@Html.ViewData["StreetName"]").prop('disabled', true);
                 $('#postal-code').prop("value", "@Html.ViewData["PostalCode"]").prop('disabled', true);
                 $('#CityID').val(7).prop('disabled', true);
@@ -154,7 +158,7 @@
        @*$("#btnFixedAddrSettings").click(function () {
            if (confirm("You are entering Fixed Address Edit Mode. Are you sure you want to continue?"))
            {
-                return 
+                return
            }
         })*@
                 @*
@@ -170,15 +174,6 @@
 
             }
         })*@
-
-        $('#submitForm').on('click', function () {
-            aptNum.prop('disabled', false)
-            strNum.prop('disabled', false)
-            strName.prop('disabled', false)
-            postalCode.prop('disabled', false)
-            cityID.prop('disabled', false)
-            provinceID.prop('disabled', false)
-        })
     </script>
     <script>
 $(document).ready(function(){
