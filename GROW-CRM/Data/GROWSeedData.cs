@@ -472,6 +472,28 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
+                //Look for About
+                if (!context.Abouts.Any())
+                {
+                    //add initial GROW address
+                    context.Abouts.AddRange(
+                   new About
+                   {
+                       OrgName = "GROW",
+                       StreetNumber = "4377",
+                       StreetName = "Fourth Avenue",
+                       AptNumber = "",
+                       PostalCode = "L2E 4N1",
+                       CityID = 2,
+                       ProvinceID = 1,
+                       PhoneNumber = "9052626812",
+                       WebSite = "https://www.growcflc.com/",
+                       Email = "info@growflc.com"
+                   });
+                    //Save changes
+                    context.SaveChanges();
+                }
+
 
                 //Look for Households
                 if (!context.Households.Any())
@@ -498,8 +520,9 @@ namespace GROW_CRM.Data
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 13,
-                            HouseholdStatusID = 1
+                            ProvinceID = 1,
+                            HouseholdStatusID = 1,
+                            AboutID = 1
                         },
                         new Household
                         {
@@ -511,8 +534,9 @@ namespace GROW_CRM.Data
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 13,
-                            HouseholdStatusID = 2
+                            ProvinceID = 1,
+                            HouseholdStatusID = 2,
+                            AboutID = 1
                         },
                          new Household
                          {
@@ -524,8 +548,9 @@ namespace GROW_CRM.Data
                              LICOVerified = false,
                              LastVerification = DateTime.Now,
                              CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 13,
-                             HouseholdStatusID = 2
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
                          }
 
                     );
@@ -533,30 +558,7 @@ namespace GROW_CRM.Data
                     
                    //Save changes
                    context.SaveChanges();
-                }
-
-
-                //Look for About
-                if (!context.Abouts.Any())
-                {
-                    //add initial GROW address
-                    context.Abouts.AddRange(
-                   new About
-                   {
-                       OrgName = "GROW",
-                       StreetNumber = "4377",
-                       StreetName = "Fourth Avenue",
-                       AptNumber = "",
-                       PostalCode = "L2E 4N1",
-                       CityID = 2,
-                       ProvinceID = 13,
-                       PhoneNumber = "9052626812",
-                       WebSite = "https://www.growcflc.com/",
-                       Email = "info@growflc.com"
-                   });
-                    //Save changes
-                    context.SaveChanges();
-                }
+                }                
 
 
 

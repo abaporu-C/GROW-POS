@@ -38,6 +38,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<About> Abouts { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -83,7 +85,6 @@ namespace GROW_CRM.Data
         public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
 
         public DbSet<UploadedFile> UploadedFiles { get; set; }
-        public DbSet<About> Abouts { get; set; }
 
         //Methods
 
