@@ -124,15 +124,13 @@
     </script>
     <script>
 
-        $("#submitForm").click(function () {
-            $('#AptNumber').prop('disabled', false);
-            $('#StreetNumber').prop('disabled', false);
-            $('#StreetName').prop('disabled', false);
-            $('#postal-code').prop('disabled', false);
-            $('#CityID').val(7).prop('disabled', false);
-            $('#ProvinceID').val(13).prop('disabled', false);
-            $("#noFixedAddr").prop('checked', false);
-
+        $('#submitForm').on('click', function () {
+            $('#AptNumber').prop('disabled', false)
+            $('#StreetNumber').prop('disabled', false)
+            $('#StreetName').prop('disabled', false)
+            $('#postal-code').prop('disabled', false)
+            $('#CityID').prop('disabled', false)
+            $('#ProvinceID').prop('disabled', false)
         })
 
         $('#noFixedAddr').on('click', function () {
@@ -141,8 +139,8 @@
                 $('#StreetNumber').val("@Html.ViewData["StreetNumber"]").prop('disabled', true);
                 $('#StreetName').val("@Html.ViewData["StreetName"]").prop('disabled', true);
                 $('#postal-code').prop("value", "@Html.ViewData["PostalCode"]").prop('disabled', true);
-                $('#CityID').val("@Html.ViewData["CityID"]").prop('disabled', true);
-                $('#ProvinceID').val("@Html.ViewData["ProvinceID"]").prop('disabled', true);
+                $('#CityID').val(2).prop('disabled', true);
+                $('#ProvinceID').val(1).prop('disabled', true);
 
             }
             else {
