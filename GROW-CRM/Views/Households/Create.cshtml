@@ -137,12 +137,12 @@
 
         $('#noFixedAddr').on('click', function () {
             if ($(this).prop('checked')) {
-                $('#AptNumber').prop('disabled', true);
+                $('#AptNumber').val("").prop('disabled', true);
                 $('#StreetNumber').val("@Html.ViewData["StreetNumber"]").prop('disabled', true);
                 $('#StreetName').val("@Html.ViewData["StreetName"]").prop('disabled', true);
                 $('#postal-code').prop("value", "@Html.ViewData["PostalCode"]").prop('disabled', true);
-                $('#CityID').val(7).prop('disabled', true);
-                $('#ProvinceID').val(13).prop('disabled', true);
+                $('#CityID').val("@Html.ViewData["CityID"]").prop('disabled', true);
+                $('#ProvinceID').val("@Html.ViewData["ProvinceID"]").prop('disabled', true);
 
             }
             else {

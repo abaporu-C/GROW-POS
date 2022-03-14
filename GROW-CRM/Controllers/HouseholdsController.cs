@@ -247,7 +247,7 @@ namespace GROW_CRM.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
-            var household = new Household();
+            //var household = new Household();
 
             var about = (About)_context.Abouts.Where(m => m.ID == 1).FirstOrDefault();
 
@@ -255,11 +255,11 @@ namespace GROW_CRM.Controllers
             ViewData["StreetNumber"] = about.StreetNumber;
             ViewData["StreetName"] = about.StreetName;
             ViewData["PostalCode"] = about.PostalCode;
-            /*ViewData["CityID"] = 2;
-            ViewData["ProvinceID"] = 13;*/
+            ViewData["CityID"] = about.CityID;
+            ViewData["ProvinceID"] = about.ProvinceID;
 
 
-            PopulateDropDownLists(household);
+            PopulateDropDownLists();
             return View();
         }
 
