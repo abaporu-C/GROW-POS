@@ -81,8 +81,8 @@
         </div>
         <div class="col-md-4">            
             @{
-                var illness = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 0).Select(drm => drm); 
-                var concerns = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 1).Select(drm => drm); 
+                var illness = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 1).Select(drm => drm); 
+                var concerns = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 2).Select(drm => drm); 
 
                 <label for="illness">Illnesses</label>
                 <ul id="illness" class="list-group list-group-flush">
