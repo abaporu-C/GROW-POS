@@ -217,6 +217,8 @@ namespace GROW_CRM.Controllers
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
 
+
+
             return View(await households.ToListAsync());
         }
 
@@ -246,7 +248,17 @@ namespace GROW_CRM.Controllers
         public IActionResult Create()
         {
             var household = new Household();
-            
+
+            var about = (About)_context.Abouts.Where(m => m.ID == 1).FirstOrDefault();
+
+            ViewData["AptNumber"] = about.AptNumber;
+            ViewData["StreetNumber"] = about.StreetNumber;
+            ViewData["StreetName"] = about.StreetName;
+            ViewData["PostalCode"] = about.PostalCode;
+            /*ViewData["CityID"] = 2;
+            ViewData["ProvinceID"] = 13;*/
+
+
             PopulateDropDownLists(household);
             return View();
         }
@@ -256,7 +268,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles, string NewID)
+        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles, string NewID, int? AboutID)
         {
             try
             {
@@ -314,14 +326,18 @@ namespace GROW_CRM.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }
-          /*  catch (DbUpdateException)
-            {
+            /*  catch (DbUpdateException)
+              {
 
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            }*/
+                  ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+              }*/
+
+            /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
+             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
+            
            
-           /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
+           
+
             return View(household);
         }
 

@@ -83,6 +83,7 @@ namespace GROW_CRM.Data
         public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
 
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<About> Abouts { get; set; }
 
         //Methods
 
@@ -191,6 +192,13 @@ namespace GROW_CRM.Data
                 .WithMany(i => i.OrderItems)
                 .HasForeignKey(oi => oi.ItemID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+           /* //About          
+            modelBuilder.Entity<About>()
+                .HasOne(oi => oi.Item)
+                .WithMany(i => i.OrderItems)
+                .HasForeignKey(oi => oi.ItemID)
+                .OnDelete(DeleteBehavior.Restrict);*/
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

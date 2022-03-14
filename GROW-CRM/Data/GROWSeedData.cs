@@ -528,11 +528,38 @@ namespace GROW_CRM.Data
                              HouseholdStatusID = 2
                          }
 
-                    ); ;
+                    );
 
+                    
+                   //Save changes
+                   context.SaveChanges();
+                }
+
+
+                //Look for About
+                if (!context.Abouts.Any())
+                {
+                    //add initial GROW address
+                    context.Abouts.AddRange(
+                   new About
+                   {
+                       OrgName = "GROW",
+                       StreetNumber = "4377",
+                       StreetName = "Fourth Avenue",
+                       AptNumber = "",
+                       PostalCode = "L2E 4N1",
+                       CityID = 2,
+                       ProvinceID = 13,
+                       PhoneNumber = "9052626812",
+                       WebSite = "https://www.growcflc.com/",
+                       Email = "info@growflc.com"
+                   });
                     //Save changes
                     context.SaveChanges();
                 }
+
+
+
 
                 //Look for members
                 if (!context.Members.Any())
