@@ -455,18 +455,18 @@ namespace GROW_CRM.Data
                     var provinces = new List<Province>
                     {
                         new Province { Code = "ON", Name = "Ontario"},
-                        new Province { Code = "PE", Name = "Prince Edward Island"},
-                        new Province { Code = "NB", Name = "New Brunswick"},
-                        new Province { Code = "BC", Name = "British Columbia"},
-                        new Province { Code = "NL", Name = "Newfoundland and Labrador"},
-                        new Province { Code = "SK", Name = "Saskatchewan"},
-                        new Province { Code = "NS", Name = "Nova Scotia"},
-                        new Province { Code = "MB", Name = "Manitoba"},
-                        new Province { Code = "QC", Name = "Quebec"},
-                        new Province { Code = "YT", Name = "Yukon"},
-                        new Province { Code = "NU", Name = "Nunavut"},
-                        new Province { Code = "NT", Name = "Northwest Territories"},
-                        new Province { Code = "AB", Name = "Alberta"}
+                        //new Province { Code = "PE", Name = "Prince Edward Island"},
+                        //new Province { Code = "NB", Name = "New Brunswick"},
+                        //new Province { Code = "BC", Name = "British Columbia"},
+                        //new Province { Code = "NL", Name = "Newfoundland and Labrador"},
+                        //new Province { Code = "SK", Name = "Saskatchewan"},
+                        //new Province { Code = "NS", Name = "Nova Scotia"},
+                        //new Province { Code = "MB", Name = "Manitoba"},
+                        //new Province { Code = "QC", Name = "Quebec"},
+                        //new Province { Code = "YT", Name = "Yukon"},
+                        //new Province { Code = "NU", Name = "Nunavut"},
+                        //new Province { Code = "NT", Name = "Northwest Territories"},
+                        //new Province { Code = "AB", Name = "Alberta"}
                     };
                     context.Provinces.AddRange(provinces);
                     context.SaveChanges();
