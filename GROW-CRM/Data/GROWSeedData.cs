@@ -526,10 +526,9 @@ namespace GROW_CRM.Data
                         },
                         new Household
                         {
-                            Name = "House #2",
+                            Name = "Luke's House",
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
-
                             PostalCode = "L2H 1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
@@ -539,11 +538,93 @@ namespace GROW_CRM.Data
                             AboutID = 1
                         },
                          new Household
+                        {
+                            Name = "Smith's House",
+                            StreetNumber = "101",
+                            StreetName = "Development Ave.",
+                            PostalCode = "L2P 1W8",
+                            LICOVerified = false,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = 1,
+                            HouseholdStatusID = 2,
+                            AboutID = 1
+                        },
+                         new Household
                          {
-                             Name = "House #3",
-                             StreetNumber = "101",
+                             Name = "McDonald's House",
+                             StreetNumber = "45",
+                             StreetName = "Niagara Str.",
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
+                         }
+                         ,
+                         new Household
+                         {
+                             Name = "Boiardee House",
+                             StreetNumber = "5664",
+                             StreetName = "North Str",
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
+                         }
+                         ,
+                         new Household
+                         {
+                             Name = "More's House",
+                             StreetNumber = "8894",
+                             StreetName = "Kentucky Cres.",
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
+                         }
+                         ,
+                         new Household
+                         {
+                             Name = "Mitchels's House",
+                             StreetNumber = "667",
+                             StreetName = "Vansicle Rd.",
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
+                         }
+                         ,
+                         new Household
+                         {
+                             Name = "Job's House",
+                             StreetNumber = "1",
+                             StreetName = "Coopertino Ave.",
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = 1,
+                             HouseholdStatusID = 2,
+                             AboutID = 1
+                         }
+                         ,
+                         new Household
+                         {
+                             Name = "Randy's House",
+                             StreetNumber = "246",
                              StreetName = "Development Ave.",
-
                              PostalCode = "L2P 1W8",
                              LICOVerified = false,
                              LastVerification = DateTime.Now,
