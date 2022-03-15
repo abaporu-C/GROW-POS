@@ -9,21 +9,21 @@
 
 <h3>Create Household</h3>
 <hr />
-<form asp-action="Create" method="post" enctype="multipart/form-data">   
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="row">
-        <div class="col-md-6">    
+        <div class="col-md-6">
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Address</legend>
-                @*<h3 class="text-danger fix-addr-edit" hidden>Fixed Address Edit Mode</h3>*@
+               
 
-            <div id="fixedAddrControls" class="addr-mode-hide form-check">
+                <div id="fixedAddrControls" class="addr-mode-hide form-check">
 
+                    
                 <input type="checkbox" id="noFixedAddr" class="form-check-input pt-2" />
                 <label for="noFixedAddr" class="form-check-label ml-1 ">No Fixed Address</label>
                 <a href="javascript:void(0)" data-toggle="popover" title="No Fixed Address" data-trigger="focus" data-content="Members with no fixed address will be registered with grow's address.'"><b>?</b></a>
                 <a id="btnFixedAddrSettings" class="btn btn-sm btn-outline-secondary mb-1 ml-2" asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Edit" onclick="return confirm('You will enter Fixed Address Edit Mode. Procced only if you know what you are doing.');"> &#9881;</a>
-            </div>
-               
+            </div>              
 
 
                 <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
@@ -70,8 +70,7 @@
                     <span asp-validation-for="PostalCode" class="text-danger"></span>
                 </div>
                 <input type="hidden" value="false" asp-for="LICOVerified" />
-              @*  <div id="btnSaveNewAddr" hidden class="btn btn-block btn-lg btn-success fix-addr-edit">Save New Fixed Address</div>
-                <div id="btnCancelNewAddr" hidden class="btn btn-block btn-lg btn-secondary fix-addr-edit">Cancel</div>*@
+             
             </fieldset>
         </div>
         <div class="col-md-6 addr-mode-hide" id="otherInfo">
@@ -94,7 +93,7 @@
             </div>
             </fieldset>
         </div>
-    </div>    
+    </div>
     <div class="form-group mt-3 addr-mode-hide">
         <input class="btn btn-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
         <input type="submit" id="submitForm" value="Next Step" class="btn btn-primary " />
@@ -152,26 +151,22 @@
                 $('#ProvinceID').val("").prop('disabled', false);
             }
         });
+    </script>
+  
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+        $('.popover-dismiss').popover({
+            trigger: 'focus'
+        })
+    </script>
 
-       @*$("#btnFixedAddrSettings").click(function () {
-           if (confirm("You are entering Fixed Address Edit Mode. Are you sure you want to continue?"))
-           {
-                return
-           }
-        })*@
-                @*
+    <script>
 
-                $("#btnCancelNewAddr").click(function() {
-                    if (confirm("Changes will not be saved. Do you want to cancel changes to Fixed Address?"))
-                    {
-                        $(".addr-mode-hide").prop('hidden', false);
-                        $(".fix-addr-edit").prop('hidden', true);
-                    }
-                }
-                )
-
-            }
-        })*@
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
     <script>
 $(function () {
