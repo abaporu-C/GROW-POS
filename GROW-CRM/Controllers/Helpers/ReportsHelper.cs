@@ -238,4 +238,61 @@ namespace GROW_CRM.Controllers.Helpers
             return renewalReportsFiltered;
         }
     }
+
+    public static IEnumerable GetSalesData(GROWContext _context)
+    {
+        var newSales = _context.Orders
+                            .Include(o => o.Member)
+                            .Include(o => o.OrderItems).ThenInclude(i => i.Item)
+                            .Select(ns => new OrdersReport
+                            {
+                                ID = ns.ID,
+                                Member = ns.Member.FullName,
+                                Date = ns.Date,
+                                Total = ns.Total
+                            }).ToList();
+
+        List<OrdersReport> newOrdersfiltered = new List<OrdersReport>();
+
+        DateTime lastWeek = DateTime.Now.AddDays(-14);
+
+        foreach (OrdersReport or in newSales)
+        {
+            TimeSpan diff = (TimeSpan)(or.Date - lastWeek);
+            double tds = diff.TotalDays;
+            if (tds > 7) continue;
+            newOrdersfiltered.Add(or);
+        }
+
+        return newOrdersfiltered;
+    }
+
+    public static IEnumerable GetNewItems(GROWContext _context)
+    {
+        var newAdditions = _context.Items
+                            .Include(h => h.Category)
+                            .Select(na => new NewItemsReport
+                            {
+                                ID = na.ID,
+                                Code = na.Code,
+                                Name = na.Name,
+                                Price = na.Price,
+                                Category = na.Category.Name,
+                                CreatedOn = na.CreatedOn
+                            }).ToList();
+
+        List<NewItemsReport> newAdditionsfiltered = new List<NewItemsReport>();
+
+        DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+        foreach (NewItemsReport na in newAdditions)
+        {
+            TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
+            double tds = diff.TotalDays;
+            if (tds > 7) continue;
+            newAdditionsfiltered.Add(na);
+        }
+
+        return newAdditionsfiltered;
+    }
 }
