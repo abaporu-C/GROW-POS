@@ -152,8 +152,6 @@ namespace GROW_CRM.Controllers
 
             return View(pagedData);
         }
-
-
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -163,8 +161,6 @@ namespace GROW_CRM.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.Household)
-                .Include(o => o.OrderItems).ThenInclude(i => i.Item)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -177,14 +173,21 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public IActionResult Create(int code)
         {
-            ViewDataReturnURL();
+            Order order = new Order { Date = DateTime.Now ,MemberID = code, PaymentTypeID = 1};
 
-            Order order = new Order();
-            PopulateDropDownLists(order);
-            PopulateSalesItems(order);
-            return View();
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            var member = (Member)_context.Members.Where(m => m.ID == code).Include(m => m.Household).Select(m => m).FirstOrDefault();
+
+            ViewData["FullName"] = member.FullName;
+            ViewData["Address"] = member.Household.FullAddress;
+            ViewData["Age"] = member.Age;
+
+            PopulateDropDownLists();
+            return View(order);
         }
 
         // POST: Orders/Create
@@ -192,81 +195,34 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,HouseholdCode,HouseMember,Date,Purchases,Price,Payment,Volunteer,Subtotal,Taxes,Total,MemberID,HouseholdID,PaymentTypeID")] Order order, string[] selectedItemOptions)
+        public async Task<IActionResult> Create([Bind("ID,Date,Subtotal,Taxes,Total,MemberID,PaymentTypeID")] Order order)
         {
+            //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
-            try
-            {
-                UpdateOrderItems(selectedItemOptions, order);
-                if (ModelState.IsValid)
-                {
-                    _context.Add(order);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { order.ID });
-                }
-            }
-            catch (RetryLimitExceededException /* dex */)
-            {
-                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-
-            PopulateSalesItems(order);
-            PopulateDropDownLists(order);
-            return View(order);
-        }
-
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders
-                .Include(o => o.OrderItems)
-                .ThenInclude(o => o.Item)
-                .FirstOrDefaultAsync(o => o.ID == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            PopulateSalesItems(order);
-            return View(order);
-        }
-
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, string[] selectedOptions)
-        {
             var orderToUpdate = await _context.Orders
-                .Include(d => d.OrderItems)
-                .ThenInclude(d => d.Item)
-                .FirstOrDefaultAsync(p => p.ID == id);
+                .Include(m => m.Member)
+                .Include(m => m.PaymentType)
+                .FirstOrDefaultAsync(m => m.ID == order.ID);
 
+
+
+            //Check that you got it or exit with a not found error
             if (orderToUpdate == null)
             {
                 return NotFound();
             }
 
-            UpdateOrderItems(selectedOptions, orderToUpdate);
-
-            if (await TryUpdateModelAsync<Order>(orderToUpdate, "", o => o.HouseholdCode, o => o.HouseMember, o => o.Date, o => o.Purchases, o => o.Price, o => o.Payment, o => o.Volunteer, o => o.Subtotal, o => o.Taxes, o => o.Total))
+            //Try updating it with the values posted
+            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
+                o => o.Date, o => o.Subtotal, o => o.Taxes, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
             {
                 try
                 {
+                    _context.Update(orderToUpdate);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { orderToUpdate.ID });
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
-
                 catch (RetryLimitExceededException /* dex */)
                 {
                     ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
@@ -284,12 +240,99 @@ namespace GROW_CRM.Controllers
                 }
                 catch (DbUpdateException)
                 {
+                    Console.WriteLine("Something Went Wrong");
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
+            }
+            
+            PopulateDropDownLists(orderToUpdate);
+            return View(orderToUpdate);
+        }
 
+        // GET: Orders/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
             }
 
-            PopulateSalesItems(orderToUpdate);
+            var order = await _context.Orders
+                                .Include(o => o.Member)
+                                .Include(o => o.PaymentType)
+                                .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+                                .FirstOrDefaultAsync(o => o.ID == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var member = (Member)_context.Members.Where(m => m.ID == order.MemberID).Include(m => m.Household).Select(m => m).FirstOrDefault();
+
+            ViewData["FullName"] = member.FullName;
+            ViewData["Address"] = member.Household.FullAddress;
+            ViewData["Age"] = member.Age;
+
+            PopulateDropDownLists(order);
+            return View(order);
+        }
+
+        // POST: Orders/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Subtotal,Taxes,Total,MemberID,PaymentTypeID")] Order order)
+        {
+            //Get the URL with the last filter, sort and page parameters
+            ViewDataReturnURL();
+
+            var orderToUpdate = await _context.Orders
+                .Include(m => m.Member)
+                .Include(m => m.PaymentType)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+
+
+            //Check that you got it or exit with a not found error
+            if (orderToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            //Try updating it with the values posted
+            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
+                o => o.Date, o => o.Subtotal, o => o.Taxes, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
+            {
+                try
+                {
+                    _context.Update(orderToUpdate);
+                    await _context.SaveChangesAsync();
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrderExists(orderToUpdate.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch (DbUpdateException)
+                {
+                    Console.WriteLine("Something Went Wrong");
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
+            PopulateDropDownLists(orderToUpdate);
             return View(orderToUpdate);
         }
 
@@ -302,8 +345,6 @@ namespace GROW_CRM.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.Household)
-                .Include(o => o.OrderItems).ThenInclude(i => i.Item)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -331,123 +372,37 @@ namespace GROW_CRM.Controllers
             return _context.Orders.Any(e => e.ID == id);
         }
 
+        private SelectList PaymentTypeSelectList(int? id)
+        {
+            var ptQuery = from pt in _context.PaymentTypes
+                           orderby pt.Type
+                           select pt;
+            return new SelectList(ptQuery, "ID", "Type", id);
+        }
+
+        public PartialViewResult OrderItemList(int id)
+        {
+            ViewBag.OrderItems = _context.OrderItems
+                .Include(s => s.Item)
+                .Where(s => s.OrderID == id)
+                .OrderBy(s => s.Item.Name)
+                .ToList();
+            return PartialView("_OrderItemLists");
+        }
+
+        private void PopulateDropDownLists(Order order = null)
+        {
+            ViewData["PaymentTypeID"] = PaymentTypeSelectList(order?.PaymentTypeID);            
+        }
+
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
-        private SelectList HouseholdSelectList(int? selectedId)
-        {
-            return new SelectList(_context.Households
-                .OrderBy(d => d.ID)
-                .ThenBy(d => d.Name), "ID", "Name", selectedId);
-        }
-        private SelectList PaymentSelectList(int? selectedId)
-        {
-            return new SelectList(_context.PaymentTypes
-                .OrderBy(d => d.ID)
-                .ThenBy(d => d.Type), "ID", "Type", selectedId);
-        }
-        private SelectList MemberSelectList(int? HouseholdID, int? selectedId)
-        {
-            var query = from c in _context.Members.Include(c => c.Household)
-                        where c.HouseholdID == HouseholdID.GetValueOrDefault()
-                        select c;
-            return new SelectList(query.OrderBy(p => p.LastName), "ID", "FullName", selectedId);
-        }
-        private SelectList ItemSelectList(int? selectedId)
-        {
-            return new SelectList(_context.Items
-                .OrderBy(i => i.ID)
-                .ThenBy(i => i.Name), "ID", "Name", selectedId);
-        }
-
-        private void PopulateDropDownLists(Order order = null)
-        {
-            ViewData["HouseholdID"] = HouseholdSelectList(order?.HouseholdID);
-            ViewData["MemberID"] = MemberSelectList(order?.HouseholdID, order?.MemberID);
-            ViewData["PaymentTypeID"] = PaymentSelectList(order?.PaymentTypeID);
-            //ViewData["ItemID"] = ItemSelectList(order?.ItemID);
-        }
-
-        private void PopulateSalesItems(Order order)
-        {
-            var allOptions = _context.Items;
-            var currentOptionsHS = new HashSet<int>(order.OrderItems.Select(b => b.ItemID));
-
-            var selected = new List<ListOptionVM>();
-            var available = new List<ListOptionVM>();
-            foreach (var s in allOptions)
-            {
-                if (currentOptionsHS.Contains(s.ID))
-                {
-                    selected.Add(new ListOptionVM
-                    {
-                        ID = s.ID,
-                        DisplayText = s.Name
-                    });
-                }
-                else
-                {
-                    available.Add(new ListOptionVM
-                    {
-                        ID = s.ID,
-                        DisplayText = s.Name
-                    });
-                }
-            }
-
-            ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(s => s.DisplayText), "ID", "DisplayText");
-            ViewData["availOpts"] = new MultiSelectList(available.OrderBy(s => s.DisplayText), "ID", "DisplayText");
-        }
-
-        private void UpdateOrderItems(string[] selectedOptions, Order orderToUpdate)
-        {
-            if (selectedOptions == null)
-            {
-                orderToUpdate.OrderItems = new List<OrderItem>();
-                return;
-            }
-
-            var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var currentOptionsHS = new HashSet<int>(orderToUpdate.OrderItems.Select(b => b.ItemID));
-            foreach (var i in _context.Items)
-            {
-                if (selectedOptionsHS.Contains(i.ID.ToString()))
-                {
-                    if (!currentOptionsHS.Contains(i.ID))
-                    {
-                        orderToUpdate.OrderItems.Add(new OrderItem
-                        {
-                            ItemID = i.ID,
-                            OrderID = orderToUpdate.ID
-                        });
-                    }
-                }
-                else
-                {
-                    if (currentOptionsHS.Contains(i.ID))
-                    {
-                        OrderItem itemToRemove = orderToUpdate.OrderItems.FirstOrDefault(o => o.ItemID == i.ID);
-                        _context.Remove(itemToRemove);
-                    }
-                }
-            }
-        }
-
         private void ViewDataReturnURL()
         {
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
-        }
-
-        public PartialViewResult OrderItemsList(int id)
-        {
-            ViewBag.OrderItemsList = _context.OrderItems
-                .Include(i => i.Item)
-                .Where(s => s.OrderID == id)
-                .OrderBy(i => i.Item.Name)
-                .ToList();
-            return PartialView("_OrderItemsList");
         }
     }
 }

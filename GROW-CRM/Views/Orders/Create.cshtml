@@ -73,71 +73,19 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <fieldset class="form-group border p-4 rounded">
-                <legend class="w-auto">Pay and Submit</legend>
-                <div class="form-group">
-                    <label asp-for="PaymentType" class="control-label"></label>
-                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID">
-                        <option value="0">Select Payment Type</option>
-                    </select>
-                    <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </fieldset>
+</form>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
         </div>
     </div>
-</form>
-
+</div>
 <div>
     <a href='@ViewData["returnURL"]'>Back to Orders</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-            //New for modal
-            function refreshModal(actionForm, MemberIncomeSituationsID) {
-              switch (actionForm) {
-                  case 'CreateForm': $('#formMemberIncomeSituationBody').load('/OrderItems/CreateOrderItem/' + @Model.ID);
-                    break;
-                  case 'EditForm': $('#formMemberIncomeSituationBody').load('/OrderItems/EditOrderItem/' + MemberIncomeSituationsID);
-                    break;
-                  case 'DeleteForm': $('#formMemberIncomeSituationBody').load('/OrderItems/DeleteOrderItem/' + MemberIncomeSituationsID)
-                    break;
-                default: break;
-              };
-            return;
-            };
-            $(document).on("click", ".modal-link", function () {
-                var actionForm = $(this).attr("name");
-                var MemberIncomeSituationsID = $(this).attr("tag");
-                refreshModal(actionForm, MemberIncomeSituationsID);
-            });
-            $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {
-                event.preventDefault();
-                var form = $('#theMemberIncomeSituationsForm');
-                if (form.valid()) {
-                    $.ajax({
-                        type: "POST",
-                        url: form.attr('action'),
-                        data: form.serialize(),
-                        success: function () {
-                            $('#theMemberIncomeSituationModal').modal('hide');
-                        },
-                        error: function () {
-                            alert("Operation Failed.  There was a problem maintaing the data.");
-                        }
-                    });
-                }
-                return false;
-            });
-        $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
-            console.log('hey')
-            $('#OrderItemList').load('/Orders/OrderItemList/@Model.ID');
-            });
-    </script>
+    <script src="~/js/multiselect.js"></script>
 }
