@@ -33,13 +33,13 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < genderReport.Count(); i++)
             {
-                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total/memberCount, 2);
+                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total / memberCount, 2);
                 genderReport[i].PercentageText = $"{Math.Round(genderReport[i].Percentage * 100, 2)}%";
             }
 
-            DateTime now = DateTime.Now;            
+            DateTime now = DateTime.Now;
 
-            int[] totals = new int[] { 0, 0, 0, 0};
+            int[] totals = new int[] { 0, 0, 0, 0 };
 
             foreach (Member m in members)
             {
@@ -81,7 +81,7 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < dietaryReport.Count(); i++)
             {
-                dietaryReport[i].Percentage = Math.Round(dietaryReport[i].Percentage/dietaryTotal, 2);
+                dietaryReport[i].Percentage = Math.Round(dietaryReport[i].Percentage / dietaryTotal, 2);
                 dietaryReport[i].PercentageText = $"{dietaryReport[i].Percentage * 100}%";
             }
 
@@ -171,7 +171,7 @@ namespace GROW_CRM.Controllers.Helpers
 
             foreach (Member m in members)
             {
-                misList.Add(new HouseholdInformation 
+                misList.Add(new HouseholdInformation
                 {
                     Code = m.HouseholdID,
                     Name = m.FullName,
@@ -237,62 +237,61 @@ namespace GROW_CRM.Controllers.Helpers
 
             return renewalReportsFiltered;
         }
-    }
-
-    public static IEnumerable GetSalesData(GROWContext _context)
-    {
-        var newSales = _context.Orders
-                            .Include(o => o.Member)
-                            .Include(o => o.OrderItems).ThenInclude(i => i.Item)
-                            .Select(ns => new OrdersReport
-                            {
-                                ID = ns.ID,
-                                Member = ns.Member.FullName,
-                                Date = ns.Date,
-                                Total = ns.Total
-                            }).ToList();
-
-        List<OrdersReport> newOrdersfiltered = new List<OrdersReport>();
-
-        DateTime lastWeek = DateTime.Now.AddDays(-14);
-
-        foreach (OrdersReport or in newSales)
+        public static IEnumerable GetSalesData(GROWContext _context)
         {
-            TimeSpan diff = (TimeSpan)(or.Date - lastWeek);
-            double tds = diff.TotalDays;
-            if (tds > 7) continue;
-            newOrdersfiltered.Add(or);
+            var newSales = _context.Orders
+                                .Include(o => o.Member)
+                                .Include(o => o.OrderItems).ThenInclude(i => i.Item)
+                                .Select(ns => new OrdersReport
+                                {
+                                    ID = ns.ID,
+                                    Member = ns.Member.FullName,
+                                    Date = ns.Date,
+                                    Total = ns.Total
+                                }).ToList();
+
+            List<OrdersReport> newOrdersfiltered = new List<OrdersReport>();
+
+            DateTime lastWeek = DateTime.Now.AddDays(-14);
+
+            foreach (OrdersReport or in newSales)
+            {
+                TimeSpan diff = (TimeSpan)(or.Date - lastWeek);
+                double tds = diff.TotalDays;
+                if (tds > 7) continue;
+                newOrdersfiltered.Add(or);
+            }
+
+            return newOrdersfiltered;
         }
 
-        return newOrdersfiltered;
-    }
-
-    public static IEnumerable GetNewItems(GROWContext _context)
-    {
-        var newAdditions = _context.Items
-                            .Include(h => h.Category)
-                            .Select(na => new NewItemsReport
-                            {
-                                ID = na.ID,
-                                Code = na.Code,
-                                Name = na.Name,
-                                Price = na.Price,
-                                Category = na.Category.Name,
-                                CreatedOn = na.CreatedOn
-                            }).ToList();
-
-        List<NewItemsReport> newAdditionsfiltered = new List<NewItemsReport>();
-
-        DateTime lastWeek = DateTime.Now.AddDays(-7);
-
-        foreach (NewItemsReport na in newAdditions)
+        public static IEnumerable GetNewItems(GROWContext _context)
         {
-            TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
-            double tds = diff.TotalDays;
-            if (tds > 7) continue;
-            newAdditionsfiltered.Add(na);
-        }
+            var newAdditions = _context.Items
+                                .Include(h => h.Category)
+                                .Select(na => new NewItemsReport
+                                {
+                                    ID = na.ID,
+                                    Code = na.Code,
+                                    Name = na.Name,
+                                    Price = na.Price,
+                                    Category = na.Category.Name,
+                                    CreatedOn = na.CreatedOn
+                                }).ToList();
 
-        return newAdditionsfiltered;
+            List<NewItemsReport> newAdditionsfiltered = new List<NewItemsReport>();
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            foreach (NewItemsReport na in newAdditions)
+            {
+                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
+                double tds = diff.TotalDays;
+                if (tds > 7) continue;
+                newAdditionsfiltered.Add(na);
+            }
+
+            return newAdditionsfiltered;
+        }
     }
 }

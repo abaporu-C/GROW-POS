@@ -1,0 +1,41 @@
+﻿@using GROW_CRM.ViewModels.ReportsViewModels
+
+@{
+    @if ((int)ViewData["Count"] > 0)
+    {
+        <a asp-action="DownloadItems" class="btn btn-info float-left">Download New Items Report</a>
+    }
+    <br />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                @foreach (string header in (string[])ViewBag.Headers)
+                {
+                    <th>@header</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (NewItemsReport item in ViewBag.Report)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        $ @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedOn)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
