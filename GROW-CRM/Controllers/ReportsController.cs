@@ -55,6 +55,12 @@ namespace GROW_CRM.Controllers
                 case "4":
                     GetIncomeInfo();
                     break;
+                case "5":
+                    GetSales();
+                    break;
+                case "6":
+                    GetNewItems();
+                    break;
                 default:
                     return View("Index");                    
             }
@@ -1110,7 +1116,7 @@ namespace GROW_CRM.Controllers
 
         public IActionResult DownloadNewItems()
         {
-            List<NewAdditionsReport> newAdditionsfiltered = (List<NewAdditionsReport>)ReportsHelper.GetNewAdditions(_context);
+            List<NewItemsReport> newAdditionsfiltered = (List<NewItemsReport>)ReportsHelper.GetNewItems(_context);
             //How many rows?
             int numRows = newAdditionsfiltered.Count();
 
@@ -1135,17 +1141,16 @@ namespace GROW_CRM.Controllers
                     //     ExcelPackage package = new ExcelPackage(memStream);
                     // }
 
-                    var workSheet = excel.Workbook.Worksheets.Add("NewAdditionsReport");
+                    var workSheet = excel.Workbook.Worksheets.Add("NewItemsReport");
 
                     //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(newAdditionsfiltered, true);
 
                     //Style first column for dates
-                    workSheet.Column(3).Style.Numberformat.Format = "###,##0.00";
+                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
 
                     //Style fee column for currency
-                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
-                    workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd";
+                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -1193,7 +1198,7 @@ namespace GROW_CRM.Controllers
                     //workSheet.Column(7).Width = 10;
 
                     //Add a title and timestamp at the top of the report
-                    workSheet.Cells[1, 1].Value = "New Aditions Report";
+                    workSheet.Cells[1, 1].Value = "New Items Report";
                     using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
                     {
                         Rng.Merge = true; //Merge columns start and end range
@@ -1229,7 +1234,7 @@ namespace GROW_CRM.Controllers
                         using (var memoryStream = new MemoryStream())
                         {
                             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            Response.Headers["content-disposition"] = "attachment;  filename=NewAdditionsReport.xlsx";
+                            Response.Headers["content-disposition"] = "attachment;  filename=NewItemsReport.xlsx";
                             excel.SaveAs(memoryStream);
                             memoryStream.WriteTo(Response.Body);
                         }
@@ -1239,7 +1244,7 @@ namespace GROW_CRM.Controllers
                         try
                         {
                             Byte[] theData = excel.GetAsByteArray();
-                            string filename = "NewAdditionsReport.xlsx";
+                            string filename = "NewItemsReport.xlsx";
                             string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                             return File(theData, mimeType, filename);
                         }
@@ -1263,7 +1268,7 @@ namespace GROW_CRM.Controllers
             items.Add(new SelectListItem { Text = "Mapping", Value = "3" });
             items.Add(new SelectListItem { Text = "Income Information", Value = "4" });
             items.Add(new SelectListItem { Text = "Sales Report", Value = "5" });
-            items.Add(new SelectListItem { Text = "New Items Report", Value = "6" });
+            items.Add(new SelectListItem { Text = "New Items", Value = "6" });
 
             ViewBag.Reports = items;
         }

@@ -13,6 +13,5 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
         public double Price { get; set; }
         public string Category { get; set; }
         public DateTime? CreatedOn { get; set; }
-        public string CreatedBy { get; set; }
     }
 }
