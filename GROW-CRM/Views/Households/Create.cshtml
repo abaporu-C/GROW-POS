@@ -14,7 +14,7 @@
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Address</legend>
             <label for="noFixedAddr" class="control-label">No Fixed Address:</label>
-            <input type="checkbox" id="noFixedAddr" /><a href="#"  data-toggle="popover" title="No Fixed Address" data-content="Members with no fixed address will be registered with grow's address.'"><b>?</b></a> 
+            <input type="checkbox" id="noFixedAddr" /><a href="#"  data-toggle="popover" title="No Fixed Address" data-content="Members with no fixed address will be registered with GROW's address.'"><b>?</b></a> 
             <input asp-for="LastVerification" type="hidden" value="@DateTime.Now" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -65,11 +65,11 @@
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Other Info</legend>
             <div class="form-group">
-                <label id="NewIDLabel" class="control-label">Member Number:</label><a href="#"  data-toggle="popover" title="Custom ID" data-content="Customized Member ID."><b>?</b></a> 
+                <label id="NewIDLabel" class="control-label">Member ID:</label><a href="#"  data-toggle="popover" title="Custom ID" data-content="Use in case a specific ID number is needed."><b>?</b></a> 
                 @Html.TextBox("NewID", null, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label><a href="#"  data-toggle="popover" title="Household Name" data-content="Household Name."><b>?</b></a> 
+                <label asp-for="Name" class="control-label"></label><a href="#"  data-toggle="popover" title="Household Name" data-content="Member's Last Name"><b>?</b></a> 
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>

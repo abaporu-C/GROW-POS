@@ -102,6 +102,10 @@ namespace GROW_CRM.Data
                 .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
                 .IsUnique();
 
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => new { i.Code })
+                .IsUnique();
+
             //Cascading Delete Behavior
 
 
@@ -127,7 +131,7 @@ namespace GROW_CRM.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHold
-              modelBuilder.Entity<Household>()
+            modelBuilder.Entity<Household>()
                   .HasOne(h => h.Province)
                   .WithMany(p => p.Households)
                   .HasForeignKey(h => h.ProvinceID)

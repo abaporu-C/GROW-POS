@@ -1,4 +1,5 @@
-﻿@model GROW_CRM.Models.Order 
+﻿@using GROW_CRM.Models;
+@model GROW_CRM.Models.Order
 
 @{
     ViewData["Title"] = "Create";
@@ -54,21 +55,22 @@
                     <legend class="w-auto">Purchases</legend>
                     <div class="form-group" id="ListOrderItemss">
                         @*<label class="control-label">
-                            <button class="btn btn-outline-secondary" id="nowAddIncomeSituation" data-toggle="modal" data-target="#addIncomeSituationModal" type="button">
-                                <strong>+</strong>
-                            </button>
-                            <strong>Income Situations</strong>
-                        &nbsp; &nbsp;
-                        </label>*@
+                                <button class="btn btn-outline-secondary" id="nowAddItem" data-toggle="modal" data-target="#addItemModal" type="button">
+                                    <strong>+</strong>
+                                </button>
+                                <strong>Income Situations</strong>
+                            &nbsp; &nbsp;
+                            </label>*@
                         <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theOrderItemsModal" title="Add Item" type="button">
                             &#x271A;
                         </button><a href="#" data-toggle="popover" title="Items" data-content="Member's Items:"><b>?</b></a>
                         <div class="col-md-offset-1" id="OrderItemsList">
-                            @*<table>
+                            <table>
                                 @{
                                     foreach (var item in Model.OrderItems.OrderBy(oi => oi.Item.Name))
                                     {
-                                        @:<tr><td>
+                                        @:<tr>
+                                            <td>
                                                 @item.Item.Name
                                             @:</td><td>
                                                 @:&nbsp; &nbsp;
@@ -77,26 +79,26 @@
                                             @:</td></tr>
                                         }
                                 }
-                            </table>*@
+                            </table>
                         </div>
                     </div>
                 </fieldset>
 
 
                 @*<div class="col-md-8">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Items Purchased</label> <button type="button" id="btnItemRight" class="btn btn-danger btn-sm">
-                            <strong>-</strong>
-                        </button>
-                        @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Choose Items</label> <button type="button" id="btnItemLeft" class="btn btn-success btn-sm">
-                            <strong>+</strong>
-                        </button>
-                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
-                    </div>
-                </div>*@
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Items Purchased</label> <button type="button" id="btnItemRight" class="btn btn-danger btn-sm">
+                                <strong>-</strong>
+                            </button>
+                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Choose Items</label> <button type="button" id="btnItemLeft" class="btn btn-success btn-sm">
+                                <strong>+</strong>
+                            </button>
+                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+                        </div>
+                    </div>*@
 
 
             </div>
@@ -116,5 +118,77 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/refreshDDL.js"></script>
     <script src="~/js/multiselect.js"></script>
+    <script type="text/javascript">
+        $('#submitItemCreate').click(function (event) {
+            event.preventDefault();
+            var form = $('#createItemForm');
+            if (form.valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function () {
+                        $('#addItemModal').modal('hide');
+                    },
+                    error: function () {
+                        alert("Create Failed.  There was a problem adding the record.");
+                    }
+                });
+            }
+            return false;
+        });
+        $('#addItemModal').on('hide.bs.modal', function () {
+            $('#createItemForm').find("input[type=text], textarea, select").val("");//to clear the data in the popup
+            refreshDDL('ItemID', '/HouseholdMembers/GetItems', false, null, true, 'None', true);
+        });
+    </script>
+    <script>
+            //New for modal
+            function refreshModal(actionForm, OrderItemsID) {
+              switch (actionForm) {
+                  case 'CreateForm': $('#formOrderItemsBody').load('/OrderItemss/CreateOrderItems/' + @Model.ID);
+                    break;
+                  case 'EditForm': $('#formOrderItemsBody').load('/OrderItemss/EditOrderItems/' + OrderItemsID);
+                    break;
+                  case 'DeleteForm': $('#formOrderItemsBody').load('/OrderItemss/DeleteOrderItems/' + OrderItemsID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var OrderItemssID = $(this).attr("tag");
+                refreshModal(actionForm, OrderItemssID);
+            });
+            $(document).on("click", "#submitOrderItemsForm", function (event) {
+                event.preventDefault();
+                var form = $('#theOrderItemsForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            console.log($('#theOrderItemsModal'))
+                            $('#theOrderItemsModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed.  There was a problem maintaing the data.");
+                        }
+                    });
+                }
+                return false;
+            });
+        $('#theOrderItemsModal').on('hide.bs.modal', function () {
+            $('#OrderItemsList').load('/HouseholdMembers/OrderItemsList/@Model.ID');
+            });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
 }

@@ -397,6 +397,7 @@ namespace GROW_CRM.Controllers
             var genderReport = data.ElementAt(0);
             var ageReport = data.ElementAt(1);
             var dietaryReport = data.ElementAt(2);
+            var healthReport = data.ElementAt(3);
 
             ViewData["ReportType"] = "Demographics Report";
             ViewData["Count"] = memberCount;
@@ -404,6 +405,7 @@ namespace GROW_CRM.Controllers
             ViewBag.GenderReport = genderReport;
             ViewBag.AgeReport = ageReport;
             ViewBag.DietaryReport = dietaryReport;
+            ViewBag.HealthReport = healthReport;
 
             GetReportsDDLItems();
         }
@@ -422,11 +424,13 @@ namespace GROW_CRM.Controllers
             var genderReport = (List<GenderReport>)data.ElementAt(0);
             var ageReport = (List<AgeReport>)data.ElementAt(1);
             var dietaryReport = (List<DietaryReport>)data.ElementAt(2);
+            var healthReport = (List<HealthReport>)data.ElementAt(3);
 
             //How many rows?
             int genderRows = genderReport.Count();
             int ageRows = ageReport.Count();
             int restrictionsRows = dietaryReport.Count();
+            int healthRows = healthReport.Count();
 
             if (memberCount > 0) //We have data
             {

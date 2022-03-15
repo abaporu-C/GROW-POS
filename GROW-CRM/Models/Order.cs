@@ -15,7 +15,7 @@ namespace GROW_CRM.Models
 
         //Fields 
         public int ID { get; set; }
-
+        
         [Required]
         [Display(Name = "Household")]
         public int HouseholdCode { get; set; }
@@ -41,7 +41,7 @@ namespace GROW_CRM.Models
         public string Volunteer { get; set; }
 
         [DataType(DataType.Currency)]
-        public decimal Subtotal { get; set; }
+        public double Subtotal { get; set; }
 
         [DataType(DataType.Currency)]
         public double Taxes { get; set; }
