@@ -23,7 +23,7 @@ namespace GROW_CRM.Data
 
                 if (!context.HealthIssueTypes.Any())
                 {
-                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> { 
+                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> {
                         new HealthIssueType{Type = "Illness"},
                         new HealthIssueType{Type = "Concern"}
                     });
@@ -45,7 +45,7 @@ namespace GROW_CRM.Data
 
                     //Add DietaryRestrictions to dietaryRestrictions List
                     for (int i = 0; i < illnesses.Count(); i++)
-                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1});
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1 });
 
                     for (int i = 0; i < concerns.Count(); i++)
                         dietaryRestrictions.Add(new DietaryRestriction { Restriction = concerns[i], HealthIssueTypeID = 2 });
@@ -82,14 +82,14 @@ namespace GROW_CRM.Data
                 if (!context.Genders.Any())
                 {
                     //Array of gender names
-                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"};
+                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say" };
 
                     //List of Gender Objects
                     List<Gender> genders = new List<Gender>();
 
                     //Add Genders to genders List
                     for (int i = 0; i < names.Count(); i++)
-                        genders.Add(new Gender { Name = names[i]});
+                        genders.Add(new Gender { Name = names[i] });
 
                     //Add list to context
                     context.Genders.AddRange(genders);
@@ -116,7 +116,7 @@ namespace GROW_CRM.Data
 
                     //Save the changes
                     context.SaveChanges();
-                        
+
                 }
 
                 //Look for Income Situation
@@ -131,7 +131,7 @@ namespace GROW_CRM.Data
 
                     //add situations to list
                     for (int i = 0; i < situations.Count(); i++)
-                        incomeSituations.Add(new IncomeSituation { Situation = situations[i]});
+                        incomeSituations.Add(new IncomeSituation { Situation = situations[i] });
 
                     //add list to context
                     context.IncomeSituations.AddRange(incomeSituations);
@@ -154,7 +154,7 @@ namespace GROW_CRM.Data
                     context.Categories.AddRange(categories);
                     context.SaveChanges();
                 }
-                
+
                 //Looks for Items
                 if (!context.Items.Any())
                 {
@@ -374,7 +374,7 @@ namespace GROW_CRM.Data
 
                     //Fill message list
                     for (int i = 0; i < 10; i++)
-                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now});
+                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now });
 
                     //Add list to context
                     context.Messages.AddRange(messages);
@@ -446,7 +446,7 @@ namespace GROW_CRM.Data
 
 
                     context.Cities.AddRange(cities);
-                    context.SaveChanges();                                        
+                    context.SaveChanges();
                 }
 
                 //Look for Provinces
@@ -455,20 +455,82 @@ namespace GROW_CRM.Data
                     var provinces = new List<Province>
                     {
                         new Province { Code = "ON", Name = "Ontario"},
-                        //new Province { Code = "PE", Name = "Prince Edward Island"},
-                        //new Province { Code = "NB", Name = "New Brunswick"},
-                        //new Province { Code = "BC", Name = "British Columbia"},
-                        //new Province { Code = "NL", Name = "Newfoundland and Labrador"},
-                        //new Province { Code = "SK", Name = "Saskatchewan"},
-                        //new Province { Code = "NS", Name = "Nova Scotia"},
-                        //new Province { Code = "MB", Name = "Manitoba"},
-                        //new Province { Code = "QC", Name = "Quebec"},
-                        //new Province { Code = "YT", Name = "Yukon"},
-                        //new Province { Code = "NU", Name = "Nunavut"},
-                        //new Province { Code = "NT", Name = "Northwest Territories"},
-                        //new Province { Code = "AB", Name = "Alberta"}
+                        new Province { Code = "PE", Name = "Prince Edward Island"},
+                        new Province { Code = "NB", Name = "New Brunswick"},
+                        new Province { Code = "BC", Name = "British Columbia"},
+                        new Province { Code = "NL", Name = "Newfoundland and Labrador"},
+                        new Province { Code = "SK", Name = "Saskatchewan"},
+                        new Province { Code = "NS", Name = "Nova Scotia"},
+                        new Province { Code = "MB", Name = "Manitoba"},
+                        new Province { Code = "QC", Name = "Quebec"},
+                        new Province { Code = "YT", Name = "Yukon"},
+                        new Province { Code = "NU", Name = "Nunavut"},
+                        new Province { Code = "NT", Name = "Northwest Territories"},
+                        new Province { Code = "AB", Name = "Alberta"}
                     };
                     context.Provinces.AddRange(provinces);
+                    context.SaveChanges();
+                }
+
+
+                //Look for Households
+                if (!context.Households.Any())
+                {
+                    //Foreign Keys
+                    int[] provincesIDs = context.Provinces.Select(p => p.ID).ToArray();
+                    int provinceCount = provincesIDs.Count();
+
+                    int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
+                    int householdStatusesCount = householdStatusesIDs.Count();
+
+                    int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
+                    int citiesCount = citiesIDs.Count();
+
+                    //Add Households to context
+                    context.Households.AddRange(
+                        new Household
+                        {
+                            Name = "House #1",
+                            StreetNumber = "65",
+                            StreetName = "Church St.",
+                            AptNumber = "201",
+                            PostalCode = "R3E 9C8",
+                            LICOVerified = true,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 1
+                        },
+                        new Household
+                        {
+                            Name = "House #2",
+                            StreetNumber = "1848",
+                            StreetName = "Paddock Trail Dr.",
+
+                            PostalCode = "L2H 1W8",
+                            LICOVerified = false,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                            HouseholdStatusID = 2
+                        },
+                         new Household
+                         {
+                             Name = "House #3",
+                             StreetNumber = "101",
+                             StreetName = "Development Ave.",
+
+                             PostalCode = "L2P 1W8",
+                             LICOVerified = false,
+                             LastVerification = DateTime.Now,
+                             CityID = citiesIDs[rnd.Next(citiesCount)],
+                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
+                             HouseholdStatusID = 2
+                         }
+
+                    ); ;
+
+                    //Save changes
                     context.SaveChanges();
                 }
 
@@ -477,15 +539,15 @@ namespace GROW_CRM.Data
                 {
                     //Foreign Keys
                     int[] householdIDs = context.Households.Select(h => h.ID).ToArray();
-                    int householdCount = householdIDs.Count();                    
+                    int householdCount = householdIDs.Count();
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();                    
+                    int genderCount = genderIDs.Count();
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
-                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G"};
-                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise"};
+                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G" };
+                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise" };
 
                     //Start DOB
                     DateTime startDOB = Convert.ToDateTime("1992-08-22");
@@ -493,9 +555,9 @@ namespace GROW_CRM.Data
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];
 
-                        for(int j = 0; j < rnd.Next(5) + 1; j++)
+                        for (int j = 0; j < rnd.Next(5) + 1; j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -510,7 +572,7 @@ namespace GROW_CRM.Data
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i]
-                                }    
+                                }
                             );
 
                             context.SaveChanges();
@@ -526,9 +588,9 @@ namespace GROW_CRM.Data
                     int drCount = drIDs.Count();
 
                     int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();                    
+                    int memberCount = memberIDs.Count();
 
-                    foreach(int memberID in memberIDs)
+                    foreach (int memberID in memberIDs)
                     {
                         if ((memberID % 3) == 0) continue;
 

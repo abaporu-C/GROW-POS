@@ -12,7 +12,7 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
         public DateTime Date { get; set; }
         public decimal Total { get; set; }
         public string Member { get; set; }
-        public ICollection<OrderItem> OrderItems { get; set; }
+        //public ICollection<OrderItem> OrderItems { get; set; }
         public int NumberOfItems { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using GROW_CRM.Models.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GROW_CRM.Models
 {
@@ -11,6 +12,21 @@ namespace GROW_CRM.Models
             OrderItems = new HashSet<OrderItem>();
         }
 
+        [Display(Name = "Number of Items")]
+        public int NumberOfMembers
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (OrderItem m in OrderItems)
+                {
+                    count++;
+                }
+
+                return count;
+            }
+        }
         //Fields 
         public int ID { get; set; }
 

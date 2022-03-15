@@ -247,6 +247,7 @@ namespace GROW_CRM.Controllers.Helpers
                                     ID = ns.ID,
                                     Member = ns.Member.FullName,
                                     Date = ns.Date,
+                                    NumberOfItems = ns.NumberOfMembers,
                                     Total = ns.Total
                                 }).ToList();
 
