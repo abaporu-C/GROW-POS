@@ -33,8 +33,8 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < genderReport.Count(); i++)
             {
-                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total/memberCount, 2);
-                genderReport[i].PercentageText = $"{Math.Round(genderReport[i].Percentage * 100, 2)}%";
+                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total/(double)memberCount, 2);
+                genderReport[i].PercentageText = $"{Math.Round((double)genderReport[i].Percentage * (double)100, 2)}%";
             }
 
             DateTime now = DateTime.Now;            
@@ -44,7 +44,7 @@ namespace GROW_CRM.Controllers.Helpers
             foreach (Member m in members)
             {
                 TimeSpan diff = (TimeSpan)(now - m.DOB);
-                int diffYears = (int)Math.Round(diff.TotalDays / 365);
+                int diffYears = (int)Math.Round((double)diff.TotalDays / (double)365);
 
                 if (diffYears < 13) totals[0] += 1;
                 else if (diffYears < 19) totals[1] += 1;
@@ -64,7 +64,7 @@ namespace GROW_CRM.Controllers.Helpers
                 ageReport[i].Total = totals[i];
                 double per = Math.Round((double)(totals[i] / (double)memberCount), 2);
                 ageReport[i].Percentage = per;
-                ageReport[i].PercentageText = $"{per * 100}%";
+                ageReport[i].PercentageText = $"{Math.Round((double)per * 100, 2)}%";
             }
 
             var dietaryTotal = _context.DietaryRestrictionMembers.Count();
@@ -81,8 +81,8 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < dietaryReport.Count(); i++)
             {
-                dietaryReport[i].Percentage = Math.Round(dietaryReport[i].Percentage/dietaryTotal, 2);
-                dietaryReport[i].PercentageText = $"{dietaryReport[i].Percentage * 100}%";
+                dietaryReport[i].Percentage = Math.Round((double)dietaryReport[i].Percentage/(double)dietaryTotal, 2);
+                dietaryReport[i].PercentageText = $"{Math.Round((double)dietaryReport[i].Percentage * (double)100, 2)}%";
             }
 
             return new List<IEnumerable> { genderReport, ageReport, dietaryReport };
