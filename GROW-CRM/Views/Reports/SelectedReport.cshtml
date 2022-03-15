@@ -101,4 +101,12 @@
     {
         <partial name="~/Views/Reports/Partial/_Income.cshtml" />
     }
+    else if ((string)ViewData["ReportType"] == "Sales Report")
+    {
+        <partial name="~/Views/Reports/Partial/_Sales.cshtml" />
+    }
+    else if ((string)ViewData["ReportType"] == "New Items Report")
+    {
+        <partial name="~/Views/Reports/Partial/_NewItems.cshtml" />
+    }
 }
