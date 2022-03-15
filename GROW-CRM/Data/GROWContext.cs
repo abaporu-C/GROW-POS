@@ -93,6 +93,15 @@ namespace GROW_CRM.Data
         {
             //modelBuilder.HasDefaultSchema("GROW");
 
+            //Adding Unique Constraints
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Name)
+                .IsUnique();
+
             //Adding Composite Keys
             modelBuilder.Entity<DietaryRestrictionMember>()
                 .HasKey(dm => new { dm.MemberID, dm.DietaryRestrictionID });
