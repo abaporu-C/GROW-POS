@@ -455,82 +455,20 @@ namespace GROW_CRM.Data
                     var provinces = new List<Province>
                     {
                         new Province { Code = "ON", Name = "Ontario"},
-                        new Province { Code = "PE", Name = "Prince Edward Island"},
-                        new Province { Code = "NB", Name = "New Brunswick"},
-                        new Province { Code = "BC", Name = "British Columbia"},
-                        new Province { Code = "NL", Name = "Newfoundland and Labrador"},
-                        new Province { Code = "SK", Name = "Saskatchewan"},
-                        new Province { Code = "NS", Name = "Nova Scotia"},
-                        new Province { Code = "MB", Name = "Manitoba"},
-                        new Province { Code = "QC", Name = "Quebec"},
-                        new Province { Code = "YT", Name = "Yukon"},
-                        new Province { Code = "NU", Name = "Nunavut"},
-                        new Province { Code = "NT", Name = "Northwest Territories"},
-                        new Province { Code = "AB", Name = "Alberta"}
+                        //new Province { Code = "PE", Name = "Prince Edward Island"},
+                        //new Province { Code = "NB", Name = "New Brunswick"},
+                        //new Province { Code = "BC", Name = "British Columbia"},
+                        //new Province { Code = "NL", Name = "Newfoundland and Labrador"},
+                        //new Province { Code = "SK", Name = "Saskatchewan"},
+                        //new Province { Code = "NS", Name = "Nova Scotia"},
+                        //new Province { Code = "MB", Name = "Manitoba"},
+                        //new Province { Code = "QC", Name = "Quebec"},
+                        //new Province { Code = "YT", Name = "Yukon"},
+                        //new Province { Code = "NU", Name = "Nunavut"},
+                        //new Province { Code = "NT", Name = "Northwest Territories"},
+                        //new Province { Code = "AB", Name = "Alberta"}
                     };
                     context.Provinces.AddRange(provinces);
-                    context.SaveChanges();
-                }
-
-
-                //Look for Households
-                if (!context.Households.Any())
-                {
-                    //Foreign Keys
-                    int[] provincesIDs = context.Provinces.Select(p => p.ID).ToArray();
-                    int provinceCount = provincesIDs.Count();
-
-                    int[] householdStatusesIDs = context.HouseholdStatuses.Select(p => p.ID).ToArray();
-                    int householdStatusesCount = householdStatusesIDs.Count();
-
-                    int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
-                    int citiesCount = citiesIDs.Count();
-
-                    //Add Households to context
-                    context.Households.AddRange(
-                        new Household
-                        {
-                            Name = "House #1",
-                            StreetNumber = "65",
-                            StreetName = "Church St.",
-                            AptNumber = "201",
-                            PostalCode = "R3E 9C8",
-                            LICOVerified = true,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                            HouseholdStatusID = 1
-                        },
-                        new Household
-                        {
-                            Name = "House #2",
-                            StreetNumber = "1848",
-                            StreetName = "Paddock Trail Dr.",
-
-                            PostalCode = "L2H 1W8",
-                            LICOVerified = false,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                            HouseholdStatusID = 2
-                        },
-                         new Household
-                         {
-                             Name = "House #3",
-                             StreetNumber = "101",
-                             StreetName = "Development Ave.",
-
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                             HouseholdStatusID = 2
-                         }
-
-                    ); ;
-
-                    //Save changes
                     context.SaveChanges();
                 }
 

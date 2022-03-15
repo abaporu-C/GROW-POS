@@ -27,9 +27,24 @@
 
 @if ((int)ViewData["Count"] < 1)
 {
-    <br>
-    <h3>Sorry, there are no households that apply to this report.</h3>
-    <br>
+    if ((string)ViewData["ReportType"] == "Sales Report")
+    {
+        <br>
+        <h3>Sorry, there are no sales to show for this week.</h3>
+        <br>
+    }
+    else if ((string)ViewData["ReportType"] == "New Items Report")
+    {
+        <br>
+        <h3>Sorry, there are no items created this week.</h3>
+        <br>
+    }
+    else 
+    { 
+        <br>
+        <h3>Sorry, there are no households that apply to this report.</h3>
+        <br>
+    }
 }
 
 @{
