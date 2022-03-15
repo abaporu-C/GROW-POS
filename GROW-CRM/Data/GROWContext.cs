@@ -38,6 +38,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        //public DbSet<About> Abouts { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -58,7 +60,7 @@ namespace GROW_CRM.Data
 
         public DbSet<IncomeSituation> IncomeSituations { get; set; }
 
-        public DbSet<Item> Items { get; set; }        
+        public DbSet<Item> Items { get; set; }
 
         public DbSet<Member> Members { get; set; }
 
@@ -99,12 +101,9 @@ namespace GROW_CRM.Data
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
             modelBuilder.Entity<MemberIncomeSituation>()
-                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
+                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID })
                 .IsUnique();
 
-            modelBuilder.Entity<Item>()
-                .HasIndex(i => new { i.Code })
-                .IsUnique();
 
             //Cascading Delete Behavior
 
@@ -132,10 +131,10 @@ namespace GROW_CRM.Data
 
             //HouseHold
             modelBuilder.Entity<Household>()
-                  .HasOne(h => h.Province)
-                  .WithMany(p => p.Households)
-                  .HasForeignKey(h => h.ProvinceID)
-                  .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(h => h.Province)
+                .WithMany(p => p.Households)
+                .HasForeignKey(h => h.ProvinceID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Household>()
                 .HasOne(h => h.City)
@@ -174,7 +173,7 @@ namespace GROW_CRM.Data
                 .HasOne(m => m.Household)
                 .WithMany(h => h.Members)
                 .HasForeignKey(m => m.HouseholdID)
-                .OnDelete(DeleteBehavior.Restrict);            
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Order
             modelBuilder.Entity<Order>()
@@ -196,11 +195,12 @@ namespace GROW_CRM.Data
                 .HasForeignKey(oi => oi.ItemID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Order)
-                .WithMany(o => o.OrderItems)
-                .HasForeignKey(oi => oi.OrderID)
-                .OnDelete(DeleteBehavior.Restrict);
+            /* //About          
+             modelBuilder.Entity<About>()
+                 .HasOne(oi => oi.Item)
+                 .WithMany(i => i.OrderItems)
+                 .HasForeignKey(oi => oi.ItemID)
+                 .OnDelete(DeleteBehavior.Restrict);*/
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

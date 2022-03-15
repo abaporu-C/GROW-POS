@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="row mt-4 mb-4">
-        <div class=col-md-4>
+        <div class=col-md-3>
             <label for="income-source">Income Source</label>
             <ul id="income-source" class="list-group list-group-flush">
                 @{
@@ -79,7 +79,7 @@
                 }                
             </ul>
         </div>
-        <div class="col-md-4">            
+        <div class="col-md-3">            
             @{
                 var illness = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 0).Select(drm => drm); 
                 var concerns = Model.DietaryRestrictionMembers.Where(drm => drm.DietaryRestriction.HealthIssueTypeID == 1).Select(drm => drm); 
@@ -120,7 +120,7 @@
 
             }
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="documents">Documents</label>
             <ul id="documents" class="list-group list-group-flush">
                 @{
@@ -155,7 +155,45 @@
                     }
                 }
             </ul>
-        </div>        
+        </div>
+            <div class="col-md-3">
+                <label for="orders">Orders</label>
+                <ul id="orders" class="list-group list-group-flush">
+                    @{
+                        int orderCount = Model.Orders.Count;
+                        if (orderCount > 0)
+                        {
+                            var firstOrder = Model.Orders.FirstOrDefault();
+                            if (orderCount > 1)
+                            {
+                                <li class="list-group-item">
+                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                                        <span class="badge badge-info">@orderCount</span> Current Orders
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(Model.ID)">
+                                        @{
+                                            foreach (var o in Model.Orders)
+                                            {
+                                                <a asp-action="Download" asp-route="@o.ID">@o.ID</a>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item">
+                                    <a asp-action="Download" asp-route-id="@firstOrder.ID">@firstOrder.ID</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item">No Orders</li>
+                        }
+                    }
+                </ul>
+            </div>
 </div>
     </div>
 <div>

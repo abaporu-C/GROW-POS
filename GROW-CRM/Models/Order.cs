@@ -37,9 +37,6 @@ namespace GROW_CRM.Models
         [Required]
         public string Payment { get; set; }
 
-        [Required]
-        public string Volunteer { get; set; }
-
         [DataType(DataType.Currency)]
         public double Subtotal { get; set; }
 
