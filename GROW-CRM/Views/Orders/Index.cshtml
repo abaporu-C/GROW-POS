@@ -54,16 +54,10 @@
                     <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" disabled="disabled" value="Purchases" class="btn btn-link" />
-                </th>
-                <th>
                     <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Payment" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" disabled="disabled" value="Volunteer" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -71,75 +65,29 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Household)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HouseMember)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Purchases)
-                    </td>
-                    <td>
-                        Primary: <strong>@Html.DisplayFor(modelItem => item.Purchases)</strong><br />
-                        @{
-                            int theCount = item.Purchases.Count();
-                            if (theCount > 0)
-                            {
-                                string first = item.Purchases.FirstOrDefault().ToString();
-                                if (theCount > 1)
-                                {
-                                    string theList = first;
-                                    var c = item.Purchases.ToList();
-                                    for (int i = 1; i < theCount; i++)
-                                    {
-                                        theList += ", " + c[i];
-                                    }
-                                    @:Alt:
-                                    <a tabindex="0" class="" role="button" data-toggle="popover"
-                                       data-trigger="focus" title="All Purchases" data-placement="bottom"
-                                       data-content="@theList">
-                                        @first... <span class="badge badge-info">
-                                            @theCount
-                                        </span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    @:Alt:
-                                    @first
-                                }
-                            }
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Total)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Payment)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Volunteer)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-                </tr>
-            }
+        <tr>
+            <td>
+                @ViewData["Household"]
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentType.Type)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>            }
         </tbody>
     </table>
     <partial name="_PagingNavBar" />
 </form>
-@section Scripts {
-    <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="popover"]').popover();
-        });
-    </script>
-}
