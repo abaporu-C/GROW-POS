@@ -23,7 +23,7 @@ namespace GROW_CRM.Data
 
                 if (!context.HealthIssueTypes.Any())
                 {
-                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> { 
+                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> {
                         new HealthIssueType{Type = "Illness"},
                         new HealthIssueType{Type = "Concern"}
                     });
@@ -45,7 +45,7 @@ namespace GROW_CRM.Data
 
                     //Add DietaryRestrictions to dietaryRestrictions List
                     for (int i = 0; i < illnesses.Count(); i++)
-                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1});
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1 });
 
                     for (int i = 0; i < concerns.Count(); i++)
                         dietaryRestrictions.Add(new DietaryRestriction { Restriction = concerns[i], HealthIssueTypeID = 2 });
@@ -82,14 +82,14 @@ namespace GROW_CRM.Data
                 if (!context.Genders.Any())
                 {
                     //Array of gender names
-                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"};
+                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say" };
 
                     //List of Gender Objects
                     List<Gender> genders = new List<Gender>();
 
                     //Add Genders to genders List
                     for (int i = 0; i < names.Count(); i++)
-                        genders.Add(new Gender { Name = names[i]});
+                        genders.Add(new Gender { Name = names[i] });
 
                     //Add list to context
                     context.Genders.AddRange(genders);
@@ -116,7 +116,7 @@ namespace GROW_CRM.Data
 
                     //Save the changes
                     context.SaveChanges();
-                        
+
                 }
 
                 //Look for Income Situation
@@ -131,7 +131,7 @@ namespace GROW_CRM.Data
 
                     //add situations to list
                     for (int i = 0; i < situations.Count(); i++)
-                        incomeSituations.Add(new IncomeSituation { Situation = situations[i]});
+                        incomeSituations.Add(new IncomeSituation { Situation = situations[i] });
 
                     //add list to context
                     context.IncomeSituations.AddRange(incomeSituations);
@@ -154,20 +154,20 @@ namespace GROW_CRM.Data
                     context.Categories.AddRange(categories);
                     context.SaveChanges();
                 }
-                
+
                 //Looks for Items
                 if (!context.Items.Any())
                 {
                     var produceItems = new List<Item> {
                             new Item { Code = "148", Name = "Anise / Fennel", Price = 1.50 },
                             new Item { Code = "101", Name = "Apples", Price = 0.10 },
-                            new Item { Code = "102", Name = "Avocado large*", Price = 1.00 },
-                            new Item { Code = "103", Name = "Avocado small*", Price = 0.50 },
+                            new Item { Code = "102", Name = "Avocado large", Price = 1.00 },
+                            new Item { Code = "103", Name = "Avocado small", Price = 0.50 },
                             new Item { Code = "104", Name = "Bananas", Price = 0.10 },
                             new Item { Code = "105", Name = "Blueberries / Blackberries", Price = 1.50 },
                             new Item { Code = "106", Name = "Broccoli", Price = 2.00 },
                             new Item { Code = "147", Name = "Brussel Sprouts", Price = 1.00 },
-                            new Item { Code = "127", Name = "Cabbage *", Price = 2.00 },
+                            new Item { Code = "127", Name = "Cabbage", Price = 2.00 },
                             new Item { Code = "107", Name = "Cantaloupe", Price = 1.50 },
                             new Item { Code = "108", Name = "Carrots", Price = 0.05 },
                             new Item { Code = "109", Name = "Cauliflower", Price = 2.50 },
@@ -177,31 +177,31 @@ namespace GROW_CRM.Data
                             new Item { Code = "113", Name = "Cucumber", Price = 1.00 },
                             new Item { Code = "114", Name = "Cucumber Mini", Price = 0.05 },
                             new Item { Code = "115", Name = "Eggplant", Price = 0.10 },
-                            new Item { Code = "116", Name = "Garlic *", Price = 0.25 },
-                            new Item { Code = "117", Name = "Grapes *", Price = 1.00 },
+                            new Item { Code = "116", Name = "Garlic", Price = 0.25 },
+                            new Item { Code = "117", Name = "Grapes", Price = 1.00 },
                             new Item { Code = "118", Name = "Green Onions", Price = 0.25 },
                             new Item { Code = "119", Name = "Kale", Price = 0.50 },
                             new Item { Code = "120", Name = "Kiwi", Price = 0.25 },
-                            new Item { Code = "121", Name = "Lemon *", Price = 0.25 },
+                            new Item { Code = "121", Name = "Lemon", Price = 0.25 },
                             new Item { Code = "122", Name = "Lettuce Romaine Hearts", Price = 0.50 },
                             new Item { Code = "123", Name = "Limes", Price = 0.05 },
                             new Item { Code = "124", Name = "Mango", Price = 1.00 },
                             new Item { Code = "125", Name = "Micro Greens", Price = 0.25 },
-                            new Item { Code = "126", Name = "Mushrooms *", Price = 1.50 },
+                            new Item { Code = "126", Name = "Mushrooms", Price = 1.50 },
                             new Item { Code = "128", Name = "Onion", Price = 0.05 },
                             new Item { Code = "129", Name = "Oranges", Price = 0.20 },
                             new Item { Code = "130", Name = "Peaches / Nectarines", Price = 0.10 },
                             new Item { Code = "131", Name = "Pear", Price = 0.10 },
                             new Item { Code = "132", Name = "Peppers", Price = 0.50 },
-                            new Item { Code = "133", Name = "Peppers Hot 3 / 0.05", Price = 0.05 },
+                            new Item { Code = "133", Name = "Peppers Hot (3)", Price = 0.05 },
                             new Item { Code = "134", Name = "Peppers Mini", Price = 0.05 },
                             new Item { Code = "135", Name = "Plums", Price = 0.05 },
                             new Item { Code = "136", Name = "Potatoes", Price = 0.05 },
-                            //new Item { Code = "136", Name = "Bag of Potatoes", Price = 1.50 },
+                            new Item { Code = "150", Name = "Bag of Potatoes", Price = 1.50 },
                             new Item { Code = "137", Name = "Potatoes Baby Basket", Price = 0.50 },
-                            new Item { Code = "138", Name = "Potatoes Sweet(Yam)", Price = 0.75 },
+                            new Item { Code = "138", Name = "Potatoes Sweet (Yam)", Price = 0.75 },
                             new Item { Code = "139", Name = "Raspberries", Price = 1.50 },
-                            //new Item { Code = "147", Name = "Shallots", Price = 0.05 },
+                            new Item { Code = "149", Name = "Shallots", Price = 0.05 },
                             new Item { Code = "140", Name = "Squash", Price = 2.50 },
                             new Item { Code = "141", Name = "Strawberries", Price = 1.50 },
                             new Item { Code = "142", Name = "Swiss Chard", Price = 0.50 },
@@ -212,13 +212,13 @@ namespace GROW_CRM.Data
                             };
 
                     var freezerItems = new List<Item> {
-                            new Item { Code = "201", Name = "Chicken Legs(2)", Price =  1.00 },
+                            new Item { Code = "201", Name = "Chicken Legs (2)", Price =  1.00 },
                             new Item { Code = "202", Name = "Chicken Drumsticks 4lbs", Price = 3.00 },
                             new Item { Code = "203", Name = "Chicken Thighs 4lbs", Price = 3.00 },
                             new Item { Code = "204", Name = "Chicken Wings 2lbs", Price = 2.00 },
                             new Item { Code = "205", Name = "Ground Beef", Price =  2.75 },
                             new Item { Code = "206", Name = "Veggie Burger 2pc", Price = 2.00 },
-                            new Item { Code = "207", Name = "Fish(Haddock / Basa)", Price = 1.00 }
+                            new Item { Code = "207", Name = "Fish (Haddock / Basa)", Price = 1.00 }
                             };
 
                     var dairyItems = new List<Item> {
@@ -228,84 +228,84 @@ namespace GROW_CRM.Data
                             new Item { Code = "303", Name = "Butter",   Price = 1.00 },
                             new Item { Code = "304", Name = "Cheese Large", Price = 3.00 },
                             new Item { Code = "305", Name = "Cream Cheese", Price = 2.00 },
-                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 2.00 },
-                            //new Item { Code = "306", Name = "Eggs (12)   ", Price = 3.00 },
-                            new Item { Code = "307", Name = "Goat Milk 1l", Price = 2.00 },
+                            new Item { Code = "306", Name = "Eggs (12)", Price = 2.00 },
+                            new Item { Code = "325", Name = "Eggs (18)", Price = 3.00 },
+                            new Item { Code = "307", Name = "Goat Milk 1L", Price = 2.00 },
                             new Item { Code = "308", Name = "Hummus",   Price = 2.50 },
                             new Item { Code = "309", Name = "Hummus Mini",  Price = 0.25 },
                             new Item { Code = "310", Name = "Margerine",    Price = 1.50 },
                             new Item { Code = "311", Name = "Milk - 1L",    Price = 1.00 },
                             new Item { Code = "312", Name = "Milk - 4L",    Price = 3.00 },
-                            new Item { Code = "313", Name = "Oat Milk 1l",  Price = 2.00 },
+                            new Item { Code = "313", Name = "Oat Milk 1L",  Price = 2.00 },
                             new Item { Code = "314", Name = "Orange Juice", Price = 2.00 },
                             new Item { Code = "315", Name = "Pizza Dough",  Price = 2.00 },
                             new Item { Code = "316", Name = "Sour Crème",   Price = 2.00 },
-                            new Item { Code = "317", Name = "Soy Milk 1l",  Price = 2.00 },
+                            new Item { Code = "317", Name = "Soy Milk 1L",  Price = 2.00 },
                             new Item { Code = "318", Name = "Tofu", Price = 2.50 },
                             new Item { Code = "319", Name = "Yogurt 4 pack",    Price = 1.00 },
                             new Item { Code = "322", Name = "Yogurt 6 pack",    Price = 1.50 },
                             new Item { Code = "320", Name = "Yogurt Greek", Price = 3.00 },
                             new Item { Code = "321", Name = "Yogurt Tub",   Price = 2.00 },
-                            //new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
+                            new Item { Code = "324", Name = "Sliced Cheese",    Price = 2.50 }
                             };
 
                     var pantryItems = new List<Item> {
-                            new Item { Code = "401", Name = " Apple Sauce", Price = 1.00 },
-                            new Item { Code = "402", Name = " Baking Powder", Price =   2.00 },
-                            new Item { Code = "403", Name = " Bars Cereal. Protein. Cookie", Price =    0.50 },
-                            new Item { Code = "404", Name = " BBQ Sauce", Price =   1.00 },
-                            new Item { Code = "405", Name = " Bleach", Price =  2.00 },
-                            new Item { Code = "406", Name = " Broth", Price =   1.00 },
-                            new Item { Code = "407", Name = " Canned Beans. Veggies. and Fruit", Price =    0.75 },
-                            new Item { Code = "408", Name = " Canola Oil", Price =  3.00 },
-                            new Item { Code = "409", Name = " Cereal all other", Price =    2.00 },
-                            new Item { Code = "410", Name = " Cereal Rice Krispies", Price =    3.00 },
-                            new Item { Code = "445", Name = " Coconut Milk", Price =    1.00 },
-                            //new Item { Code = "445", Name = " Coffee", Price =  4.00 },
-                            new Item { Code = "411", Name = " Crackers ", Price =   2.00 },
-                            new Item { Code = "412", Name = " Dried Legumes/Beans", Price = 1.50 },
-                            new Item { Code = "413", Name = " Flour", Price =   2.00 },
-                            new Item { Code = "414", Name = " Garden Cocktail", Price = 0.75 },
-                            new Item { Code = "415", Name = " Granola Bars 6 pack", Price = 1.00 },
-                            //new Item { Code = "446", Name = " Gummies", Price = 0.10 },
-                            new Item { Code = "416", Name = " Jam", Price = 2.00 },
-                            new Item { Code = "417", Name = " Kraft Dinner", Price =    1.00 },
-                            new Item { Code = "418", Name = " Laundry Soap large", Price =  6.00 },
-                            new Item { Code = "419", Name = " Laundry Soap small", Price =  3.00 },
-                            new Item { Code = "420", Name = " Miracle Whip", Price =    3.00 },
-                            new Item { Code = "421", Name = " Nuts", Price =    2.00 },
-                            new Item { Code = "422", Name = " Oats", Price =    2.00 },
-                            new Item { Code = "423", Name = " Olive Oil", Price =   6.00 },
-                            new Item { Code = "424", Name = " Passata", Price = 0.75 },
-                            new Item { Code = "425", Name = " Pasta", Price =   0.75 },
-                            new Item { Code = "426", Name = " Pasta Sauce", Price = 0.75 },
-                            new Item { Code = "427", Name = " Peanut Butter", Price =   2.50 },
-                            new Item { Code = "428", Name = " Polenta", Price = 3.00 },
-                            //new Item { Code = "445", Name = " Protein Drink", Price =   0.50 },
-                            new Item { Code = "446", Name = " Raisins", Price = 4.00 },
-                            new Item { Code = "429", Name = " Rice", Price =    1.50 },
-                            new Item { Code = "430", Name = " Salad Dressing", Price =  1.00 },
-                            //new Item { Code = "445", Name = " Salsa", Price =   1.50 },
-                            new Item { Code = "431", Name = " Soap ", Price =   0.50 },
-                            new Item { Code = "432", Name = " Soup Small", Price =  0.50 },
-                            new Item { Code = "433", Name = " Spices", Price =  1.00 },
-                            new Item { Code = "434", Name = " Sugar White and Brown", Price =   2.00 },
-                            new Item { Code = "435", Name = " Tea", Price = 2.00 },
-                            new Item { Code = "436", Name = " Tea Green Tea", Price =   4.50 },
-                            new Item { Code = "437", Name = " Tea Orange Pekoe", Price =    3.00 },
-                            new Item { Code = "438", Name = " Tea Red Rose", Price =    5.00 },
-                            new Item { Code = "439", Name = " Toilet Paper", Price =    5.00 },
-                            new Item { Code = "440", Name = " Tomato Paste", Price =    0.75 },
-                            new Item { Code = "441", Name = " Tooth Paste / Brush / Floss", Price = 0.75 },
-                            new Item { Code = "442", Name = " Tuna", Price =    1.00 },
-                            new Item { Code = "443", Name = " Wild Rice Blend", Price = 0.25 },
-                            new Item { Code = "444", Name = " Yeast", Price =   0.50 },
+                            new Item { Code = "401", Name = "Apple Sauce", Price = 1.00 },
+                            new Item { Code = "402", Name = "Baking Powder", Price =   2.00 },
+                            new Item { Code = "403", Name = "Bars: Cereal, Protein, Cookie", Price =    0.50 },
+                            new Item { Code = "404", Name = "BBQ Sauce", Price =   1.00 },
+                            new Item { Code = "405", Name = "Bleach", Price =  2.00 },
+                            new Item { Code = "406", Name = "Broth", Price =   1.00 },
+                            new Item { Code = "407", Name = "Canned Beans, Veggies, and Fruit", Price =    0.75 },
+                            new Item { Code = "408", Name = "Canola Oil", Price =  3.00 },
+                            new Item { Code = "409", Name = "Cereal All Other", Price =    2.00 },
+                            new Item { Code = "410", Name = "Cereal Rice Krispies", Price =    3.00 },
+                            new Item { Code = "445", Name = "Coconut Milk", Price =    1.00 },
+                            new Item { Code = "450", Name = "Coffee", Price =  4.00 },
+                            new Item { Code = "411", Name = "Crackers ", Price =   2.00 },
+                            new Item { Code = "412", Name = "Dried Legumes / Beans", Price = 1.50 },
+                            new Item { Code = "413", Name = "Flour", Price =   2.00 },
+                            new Item { Code = "414", Name = "Garden Cocktail", Price = 0.75 },
+                            new Item { Code = "415", Name = "Granola Bars 6 pack", Price = 1.00 },
+                            new Item { Code = "446", Name = "Gummies", Price = 0.10 },
+                            new Item { Code = "416", Name = "Jam", Price = 2.00 },
+                            new Item { Code = "417", Name = "Kraft Dinner", Price =    1.00 },
+                            new Item { Code = "418", Name = "Laundry Soap large", Price =  6.00 },
+                            new Item { Code = "419", Name = "Laundry Soap small", Price =  3.00 },
+                            new Item { Code = "420", Name = "Miracle Whip", Price =    3.00 },
+                            new Item { Code = "421", Name = "Nuts", Price =    2.00 },
+                            new Item { Code = "422", Name = "Oats", Price =    2.00 },
+                            new Item { Code = "423", Name = "Olive Oil", Price =   6.00 },
+                            new Item { Code = "424", Name = "Passata", Price = 0.75 },
+                            new Item { Code = "425", Name = "Pasta", Price =   0.75 },
+                            new Item { Code = "426", Name = "Pasta Sauce", Price = 0.75 },
+                            new Item { Code = "427", Name = "Peanut Butter", Price =   2.50 },
+                            new Item { Code = "428", Name = "Polenta", Price = 3.00 },
+                            new Item { Code = "448", Name = "Protein Drink", Price =   0.50 },
+                            new Item { Code = "449", Name = "Raisins", Price = 4.00 },
+                            new Item { Code = "429", Name = "Rice", Price =    1.50 },
+                            new Item { Code = "430", Name = "Salad Dressing", Price =  1.00 },
+                            new Item { Code = "447", Name = "Salsa", Price =   1.50 },
+                            new Item { Code = "431", Name = "Soap ", Price =   0.50 },
+                            new Item { Code = "432", Name = "Soup Small", Price =  0.50 },
+                            new Item { Code = "433", Name = "Spices", Price =  1.00 },
+                            new Item { Code = "434", Name = "Sugar White and Brown", Price =   2.00 },
+                            new Item { Code = "435", Name = "Tea", Price = 2.00 },
+                            new Item { Code = "436", Name = "Tea - Green Tea", Price =   4.50 },
+                            new Item { Code = "437", Name = "Tea - Orange Pekoe", Price =    3.00 },
+                            new Item { Code = "438", Name = "Tea - Red Rose", Price =    5.00 },
+                            new Item { Code = "439", Name = "Toilet Paper", Price =    5.00 },
+                            new Item { Code = "440", Name = "Tomato Paste", Price =    0.75 },
+                            new Item { Code = "441", Name = "Tooth Paste / Brush / Floss", Price = 0.75 },
+                            new Item { Code = "442", Name = "Tuna", Price =    1.00 },
+                            new Item { Code = "443", Name = "Wild Rice Blend", Price = 0.25 },
+                            new Item { Code = "444", Name = "Yeast", Price =   0.50 },
                             };
 
 
                     var specialsItems = new List<Item> {
                             new Item { Code = "501", Name = "Cat Food (wet)", Price = 0.50 },
-                            new Item { Code = "502", Name = "Sweets (Cotco)", Price = 2.00 },
+                            new Item { Code = "502", Name = "Sweets (Costco)", Price = 2.00 },
                             new Item { Code = "503", Name = "Drinks ", Price = 0.50 },
                             new Item { Code = "504", Name = "GROW Soup", Price = 2.50 },
                             new Item { Code = "505", Name = "Deoderant", Price = 1.00 },
@@ -374,7 +374,7 @@ namespace GROW_CRM.Data
 
                     //Fill message list
                     for (int i = 0; i < 10; i++)
-                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now});
+                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now });
 
                     //Add list to context
                     context.Messages.AddRange(messages);
@@ -446,7 +446,7 @@ namespace GROW_CRM.Data
 
 
                     context.Cities.AddRange(cities);
-                    context.SaveChanges();                                        
+                    context.SaveChanges();
                 }
 
                 //Look for Provinces
@@ -455,42 +455,20 @@ namespace GROW_CRM.Data
                     var provinces = new List<Province>
                     {
                         new Province { Code = "ON", Name = "Ontario"},
-                        //new Province { Code = "PE", Name = "Prince Edward Island"},
-                        //new Province { Code = "NB", Name = "New Brunswick"},
-                        //new Province { Code = "BC", Name = "British Columbia"},
-                        //new Province { Code = "NL", Name = "Newfoundland and Labrador"},
-                        //new Province { Code = "SK", Name = "Saskatchewan"},
-                        //new Province { Code = "NS", Name = "Nova Scotia"},
-                        //new Province { Code = "MB", Name = "Manitoba"},
-                        //new Province { Code = "QC", Name = "Quebec"},
-                        //new Province { Code = "YT", Name = "Yukon"},
-                        //new Province { Code = "NU", Name = "Nunavut"},
-                        //new Province { Code = "NT", Name = "Northwest Territories"},
-                        //new Province { Code = "AB", Name = "Alberta"}
+                        new Province { Code = "PE", Name = "Prince Edward Island"},
+                        new Province { Code = "NB", Name = "New Brunswick"},
+                        new Province { Code = "BC", Name = "British Columbia"},
+                        new Province { Code = "NL", Name = "Newfoundland and Labrador"},
+                        new Province { Code = "SK", Name = "Saskatchewan"},
+                        new Province { Code = "NS", Name = "Nova Scotia"},
+                        new Province { Code = "MB", Name = "Manitoba"},
+                        new Province { Code = "QC", Name = "Quebec"},
+                        new Province { Code = "YT", Name = "Yukon"},
+                        new Province { Code = "NU", Name = "Nunavut"},
+                        new Province { Code = "NT", Name = "Northwest Territories"},
+                        new Province { Code = "AB", Name = "Alberta"}
                     };
                     context.Provinces.AddRange(provinces);
-                    context.SaveChanges();
-                }
-
-                //Look for About
-                if (!context.Abouts.Any())
-                {
-                    //add initial GROW address
-                    context.Abouts.AddRange(
-                   new About
-                   {
-                       OrgName = "GROW",
-                       StreetNumber = "4377",
-                       StreetName = "Fourth Avenue",
-                       AptNumber = "",
-                       PostalCode = "L2E 4N1",
-                       CityID = 11,
-                       ProvinceID = 1,
-                       PhoneNumber = "9052626812",
-                       WebSite = "https://www.growcflc.com/",
-                       Email = "info@growflc.com"
-                   });
-                    //Save changes
                     context.SaveChanges();
                 }
 
@@ -512,7 +490,7 @@ namespace GROW_CRM.Data
                     context.Households.AddRange(
                         new Household
                         {
-                            Name = "House #1",
+                            Name = "Z",
                             StreetNumber = "65",
                             StreetName = "Church St.",
                             AptNumber = "201",
@@ -520,144 +498,56 @@ namespace GROW_CRM.Data
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 1,
-                            AboutID = 1
+                            ProvinceID = 13,
+                            HouseholdStatusID = 1
                         },
                         new Household
                         {
-                            Name = "Luke's House",
+                            Name = "Scott",
                             StreetNumber = "1848",
                             StreetName = "Paddock Trail Dr.",
+
                             PostalCode = "L2H 1W8",
                             LICOVerified = false,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 2,
-                            AboutID = 1
-                        },
-                         new Household
-                        {
-                            Name = "Smith's House",
-                            StreetNumber = "101",
-                            StreetName = "Development Ave.",
-                            PostalCode = "L2P 1W8",
-                            LICOVerified = false,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 2,
-                            AboutID = 1
+                            ProvinceID = 13,
+                            HouseholdStatusID = 2
                         },
                          new Household
                          {
-                             Name = "McDonald's House",
-                             StreetNumber = "45",
-                             StreetName = "Niagara Str.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Boiardee House",
-                             StreetNumber = "5664",
-                             StreetName = "North Str",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "More's House",
-                             StreetNumber = "8894",
-                             StreetName = "Kentucky Cres.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Mitchels's House",
-                             StreetNumber = "667",
-                             StreetName = "Vansicle Rd.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Job's House",
-                             StreetNumber = "1",
-                             StreetName = "Coopertino Ave.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Randy's House",
-                             StreetNumber = "246",
+                             Name = "Castro",
+                             StreetNumber = "101",
                              StreetName = "Development Ave.",
+
                              PostalCode = "L2P 1W8",
                              LICOVerified = false,
                              LastVerification = DateTime.Now,
                              CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
+                             ProvinceID = 13,
+                             HouseholdStatusID = 2
                          }
 
-                    );
+                    ); ;
 
-                    
-                   //Save changes
-                   context.SaveChanges();
-                }                
-
-
-
+                    //Save changes
+                    context.SaveChanges();
+                }
 
                 //Look for members
                 if (!context.Members.Any())
                 {
                     //Foreign Keys
                     int[] householdIDs = context.Households.Select(h => h.ID).ToArray();
-                    int householdCount = householdIDs.Count();                    
+                    int householdCount = householdIDs.Count();
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();                    
+                    int genderCount = genderIDs.Count();
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
-                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G"};
-                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise"};
+                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G" };
+                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise" };
 
                     //Start DOB
                     DateTime startDOB = Convert.ToDateTime("1992-08-22");
@@ -665,9 +555,9 @@ namespace GROW_CRM.Data
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];
 
-                        for(int j = 0; j < rnd.Next(5) + 1; j++)
+                        for (int j = 0; j < rnd.Next(5) + 1; j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -682,7 +572,7 @@ namespace GROW_CRM.Data
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i]
-                                }    
+                                }
                             );
 
                             context.SaveChanges();
@@ -698,9 +588,9 @@ namespace GROW_CRM.Data
                     int drCount = drIDs.Count();
 
                     int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();                    
+                    int memberCount = memberIDs.Count();
 
-                    foreach(int memberID in memberIDs)
+                    foreach (int memberID in memberIDs)
                     {
                         if ((memberID % 3) == 0) continue;
 
