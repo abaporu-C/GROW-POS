@@ -41,7 +41,8 @@ namespace GROW_CRM.Models
 
         [Required(ErrorMessage = "You cannot leave the Price blank")]
         [CustomValidation(typeof(ValidationMethods), "ValidateGreaterOrEqualToZero")]
-        [Display(Name = "Price ($)")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Price")]
         public double Price { get; set; }
 
         [Range(0, 100, ErrorMessage = "Value for {0} must be between {1} and {2}")]

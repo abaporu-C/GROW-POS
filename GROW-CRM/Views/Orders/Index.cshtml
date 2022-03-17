@@ -1,8 +1,7 @@
-﻿@model IEnumerable<GROW_CRM.Models.Order>
+﻿@using GROW_CRM.Models;
+@model IEnumerable<GROW_CRM.Models.Order>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
 <h1>Index</h1>
 
@@ -13,23 +12,20 @@
 </p>
 
 <partial name="_CreateOrderModal" />
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.Household)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Taxes)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PaymentType)
@@ -38,32 +34,60 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subtotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Taxes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentType.ID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>
+        @ViewData["Household"]
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Member.FullName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Total)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PaymentType.Type)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+    </td>
+</tr>}
     </tbody>
 </table>
+
+@section Scripts{
+    <script>
+        $(document).on('click', '#searchHH', function (event) {
+            event.preventDefault();
+            var code = $('#code');
+            var codeSerialized = code.serialize();
+
+            console.log(code);
+            console.log(codeSerialized)
+
+            $.ajax({
+                type: "GET",
+                url: 'Orders/GetMembers',
+                data: code.serialize(),
+                success: function (data) {
+                    console.log(data)
+                    //console.log($('#theMemberIncomeSituationModal'))
+                    $.each(data, function (index, item) {
+                        $('#membersDDl').append(
+                            $('<option></option>').val(item.id).html(item.fullName)
+                        );
+                    });
+                },
+                error: function () {
+                    alert("Operation Failed. There was a problem maintaing the data.");
+                }
+            });
+        })
+    </script>
+}

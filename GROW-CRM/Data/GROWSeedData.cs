@@ -239,7 +239,7 @@ namespace GROW_CRM.Data
                             new Item { Code = "313", Name = "Oat Milk 1l",  Price = 2.00 },
                             new Item { Code = "314", Name = "Orange Juice", Price = 2.00 },
                             new Item { Code = "315", Name = "Pizza Dough",  Price = 2.00 },
-                            new Item { Code = "316", Name = "Sour Crème",   Price = 2.00 },
+                            new Item { Code = "316", Name = "Sour CrÃ¨me",   Price = 2.00 },
                             new Item { Code = "317", Name = "Soy Milk 1l",  Price = 2.00 },
                             new Item { Code = "318", Name = "Tofu", Price = 2.50 },
                             new Item { Code = "319", Name = "Yogurt 4 pack",    Price = 1.00 },

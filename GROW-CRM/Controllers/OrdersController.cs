@@ -31,13 +31,18 @@ namespace GROW_CRM.Controllers
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var order = await _context.Orders
-                .Include(o => o.Member)
+                .Include(o => o.OrderItems).ThenInclude(o => o.Item)
+                .Include(o => o.Member).ThenInclude(o => o.Household)
+                .Include(o => o.Member.Household.Province)
+                .Include(o => o.Member.Household.City)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (order == null)
@@ -49,14 +54,16 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create(int code)
+        public IActionResult Create(int membersDDl)
         {
-            Order order = new Order { Date = DateTime.Now ,MemberID = code, PaymentTypeID = 1};
+            ViewDataReturnURL();
+
+            Order order = new Order { Date = DateTime.Now, MemberID = membersDDl, PaymentTypeID = 1 };
 
             _context.Orders.Add(order);
             _context.SaveChanges();
 
-            var member = (Member)_context.Members.Where(m => m.ID == code).Include(m => m.Household).Select(m => m).FirstOrDefault();
+            var member = (Member)_context.Members.Where(m => m.ID == membersDDl).Include(m => m.Household).Select(m => m).FirstOrDefault();
 
             ViewData["FullName"] = member.FullName;
             ViewData["Address"] = member.Household.FullAddress;
@@ -77,11 +84,13 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
-                .Include(m => m.Member)
+                .Include(o => o.Member.Household.Province)
+                .Include(o => o.Member.Household.City)
+                .Include(m => m.Member).ThenInclude(m => m.Household)
                 .Include(m => m.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == order.ID);
 
-
+            var orderItemsCheck = await _context.OrderItems.Where(oi => oi.OrderID == order.ID).ToListAsync();
 
             //Check that you got it or exit with a not found error
             if (orderToUpdate == null)
@@ -95,9 +104,16 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
-                    _context.Update(orderToUpdate);
-                    await _context.SaveChangesAsync();
-                    return Redirect(ViewData["returnURL"].ToString());
+                    if (!orderItemsCheck.Any())
+                    {
+                        throw new Exception("You need to add items to this order.");
+                    }
+                    else
+                    {
+                        _context.Update(orderToUpdate);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Details", new { order.ID });
+                    }
                 }
                 catch (RetryLimitExceededException /* dex */)
                 {
@@ -120,7 +136,7 @@ namespace GROW_CRM.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }
-            
+
             PopulateDropDownLists(orderToUpdate);
             return View(orderToUpdate);
         }
@@ -128,6 +144,8 @@ namespace GROW_CRM.Controllers
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -136,6 +154,8 @@ namespace GROW_CRM.Controllers
             var order = await _context.Orders
                                 .Include(o => o.Member)
                                 .Include(o => o.PaymentType)
+                                .Include(o => o.Member.Household.Province)
+                                .Include(o => o.Member.Household.City)
                                 .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
                                 .FirstOrDefaultAsync(o => o.ID == id);
             if (order == null)
@@ -143,11 +163,11 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var member = (Member)_context.Members.Where(m => m.ID == order.MemberID).Include(m => m.Household).Select(m => m).FirstOrDefault();
+            //var member = (Member)_context.Members.Where(m => m.ID == order.MemberID).Include(m => m.Household).Select(m => m).FirstOrDefault();
 
-            ViewData["FullName"] = member.FullName;
-            ViewData["Address"] = member.Household.FullAddress;
-            ViewData["Age"] = member.Age;
+            //ViewData["Household"] = member.Household.Name;
+            //ViewData["Address"] = member.Household.FullAddress;
+            //ViewData["Date"] = DateTime.Today;
 
             PopulateDropDownLists(order);
             return View(order);
@@ -164,6 +184,8 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
+                .Include(o => o.Member.Household.Province)
+                .Include(o => o.Member.Household.City)
                 .Include(m => m.Member)
                 .Include(m => m.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -184,7 +206,7 @@ namespace GROW_CRM.Controllers
                 {
                     _context.Update(orderToUpdate);
                     await _context.SaveChangesAsync();
-                    return Redirect(ViewData["returnURL"].ToString());
+                    return RedirectToAction("Details", new { order.ID });
                 }
                 catch (RetryLimitExceededException /* dex */)
                 {
@@ -215,12 +237,17 @@ namespace GROW_CRM.Controllers
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var order = await _context.Orders
+                .Include(o => o.Member.Household.Province)
+                .Include(o => o.Member.Household.City)
+                .Include(o => o.OrderItems).ThenInclude(o => o.Item)
                 .Include(o => o.Member)
                 .Include(o => o.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -237,6 +264,8 @@ namespace GROW_CRM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var order = await _context.Orders.FindAsync(id);
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
@@ -251,9 +280,14 @@ namespace GROW_CRM.Controllers
         private SelectList PaymentTypeSelectList(int? id)
         {
             var ptQuery = from pt in _context.PaymentTypes
-                           orderby pt.Type
-                           select pt;
+                          orderby pt.Type
+                          select pt;
             return new SelectList(ptQuery, "ID", "Type", id);
+        }
+        public SelectList MemberSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Members
+                .OrderBy(d => d.LastName).ThenByDescending(d => d.FirstName), "ID", "FullName", selectedId);
         }
 
         public PartialViewResult OrderItemList(int id)
@@ -268,7 +302,8 @@ namespace GROW_CRM.Controllers
 
         private void PopulateDropDownLists(Order order = null)
         {
-            ViewData["PaymentTypeID"] = PaymentTypeSelectList(order?.PaymentTypeID);            
+            ViewData["PaymentTypeID"] = PaymentTypeSelectList(order?.PaymentTypeID);
+            ViewData["MemberID"] = MemberSelectList(order?.MemberID);
         }
 
         private string ControllerName()
@@ -279,6 +314,12 @@ namespace GROW_CRM.Controllers
         private void ViewDataReturnURL()
         {
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
+        }
+
+        public JsonResult GetMembers(int code)
+        {
+            var members = _context.Members.Where(m => m.HouseholdID == code).ToList();
+            return Json(members);
         }
     }
 }
