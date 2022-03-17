@@ -90,7 +90,7 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.PaymentType)
                 .FirstOrDefaultAsync(m => m.ID == order.ID);
 
-
+            var orderItemsCheck = await _context.OrderItems.Where(oi => oi.OrderID == order.ID).ToListAsync();
 
             //Check that you got it or exit with a not found error
             if (orderToUpdate == null)
@@ -104,9 +104,16 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
-                    _context.Update(orderToUpdate);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { order.ID });
+                    if (!orderItemsCheck.Any())
+                    {
+                        throw new Exception("You need to add items to this order.");
+                    }
+                    else
+                    {
+                        _context.Update(orderToUpdate);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Details", new { order.ID });
+                    }
                 }
                 catch (RetryLimitExceededException /* dex */)
                 {
