@@ -211,6 +211,8 @@ namespace GROW_CRM.Data
                             new Item { Code = "146", Name = "Zucchini", Price = 0.50 }
                             };
 
+
+
                     var freezerItems = new List<Item> {
                             new Item { Code = "201", Name = "Chicken Legs(2)", Price =  1.00 },
                             new Item { Code = "202", Name = "Chicken Drumsticks 4lbs", Price = 3.00 },
@@ -220,6 +222,8 @@ namespace GROW_CRM.Data
                             new Item { Code = "206", Name = "Veggie Burger 2pc", Price = 2.00 },
                             new Item { Code = "207", Name = "Fish(Haddock / Basa)", Price = 1.00 }
                             };
+
+
 
                     var dairyItems = new List<Item> {
                             new Item { Code = "301", Name = "Almond Milk 2L",   Price = 2.00 },
@@ -248,6 +252,8 @@ namespace GROW_CRM.Data
                             new Item { Code = "321", Name = "Yogurt Tub",   Price = 2.00 },
                             //new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
                             };
+
+
 
                     var pantryItems = new List<Item> {
                             new Item { Code = "401", Name = " Apple Sauce", Price = 1.00 },
@@ -303,6 +309,8 @@ namespace GROW_CRM.Data
                             };
 
 
+
+
                     var specialsItems = new List<Item> {
                             new Item { Code = "501", Name = "Cat Food (wet)", Price = 0.50 },
                             new Item { Code = "502", Name = "Sweets (Cotco)", Price = 2.00 },
@@ -314,6 +322,8 @@ namespace GROW_CRM.Data
                             new Item { Code = "508", Name = "Ramen / Rice Krispies", Price = 0.25 }
                             };
 
+
+
                     foreach (var category in context.Categories)
                     {
                         switch (category.Name)
@@ -324,6 +334,8 @@ namespace GROW_CRM.Data
                                     item.CategoryID = category.ID;
                                 }
 
+
+
                                 context.Items.AddRange(produceItems);
                                 break;
                             case "Freezer":
@@ -331,6 +343,8 @@ namespace GROW_CRM.Data
                                 {
                                     item.CategoryID = category.ID;
                                 }
+
+
 
                                 context.Items.AddRange(freezerItems);
                                 break;
@@ -340,6 +354,8 @@ namespace GROW_CRM.Data
                                     item.CategoryID = category.ID;
                                 }
 
+
+
                                 context.Items.AddRange(dairyItems);
                                 break;
                             case "Pantry":
@@ -347,6 +363,8 @@ namespace GROW_CRM.Data
                                 {
                                     item.CategoryID = category.ID;
                                 }
+
+
 
                                 context.Items.AddRange(pantryItems);
                                 break;
@@ -356,12 +374,16 @@ namespace GROW_CRM.Data
                                     item.CategoryID = category.ID;
                                 }
 
+
+
                                 context.Items.AddRange(specialsItems);
                                 break;
                             default:
                                 break;
                         }
                     }
+
+
 
                     context.SaveChanges();
                 }
