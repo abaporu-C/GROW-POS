@@ -109,4 +109,8 @@
     {
         <partial name="~/Views/Reports/Partial/_NewItems.cshtml" />
     }
+    else if ((string)ViewData["ReportType"] == "Categories Report")
+    {
+        <partial name="~/Views/Reports/Partial/_Categories.cshtml" />
+    }
 }

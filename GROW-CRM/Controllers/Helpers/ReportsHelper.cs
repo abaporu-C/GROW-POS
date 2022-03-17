@@ -33,13 +33,13 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < genderReport.Count(); i++)
             {
-                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total/(double)memberCount, 2);
+                genderReport[i].Percentage = Math.Round((double)genderReport[i].Total / (double)memberCount, 2);
                 genderReport[i].PercentageText = $"{Math.Round((double)genderReport[i].Percentage * (double)100, 2)}%";
             }
 
-            DateTime now = DateTime.Now;            
+            DateTime now = DateTime.Now;
 
-            int[] totals = new int[] { 0, 0, 0, 0};
+            int[] totals = new int[] { 0, 0, 0, 0 };
 
             foreach (Member m in members)
             {
@@ -81,7 +81,7 @@ namespace GROW_CRM.Controllers.Helpers
 
             for (int i = 0; i < dietaryReport.Count(); i++)
             {
-                dietaryReport[i].Percentage = Math.Round((double)dietaryReport[i].Percentage/(double)dietaryTotal, 2);
+                dietaryReport[i].Percentage = Math.Round((double)dietaryReport[i].Percentage / (double)dietaryTotal, 2);
                 dietaryReport[i].PercentageText = $"{Math.Round((double)dietaryReport[i].Percentage * (double)100, 2)}%";
             }
 
@@ -171,7 +171,7 @@ namespace GROW_CRM.Controllers.Helpers
 
             foreach (Member m in members)
             {
-                misList.Add(new HouseholdInformation 
+                misList.Add(new HouseholdInformation
                 {
                     Code = m.HouseholdID,
                     Name = m.FullName,
@@ -292,6 +292,36 @@ namespace GROW_CRM.Controllers.Helpers
             }
 
             return newAdditionsfiltered;
+        }
+
+        public static IEnumerable GetCategoriesData(GROWContext _context)
+        {
+            var newAdditions = _context.OrderItems
+                                .Include(oi => oi.Order).ThenInclude(o => o.CreatedOn)
+                                .Include(oi => oi.Item).ThenInclude(i => i.Category)
+                                .GroupBy(oi => new { oi.Item.Category.Name, oi.Order.CreatedOn, oi.Item.Category.ID })
+                                .Select(na => new CategoriesReport
+                                {
+                                    ID = na.Key.ID,
+                                    Category = na.Key.Name,
+                                    Percentage = na.Count() / na.Key.Name.Count(),
+                                    Total = na.Count(),
+                                    CreatedOn = na.Key.CreatedOn
+                                }).ToList();
+
+            List<CategoriesReport> categoriesFiltered = new List<CategoriesReport>();
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            foreach (CategoriesReport na in newAdditions)
+            {
+                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
+                double tds = diff.TotalDays;
+                if (tds > 7) continue;
+                categoriesFiltered.Add(na);
+            }
+
+            return categoriesFiltered;
         }
     }
 }

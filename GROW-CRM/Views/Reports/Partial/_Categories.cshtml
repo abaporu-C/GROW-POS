@@ -1,9 +1,9 @@
 ﻿@using GROW_CRM.ViewModels.ReportsViewModels
 
 
-    <br>
-    <h4>Sales this week: @ViewData["Count"]</h4>
-    <br>
+<br>
+<h4>New sales this week: @ViewData["Count"]</h4>
+<br>
 
 @{
     @if ((int)ViewData["Count"] > 0)
@@ -21,22 +21,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (OrdersReport item in ViewBag.Report)
+            @foreach (CategoriesReport item in ViewBag.Report)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ID)
+                        @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Member)
+                        @Html.DisplayFor(modelItem => item.Percentage)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                        @Html.DisplayFor(modelItem => item.Total)
                     </td>
-                    <td>
-                        $ @Html.DisplayFor(modelItem => item.Total)
-                    </td>
-
                 </tr>
             }
         </tbody>

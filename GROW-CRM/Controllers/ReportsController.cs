@@ -61,6 +61,9 @@ namespace GROW_CRM.Controllers
                 case "6":
                     GetNewItems();
                     break;
+                case "7":
+                    GetCategories();
+                    break;
                 default:
                     return View("Index");                    
             }
@@ -1071,7 +1074,7 @@ namespace GROW_CRM.Controllers
                         using (var memoryStream = new MemoryStream())
                         {
                             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            Response.Headers["content-disposition"] = "attachment;  filename=Appointments.xlsx";
+                            Response.Headers["content-disposition"] = "attachment;  filename=Sales.xlsx";
                             excel.SaveAs(memoryStream);
                             memoryStream.WriteTo(Response.Body);
                         }
@@ -1081,7 +1084,7 @@ namespace GROW_CRM.Controllers
                         try
                         {
                             Byte[] theData = excel.GetAsByteArray();
-                            string filename = "Appointments.xlsx";
+                            string filename = "Sales.xlsx";
                             string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                             return File(theData, mimeType, filename);
                         }
@@ -1111,7 +1114,22 @@ namespace GROW_CRM.Controllers
 
             GetReportsDDLItems();
         }
+        public void GetCategories()
+        {
+            List<CategoriesReport> newItemsfiltered = (List<CategoriesReport>)ReportsHelper.GetCategoriesData(_context);
 
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            string[] headers = new string[] { "Category", "Percentage", "Total" };
+
+            ViewData["ReportType"] = "Categories Report";
+            ViewData["Count"] = newItemsfiltered.Count();
+            ViewData["Name"] = "Sales by Category";
+            ViewBag.Headers = headers;
+            ViewBag.Report = newItemsfiltered;
+
+            GetReportsDDLItems();
+        }
         public IActionResult DownloadNewItems()
         {
             List<NewItemsReport> newAdditionsfiltered = (List<NewItemsReport>)ReportsHelper.GetNewItems(_context);
@@ -1267,6 +1285,7 @@ namespace GROW_CRM.Controllers
             items.Add(new SelectListItem { Text = "Income Information", Value = "4" });
             items.Add(new SelectListItem { Text = "Sales Report", Value = "5" });
             items.Add(new SelectListItem { Text = "New Items", Value = "6" });
+            //items.Add(new SelectListItem { Text = "Categories Report", Value = "7" });
 
             ViewBag.Reports = items;
         }
