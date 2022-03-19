@@ -296,32 +296,38 @@ namespace GROW_CRM.Controllers.Helpers
 
         public static IEnumerable GetCategoriesData(GROWContext _context)
         {
-            var newAdditions = _context.OrderItems
-                                .Include(oi => oi.Order).ThenInclude(o => o.CreatedOn)
-                                .Include(oi => oi.Item).ThenInclude(i => i.Category)
-                                .GroupBy(oi => new { oi.Item.Category.Name, oi.Order.CreatedOn, oi.Item.Category.ID })
-                                .Select(na => new CategoriesReport
+            var orderItems = from o in _context.OrderItems
+                              .Include(o => o.Item)
+                             select o;
+
+            int itemsCount = orderItems.Count();
+
+            var categoriesReport = _context.OrderItems
+                                    .Include(m => m.Item).ThenInclude(oi => oi.Category)
+                                    .GroupBy(m => new { m.Item.Category.Name })
+                                    .Select(grp => new CategoriesReport
+                                    {
+                                        Category = grp.Key.Name,
+                                        Percentage = 0,
+                                        Total = grp.Count()
+                                    }).ToList();
+
+
+            return categoriesReport;
+        }
+
+        public static IEnumerable GetOrderItems(GROWContext _context)
+        {
+            var orderItems = _context.OrderItems
+                                .Include(h => h.Item)
+                                .Select(na => new OrderItemsReport
                                 {
-                                    ID = na.Key.ID,
-                                    Category = na.Key.Name,
-                                    Percentage = na.Count() / na.Key.Name.Count(),
-                                    Total = na.Count(),
-                                    CreatedOn = na.Key.CreatedOn
+                                    ID = na.ID,
+                                    Quantity = na.Quantity,
+                                    Item = na.Item.Name
                                 }).ToList();
 
-            List<CategoriesReport> categoriesFiltered = new List<CategoriesReport>();
-
-            DateTime lastWeek = DateTime.Now.AddDays(-7);
-
-            foreach (CategoriesReport na in newAdditions)
-            {
-                TimeSpan diff = (TimeSpan)(na.CreatedOn - lastWeek);
-                double tds = diff.TotalDays;
-                if (tds > 7) continue;
-                categoriesFiltered.Add(na);
-            }
-
-            return categoriesFiltered;
+            return orderItems;
         }
     }
 }

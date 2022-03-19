@@ -1,15 +1,10 @@
 ﻿@using GROW_CRM.ViewModels.ReportsViewModels
 
-
-<br>
-<h4>New sales this week: @ViewData["Count"]</h4>
-<br>
-
 @{
-    @if ((int)ViewData["Count"] > 0)
-    {
-        <a asp-action="DownloadSales" class="btn btn-info float-left">Download Sales Report</a>
-    }
+    //@if ((int)ViewData["Count"] > 0)
+    //{
+    //    <a asp-action="DownloadSales" class="btn btn-info float-left">Download Sales Report</a>
+    //}
     <br />
     <table class="table table-striped">
         <thead>
@@ -28,7 +23,7 @@
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Percentage)
+                        @(Math.Round(Convert.ToDecimal(item.Total) / Convert.ToDecimal(ViewData["ItemsSold"]) * 100 , 2))%
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Total)

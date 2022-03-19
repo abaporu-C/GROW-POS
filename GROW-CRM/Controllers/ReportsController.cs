@@ -944,13 +944,15 @@ namespace GROW_CRM.Controllers
 
             DateTime lastWeek = DateTime.Now.AddDays(-7);
 
-            string[] headers = new string[] { "Order ID", "Date", "Total", "Member" };
+            string[] headers = new string[] { "Order ID", "Member", "Date", "Total" };
 
             ViewData["ReportType"] = "Sales Report";
             ViewData["Count"] = newSalesfiltered.Count();
             ViewData["Name"] = $"Weekly Sales - From: {lastWeek.Month}/{lastWeek.Day}/{lastWeek.Year} To: {DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.Year}";
             ViewBag.Headers = headers;
             ViewBag.Report = newSalesfiltered;
+
+            GetReportsDDLItems();
 
             GetReportsDDLItems();
         }
@@ -989,8 +991,10 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[3, 1].LoadFromCollection(salesReportsFiltered, true);
 
                     //Style fee column for currency
+                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
 
                     //Style first column for dates
+                    workSheet.Column(2).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -1117,6 +1121,7 @@ namespace GROW_CRM.Controllers
         public void GetCategories()
         {
             List<CategoriesReport> newItemsfiltered = (List<CategoriesReport>)ReportsHelper.GetCategoriesData(_context);
+            List<OrderItemsReport> orderItems = (List<OrderItemsReport>)ReportsHelper.GetOrderItems(_context);
 
             DateTime lastWeek = DateTime.Now.AddDays(-7);
 
@@ -1124,7 +1129,8 @@ namespace GROW_CRM.Controllers
 
             ViewData["ReportType"] = "Categories Report";
             ViewData["Count"] = newItemsfiltered.Count();
-            ViewData["Name"] = "Sales by Category";
+            ViewData["ItemsSold"] = orderItems.Count();
+            ViewData["Name"] = "Total Sales by Category";
             ViewBag.Headers = headers;
             ViewBag.Report = newItemsfiltered;
 
@@ -1162,10 +1168,10 @@ namespace GROW_CRM.Controllers
                     //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(newAdditionsfiltered, true);
 
-                    //Style first column for dates
+                    //Style first column for currency
                     workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
 
-                    //Style fee column for currency
+                    //Style fee column for dates
                     workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
@@ -1285,7 +1291,7 @@ namespace GROW_CRM.Controllers
             items.Add(new SelectListItem { Text = "Income Information", Value = "4" });
             items.Add(new SelectListItem { Text = "Sales Report", Value = "5" });
             items.Add(new SelectListItem { Text = "New Items", Value = "6" });
-            //items.Add(new SelectListItem { Text = "Categories Report", Value = "7" });
+            items.Add(new SelectListItem { Text = "Categories Report", Value = "7" });
 
             ViewBag.Reports = items;
         }
