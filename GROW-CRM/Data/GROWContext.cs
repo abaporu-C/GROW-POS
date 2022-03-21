@@ -250,7 +250,5 @@ namespace GROW_CRM.Data
                 }
             }
         }
-
-        public DbSet<GROW_CRM.ViewModels.ReportsViewModels.CategoriesReport> CategoriesReport { get; set; }
     }
 }
