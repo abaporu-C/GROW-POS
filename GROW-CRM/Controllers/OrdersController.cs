@@ -9,6 +9,7 @@ using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Net;
 
 namespace GROW_CRM.Controllers
 {
@@ -57,6 +58,8 @@ namespace GROW_CRM.Controllers
         public IActionResult Create(int membersDDl)
         {
             ViewDataReturnURL();
+
+            if(membersDDl == 0) return new ObjectResult("Please, select an existing member.") { StatusCode = 400};
 
             Order order = new Order { Date = DateTime.Now, MemberID = membersDDl, PaymentTypeID = 1 };
 
@@ -316,10 +319,16 @@ namespace GROW_CRM.Controllers
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
-        public JsonResult GetMembers(int code)
+        public async Task<ActionResult> GetMembers(int code)
         {
-            var members = _context.Members.Where(m => m.HouseholdID == code).ToList();
-            return Json(members);
+            //Checks to see if there is a valid household ID for the user input
+            var householdID = await _context.Households.FirstOrDefaultAsync(h => h.ID == code);
+            if (householdID == null) return new ObjectResult("Please, enter a valid Household ID.\nIt must consist only of positive numbers.") { StatusCode = 400 };
+
+            var members = await _context.Members.Where(m => m.HouseholdID == code && m.FirstName != "" && m.LastName != "").ToListAsync();
+            
+            if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400};
+            return new JsonResult(members);
         }
     }
 }

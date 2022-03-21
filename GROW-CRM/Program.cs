@@ -50,6 +50,10 @@ namespace GROW_CRM
                 {
                     services.AddHostedService<DeleteTempMembers>();
                     services.AddScoped<IScopedDeleteEmptyMembers, ScopedDeleteEmptyMembers>();
+                    services.AddControllersWithViews()
+                        .AddNewtonsoftJson(options =>
+                                                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                                            );
                 });
     }
 }

@@ -88,8 +88,9 @@
                         );
                     });
                 },
-                error: function () {
-                    alert("Operation Failed. There was a problem maintaing the data.");
+                error: function (err) {
+                    console.log(err)
+                    alert(err.responseText);
                 }
             });
         })
