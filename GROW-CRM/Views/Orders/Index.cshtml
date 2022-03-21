@@ -68,31 +68,41 @@
             var code = $('#code');
             var codeSerialized = code.serialize();
 
-            console.log(code);
-            console.log(codeSerialized)
-
             $.ajax({
                 type: "GET",
                 url: 'Orders/GetMembers',
                 data: code.serialize(),
-                success: function (data) {
+                success: function (data) {                    
+                    $('#searchHErr').html("");
+
                     var membersDDL = $('#membersDDl')
                     membersDDL.html("");
-
                     membersDDL.append($('<option></option>').val(0).html("Select Member"))
-                    //console.log(data)
-                    //console.log($('#theMemberIncomeSituationModal'))
                     $.each(data, function (index, item) {                                                                                               
                         membersDDL.append(
                             $('<option></option>').val(item.id).html(item.fullName)
                         );
                     });
                 },
-                error: function (err) {
-                    console.log(err)
-                    alert(err.responseText);
+                error: function (err) {  
+                    var membersDDL = $('#membersDDl')
+
+                    $('#searchHErr').html(err.responseText)
+                    membersDDL.html("");
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))                    
                 }
             });
+        })
+
+        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){
+            event.preventDefault();
+            var memberID = $('#membersDDl').val();
+            if(memberID === "0"){        
+                $('#searchHErr').html("Please, select an existing member.")
+                return;
+            }
+
+            $.get(`Orders/Create/${memberID}`)
         })
     </script>
 }
