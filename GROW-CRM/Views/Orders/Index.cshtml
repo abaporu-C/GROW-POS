@@ -76,10 +76,14 @@
                 url: 'Orders/GetMembers',
                 data: code.serialize(),
                 success: function (data) {
-                    console.log(data)
+                    var membersDDL = $('#membersDDl')
+                    membersDDL.html("");
+
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))
+                    //console.log(data)
                     //console.log($('#theMemberIncomeSituationModal'))
-                    $.each(data, function (index, item) {
-                        $('#membersDDl').append(
+                    $.each(data, function (index, item) {                                                                                               
+                        membersDDL.append(
                             $('<option></option>').val(item.id).html(item.fullName)
                         );
                     });
