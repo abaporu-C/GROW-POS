@@ -13,11 +13,11 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label for="code">Household ID</label>
-                            <input type="text" name="code" id="code" />
+                            <input type="text" pattern="^[0-9]*$" name="code" id="code" />
                             <button class="btn btn-outline-secondary" id="searchHH">Search</button>
                         </div>
                         <div>
-                            <label for="membersDDl" class="control-label">Member</label>
+                            <label for="membersDDl" class="control-label">Members</label>
                             <select class="form-control" data-val-required="You must select a member." id="membersDDl" name="membersDDl">
                                 <option value="0">Select Member</option>
                             </select>
