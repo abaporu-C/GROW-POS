@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Faker;
 
 namespace GROW_CRM.Data
 {
@@ -508,7 +509,31 @@ namespace GROW_CRM.Data
                     int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
                     int citiesCount = citiesIDs.Count();
 
+                    //Data
+                    string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "W", "Y", "Z" };
+                    int alhabetLen = alphabet.Count();
+
                     //Add Households to context
+                    for (int i = 0; i < 100; i++)
+                    {
+                        string postalCode = $"L{Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]} {Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]}{Faker.RandomNumber.Next(9)}";
+                        context.Add(new Household
+                        {
+                            Name = $"House #{i}",
+                            StreetNumber = Faker.RandomNumber.Next(200).ToString(),
+                            StreetName = Faker.Address.StreetName(),
+                            AptNumber = Faker.RandomNumber.Next(100).ToString(),
+                            PostalCode = postalCode,
+                            LICOVerified = true,
+                            LastVerification = DateTime.Now,
+                            CityID = citiesIDs[rnd.Next(citiesCount)],
+                            ProvinceID = 1,
+                            HouseholdStatusID = 1,
+                            AboutID = 1
+                        }); ;
+                    }
+
+                    /*//Add Households to context
                     context.Households.AddRange(
                         new Household
                         {
@@ -634,7 +659,7 @@ namespace GROW_CRM.Data
                              AboutID = 1
                          }
 
-                    );
+                    );*/
 
                     
                    //Save changes
@@ -662,10 +687,18 @@ namespace GROW_CRM.Data
                     //Start DOB
                     DateTime startDOB = Convert.ToDateTime("1992-08-22");
 
+                    //Phone Generator
+                    string[] areaCodes = new string[] { "905", "289", "365", "742"};
+                    int areaCodesCount = areaCodes.Length;
+
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
+                        string lastName = lastNames[rnd.Next(lastNames.Count())];
+
+                        string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
+
+                        for(int j = 0; j < 6; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
 
                         for(int j = 0; j < rnd.Next(5) + 1; j++)
                         {
@@ -676,8 +709,8 @@ namespace GROW_CRM.Data
                                     MiddleName = middleNames[rnd.Next(middleNames.Count())],
                                     LastName = lastName,
                                     DOB = startDOB.AddDays(rnd.Next(60, 6500)),
-                                    PhoneNumber = "0000000000",
-                                    Email = "mail@mail.com",
+                                    PhoneNumber = phoneNumber,
+                                    Email = Faker.Internet.Email(),
                                     Notes = baconNotes[rnd.Next(5)],
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
@@ -704,12 +737,7 @@ namespace GROW_CRM.Data
                     {
                         if ((memberID % 3) == 0) continue;
 
-                        context.DietaryRestrictionMembers.AddRange(
-                            new DietaryRestrictionMember
-                            {
-                                MemberID = memberID,
-                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
-                            },
+                        context.DietaryRestrictionMembers.Add(
                             new DietaryRestrictionMember
                             {
                                 MemberID = memberID,
