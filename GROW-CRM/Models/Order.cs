@@ -19,7 +19,7 @@ namespace GROW_CRM.Models
         public DateTime Date { get; set; }
 
         [DataType(DataType.Currency)]
-        public decimal Total { get; set; }
+        public double Total { get; set; }
         
         //Foreign Keys        
 
