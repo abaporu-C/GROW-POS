@@ -437,10 +437,10 @@ namespace GROW_CRM.Data
                         new City{Name = "Wainfleet"},
                         new City{Name = "Pelham"},
                         new City{Name = "St. Catharines"},
-                        new City{Name = "Throld"},
+                        new City{Name = "Thorold"},
                         new City{Name = "Welland"},
                         new City{Name = "Port Colborne"},
-                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara-on-the-Lake"},
                         new City{Name = "Niagara Falls"},
                         new City{Name = "Fort Erie"}
                     };
@@ -698,7 +698,7 @@ namespace GROW_CRM.Data
 
                         string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
 
-                        for(int j = 0; j < 6; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
+                        for(int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
 
                         for(int j = 0; j < rnd.Next(5) + 1; j++)
                         {
@@ -723,15 +723,16 @@ namespace GROW_CRM.Data
                     }
                 }
 
+                //Members
+                int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                int memberCount = memberIDs.Count();
+
                 //Look for Dietary Restriction Members
                 if (!context.DietaryRestrictionMembers.Any())
                 {
                     //Foreign Keys
                     int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
-                    int drCount = drIDs.Count();
-
-                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();                    
+                    int drCount = drIDs.Count();                                     
 
                     foreach(int memberID in memberIDs)
                     {
@@ -753,10 +754,7 @@ namespace GROW_CRM.Data
                 if (!context.MemberIncomeSituations.Any())
                 {
                     int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();
-
-                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();
+                    int incomeSituationCount = incomeSituationIDs.Count();                    
 
                     List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
 
@@ -771,6 +769,57 @@ namespace GROW_CRM.Data
                         mis.Add(s);
                     }
                     context.MemberIncomeSituations.AddRange(mis);
+                    context.SaveChanges();
+                }
+
+                //Look for Orders
+                if (!context.Orders.Any())
+                {
+                    //Foreign Keys
+                    int[] paymentTypeIDs = context.PaymentTypes.Select(i => i.ID).ToArray();
+                    int paymentTypeCount = paymentTypeIDs.Count();
+
+                    List<Order> orders = new List<Order>();
+
+                    foreach (var memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        Order s = new Order
+                        {
+                            Date = DateTime.Now,
+                            Total = 0,
+                            MemberID = memberID,
+                            PaymentTypeID = paymentTypeIDs[rnd.Next(paymentTypeCount)],
+                        };
+                        orders.Add(s);
+                    }
+
+                    context.Orders.AddRange(orders);
+                    context.SaveChanges();
+
+                    //Foreign Keys for OrderItems
+                    int[] itemsIDs = context.Items.Select(i => i.ID).ToArray();
+                    int itemsCount = itemsIDs.Count();
+
+                    List<OrderItem> ois = new List<OrderItem>();
+
+                    for(int i = 0; i < orders.Count; i++)
+                    {
+                        OrderItem oi = new OrderItem
+                        {
+                            ItemID = itemsIDs[rnd.Next(itemsCount - 1)],
+                            OrderID = orders[i].ID,
+                            Quantity = Faker.RandomNumber.Next(30)
+                        };
+                        ois.Add(oi);
+
+                        Item item = context.Items.FirstOrDefault(i => i.ID == oi.ItemID);
+
+                        orders[i].Total = oi.Quantity * item.Price;
+                    }
+                    context.Orders.UpdateRange(orders);                    
+                    context.OrderItems.AddRange(ois);
                     context.SaveChanges();
                 }
             }

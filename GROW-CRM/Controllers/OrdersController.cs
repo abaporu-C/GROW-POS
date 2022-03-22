@@ -61,7 +61,7 @@ namespace GROW_CRM.Controllers
 
             //if(membersDDl == 0) return new ObjectResult("Please, select an existing member.") { StatusCode = 400};
 
-            Order order = new Order { Date = DateTime.Now, MemberID = membersDDl, PaymentTypeID = 1 };
+            Order order = new Order { Date = DateTime.Now, Total = 0, MemberID = membersDDl, PaymentTypeID = 1 };
 
             _context.Orders.Add(order);
             _context.SaveChanges();
@@ -81,17 +81,17 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Date,Subtotal,Taxes,Total,MemberID,PaymentTypeID")] Order order)
+        public async Task<IActionResult> Create([Bind("ID,Date,Total,MemberID,PaymentTypeID")] Order order)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
-                .Include(o => o.Member.Household.Province)
-                .Include(o => o.Member.Household.City)
-                .Include(m => m.Member).ThenInclude(m => m.Household)
-                .Include(m => m.PaymentType)
-                .FirstOrDefaultAsync(m => m.ID == order.ID);
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
+                                .Include(o => o.PaymentType)
+                                .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+                                .FirstOrDefaultAsync(o => o.ID == order.ID);
 
             var orderItemsCheck = await _context.OrderItems.Where(oi => oi.OrderID == order.ID).ToListAsync();
 
@@ -102,8 +102,8 @@ namespace GROW_CRM.Controllers
             }
 
             //Try updating it with the values posted
-            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
-                o => o.Date, o => o.Subtotal, o => o.Taxes, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
+            if (ModelState.IsValid && await TryUpdateModelAsync<Order>(orderToUpdate, "",
+                o => o.Date, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
             {
                 try
                 {
@@ -135,8 +135,11 @@ namespace GROW_CRM.Controllers
                 }
                 catch (DbUpdateException)
                 {
-                    Console.WriteLine("Something Went Wrong");
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
                 }
             }
 
@@ -155,10 +158,9 @@ namespace GROW_CRM.Controllers
             }
 
             var order = await _context.Orders
-                                .Include(o => o.Member)
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
                                 .Include(o => o.PaymentType)
-                                .Include(o => o.Member.Household.Province)
-                                .Include(o => o.Member.Household.City)
                                 .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
                                 .FirstOrDefaultAsync(o => o.ID == id);
             if (order == null)
@@ -181,17 +183,17 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Subtotal,Taxes,Total,MemberID,PaymentTypeID")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Total,MemberID,PaymentTypeID")] Order order)
         {
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
-                .Include(o => o.Member.Household.Province)
-                .Include(o => o.Member.Household.City)
-                .Include(m => m.Member)
-                .Include(m => m.PaymentType)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
+                                .Include(o => o.PaymentType)
+                                .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+                                .FirstOrDefaultAsync(o => o.ID == id);
 
 
 
@@ -202,8 +204,8 @@ namespace GROW_CRM.Controllers
             }
 
             //Try updating it with the values posted
-            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
-                o => o.Date, o => o.Subtotal, o => o.Taxes, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
+            if (ModelState.IsValid && await TryUpdateModelAsync<Order>(orderToUpdate, "",
+                o => o.Date, o => o.Total, o => o.MemberID, o => o.PaymentTypeID))
             {
                 try
                 {
