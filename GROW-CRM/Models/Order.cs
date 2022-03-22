@@ -18,10 +18,6 @@ namespace GROW_CRM.Models
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        public decimal Subtotal { get; set; }
-
-        public decimal Taxes { get; set; }
-
         [DataType(DataType.Currency)]
         public decimal Total { get; set; }
         

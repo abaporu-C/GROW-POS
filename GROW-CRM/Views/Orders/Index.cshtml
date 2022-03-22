@@ -94,15 +94,13 @@
             });
         })
 
-        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){
-            event.preventDefault();
-            var memberID = $('#membersDDl').val();
+        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){            
+            var memberID = $('#membersDDl').val();            
             if(memberID === "0"){        
+                event.preventDefault();
                 $('#searchHErr').html("Please, select an existing member.")
                 return;
             }
-
-            $.get(`Orders/Create/${memberID}`)
         })
     </script>
 }

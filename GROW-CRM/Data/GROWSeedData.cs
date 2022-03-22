@@ -437,10 +437,10 @@ namespace GROW_CRM.Data
                         new City{Name = "Wainfleet"},
                         new City{Name = "Pelham"},
                         new City{Name = "St. Catharines"},
-                        new City{Name = "Throld"},
+                        new City{Name = "Thorold"},
                         new City{Name = "Welland"},
                         new City{Name = "Port Colborne"},
-                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara-on-the-Lake"},
                         new City{Name = "Niagara Falls"},
                         new City{Name = "Fort Erie"}
                     };
@@ -698,7 +698,7 @@ namespace GROW_CRM.Data
 
                         string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
 
-                        for(int j = 0; j < 6; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
+                        for(int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
 
                         for(int j = 0; j < rnd.Next(5) + 1; j++)
                         {

@@ -14,7 +14,7 @@
                 <input type="hidden" name="ID" value="@Model.ID" />
                 <input type="hidden" name="MemberID" value="@Model.MemberID" />
                 <input type="hidden" name="Date" value="@Model.Date" />
-
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="col-md-6">
                     <p><strong>Household</strong> @ViewData["Household"]</p>
                     <p><strong></strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
