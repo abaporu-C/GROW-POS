@@ -59,7 +59,7 @@ namespace GROW_CRM.Controllers
         {
             ViewDataReturnURL();
 
-            if(membersDDl == 0) return new ObjectResult("Please, select an existing member.") { StatusCode = 400};
+            //if(membersDDl == 0) return new ObjectResult("Please, select an existing member.") { StatusCode = 400};
 
             Order order = new Order { Date = DateTime.Now, MemberID = membersDDl, PaymentTypeID = 1 };
 
