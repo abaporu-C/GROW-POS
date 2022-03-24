@@ -52,7 +52,7 @@
         <li class="nav-item">
             <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
         </li>*@
-        @if(User.IsInRole("Security"))
+        @if(User.IsInRole("Admin"))
                         {                          
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Security Roles Assignments</a>

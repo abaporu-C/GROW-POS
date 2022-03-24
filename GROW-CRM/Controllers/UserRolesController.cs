@@ -11,7 +11,7 @@ using GROW_CRM.ViewModels;
 
 namespace GROW.Controllers
 {
-    [Authorize(Roles = "Security")]
+    [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
