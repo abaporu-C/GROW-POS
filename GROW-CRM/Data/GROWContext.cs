@@ -68,7 +68,7 @@ namespace GROW_CRM.Data
 
         public DbSet<MemberIncomeSituation> MemberIncomeSituations { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
+        //public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
 

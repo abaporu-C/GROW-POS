@@ -366,22 +366,22 @@ namespace GROW_CRM.Data
                     context.SaveChanges();
                 }
 
-                //Look for messages
-                if (!context.Messages.Any())
-                {
-                    //List of Messages
-                    List<Message> messages = new List<Message>();
+                ////Look for messages
+                //if (!context.Messages.Any())
+                //{
+                //    //List of Messages
+                //    List<Message> messages = new List<Message>();
 
-                    //Fill message list
-                    for (int i = 0; i < 10; i++)
-                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now});
+                //    //Fill message list
+                //    for (int i = 0; i < 10; i++)
+                //        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now});
 
-                    //Add list to context
-                    context.Messages.AddRange(messages);
+                //    //Add list to context
+                //    context.Messages.AddRange(messages);
 
-                    //Save Changes
-                    context.SaveChanges();
-                }
+                //    //Save Changes
+                //    context.SaveChanges();
+                //}
 
                 //Look for NotificationTypes
                 if (!context.NotificationTypes.Any())
