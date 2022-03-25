@@ -204,8 +204,8 @@ a[href*="/Households"]::before {
     content: "\f073" !important;
 }
 
-a[href*="#events"]::before {
-    content: "\f073" !important;
+a[href*="/Orders"]::before {
+    content: "\24" !important;
 }
 
 a[href*="#team"]::before {
