@@ -63,6 +63,8 @@ namespace GROW_CRM.Data
 
         public DbSet<Item> Items { get; set; }        
 
+        public DbSet<Message> Messages { get; set; }
+
         public DbSet<Member> Members { get; set; }
 
         public DbSet<MemberDocument> MemberDocuments { get; set; }
