@@ -215,6 +215,7 @@ namespace GROW_CRM.Controllers
                         + ((folksCount == 1) ? "" : "s") + " in the trial.";
                 }
             }
+            PopulateDropDownLists();
             return View();
         }
 
@@ -230,8 +231,9 @@ namespace GROW_CRM.Controllers
 
         private SelectList HouseholdStatusSelectList(int? selectedId)
         {
-            return new SelectList(_context.HouseholdStatuses
+            SelectList sl = new SelectList(_context.HouseholdStatuses
                 .OrderBy(d => d.Name), "ID", "Name", selectedId);
+            return sl;
 
         }
 

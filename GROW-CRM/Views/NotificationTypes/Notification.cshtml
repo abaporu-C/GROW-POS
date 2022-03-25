@@ -15,7 +15,7 @@
             <input type="hidden" name="id" value="@ViewData["id"]" />
             @*<input type="text" name="householdStatusID" value="@ViewData["householdStatusID"]" />*@
             <label for="HouseholdStatusID" class="control-label"></label>
-            <select id="HouseholdStatusID" class="form-control" asp-items="ViewBag.householdStatusID">
+            <select id="HouseholdStatusID" name="householdStatusID" class="form-control" asp-items="ViewBag.householdStatusID">
             <option value="">Select...</option>
             </select>
             <span for="HouseholdStatusID" class="text-danger"></span>
