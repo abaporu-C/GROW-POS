@@ -2,81 +2,150 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <title>@ViewData["Title"] - GROW_CRM</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
-<body>
+<body id="wrapper">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/logo_sm.webp" width="158" height="52"  alt="GROW logo" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+        <div class="overlay"></div>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Member Menu<b class="caret"></b>
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Members" asp-action="Index">Member List</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Items</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">About</a>
-                        </li>
-                        @*<li class="nav-item">
-            <a class="nav-link  display-4" asp-area="" asp-controller="Reports" asp-action="Index"> <h5>Reports</h5> </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
-        </li>*@
-        @if(User.IsInRole("Admin"))
-                        {                          
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Security Roles Assignments</a>
-                            </li>
-                        }
-                    </ul>
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <div class="sidebar-header">
+                    <div class="sidebar-brand">
+                        <a href="#">Brand</a>
+                    </div>
                 </div>
-            </div>
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">About</a></li>
+                <li><a asp-area="" asp-controller="Households" asp-action="Index">Households</a></li>
+                <li><a href="#team">Team</a></li>
+                <li class="dropdown">
+                    <a href="#works" class="dropdown-toggle" data-toggle="dropdown">Works <span class="caret"></span></a>
+                    <ul class="dropdown-menu animated fadeInLeft" role="menu">
+                        <div class="dropdown-header">Dropdown heading</div>
+                        <li><a href="#pictures">Pictures</a></li>
+                        <li><a href="#videos">Videeos</a></li>
+                        <li><a href="#books">Books</a></li>
+                        <li><a href="#art">Art</a></li>
+                        <li><a href="#awards">Awards</a></li>
+                    </ul>
+                </li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#followme">Follow me</a></li>
+            </ul>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
+            <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/logo_sm.webp" width="158" height="52" alt="GROW logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <partial name="_LoginPartial" />
+            <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
 
-    <footer class="border-top footer text-muted">
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Member Menu<b class="caret"></b>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Members" asp-action="Index">Member List</a>
+            <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Items</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+            </div>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">About</a>
+            </li>
+            @*<li class="nav-item">
+            <a class="nav-link  display-4" asp-area="" asp-controller="Reports" asp-action="Index"> <h5>Reports</h5> </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
+            </li>
+            @if (User.IsInRole("Admin"))
+            {
+            <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Security Roles Assignments</a>
+            </li>
+            }
+            </ul>
+            </div>
+            </div>
+            </nav>*@
+    </header>
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
         <div class="container">
-            &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <main role="main">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
+    </div>
+    @*<footer class="border-top footer text-muted">
+        <div class="container">
+        &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+                $(document).ready(function () {
+          var trigger = $('.hamburger'),
+              overlay = $('.overlay'),
+             isClosed = false;
+
+            trigger.click(function () {
+              hamburger_cross();
+            });
+
+            function hamburger_cross() {
+
+              if (isClosed == true) {
+                overlay.hide();
+                trigger.removeClass('is-open');
+                trigger.addClass('is-closed');
+                isClosed = false;
+              } else {
+                overlay.show();
+                trigger.removeClass('is-closed');
+                trigger.addClass('is-open');
+                isClosed = true;
+              }
+          }
+
+          $('[data-toggle="offcanvas"]').click(function () {
+                $('#wrapper').toggleClass('toggled');
+          });
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
