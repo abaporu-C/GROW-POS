@@ -17,6 +17,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -51,6 +52,12 @@
         <li class="nav-item">
             <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
         </li>*@
+        @if(User.IsInRole("Admin"))
+                        {                          
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Security Roles Assignments</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

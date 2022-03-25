@@ -1,12 +1,12 @@
 ﻿<table>
                             @{
-                                double subtotal = 0;
-                                double taxes = 0;
+                                //double subtotal = 0;
+                                //double taxes = 0;
                                 double total = 0;
 
-                            foreach (var item in ViewBag.OrderItems)
+                                foreach (var item in ViewBag.OrderItems)
                                 {
-                                    subtotal += (item.Item.Price * item.Quantity);
+                                    total += (item.Item.Price * item.Quantity);
 
                                     @:<tr><td>
 
@@ -17,7 +17,7 @@
                                         <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Item.Code" type="button">&#x274C;</button>
 		                            @:</td></tr>
                                 }
-                                <tr>
+                                @*<tr>
                                     <td>SubTotal</td>
                                     <td>@subtotal</td>
                                     <td><input type="hidden" name="Subtotal" value="@subtotal"/></td>
@@ -31,7 +31,7 @@
                                     <td><input type="hidden" name="Taxes" value="@taxes"/></td>
                                 </tr>
 
-                                total = subtotal + taxes;
+                                total = subtotal + taxes;*@
                                 <tr>
                                     <td>Total</td>
                                     <td>@total</td>

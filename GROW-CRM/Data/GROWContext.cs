@@ -1,4 +1,4 @@
-using GROW_CRM.Models;
+﻿using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
 using GROW_CRM.Models.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GROW_CRM.ViewModels.ReportsViewModels;
 
 
 namespace GROW_CRM.Data
@@ -92,6 +93,15 @@ namespace GROW_CRM.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.HasDefaultSchema("GROW");
+
+            //Adding Unique Constraints
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Name)
+                .IsUnique();
 
             //Adding Composite Keys
             modelBuilder.Entity<DietaryRestrictionMember>()

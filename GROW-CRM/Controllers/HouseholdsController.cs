@@ -334,9 +334,19 @@ namespace GROW_CRM.Controllers
 
             /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
              ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
-            
-           
-           
+
+
+            var about = (About)_context.Abouts.Where(m => m.ID == 1).FirstOrDefault();
+
+            ViewData["AptNumber"] = about.AptNumber;
+            ViewData["StreetNumber"] = about.StreetNumber;
+            ViewData["StreetName"] = about.StreetName;
+            ViewData["PostalCode"] = about.PostalCode;
+            ViewData["CityID"] = about.CityID;
+            ViewData["ProvinceID"] = about.ProvinceID;
+
+
+            PopulateDropDownLists(household);
 
             return View(household);
         }

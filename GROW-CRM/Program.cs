@@ -27,7 +27,13 @@ namespace GROW_CRM
                 try
                 {
                     var context = services.GetRequiredService<GROWContext>();
-                    context.Database.Migrate();
+                    context.Database.Migrate();                    
+
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
+
+                    identityContext.Database.Migrate();
+
                     GROWSeedData.Initialize(services);
                 }
                 catch (Exception ex)
@@ -50,6 +56,10 @@ namespace GROW_CRM
                 {
                     services.AddHostedService<DeleteTempMembers>();
                     services.AddScoped<IScopedDeleteEmptyMembers, ScopedDeleteEmptyMembers>();
+                    services.AddControllersWithViews()
+                        .AddNewtonsoftJson(options =>
+                                                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                                            );
                 });
     }
 }
