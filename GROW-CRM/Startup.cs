@@ -1,4 +1,6 @@
 using GROW_CRM.Data;
+using GROW_CRM.Utilities;
+using GROW_CRM.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -77,6 +79,17 @@ namespace GROW_CRM
 
             //To give access to IHttpContextAccessor for Audit Data with IAuditable
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //For email service
+            services.AddSingleton<IEmailConfiguration>(Configuration
+                .GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
+            //With added methods for production use.
+            services.AddTransient<IMyEmailSender, MyEmailSender>();
+
+            //For the Identity System
+            services.AddTransient<IEmailSender, EmailSender>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
