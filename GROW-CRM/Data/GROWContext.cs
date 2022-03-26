@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GROW_CRM.ViewModels.ReportsViewModels;
-
+using GROW_CRM.ViewModels;
 
 namespace GROW_CRM.Data
 {
@@ -51,6 +51,8 @@ namespace GROW_CRM.Data
 
         public DbSet<DocumentType> DocumentTypes { get; set; }
 
+        public DbSet<Employee> Employees { get; set; }
+
         public DbSet<Gender> Genders { get; set; }
 
         public DbSet<HealthIssueType> HealthIssueTypes { get; set; }
@@ -87,6 +89,8 @@ namespace GROW_CRM.Data
 
         public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
 
+        public DbSet<RoleWithUserVM> RolesWithUsers { get; set; }
+
         public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         //Methods
@@ -104,6 +108,17 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<Item>()
                 .HasIndex(i => i.Name)
                 .IsUnique();
+
+            //Add a unique index to the Employee Email
+            modelBuilder.Entity<Employee>()
+            .HasIndex(a => new { a.Email })
+            .IsUnique();
+
+            //For the RolesWithUsers View
+            modelBuilder
+                .Entity<RoleWithUserVM>()
+                .ToView(nameof(RolesWithUsers))
+                .HasNoKey();
 
             //Adding Composite Keys
             modelBuilder.Entity<DietaryRestrictionMember>()

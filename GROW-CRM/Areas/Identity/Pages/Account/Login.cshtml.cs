@@ -11,23 +11,27 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using GROW_CRM.Data;
+using GROW_CRM.Utilities;
 
 namespace GROW_CRM.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly GROWContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, GROWContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -65,6 +69,8 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            //David Stovell-Clear userName cookie
+            HttpContext.Response.Cookies.Delete("userName");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -82,6 +88,16 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                    }
+                    else
+                    {
+                        //What better time to create the profile?
+                        returnUrl = "~/EmployeeAccount/Create";
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

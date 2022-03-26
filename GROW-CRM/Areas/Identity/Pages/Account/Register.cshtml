@@ -12,6 +12,7 @@
     <div class="pl-5 pr-5 pt-3 pb-3">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
+            <h4 class="text-primary">@ViewData["msg"]</h4>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />

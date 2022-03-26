@@ -4,19 +4,18 @@
     ViewData["Title"] = "Households Index";
 }
 
+    <div class="row ">
+        <div class="col-md-6">
+            <h2>Households</h2>
+        </div>
 
-<div class="row ">
-    <div class="col-md-6">
-        <h2>Households</h2>
+        <div class="col-md-3 justify-content-end">
+            <a class="btn btn-outline-info" asp-area="" asp-controller="Members" asp-action="Index">Members Index</a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-outline-success" asp-action="Create">Create New</a>
+        </div>
     </div>
-
-    <div class="col-md-3 justify-content-end">
-        <a class="btn btn-outline-info" asp-area="" asp-controller="Members" asp-action="Index">Members Index</a>
-    </div>
-    <div class="col-md-3">
-        <a class="btn btn-outline-success" asp-action="Create">Create New</a>
-    </div>
-</div>
 
 
 
@@ -44,33 +43,33 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            </div>
-                            <div class="col-md-3">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="control-label">Filter by Status:</label>
-                                        @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
-                                    </div>
+                                    <label class="control-label">Filter by Status:</label>
+                                    @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
-
-
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
-                                <label class="control-label">Search by Household Address:</label>
-                                @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
-                            </div>
-                            <div class="form-group col-md-5">
-                                <label class="control-label">Search by City:</label>
-                                @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
-                            </div>
-                            <div class="form-group col-md-4 align-self-end pr-3">
-                                <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
-                                <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
-                            </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Household Address:</label>
+                            @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by City:</label>
+                            @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
+                        </div>
+                        <div class="form-group col-md-4 align-self-end pr-3">
+                            <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
+                            <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
         <table class="table">
@@ -120,7 +119,7 @@
                 {
                     <tr>
                         <td>
-                             @Html.DisplayFor(modelItem => item.ID)
+                            @Html.DisplayFor(modelItem => item.ID)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.StreetNumber)
@@ -137,7 +136,8 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Province.Name)
                         </td>
-                        <td><center>
+                        <td>
+                            <center>
                                 @{
                                     int memberCount = item.NumberOfMembers;
                                     if (memberCount > 0)
@@ -148,7 +148,7 @@
                                     {
                                         @Html.Raw("0")
                                     }
-                                 }
+                                }
                             </center>
                             @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
                         </td>
@@ -170,7 +170,6 @@
             </tbody>
         </table>
     </form>
-
     @section Scripts {
         <script type="text/javascript">
             $(function () {

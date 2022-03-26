@@ -1,15 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@*For Cookies*@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <li class="profile">
     @if (SignInManager.IsSignedIn(User))
     {
+        var username = HttpContextAccessor.HttpContext.Request.Cookies["userName"] ?? UserManager.GetUserName(User);
         <div class="profile-details">
             <!--<img src="profile.jpg" alt="profileImg">-->
         <div class="name_job">
                 <div class="name">
-                    <a id="login-anchor" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+                    <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
                 </div>
                 @*<div class="job">Web designer</div>*@
             </div>

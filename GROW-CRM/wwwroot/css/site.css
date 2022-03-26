@@ -1,6 +1,8 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
+:root {
+    --light-green: #74DF00;
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -89,5 +91,16 @@ body {
 }
 
 
+/*
+    Forms
+*/
 
-
+.box-form {
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    max-width: 95%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
