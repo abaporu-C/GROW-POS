@@ -822,6 +822,38 @@ namespace GROW_CRM.Data
                     context.OrderItems.AddRange(ois);
                     context.SaveChanges();
                 }
+
+                // Look for any Employees.  Seed ones to match the seeded Identity accounts.
+                if (!context.Employees.Any())
+                {
+                    context.Employees.AddRange(
+                     new Employee
+                     {
+                         FirstName = "Gregory",
+                         LastName = "House",
+                         Email = "admin1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "Fred",
+                         LastName = "Flintstone",
+                         Email = "security1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "Betty",
+                         LastName = "Rubble",
+                         Email = "super1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "David",
+                         LastName = "Stovell",
+                         Email = "user1@outlook.com",
+                     });
+
+                    context.SaveChanges();
+                }
             }
         }
     }
