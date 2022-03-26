@@ -2,7 +2,31 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
+<li class="profile">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="profile-details">
+            <!--<img src="profile.jpg" alt="profileImg">-->
+        <div class="name_job">
+                <div class="name">
+                    <a id="login-anchor" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+                </div>
+                @*<div class="job">Web designer</div>*@
+            </div>
+            <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <i class='bx bx-log-out' id="log_out"></i>
+        </form>
+        </div>
+        
+    }
+    else
+    {
+
+    }
+
+</li>
+
+@*<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
@@ -23,4 +47,4 @@ else
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
+</ul>*@
