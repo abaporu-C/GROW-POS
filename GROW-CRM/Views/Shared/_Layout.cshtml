@@ -4,44 +4,97 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <title>@ViewData["Title"] - GROW_CRM</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
-<body id="wrapper">
+<body class="m-0">
     <header>
-        <div class="overlay"></div>
-
-        <!-- Sidebar -->
-        <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
-            <ul class="nav sidebar-nav">
-                <div class="sidebar-header">
-                    <div class="sidebar-brand">
-                        <a href="#">Brand</a>
-                    </div>
-                </div>
-                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">About</a></li>
-                <li><a asp-area="" asp-controller="Households" asp-action="Index">Households</a></li>
-                <li><a asp-area="" asp-controller="Orders" asp-action="Index">Orders</a></li>
-                <li class="dropdown">
-                    <a href="#works" class="dropdown-toggle" data-toggle="dropdown">Works <span class="caret"></span></a>
-                    <ul class="dropdown-menu animated fadeInLeft" role="menu">
-                        <div class="dropdown-header">Dropdown heading</div>
-                        <li><a href="#pictures">Pictures</a></li>
-                        <li><a href="#videos">Videeos</a></li>
-                        <li><a href="#books">Books</a></li>
-                        <li><a href="#art">Art</a></li>
-                        <li><a href="#awards">Awards</a></li>
-                    </ul>
+        <div class="sidebar">
+            <div class="logo-details">
+                <i class='bx bxl-c-plus-plus icon'></i>
+                <div class="logo_name">CodingLab</div>
+                <i class='bx bx-menu' id="btn"></i>
+            </div>
+            <ul class="nav-list">
+                <li>
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search...">
+                    <span class="tooltip">Search</span>
                 </li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#followme">Follow me</a></li>
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class='bx bx-grid-alt'></i>
+                        <span class="links_name">Dashboard</span>
+                    </a>
+                    <span class="tooltip">Dashboard</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Households" asp-action="Index">
+                        <i class='bx bx-building-house'></i>
+                        <span class="links_name">Households</span>
+                    </a>
+                    <span class="tooltip">Households</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Orders" asp-action="Index">
+                        <i class='bx bx-cart-alt'></i>
+                        <span class="links_name">Orders</span>
+                    </a>
+                    <span class="tooltip">Orders</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Items" asp-action="Index">
+                        <i class='bx bx-food-menu'></i>
+                        <span class="links_name">Items</span>
+                    </a>
+                    <span class="tooltip">Items</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Reports" asp-action="Index">
+                        <i class='bx bx-pie-chart-alt-2'></i>
+                        <span class="links_name">Reports</span>
+                    </a>
+                    <span class="tooltip">Reports</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Lookups" asp-action="Index">
+                        <i class='bx bx-folder'></i>
+                        <span class="links_name">Misc Data</span>
+                    </a>
+                    <span class="tooltip">Misc Data</span>
+                </li>                
+                <li>
+                    <a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">
+                        <i class='bx bx-info-circle'></i>
+                        <span class="links_name">About</span>
+                    </a>
+                    <span class="tooltip">About</span>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>
+                    <a asp-area="" asp-controller="UserRoles" asp-action="Index">
+                        <i class='bx bx-cog'></i>
+                        <span class="links_name">Users</span>
+                    </a>
+                    <span class="tooltip">Users</span>
+                </li>
+                }                
+                <li class="profile">
+                    <div class="profile-details">
+                        <!--<img src="profile.jpg" alt="profileImg">-->
+                        <div class="name_job">
+                            <div class="name">Prem Shahi</div>
+                            <div class="job">Web designer</div>
+                        </div>
+                    </div>
+                    <i class='bx bx-log-out' id="log_out"></i>
+                </li>
             </ul>
-        </nav>
+        </div>
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
             <div class="container">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/logo_sm.webp" width="158" height="52" alt="GROW logo" /></a>
@@ -96,18 +149,13 @@
             </div>
             </nav>*@
     </header>
-    <div id="page-content-wrapper">
-        <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
-            <span class="hamb-top"></span>
-            <span class="hamb-middle"></span>
-            <span class="hamb-bottom"></span>
-        </button>
+    <section class="home-section">
         <div class="container">
             <main role="main">
                 @RenderBody()
             </main>
         </div>
-    </div>
+    </section>
     @*<footer class="border-top footer text-muted">
         <div class="container">
         &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -117,34 +165,28 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-                $(document).ready(function () {
-          var trigger = $('.hamburger'),
-              overlay = $('.overlay'),
-             isClosed = false;
+               let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
 
-            trigger.click(function () {
-              hamburger_cross();
-            });
-
-            function hamburger_cross() {
-
-              if (isClosed == true) {
-                overlay.hide();
-                trigger.removeClass('is-open');
-                trigger.addClass('is-closed');
-                isClosed = false;
-              } else {
-                overlay.show();
-                trigger.removeClass('is-closed');
-                trigger.addClass('is-open');
-                isClosed = true;
-              }
-          }
-
-          $('[data-toggle="offcanvas"]').click(function () {
-                $('#wrapper').toggleClass('toggled');
-          });
+        closeBtn.addEventListener("click", ()=>{
+          sidebar.classList.toggle("open");
+          menuBtnChange();//calling the function(optional)
         });
+
+        searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+          sidebar.classList.toggle("open");
+          menuBtnChange(); //calling the function(optional)
+        });
+
+        // following are the code to change sidebar button(optional)
+        function menuBtnChange() {
+         if(sidebar.classList.contains("open")){
+           closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+         }else {
+           closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+         }
+        }
     </script>
     @RenderSection("Scripts", required: false)
 </body>
