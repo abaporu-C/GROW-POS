@@ -290,6 +290,17 @@ header * {
     margin: 18px
 }
 
+#login-anchor {
+    background-color: transparent;
+    color: #FFF;
+    display: block;
+    margin-top: 10px;
+}
+
+#log_out:hover{
+    cursor: pointer;
+}
+
 @media (max-width: 420px) {
     .sidebar li .tooltip {
         display: none;

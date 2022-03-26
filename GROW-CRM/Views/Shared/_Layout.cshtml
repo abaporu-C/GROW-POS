@@ -83,16 +83,7 @@
                     <span class="tooltip">Users</span>
                 </li>
                 }                
-                <li class="profile">
-                    <div class="profile-details">
-                        <!--<img src="profile.jpg" alt="profileImg">-->
-                        <div class="name_job">
-                            <div class="name">Prem Shahi</div>
-                            <div class="job">Web designer</div>
-                        </div>
-                    </div>
-                    <i class='bx bx-log-out' id="log_out"></i>
-                </li>
+                <partial name="_LoginPartial" />
             </ul>
         </div>
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
@@ -187,6 +178,14 @@
            closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
          }
         }
+    </script>
+    <script>
+        var form = document.getElementById("logout-form");
+
+        document.getElementById("log_out").addEventListener('click', function(){
+            form.submit();
+        })
+
     </script>
     @RenderSection("Scripts", required: false)
 </body>
