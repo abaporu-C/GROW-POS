@@ -509,6 +509,8 @@ namespace GROW_CRM.Data
                     int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
                     int citiesCount = citiesIDs.Count();
 
+                    int hhs = context.HouseholdStatuses.Where(hhs => hhs.Name == "Active").Select(hhs => hhs.ID).FirstOrDefault();
+
                     //Data
                     string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "W", "Y", "Z" };
                     int alhabetLen = alphabet.Count();

@@ -4,6 +4,7 @@
 :root {
     --dark-green: #347037;
     --green: #23880E;
+    --light-gray: #C7EAE4;
 }
 
 header * {
@@ -268,11 +269,12 @@ header * {
 
 .home-section {
     position: relative;
-    background: #E4E9F7;
+    background: var(--light-gray);
     min-height: 100vh;
     top: 0;
     left: 78px;
     width: calc(100% - 78px);
+    padding: 3% 2%;
     transition: all 0.5s ease;
     z-index: 2;
 }
