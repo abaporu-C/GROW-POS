@@ -53,6 +53,7 @@ namespace GROW_CRM.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(employee);
+                    await InviteUserToRegister(employee, null);
                     await _context.SaveChangesAsync();
 
                     //Send Email to new Employee - commented out till email configured
@@ -79,8 +80,8 @@ namespace GROW_CRM.Controllers
         private async Task InviteUserToRegister(Employee employee, string message)
         {
             message ??= "Hello " + employee.FirstName + "<br /><p>Please navigate to:<br />" +
-                        "<a href='https://canadagames.azurewebsites.net/' title='https://canadagames.azurewebsites.net/' target='_blank' rel='noopener'>" +
-                        "https://summercamp2022.azurewebsites.net</a><br />" +
+                        "<a href='https://grow-pos.azurewebsites.net/' title='https://grow-pos.azurewebsites.net/' target='_blank' rel='noopener'>" +
+                        "https://grow-pos.azurewebsites.net</a><br />" +
                         " and Register using " + employee.Email + " for email address.</p>";
             //Sending the email commented out until the service is configured.
             await _emailSender.SendOneAsync(employee.FullName, employee.Email,
@@ -105,9 +106,6 @@ namespace GROW_CRM.Controllers
             return View(employee);
         }
 
-        // POST: Employees/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, bool Active)
