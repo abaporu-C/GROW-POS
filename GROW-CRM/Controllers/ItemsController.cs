@@ -142,7 +142,7 @@ namespace GROW_CRM.Controllers
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
             ViewData["Filtering"] = isFiltering ? " show" : "";
-
+            ViewData["Action"] = "/Items";
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

@@ -6,6 +6,7 @@
                 <h4 class="modal-title" id="pageSizeModalLabel">Set Page Size</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
+            <form method="get" action="@ViewData["Action"]">
             <div class="modal-body">
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -13,7 +14,11 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Page Size: </span>
                             </div>
-                            @Html.DropDownList("pageSizeID", null, htmlAttributes: new { @class = "form-control" })
+                                @foreach(var q in Context.Request.Query)
+                                {
+                                    <input hidden name="@q.Key" value="@q.Value"/>
+                                }
+                                @if (!(ViewData["pageSizeID"] is null)) { @Html.DropDownList("pageSizeID", null, htmlAttributes: new { @class = "form-control" }) }
                             <div class="input-group-append">
                                 <input type="submit" class="btn btn-primary" value="Set Page Size" />
                             </div>
@@ -21,6 +26,7 @@
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 </div>
