@@ -46,9 +46,18 @@
                     @Html.DisplayFor(modelItem => item.Active)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                        <i class='bx bxs-edit-alt'></i>
+                    </a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+@section Scripts{
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
+}

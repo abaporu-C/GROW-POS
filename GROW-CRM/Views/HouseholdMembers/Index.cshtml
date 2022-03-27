@@ -116,6 +116,10 @@
     </div>
 </div>
 <form asp-action="Index" method="get">
+    @if(!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+    {
+        <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]"/>   
+    } 
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <input type="hidden" name="HouseholdID" value="@household.ID" />
@@ -335,5 +339,8 @@
         $('.popover-dismiss').popover({
             trigger: 'focus'
         })
+        $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     </script>
 }

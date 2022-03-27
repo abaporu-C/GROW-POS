@@ -11,7 +11,6 @@
     </button>
 </p>
 
-<partial name="_CreateOrderModal" />
 <table class="table table-striped">
     <thead>
         <tr>
@@ -53,9 +52,12 @@
         @Html.DisplayFor(modelItem => item.PaymentType.Type)
     </td>
     <td>
-        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+        <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                            <i class='bx bxs-edit-alt'></i>
+                        </a>
+                         |
+                        <a asp-action="Details" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> |
+                        <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
     </td>
 </tr>}
     </tbody>
@@ -103,4 +105,12 @@
             }
         })
     </script>
+    <script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 }

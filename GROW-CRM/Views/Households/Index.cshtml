@@ -161,9 +161,15 @@
                             @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                            <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">Details</a> |
-                            <a asp-action="Add" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">Add Member</a>
+                            <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                <i class='bx bxs-edit-alt'></i>
+                            </a> |
+                            <a asp-action="Index" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
+                                <i class='bx bx-info-square'></i>
+                            </a> |
+                            <a asp-action="Add" class="text-success h3" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
+                                <i class='bx bx-user-plus'></i>
+                            </a>
                         </td>
                     </tr>
                 }
@@ -178,5 +184,8 @@
             $('.popover-dismiss').popover({
                 trigger: 'focus'
             })
+            $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
         </script>
     }

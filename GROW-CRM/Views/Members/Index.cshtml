@@ -132,12 +132,23 @@
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                 </td>*@
                 <td>
-                    <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Update" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> |
+                    <a asp-action="Details" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> |
+                    <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
                 </td>
             </tr>
             }
         </tbody>
     </table>
 </form>
+
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+}

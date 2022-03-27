@@ -59,9 +59,9 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-action="Download" asp-route-id="@item.ID">Download</a> |
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        <a asp-action="Download" class="h3" data-toggle="tooltip" data-placement="top" title="Download" asp-route-id="@item.ID"><i class='bx bx-download'></i></a> |
+                        <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> |
+                        <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
                     </td>
                 </tr>
             }

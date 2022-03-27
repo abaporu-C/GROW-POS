@@ -10,6 +10,10 @@
     <a asp-action="Create" class="btn btn-outline-success"> <i class="fa-solid fa-circle-plus"></i> New Item</a>
 </p>
 <form asp-action="Index" method="get">
+    @if(!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+    {
+        <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]"/>   
+    }    
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
@@ -152,9 +156,9 @@
                         </span>
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID"> <i class="fa-solid fa-pen-to-square"></i> Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID"> <i class="fa-solid fa-circle-info"></i> Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID"> <i class="fa-solid fa-trash-can"></i> Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit"><i class='bx bxs-edit-alt'></i></a> |
+                        <a asp-action="Details" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> |
+                        <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
                     </td>
                 </tr>
             }
@@ -169,6 +173,9 @@
     });
     $('.popover-dismiss').popover({
         trigger: 'focus'
+    })
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 }
