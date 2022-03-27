@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
 <body class="m-0">
+    <partial name="_addIncomeSituationModal" />
+    <partial name="_MemberIncomeSituationModal"/>
+    <partial name="_CreateOrderModal" />
+    <partial name="_OrderItemsModal" />
+    <partial name="_OrderModal" />
+    <partial name="_PageSizeModal" />
+    <partial name="_LICOInfoModal" />
     <header>
         <div class="sidebar">
             <div class="logo-details">
@@ -146,16 +153,18 @@
             </div>
             </div>
             </nav>*@
-    </header>
+    </header>    
+
     <section class="home-section">
         <div class="container">
             <main role="main">
-                <div class="box-form">
+                <div class="box-form rounded-lg">
                     @RenderBody()
                 </div>
             </main>
         </div>
     </section>
+
     @*<footer class="border-top footer text-muted">
         <div class="container">
         &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

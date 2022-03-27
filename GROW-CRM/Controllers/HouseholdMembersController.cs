@@ -151,6 +151,7 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            ViewData["Action"] = "/HouseholdMembers";            
 
             //Now get the MASTER record, the patient, so it can be displayed at the top of the screen
             Household household = _context.Households

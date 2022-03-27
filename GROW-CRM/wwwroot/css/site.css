@@ -2,6 +2,7 @@
 for details on configuring this project to bundle and minify static web assets. */
 :root {
     --light-green: #74DF00;
+    --light-gray: #C7EAE4;
 }
 
 a.navbar-brand {
@@ -101,6 +102,47 @@ body {
     flex-direction: column;
     justify-content: center;
     padding: 20px;
-    max-width: 95%;
+    max-width: 95vw;
+    min-height: 80vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*
+    Home Section
+*/
+
+.home-section {
+    position: relative;
+    background: var(--light-gray);
+    min-height: 100vh;
+    top: 0;
+    left: 78px;
+    width: calc(100% - 78px);
+    padding: 3% 2%;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+    .home-section .text {
+        display: inline-block;
+        color: #11101d;
+        font-size: 25px;
+        font-weight: 500;
+        margin: 18px
+    }
+
+/*
+    Modals
+*/
+
+.modal-bg{
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;   
+    top: 0;
+    width: 100%;
 }

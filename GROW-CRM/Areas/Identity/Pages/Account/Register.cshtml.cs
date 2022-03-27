@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GROW_CRM.Data;
+using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,17 +25,19 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly GROWContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, GROWContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -74,48 +78,40 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                //First see if the user exists and is allowed to register
+                var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
+                if (emp == null)
                 {
-                    /*
-                    
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
-
-                     */
-
-                    string msg = "Success: account for " + Input.Email + " has been created.";
+                    string msg = "Error: Account for " + Input.Email + " has not been created by the Admin.";
                     _logger.LogInformation(msg);
                     ViewData["msg"] = msg;
-                    return Page();                    
                 }
-                foreach (var error in result.Errors)
+                else if (!emp.Active)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    string msg = "Error: Account for login " + Input.Email + " is not active.";
+                    _logger.LogInformation(msg);
+                    ViewData["msg"] = msg;
+                }
+                else //All good to add the account
+                {
+                    var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
+                    {
+                        string msg = "Success: Account for " + Input.Email + " has been created with password.";
+                        _logger.LogInformation(msg);
+                        ViewData["msg"] = msg;
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //Set Cookie to show full name
+                        CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                        return LocalRedirect(returnUrl);
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }

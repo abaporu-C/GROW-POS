@@ -530,7 +530,7 @@ namespace GROW_CRM.Data
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = 1,
-                            HouseholdStatusID = 1,
+                            HouseholdStatusID = hhs,
                             AboutID = 1
                         }); ;
                     }

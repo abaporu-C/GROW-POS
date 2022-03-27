@@ -1,4 +1,4 @@
-﻿@model GROW_CRM.ViewModels.EmployeeVM
+﻿@model GROW_CRM.Models.Employee
 
 @{
     ViewData["Title"] = "Account";
@@ -6,6 +6,7 @@
 
 <h2>Account for: @Model.FullName</h2>
 
+<div class="text-danger">@TempData["message"]</div>
 
 <div>
     <hr />

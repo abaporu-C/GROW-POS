@@ -89,14 +89,12 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
-                    if (emp != null)
+                    CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                    if (String.IsNullOrEmpty(emp.Phone))
                     {
-                        CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
-                    }
-                    else
-                    {
-                        //What better time to create the profile?
-                        returnUrl = "~/EmployeeAccount/Create";
+                        //Nag to complete the profile?
+                        TempData["message"] = "Please enter the phone number.";
+                        returnUrl = "~/EmployeeAccounts/Edit";
                     }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
@@ -112,7 +110,25 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
+                    if (emp == null) //check if they are in the system
+                    {
+                        string msg = "Error: Account for " + Input.Email + " has not been created by the Admin.";
+                        ModelState.AddModelError(string.Empty, msg);
+                    }
+                    else if (!emp.Active) //check if they are active
+                    {
+                        string msg = "Error: Account for login " + Input.Email + " is not active.";
+                        ModelState.AddModelError(string.Empty, msg);
+                    }
+                    else if (_userManager.FindByEmailAsync(Input.Email).Result == null) //check if they need to register
+                    {
+                        ModelState.AddModelError(string.Empty, "You must register to create a password for the system.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
                     return Page();
                 }
             }

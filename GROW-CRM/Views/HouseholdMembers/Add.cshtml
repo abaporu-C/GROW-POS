@@ -9,8 +9,6 @@
     Add Member to Household : @ViewData["HouseholdName"]
 </h3>
 <hr />
-<partial name="_addIncomeSituationModal" />
-<partial name="_MemberIncomeSituationModal" />
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="ID" value="@Model.ID" />
     <input type="hidden" name="HouseholdID" value="@Model.HouseholdID" />

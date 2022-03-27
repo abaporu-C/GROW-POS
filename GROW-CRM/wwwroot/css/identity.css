@@ -20,7 +20,7 @@ a {
 
 .first-line, .second-line, .third-line, .login-form {
     animation-name: FadeIn;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
@@ -30,13 +30,13 @@ a {
 }
 
 .second-line {
-    animation-delay: 2s;
+    animation-delay: 0.5s;
     opacity: 0;
     text-align: right;
 }
 
 .third-line {
-    animation-delay: 4s;
+    animation-delay: 1s;
     opacity: 0;
     text-align: center;
 }
@@ -68,7 +68,7 @@ a {
 }
 
 .login-form {
-    animation-delay: 6s;
+    animation-delay: 1.5s;
     opacity: 0;
 }
 
