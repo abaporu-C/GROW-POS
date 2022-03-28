@@ -30,8 +30,9 @@
             </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
+    <div class="table-responsive">
+    <table class="table table-striped rounded-lg">
+        <thead class="thead-dark">
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Member)
@@ -59,13 +60,14 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-action="Download" class="h3" data-toggle="tooltip" data-placement="top" title="Download" asp-route-id="@item.ID"><i class='bx bx-download'></i></a> |
-                        <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> |
-                        <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
+                        <a asp-action="Download" class="h4" data-toggle="tooltip" data-placement="top" title="Download" asp-route-id="@item.ID"><i class='bx bx-download'></i></a> 
+                        <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> 
+                        <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    </div>
     <partial name="_PagingNavBar" />
 </form>

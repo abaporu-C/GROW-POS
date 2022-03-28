@@ -24,12 +24,11 @@ for (let city of allCities) {
     }
 }
 
-console.log(mapData)
 
 let vegaMap = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": 500,
-            "height": 300,
+    "width": 200,
+    "height": 200,
                 "data": {
                     "url": "../NGMunicipalBoundaries.json",
             "format": { "property": "features" }

@@ -158,7 +158,8 @@
         </dt>
         <dd>
             <div>
-                <table class="table">
+                <div class="table-responsive">
+                <table class="table table-striped rounded-lg">
                     <colgroup>
                         <col />
                         <col />
@@ -169,6 +170,7 @@
                         <col />
                         <col />
                     </colgroup>
+                    <thead class="thead-dark">
                     <tr>
                         <th>
                             <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
@@ -197,7 +199,8 @@
                             </a>
                         </th>
                     </tr>
-
+                    </thead>
+                    <tbody>
                     @foreach (var item in Model)
                     {
                 <tr>
@@ -222,7 +225,7 @@
                                         theList += ", \n" + c.FirstOrDefault()[i].Summary;
                                     }
                                     <a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus" 
-                                       data-trigger="focus" title="IncomeSituations" data-placement="bottom"
+                                       title="IncomeSituations" data-placement="bottom"
                                        data-content="@theList">
                                         @first... <span class="badge badge-info">
                                             @theCount
@@ -310,6 +313,7 @@
                     </td>
                 </tr>
                     }
+                    
                 <tr>
                     <td></td>
                     <td></td>
@@ -321,7 +325,9 @@
                     <td></td>
                     <td></td>
                 </tr>
+                </tbody>
                 </table>
+                </div>
             </div>
         </dd>
     </dl>

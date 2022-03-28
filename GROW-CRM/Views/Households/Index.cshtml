@@ -72,13 +72,14 @@
                 </div>
             </div>
         </div>
-        <table class="table">
-            <colgroup>
+        <div class="table-responsive">
+        <table class="table table-striped rounded-lg">
+            @*<colgroup>
                 <col />
-                @*<col width="300" />*@
+                <col width="300" />
                 <col />
-            </colgroup>
-            <thead>
+            </colgroup>*@
+            <thead class="thead-dark">
                 <tr>
                     <th>
                         <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
@@ -96,9 +97,9 @@
                         <input type="submit" name="actionButton" value="City" class="btn btn-link" />
                     </th>
 
-                    <th>
+                    @*<th>
                         <input type="submit" name="actionButton" value="Province" class="btn btn-link" />
-                    </th>
+                    </th>*@
 
                     <th>
                         <input type="submit" name="actionButton" value="Members" class="btn btn-link" />
@@ -133,9 +134,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.City.Name)
                         </td>
-                        <td>
+                        @*<td>
                             @Html.DisplayFor(modelItem => item.Province.Name)
-                        </td>
+                        </td>*@
                         <td>
                             <center>
                                 @{
@@ -161,13 +162,13 @@
                             @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
                         </td>
                         <td>
-                            <a asp-action="Edit" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                            <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
                                 <i class='bx bxs-edit-alt'></i>
-                            </a> |
-                            <a asp-action="Index" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
+                            </a>
+                            <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
                                 <i class='bx bx-info-square'></i>
-                            </a> |
-                            <a asp-action="Add" class="text-success h3" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
+                            </a>
+                            <a asp-action="Add" class="text-success h4" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
                                 <i class='bx bx-user-plus'></i>
                             </a>
                         </td>
@@ -175,6 +176,7 @@
                 }
             </tbody>
         </table>
+        </div>
     </form>
     @section Scripts {
         <script type="text/javascript">

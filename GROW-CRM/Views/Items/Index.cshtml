@@ -54,8 +54,8 @@
             </div>
         </div>
     </div>
-
-    <table class="table table-hover">
+    <div class="table-responsive">
+    <table class="table table-striped rounded-lg">
         @{
             string bold = "font-weight-bold";
             string field = ViewData["sortField"].ToString();
@@ -66,7 +66,7 @@
                 direction = "▲";
             }
         }
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th>
                     @if (field == "Code")
@@ -156,14 +156,15 @@
                         </span>
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID" class="text-warning h3" data-toggle="tooltip" data-placement="top" title="Edit"><i class='bx bxs-edit-alt'></i></a> |
-                        <a asp-action="Details" class="h3" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> |
-                        <a asp-action="Delete" class="text-danger h3" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit"><i class='bx bxs-edit-alt'></i></a> 
+                        <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> 
+                        <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    </div>
     <partial name="_PagingNavBar" />
 </form>
 @section Scripts {

@@ -22,6 +22,7 @@ namespace GROW_CRM.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
             return View();
         }
 
