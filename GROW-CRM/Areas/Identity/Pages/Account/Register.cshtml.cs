@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GROW_CRM.Data;
+using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -24,14 +25,14 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly IMyEmailSender _emailSender;
         private readonly GROWContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, GROWContext context)
+            IMyEmailSender emailSender, GROWContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -49,6 +50,21 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Display(Name = "First Name")]
+            [Required(ErrorMessage = "You cannot leave the first name blank.")]
+            [StringLength(50, ErrorMessage = "First name cannot be more than 50 characters long.")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            [Required(ErrorMessage = "You cannot leave the last name blank.")]
+            [StringLength(50, ErrorMessage = "Last name cannot be more than 50 characters long.")]
+            public string LastName { get; set; }
+
+            [RegularExpression("^\\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number (no spaces).")]
+            [DataType(DataType.PhoneNumber)]
+            [StringLength(10)]
+            public string Phone { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -66,7 +82,7 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = "/Employees")
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -78,6 +94,12 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                //Create Employee
+                Employee newEmp = new Employee { FirstName = Input.FirstName, LastName = Input.LastName, Phone = Input.Phone ?? "", Email = Input.Email, Active = true};
+
+                _context.Add(newEmp);
+                await _context.SaveChangesAsync();
+
                 //First see if the user exists and is allowed to register
                 var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
                 if (emp == null)
@@ -98,12 +120,22 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {
+                        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ResetPassword",
+                            pageHandler: null,
+                            values: new { area = "Identity", code },
+                            protocol: Request.Scheme);
+
+                        await InviteUserToRegister(newEmp, callbackUrl);
+
                         string msg = "Success: Account for " + Input.Email + " has been created with password.";
                         _logger.LogInformation(msg);
                         ViewData["msg"] = msg;
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         //Set Cookie to show full name
-                        CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                        //CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
                         return LocalRedirect(returnUrl);
                     }
                     foreach (var error in result.Errors)
@@ -114,6 +146,19 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             }
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task InviteUserToRegister(Employee employee, string url)
+        {
+            string message = "Hello " + employee.FirstName + "<br /><p>Please navigate to:<br />" +
+                        $"<a href='{url}' title='{url}' target='_blank' rel='noopener'>" +
+                        $"{url}</a><br />" +
+                        " and Register your own password using " + employee.Email + " for email address.</p>";
+            //Sending the email commented out until the service is configured.
+            await _emailSender.SendOneAsync(employee.FullName, employee.Email,
+                "Account Registration", message);
+            TempData["message"] = "Invitation email sent to " + employee.FullName + " at " + employee.Email;
+
         }
     }
 }
