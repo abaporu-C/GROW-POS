@@ -183,8 +183,9 @@ body {
 */
 
 #mapping{
+    height: 70vh;
     margin: auto;
-    width: 40%; 
+    width: 100%; 
 }
 
 /*

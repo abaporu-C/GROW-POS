@@ -594,6 +594,7 @@ namespace GROW_CRM.Controllers
             ViewData["ReportType"] = "Mapping Report";
             ViewData["Count"] = citiesReport.Count();
             ViewData["Name"] = "Mapping";
+            ViewData["Mapping-Header"] = true;
             ViewBag.CitiesReport = citiesReport;
             ViewBag.CityReports = cityReports;
 
