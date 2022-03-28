@@ -207,23 +207,32 @@ header * {
         border-radius: 12px;
     }
 
-    .sidebar li.profile {
+    .sidebar li.profile, .profile-mobile {
         position: fixed;
         height: 60px;
-        width: 78px;
         left: 0;
-        bottom: -8px;
         padding: 10px 14px;
         background: #1d1b31;
-        transition: all 0.5s ease;
         overflow: hidden;
     }
+
+    .sidebar li.profile {
+        bottom: -8px;
+        transition: all 0.5s ease;
+        width: 78px;
+    }
+
+.profile-mobile {
+    bottom: -0.09vh;
+    display: none;
+    width: 100%;
+}
 
     .sidebar.open li.profile {
         width: 250px;
     }
 
-    .sidebar li .profile-details {
+    .sidebar li .profile-details, .profile-mobile .profile-details {
         display: flex;
         align-items: center;
         flex-wrap: nowrap;
@@ -238,34 +247,43 @@ header * {
     }
 
     .sidebar li.profile .name,
-    .sidebar li.profile .job {
+    .sidebar li.profile .job,
+    .profile-mobile .name,
+    .profile-mobile .job {
         font-size: 15px;
         font-weight: 400;
         color: #fff;
         white-space: nowrap;
     }
 
-    .sidebar li.profile .job {
+    .sidebar li.profile .job, .profile-mobile .job {
         font-size: 12px;
     }
 
-    .sidebar .profile #log_out {
+    .sidebar .profile #log_out, .profile-mobile #log_out {
         position: absolute;
         top: 50%;
         right: 0;
         transform: translateY(-50%);
         background: #1d1b31;
-        width: 100%;
         height: 60px;
         line-height: 60px;
         border-radius: 0px;
         transition: all 0.5s ease;
     }
 
-    .sidebar.open .profile #log_out {
-        width: 50px;
-        background: none;
-    }
+        .sidebar .profile #log_out{
+            width:100%;
+        }
+
+        .profile-mobile #log_out {
+            width: 30%;
+        }
+
+        .sidebar.open .profile #log_out {
+            width: 50px;
+            background: none;
+        }
 
 
 
@@ -291,21 +309,52 @@ header * {
     }
 }
 
-/*@media (max-width: 700px) {
-    .sidebar {
-        width: 100%;
-        height: 9vh;
-        position: relative;
+@media (max-width: 700px) {
+    .profile{
+        display: none;
     }
 
-        .sidebar a {
-            float: left;
+    .profile-mobile{
+        display: block;
+    }
+
+    .sidebar, .sidebar.open {
+        position: fixed;
+        height: 9vh;
+        width: 100%;
+    }
+        .sidebar .list-wrapper {
+            background: var(--dark-green);
+            border-radius: 0 0 1% 1%;
+            display: none;
+            height: 80vh;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .list-wrapper{
+            display: block;
+        }
+
+        .sidebar .nav-list {
+            height: 100%;
+            margin-top: 9vh;
+            padding: 20px;
+            width: 90vw;
+        }
+
+        .sidebar .nav-list li{
+            margin-top:0;
+        }
+
+        .sidebar .logo-details .icon, .sidebar .logo-details .logo_name{
+            opacity: 1;
+            transition: none;
         }
 
     div.content {
         margin-left: 0;
     }
-}*/
+}
 
 @media (max-width: 768px) {
     .sidebar .nav-list {
