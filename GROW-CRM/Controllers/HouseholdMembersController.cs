@@ -151,7 +151,8 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
-            ViewData["Action"] = "/HouseholdMembers";            
+            ViewData["Action"] = "/HouseholdMembers";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal", "_LICOInfoModal" };
 
             //Now get the MASTER record, the patient, so it can be displayed at the top of the screen
             Household household = _context.Households
@@ -186,6 +187,7 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             ViewData["HouseholdName"] = HouseholdName;
+            ViewData["Modals"] = new List<string> { "_MemberIncomeSituationModal", "_addIncomeSituationModal" };
             //ViewData["MISList"] = new List<MemberIncomeSituationVM>();
             Member m = new Member()
             {
@@ -343,6 +345,8 @@ namespace GROW_CRM.Controllers
             }
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
+
+            ViewData["Modals"] = new List<string> { "_MemberIncomeSituationModal", "_addIncomeSituationModal" };
 
             var member = await _context.Members
                .Include(m => m.Gender)

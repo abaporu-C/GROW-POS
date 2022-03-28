@@ -25,6 +25,7 @@ namespace GROW_CRM.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
+            ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
             var gROWContext = _context.Orders.Include(o => o.Member).Include(o => o.PaymentType);
             return View(await gROWContext.ToListAsync());
         }
@@ -71,6 +72,7 @@ namespace GROW_CRM.Controllers
             ViewData["FullName"] = member.FullName;
             ViewData["Address"] = member.Household.FullAddress;
             ViewData["Age"] = member.Age;
+            ViewData["Modals"] = new List<string> { "_OrderModal" };
 
             PopulateDropDownLists();
             return View(order);
@@ -94,6 +96,8 @@ namespace GROW_CRM.Controllers
                                 .FirstOrDefaultAsync(o => o.ID == order.ID);
 
             var orderItemsCheck = await _context.OrderItems.Where(oi => oi.OrderID == order.ID).ToListAsync();
+
+            ViewData["Modals"] = new List<string> { "_OrderModal" };
 
             //Check that you got it or exit with a not found error
             if (orderToUpdate == null)

@@ -67,8 +67,9 @@
             </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
+    <div class="table-responsive">
+    <table class="table table-striped rounded-lg">
+        <thead class="thead-dark">
             <tr>
                 <th>
                     <input type="submit" disabled="disabled" value="Household ID: " class="btn btn-link" />
@@ -77,9 +78,9 @@
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
                     @*@Html.DisplayNameFor(model => model.FullName)*@
                 </th>
-                <th>
+                @*<th>
                     <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
-                </th>
+                </th>*@
                 <th>
                     <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
                 </th>
@@ -108,9 +109,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Gender.Name)
-                </td>
+                </td>*@
 
                 <td>
                     @Html.DisplayFor(modelItem => item.Age)
@@ -132,12 +133,24 @@
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                 </td>*@
                 <td>
-                    <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> 
+                    <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> 
+                    <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
                 </td>
             </tr>
             }
         </tbody>
     </table>
+    </div>
 </form>
+
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+}

@@ -52,6 +52,8 @@ namespace GROW_CRM.Controllers
 
             ViewData["sortDirection"] = sortDirection;
             ViewData["Filtering"] = isFiltering ? " show" : "";
+            ViewData["Action"] = "/Categories";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal" };
 
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);

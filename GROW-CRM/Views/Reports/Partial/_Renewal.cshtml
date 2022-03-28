@@ -5,8 +5,9 @@
     <a asp-action="DownloadRenewal" class="btn btn-info float-left">Download Renewal Report</a>
 }
 
-<table class="table table-striped">
-    <thead>
+<div class="table-responsive">
+<table class="table table-striped rounded-lg">
+    <thead class="thead-dark">
         <tr>
             @foreach (string header in (string[])ViewBag.Headers)
             {
@@ -35,3 +36,4 @@
         }
     </tbody>
 </table>
+</div>

@@ -1,8 +1,9 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 :root {
+    --dark-green: #347037;
     --light-green: #74DF00;
-    --light-gray: #C7EAE4;
+    --light-gray: #E3F1E3;
 }
 
 a.navbar-brand {
@@ -102,8 +103,8 @@ body {
     flex-direction: column;
     justify-content: center;
     padding: 20px;
-    max-width: 95vw;
-    min-height: 80vh;
+    /*max-width: 95%;*/
+    min-height: 100vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -113,12 +114,12 @@ body {
 
 .home-section {
     position: relative;
-    background: var(--light-gray);
+    background: transparent;
     min-height: 100vh;
     top: 0;
     left: 78px;
     width: calc(100% - 78px);
-    padding: 3% 2%;
+    padding: 0;
     transition: all 0.5s ease;
     z-index: 2;
 }
@@ -131,6 +132,13 @@ body {
         margin: 18px
     }
 
+.home-background {
+    background: url('/images/Vegetables1.jpg');
+    background-size: cover;    
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
 /*
     Modals
 */
@@ -145,4 +153,62 @@ body {
     position: fixed;   
     top: 0;
     width: 100%;
+}
+
+/*
+    Boostrap Overide
+*/
+
+.btn-outline-primary{
+    border-color: var(--dark-green);
+    color: var(--dark-green);
+}
+
+.btn-outline-primary:hover{
+    background-color: var(--dark-green);
+    color:#FFF;    
+}
+
+.container{
+    padding-right: 0;
+    padding-left: 0;
+}
+
+/*
+    Reports
+*/
+
+#mapping{
+    margin: auto;
+    width: 40%; 
+}
+
+/*
+    Tables
+*/
+
+.table .thead-dark th{
+    background-color: var(--dark-green);
+    color: #FFF;
+}
+
+.table .thead-dark th input{
+    color: #FFF;
+}
+
+/*
+    Queries
+*/
+
+@media (min-width: 426px) {
+    .home-section {
+        padding: 3% 2%;
+    }
+    .container{
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .box-form{
+        min-height: 80vh;
+    }
 }

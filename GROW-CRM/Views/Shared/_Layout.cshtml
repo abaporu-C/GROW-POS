@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <title>@ViewData["Title"] - GROW_CRM</title>
     <!-- Boxicons CDN Link -->
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Stylesheets References -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
 <body class="m-0">
-    <partial name="_addIncomeSituationModal" />
-    <partial name="_MemberIncomeSituationModal"/>
-    <partial name="_CreateOrderModal" />
-    <partial name="_OrderItemsModal" />
-    <partial name="_OrderModal" />
-    <partial name="_PageSizeModal" />
-    <partial name="_LICOInfoModal" />
+    @if(!(ViewData["Modals"] is null))
+    {
+        foreach(var modal in (List<string>)ViewData["Modals"])
+        {
+            <partial name="@modal" />
+        }
+    }
     <header>
         <div class="sidebar">
             <div class="logo-details">
-                <i class='bx bxl-c-plus-plus icon'></i>
-                <div class="logo_name">CodingLab</div>
+                <i class='bx bxs-leaf bx-tada icon' ></i>
+                <div class="logo_name">GROW POS</div>
                 <i class='bx bx-menu' id="btn"></i>
             </div>
             <ul class="nav-list">
@@ -155,10 +156,12 @@
             </nav>*@
     </header>    
 
-    <section class="home-section">
+    <div class="home-background"></div>
+
+    <section class="home-section">        
         <div class="container">
             <main role="main">
-                <div class="box-form rounded-lg">
+                <div class="box-form rounded-lg" id="box">
                     @RenderBody()
                 </div>
             </main>
