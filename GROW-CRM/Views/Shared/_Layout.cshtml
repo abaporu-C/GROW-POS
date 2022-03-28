@@ -26,12 +26,13 @@
                 <div class="logo_name">GROW POS</div>
                 <i class='bx bx-menu' id="btn"></i>
             </div>
+            <div class="list-wrapper">
             <ul class="nav-list">
-                <li>
+                @*<li>
                     <i class='bx bx-search'></i>
                     <input type="text" placeholder="Search...">
                     <span class="tooltip">Search</span>
-                </li>
+                </li>*@
                 <li>
                     <a asp-area="" asp-controller="Home" asp-action="Index">
                         <i class='bx bx-grid-alt'></i>
@@ -99,7 +100,20 @@
                 </li>
                 }                
                 <partial name="_LoginPartial" />
-            </ul>
+            </ul>            
+            </div>
+            <div class="profile-mobile">
+            <!--<img src="profile.jpg" alt="profileImg">-->
+        <div class="name_job">
+                <div class="name">
+                    <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
+                </div>
+                @*<div class="job">Web designer</div>*@
+            </div>
+            <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <i class='bx bx-log-out' id="log_out"></i>
+        </form>
+        </div>
         </div>
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
             <div class="container">
@@ -164,10 +178,13 @@
                 <div class="box-form rounded-lg" id="box">
                     @RenderBody()
                 </div>
+                <div class="mobile-filler"style="height: 60px">
+
+                </div>
             </main>
         </div>
     </section>
-
+    
     @*<footer class="border-top footer text-muted">
         <div class="container">
         &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

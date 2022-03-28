@@ -139,18 +139,22 @@ body {
     position: fixed;
     width: 100%;
 }
+
+.mobile-filler{
+    display:none;
+    height: 7vh;
+}
 /*
     Modals
 */
-
-.modal-bg{
+.modal-bg {
     align-items: center;
     background-color: rgba(0,0,0,0.5);
     display: flex;
     height: 100vh;
     justify-content: center;
     left: 0;
-    position: fixed;   
+    position: fixed;
     top: 0;
     width: 100%;
 }
@@ -210,5 +214,19 @@ body {
     }
     .box-form{
         min-height: 80vh;
+    }
+}
+
+@media (max-width: 700px) {
+    .home-section{
+        height: calc(100% - 9vh);
+        bottom:7vh;
+        left: 0;
+        top: 9vh;
+        width: 100%;
+    }
+
+    .mobile-filler{
+        display:block;
     }
 }
