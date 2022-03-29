@@ -38,7 +38,7 @@
         {
 <tr>
     <td>
-        @ViewData["Household"]
+        @Html.DisplayFor(modelItem => item.Member.Household.Name)
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.Member.FullName)
@@ -85,7 +85,7 @@
                     });
                 },
                 error: function () {
-                    alert("Operation Failed. There was a problem maintaing the data.");
+                    alert("Operation Failed. There was a problem maintaining the data.");
                 }
             });
         })

@@ -24,7 +24,9 @@ namespace GROW_CRM.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var gROWContext = _context.Orders.Include(o => o.Member).Include(o => o.PaymentType);
+            var gROWContext = _context.Orders
+                .Include(o => o.Member).ThenInclude(o => o.Household)
+                .Include(o => o.PaymentType);
             return View(await gROWContext.ToListAsync());
         }
 
@@ -58,12 +60,15 @@ namespace GROW_CRM.Controllers
         {
             ViewDataReturnURL();
 
-            Order order = new Order { Date = DateTime.Now, MemberID = membersDDl, PaymentTypeID = 1 };
+            Order order = new Order { Date = DateTime.Today.Date, MemberID = membersDDl, PaymentTypeID = 1 };
+
+            var member = (Member)_context.Members.Where(m => m.ID == membersDDl)
+                .Include(m => m.Household).ThenInclude(m => m.Province)
+                .Include(m => m.Household).ThenInclude(m => m.City)
+                .Select(m => m).FirstOrDefault();
 
             _context.Orders.Add(order);
             _context.SaveChanges();
-
-            var member = (Member)_context.Members.Where(m => m.ID == membersDDl).Include(m => m.Household).Select(m => m).FirstOrDefault();
 
             ViewData["FullName"] = member.FullName;
             ViewData["Address"] = member.Household.FullAddress;
@@ -84,10 +89,11 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
-                .Include(o => o.Member.Household.Province)
-                .Include(o => o.Member.Household.City)
                 .Include(m => m.Member).ThenInclude(m => m.Household)
+                .Include(m => m.Member.Household.Province)
+                .Include(m => m.Member.Household.City)
                 .Include(m => m.PaymentType)
+                .Include(m => m.OrderItems).ThenInclude(m => m.Item)
                 .FirstOrDefaultAsync(m => m.ID == order.ID);
 
             var orderItemsCheck = await _context.OrderItems.Where(oi => oi.OrderID == order.ID).ToListAsync();
@@ -104,10 +110,26 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
+                    //Dave gave me this code to delete empty orders automatically that are older than a day old
+                    //var yesterday = DateTime.Today.AddDays(-1);
+                    var yesterday = order.Date.AddDays(-1);
+                    var noItems = (orderItemsCheck == null);
+                    var badOrders = await _context.Orders.Where(o => o.Date <= yesterday && noItems).ToListAsync();
+                    if (badOrders != null)
+                    {
+                        _context.Orders.RemoveRange(badOrders);
+                        await _context.SaveChangesAsync();
+                    }
+
                     if (!orderItemsCheck.Any())
                     {
-                        throw new Exception("You need to add items to this order.");
+                        ViewBag.ErrorMessage = "You need to add items to this order.";
+                        //throw new Exception("You need to add items to this order.");
                     }
+                    //else if(orderToUpdate.Total == 0)
+                    //{
+                    //    //Delete the created record (if there is no total, then the order is empty)
+                    //}
                     else
                     {
                         _context.Update(orderToUpdate);
@@ -152,7 +174,7 @@ namespace GROW_CRM.Controllers
             }
 
             var order = await _context.Orders
-                                .Include(o => o.Member)
+                                .Include(o => o.Member).ThenInclude(o => o.Household)
                                 .Include(o => o.PaymentType)
                                 .Include(o => o.Member.Household.Province)
                                 .Include(o => o.Member.Household.City)

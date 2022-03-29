@@ -16,7 +16,7 @@
                 <input type="hidden" name="Date" value="@Model.Date" />
 
                 <div class="col-md-6">
-                    <p><strong>Household</strong> @ViewData["Household"]</p>
+                    <p><strong>Household</strong> @Html.DisplayFor(model => model.Member.Household.Name)</p>
                     <p><strong>Address</strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
                     <p><strong>Date</strong> @Html.DisplayFor(model => model.Date)</p>
                 </div>
@@ -61,7 +61,7 @@
 
                                       total = subtotal + taxes;*@
                                       <tr>
-                                        <td>Total</td>
+                                        <td>Total: </td>
                                         <td>@total</td>
                                         <td><input type="hidden" name="Total" value="@total" /></td>
                                       </tr>

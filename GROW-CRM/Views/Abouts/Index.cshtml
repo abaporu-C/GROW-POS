@@ -31,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.StreetName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AptNumber)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.PostalCode)
             </th>
             <th>
@@ -67,16 +64,13 @@
                 @Html.DisplayFor(modelItem => item.StreetName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AptNumber)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City.ID)
+                @Html.DisplayFor(modelItem => item.City.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Province.ID)
+                @Html.DisplayFor(modelItem => item.Province.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

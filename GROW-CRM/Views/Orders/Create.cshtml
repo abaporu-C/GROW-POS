@@ -2,7 +2,7 @@
 
 @{ ViewData["Title"] = "Create"; }
 
-<h2>Create Order for: @Model.ID</h2>
+<h2>Create Order for: @Model.Member.FullName</h2>
 
 <hr />
 <partial name="_OrderModal" />
@@ -16,9 +16,9 @@
                 <input type="hidden" name="Date" value="@Model.Date" />
 
                 <div class="col-md-6">
-                    <p><strong>Household</strong> @ViewData["Household"]</p>
-                    <p><strong></strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
-                    <p>Date: @Html.DisplayFor(model => model.Date)</p>
+                    <p><strong>Household</strong> @Html.DisplayFor(model => model.Member.Household.Name)</p>
+                    <p><strong>Address</strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
+                    <p><strong>Date</strong> @Html.DisplayFor(model => model.Date)</p>
                 </div>
             </fieldset>
         </div>
@@ -27,7 +27,10 @@
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Order Information</legend>
                     <div class="form-group" id="ListMemberIncomeSituations">
-                        <label class="control-label"><strong>Order Items:</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">&#x271A;</button>
+                        <div class="text-danger">
+                            <p>@ViewBag.ErrorMessage</p>
+                        </div>
+                        <label class="control-label">Order Items: &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">&#x271A;</button>
                         <div class="col-md-offset-12" id="OrderItemList">
                             <table>
                                 @{
@@ -77,9 +80,7 @@
                 <legend class="w-auto">Pay and Submit</legend>
                 <div class="form-group">
                     <label asp-for="PaymentType" class="control-label"></label>
-                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID">
-                        <option value="0">Select Payment Type</option>
-                    </select>
+                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID"></select>
                     <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -136,6 +137,6 @@
         $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
             console.log('hey')
             $('#OrderItemList').load('/Orders/OrderItemList/@Model.ID');
-            });
+        });
     </script>
 }
