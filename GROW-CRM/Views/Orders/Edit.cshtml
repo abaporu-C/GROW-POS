@@ -15,14 +15,14 @@
                 <input type="hidden" name="Date" value="@Model.Date" />
 
                 <div class="col-md-6">
-                    <p><strong>Household</strong> @ViewData["Household"]</p>
-                    <p><strong>Address</strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
-                    <p><strong>Date</strong> @Html.DisplayFor(model => model.Date)</p>
+                    <p><strong>Member:</strong> @Model.Member.FullName</p>
+                    <p><strong>Household:</strong> @Model.Member.Household.Name</p>
+                    <p><strong>Address:</strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
+                    <p><strong>Date: </strong>@Html.DisplayFor(model => model.Date)</p>
                 </div>
             </fieldset>
         </div>
-        <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Order Information</legend>
                     <div class="form-group" id="ListMemberIncomeSituations">
@@ -71,7 +71,6 @@
                 </fieldset>
             </div>
         </div>
-    </div>
     <div class="row">
         <div class="col-md-6">
             <fieldset class="form-group border p-4 rounded">

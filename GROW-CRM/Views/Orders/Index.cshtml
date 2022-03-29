@@ -38,7 +38,7 @@
         {
 <tr>
     <td>
-        @ViewData["Household"]
+        @Html.DisplayFor(modelItem => item.Member.Household.Name)
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.Member.FullName)
@@ -78,6 +78,7 @@
                 data: code.serialize(),
                 success: function (data) {                    
                     $('#searchHErr').html("");
+                    $('#order-member-list').css("display", "inline-flex");
 
                     var membersDDL = $('#membersDDl')
                     membersDDL.html("");
