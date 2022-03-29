@@ -2,22 +2,51 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .index-card{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+</style>
+
 <div class="text-center">
     <h1 class="display-4">Welcome to GROW - POS</h1>
     <div class="row justify-content-center mt-4 mb-4">
         <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-12">
-                    <a class="btn btn-lg btn-outline-success" asp-controller="Households" asp-action="Create">New Household</a>
+                <div class="d-flex justify-content-around flex-wrap">
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Add New Household</h5>
+                            <p class="card-text">Add new household for new members!</p>
+                            <a class="btn btn-outline-primary" asp-controller="Households" asp-action="Create">Create Household</a>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">New Order</h5>
+                            <p class="card-text">Create new order now!</p>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createOrderModal">
+        Create Order
+    </button>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Members List</h5>
+                            <p class="card-text">See the list of all of our members!</p>
+                            <a class="btn btn-outline-primary" asp-area="" asp-controller="Members" asp-action="Index">Members List</a>
+                        </div>
+                    </div>
+                    </div>
                 </div>
-                @*<div class="col-md-7">
-                    <a class="btn btn-lg btn-outline-primary" href="#">Search Household</a>
-                </div>*@
             </div>
         </div>
     </div>
-    
-</div>
 @section Scripts {
     <script>
         //Register the service worker.
