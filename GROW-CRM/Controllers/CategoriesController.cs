@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly GROWContext _context;

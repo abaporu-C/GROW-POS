@@ -9,9 +9,11 @@ using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class NotificationTypesController : Controller
     {
 

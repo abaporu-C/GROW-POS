@@ -9,9 +9,11 @@ using GROW_CRM.Data;
 using GROW_CRM.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using GROW_CRM.Controllers.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class MembersController : Controller
     {
         private readonly GROWContext _context;

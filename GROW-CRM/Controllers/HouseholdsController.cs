@@ -10,9 +10,11 @@ using GROW_CRM.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class HouseholdsController : Controller
     {
         private readonly GROWContext _context;
