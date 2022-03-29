@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Authorization;
+using GROW_CRM.Utilities;
 
 namespace GROW_CRM.Controllers
 {
@@ -30,13 +31,14 @@ namespace GROW_CRM.Controllers
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
         {
-            //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = ""; //Asume not filtering
-
+            bool isFiltering = false;
+            /*//Toggle the Open/Closed state of the collapse depending on if we are filtering
+            ViewData["Filtering"] = ""; //Asume not filtering*/
+            PopulateDropDownLists();
             //NOTE: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "ID","Street", "City", "Province", "Members", "LICO", "Status" };
 
-            PopulateDropDownLists();
+          
 
             //Trying to save the world
 
@@ -45,6 +47,7 @@ namespace GROW_CRM.Controllers
                                 .Include(h => h.City)
                                 .Include(h => h.Province)
                                 .Include(h => h.Members)
+                                .AsNoTracking()
 
                              select h;
 
@@ -52,7 +55,7 @@ namespace GROW_CRM.Controllers
             if (HouseholdStatusID.HasValue)
             {
                 households = households.Where(h => h.HouseholdStatusID == HouseholdStatusID);
-                ViewData["Filtering"] = " show";
+                isFiltering = true;
             }
             if (!String.IsNullOrEmpty(StreetSearch))
             {
@@ -62,13 +65,13 @@ namespace GROW_CRM.Controllers
                 ||  h.StreetName.ToUpper().Contains(StreetSearch.ToUpper()) 
                 ||  h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
 
-                ViewData["Filtering"] = " show";
+                isFiltering = true;
             }
             if (!String.IsNullOrEmpty(CitySearch))
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
-                ViewData["Filtering"] = " show";
+                isFiltering = true;
             }
             if (IDSearch != null)
             {
@@ -76,7 +79,7 @@ namespace GROW_CRM.Controllers
                 try
                 {
                     households = households.Where(h => h.ID.Equals(IDSearch));
-                    ViewData["Filtering"] = " show";
+                    isFiltering = true;
                 }
                 catch (Exception)
                 {
@@ -215,13 +218,19 @@ namespace GROW_CRM.Controllers
 
 
 
-            //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            ViewData["Filtering"] = isFiltering ? " show" : "";
+            ViewData["Action"] = "/Households";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal" };
 
+            //Handle Paging
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
+            var pagedData = await PaginatedList<Household>.CreateAsync(households.AsNoTracking(), page ?? 1, pageSize);
 
-            return View(await households.ToListAsync());
+            return View(pagedData);
         }
 
         // GET: Households/Details/5
@@ -565,6 +574,14 @@ namespace GROW_CRM.Controllers
             ViewData["CityID"] = CitySelectList(household?.CityID);
             ViewData["ProvinceID"] = ProvinceSelectList(household?.ProvinceID);
             ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);           
+        }
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
     }
 }

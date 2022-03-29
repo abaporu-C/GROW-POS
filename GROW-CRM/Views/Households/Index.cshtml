@@ -23,6 +23,10 @@
 
 
     <form asp-action="Index" method="get">
+        @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+        {
+            <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]" />
+        }
         <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
         <div class="form-horizontal">
@@ -74,110 +78,111 @@
             </div>
         </div>
         <div class="table-responsive">
-        <table class="table table-striped rounded-lg">
-            @*<colgroup>
-                <col />
-                <col width="300" />
-                <col />
-            </colgroup>*@
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" name="actionButton" value="Street" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" disabled="disabled" value="Apartment" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" name="actionButton" value="City" class="btn btn-link" />
-                    </th>
-
-                    @*<th>
-                        <input type="submit" name="actionButton" value="Province" class="btn btn-link" />
-                    </th>*@
-
-                    <th>
-                        <input type="submit" name="actionButton" value="Members" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" name="actionButton" value="LICO" class="btn btn-link" />
-                    </th>
-
-
-                    <th>
-                        <input type="submit" name="actionButton" value="Status" class="btn btn-link" />
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <table class="table table-striped rounded-lg">
+                @*<colgroup>
+                    <col />
+                    <col width="300" />
+                    <col />
+                </colgroup>*@
+                <thead class="thead-dark">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StreetNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StreetName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AptNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.City.Name)
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.Province.Name)
-                        </td>*@
-                        <td>
-                            <center>
-                                @{
-                                    int memberCount = item.NumberOfMembers;
-                                    if (memberCount > 0)
-                                    {
-                                        @Html.Raw(memberCount)
-                                    }
-                                    else
-                                    {
-                                        @Html.Raw("0")
-                                    }
-                                }
-                            </center>
-                            @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LICOVerified)
-                        </td>
+                        <th>
+                            <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" name="actionButton" value="Street" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Apartment" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" name="actionButton" value="City" class="btn btn-link" />
+                        </th>
+
+                        @*<th>
+                            <input type="submit" name="actionButton" value="Province" class="btn btn-link" />
+                        </th>*@
+
+                        <th>
+                            <input type="submit" name="actionButton" value="Members" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" name="actionButton" value="LICO" class="btn btn-link" />
+                        </th>
 
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                                <i class='bx bxs-edit-alt'></i>
-                            </a>
-                            <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
-                                <i class='bx bx-info-square'></i>
-                            </a>
-                            <a asp-action="Add" class="text-success h4" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
-                                <i class='bx bx-user-plus'></i>
-                            </a>
-                        </td>
+                        <th>
+                            <input type="submit" name="actionButton" value="Status" class="btn btn-link" />
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StreetNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StreetName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AptNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City.Name)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.Province.Name)
+                            </td>*@
+                            <td>
+                                <center>
+                                    @{
+                                        int memberCount = item.NumberOfMembers;
+                                        if (memberCount > 0)
+                                        {
+                                            @Html.Raw(memberCount)
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("0")
+                                        }
+                                    }
+                                </center>
+                                @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LICOVerified)
+                            </td>
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                    <i class='bx bxs-edit-alt'></i>
+                                </a>
+                                <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
+                                    <i class='bx bx-info-square'></i>
+                                </a>
+                                <a asp-action="Add" class="text-success h4" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
+                                    <i class='bx bx-user-plus'></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
+        <partial name="_PagingNavBar" />
     </form>
     @section Scripts {
         <script type="text/javascript">
