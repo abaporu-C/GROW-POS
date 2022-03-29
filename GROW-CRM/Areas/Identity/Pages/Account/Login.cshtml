@@ -51,8 +51,28 @@
                 </p>*@
             </div>
         </form>
+
+        <button id="admin-log" class="button btn">Admin Login</button>
+        <button id="user-log" class="button btn">User Login</button>
     </div>
 </div>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />    
+    <partial name="_ValidationScriptsPartial" />  
+    <script>
+        $(document).on('click', '#admin-log', function(event){
+            changeCreds("admin1@outlook.com", "password");
+        })
+
+        $(document).on('click', '#user-log', function(event){
+            changeCreds("user1@outlook.com", "password");
+        })
+
+        function changeCreds(email, password){
+            var em = document.getElementById("Input_Email")
+            var pass = document.getElementById("Input_Password")
+
+            em.value = email;
+            pass.value = password;
+        }
+    </script>
 }
