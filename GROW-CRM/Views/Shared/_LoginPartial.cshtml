@@ -17,7 +17,7 @@
                 @*<div class="job">Web designer</div>*@
             </div>
             <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <i class='bx bx-log-out' id="log_out"></i>
+            <button type="submit"><i class='bx bx-log-out' id="log_out"></i></button>
         </form>
         </div>         
     }
