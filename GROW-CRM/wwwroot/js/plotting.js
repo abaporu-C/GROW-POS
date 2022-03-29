@@ -1,63 +1,94 @@
-var [gender, age, restriction] = await $.getJSON("/Reports/GetDemoJson", function(data){
+//TODO: create overload of GetDemoJson function to accept an argument for type of data, to get a specific set of data instead of all of them.
+
+var [gender, age, restriction] = await $.getJSON("/Reports/GetDemoJson", function (data) {
     return data;
 })
 
-// Assign the specification to a local variable vlSpec.
-var vlGender = {
-    "data": {
-      "values": gender
-    },
-    "encoding": {
-      "theta": {"field": "percentage", "type": "quantitative", "stack": true},
-      "color": {"field": "gender", "type": "nominal"}
-    },
-    "layer": [{
-      "mark": {"type": "arc", "outerRadius": 80}
-    }, {
-      "mark": {"type": "text", "radius": 90},
-      "encoding": {
-        "text": {"field": "percentageText", "type": "nominal"}
-      }
-    }]
-  };
+am4core.ready(function () {
 
-  var vlAge = {
-    "data": {
-      "values": age
-    },
-    "encoding": {
-      "theta": {"field": "percentage", "type": "quantitative", "stack": true},
-      "color": {"field": "ageRange", "type": "nominal"}
-    },
-    "layer": [{
-      "mark": {"type": "arc", "outerRadius": 80}
-    }, {
-      "mark": {"type": "text", "radius": 90},
-      "encoding": {
-        "text": {"field": "percentageText", "type": "nominal"}
-      }
-    }]
-  }
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
 
-  var vlRestriction = {
-    "data": {
-      "values": restriction
-    },
-    "encoding": {
-      "theta": {"field": "percentage", "type": "quantitative", "stack": true},
-      "color": {"field": "restriction", "type": "nominal"}
-    },
-    "layer": [{
-      "mark": {"type": "arc", "outerRadius": 80}
-    }, {
-      "mark": {"type": "text", "radius": 90},
-      "encoding": {
-        "text": {"field": "percentageText", "type": "nominal"}
-      }
-    }]
-  }
 
-  // Embed the visualization in the container with id `vis`
-  vegaEmbed('#genderPie', vlGender);
-  vegaEmbed('#agePie', vlAge);
-  vegaEmbed('#restrictionPie', vlRestriction);
+    //Gender Chart
+    var genderChart = am4core.create("genderPie", am4charts.PieChart);
+    genderChart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    genderChart.data = gender;
+    genderChart.radius = am4core.percent(70);
+    genderChart.innerRadius = am4core.percent(40);
+    genderChart.startAngle = 180;
+    genderChart.endAngle = 360;
+
+    var series = genderChart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = "total";
+    series.dataFields.category = "gender";
+
+    series.slices.template.cornerRadius = 10;
+    series.slices.template.innerCornerRadius = 7;
+    series.slices.template.draggable = true;
+    series.slices.template.inert = true;
+    series.alignLabels = false;
+
+    series.hiddenState.properties.startAngle = 90;
+    series.hiddenState.properties.endAngle = 90;
+
+    genderChart.legend = new am4charts.Legend();
+
+    //Age Chart
+
+    var ageChart = am4core.create("agePie", am4charts.PieChart);
+    ageChart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    ageChart.data = age;
+    ageChart.radius = am4core.percent(70);
+    ageChart.innerRadius = am4core.percent(40);
+    ageChart.startAngle = 180;
+    ageChart.endAngle = 360;
+
+    var series = ageChart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = "total";
+    series.dataFields.category = "ageRange";
+
+    series.slices.template.cornerRadius = 10;
+    series.slices.template.innerCornerRadius = 7;
+    series.slices.template.draggable = true;
+    series.slices.template.inert = true;
+    series.alignLabels = false;
+
+    series.hiddenState.properties.startAngle = 90;
+    series.hiddenState.properties.endAngle = 90;
+
+    ageChart.legend = new am4charts.Legend();
+
+    //Restriction Chart
+
+    var restrictionChart = am4core.create("restrictionPie", am4charts.PieChart);
+    restrictionChart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    restrictionChart.data = restriction;
+    restrictionChart.radius = am4core.percent(70);
+    restrictionChart.innerRadius = am4core.percent(40);
+    restrictionChart.startAngle = 180;
+    restrictionChart.endAngle = 360;
+
+    var series = restrictionChart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = "total";
+    series.dataFields.category = "restriction";
+
+    series.slices.template.cornerRadius = 10;
+    series.slices.template.innerCornerRadius = 7;
+    series.slices.template.draggable = true;
+    series.slices.template.inert = true;
+    series.alignLabels = false;
+
+    series.hiddenState.properties.startAngle = 90;
+    series.hiddenState.properties.endAngle = 90;
+
+    restrictionChart.legend = new am4charts.Legend();
+
+    console.log(am4core)
+
+}); // end am4core.ready()
+
