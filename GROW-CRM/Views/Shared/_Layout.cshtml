@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/navbar.css" />
     <link rel="Manifest" href="~/Manifest.json" />
+    @if (!(ViewData["Mapping-Header"] is null))
+    {
+        
+    }
 </head>
 <body class="m-0">
     @if(!(ViewData["Modals"] is null))
@@ -204,10 +208,10 @@
           menuBtnChange();//calling the function(optional)
         });
 
-        searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+        /*searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
           sidebar.classList.toggle("open");
           menuBtnChange(); //calling the function(optional)
-        });
+        });*/
 
         // following are the code to change sidebar button(optional)
         function menuBtnChange() {
