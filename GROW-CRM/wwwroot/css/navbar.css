@@ -309,7 +309,7 @@ header * {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) {        
     .profile{
         display: none;
     }
@@ -331,15 +331,23 @@ header * {
             transition: all 0.5s ease;
         }
 
-        .sidebar.open .list-wrapper{
+        .sidebar.open .list-wrapper {
             display: block;
+            width: 100vw;
+            position: relative;
+            right: 14px;
+            overflow: scroll;
+            height: 65vh;
         }
 
         .sidebar .nav-list {
             height: 100%;
             margin-top: 9vh;
-            padding: 20px;
-            width: 90vw;
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            padding: 0;
+            margin-top: 0;
         }
 
         .sidebar .nav-list li{
