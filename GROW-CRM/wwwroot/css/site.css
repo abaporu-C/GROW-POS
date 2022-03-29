@@ -159,6 +159,12 @@ body {
     width: 100%;
 }
 
+#order-member-list{
+    display: none;
+    flex-direction: column;
+    width: 80%;
+}
+
 /*
     Boostrap Overide
 */

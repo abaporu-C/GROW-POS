@@ -26,7 +26,7 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
-            var gROWContext = _context.Orders.Include(o => o.Member).Include(o => o.PaymentType);
+            var gROWContext = _context.Orders.Include(o => o.Member).ThenInclude(m => m.Household).Include(o => o.PaymentType);
             return View(await gROWContext.ToListAsync());
         }
 
@@ -73,6 +73,12 @@ namespace GROW_CRM.Controllers
             ViewData["Address"] = member.Household.FullAddress;
             ViewData["Age"] = member.Age;
             ViewData["Modals"] = new List<string> { "_OrderModal" };
+
+            Order viewOrder = _context.Orders
+                              .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
+                              .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                              .Where(m => m.ID == order.ID)
+                              .FirstOrDefault();
 
             PopulateDropDownLists();
             return View(order);
