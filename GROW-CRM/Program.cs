@@ -26,15 +26,14 @@ namespace GROW_CRM
 
                 try
                 {
-                    var context = services.GetRequiredService<GROWContext>();
-                    context.Database.Migrate();                    
 
                     var identityContext = services.GetRequiredService<ApplicationDbContext>();
-                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
-
                     identityContext.Database.Migrate();
+                    //ApplicationSeedData.SeedAsync(identityContext, services).Wait();
 
-                    GROWSeedData.Initialize(services);
+                    var context = services.GetRequiredService<GROWContext>();
+                    context.Database.Migrate();
+                    //GROWSeedData.Initialize(services);
                 }
                 catch (Exception ex)
                 {

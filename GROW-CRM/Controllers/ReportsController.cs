@@ -15,9 +15,11 @@ using System.Drawing;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
 using GROW_CRM.Controllers.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class ReportsController : Controller
     {
         private readonly GROWContext _context;

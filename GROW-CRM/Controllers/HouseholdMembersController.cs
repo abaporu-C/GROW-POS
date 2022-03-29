@@ -14,9 +14,11 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using GROW_CRM.Controllers.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class HouseholdMembersController : Controller
     {
         private readonly GROWContext _context;
@@ -223,8 +225,6 @@ namespace GROW_CRM.Controllers
                 
 
                 var memberToUpdate = await _context.Members
-                .Include(m => m.Gender)
-                .Include(m => m.Household)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)

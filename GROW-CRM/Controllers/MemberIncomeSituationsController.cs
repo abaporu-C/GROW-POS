@@ -1,6 +1,7 @@
 ﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class MemberIncomeSituationsController : Controller
     {
         private readonly GROWContext _context;
