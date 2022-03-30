@@ -27,7 +27,7 @@ namespace GROW_CRM.Controllers
 
         // GET: Households
         public async Task<IActionResult> Index(string StreetSearch, string CitySearch, string HouseholdNameSearch, int? IDSearch,
-            int? HouseholdID, int? HouseholdStatusID,
+            int? HouseholdID, int? HouseholdStatusID, int? CityID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
         {
@@ -57,6 +57,12 @@ namespace GROW_CRM.Controllers
                 households = households.Where(h => h.HouseholdStatusID == HouseholdStatusID);
                 isFiltering = true;
             }
+            if (CityID.HasValue)
+            {
+                households = households.Where(h => h.CityID == CityID);
+                isFiltering = true;
+            }
+
             if (!String.IsNullOrEmpty(StreetSearch))
             {
                 households = households.Where(h => h.StreetNumber.Contains(StreetSearch.ToString().ToUpper())
@@ -67,12 +73,13 @@ namespace GROW_CRM.Controllers
 
                 isFiltering = true;
             }
-            if (!String.IsNullOrEmpty(CitySearch))
+            //TODO remove commented code
+          /*  if (!String.IsNullOrEmpty(CitySearch))
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
                 isFiltering = true;
-            }
+            }*/
             if (!String.IsNullOrEmpty(HouseholdNameSearch))
             {
                 households = households.Where(h => h.Name.ToUpper().Contains(HouseholdNameSearch.ToUpper()));
@@ -579,6 +586,7 @@ namespace GROW_CRM.Controllers
             ViewData["CityID"] = CitySelectList(household?.CityID);
             ViewData["ProvinceID"] = ProvinceSelectList(household?.ProvinceID);
             ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);
+
         }
         private string ControllerName()
         {
