@@ -73,13 +73,6 @@ namespace GROW_CRM.Controllers
 
                 isFiltering = true;
             }
-            //TODO remove commented code
-          /*  if (!String.IsNullOrEmpty(CitySearch))
-            {
-                households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
-                                       || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
-                isFiltering = true;
-            }*/
             if (!String.IsNullOrEmpty(HouseholdNameSearch))
             {
                 households = households.Where(h => h.Name.ToUpper().Contains(HouseholdNameSearch.ToUpper()));
