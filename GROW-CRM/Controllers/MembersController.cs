@@ -24,14 +24,14 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch, 
+        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch, string sortDirectionCheck, string sortFieldID,
             int? HouseholdIDSearch,
             int? HouseholdID, int? GenderID, 
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Member")
         {
             //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = ""; //Asume not filtering
+            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "Member", "Age", "Gender", "Household", "Situation" };
@@ -49,34 +49,34 @@ namespace GROW_CRM.Controllers
             if (HouseholdID.HasValue)
             {
                 members = members.Where(p => p.HouseholdID == HouseholdID);
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (GenderID.HasValue)
             {
                 members = members.Where(p => p.GenderID == GenderID);
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(MemberSearch))
             {
                 members = members.Where(p => p.LastName.ToUpper().Contains(MemberSearch.ToUpper())
                                        || p.FirstName.ToUpper().Contains(MemberSearch.ToUpper()));
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(PhoneSearch))
             {
                 members = members.Where(p => p.PhoneNumber.Contains(PhoneSearch));
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(HouseholdSearch))
             {
                 members = members.Where(p => p.Household.StreetName.ToUpper().Contains(HouseholdSearch.ToUpper())
                                        || p.Household.City.Name.ToUpper().Contains(HouseholdSearch.ToUpper()));
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(HouseholdIDSearch.ToString()))
             {
                 members = members.Where(p => p.HouseholdID == HouseholdIDSearch);
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
 
 
@@ -93,6 +93,11 @@ namespace GROW_CRM.Controllers
                         sortDirection = sortDirection == "asc" ? "desc" : "asc";
                     }
                     sortField = actionButton;//Sort by the button clicked
+                }
+                else
+                {
+                    sortDirection = string.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
                 }
             }
 
@@ -173,6 +178,8 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            //selectlist for Sorting options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
 
             return View(await members.ToListAsync());
         }

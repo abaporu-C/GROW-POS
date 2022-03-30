@@ -26,10 +26,27 @@
         <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
         <div class="form-horizontal">
-            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Filter/Search
-            </button>
-            <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            <text class="d-none d-lg-inline">Filter</text><text class="d-inline d-lg-none">Filter/Sort</text>
+        </button>
+        <br />
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+            <div class="d-block d-lg-none">
+                    <div class="form-group">
+                        <label class="control-label">Sort By:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" class="" value="desc"
+                                           @((ViewData["sortDirection"].ToString() != "asc" ? "checked=\"checked\"" : ""))
+                                           name="sortDirectionCheck" />&nbsp;&nbsp;Descending
+                                </div>
+                            </div>
+                            <select name="sortFieldID" class="form-control" asp-items="ViewBag.sortFieldID"></select>
+                        </div>
+                    </div>
+                </div>
                 <div class="card card-body bg-light">
                     <div class="row">
                         <div class="col-md-3">
@@ -66,15 +83,49 @@
                             @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
                         </div>
                         <div class="form-group col-md-4 align-self-end pr-3">
-                            <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
+                            <input type="submit" name="actionButton" value="Apply" class="btn btn-outline-primary" />
                             <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
+        <br />
+        <div class="container-fluid d-block d-lg-none">
+            <div class="card-deck-wrapper">
+                <div class="card-deck">
+                @foreach(var item in Model)
+                {
+                    //Make a card for each one
+                    <div class="card mb-sm-3" style="min-width: 18rem;">
+                        <h5 class="card-header"><strong>Family Last Name: @Html.DisplayFor(modelItem=>item.Name)</strong></h5>
+                        <div class="card-body">
+                            <div class="media-body m1-2">
+                                <strong>ID:</strong> @Html.DisplayFor(modelItem=>item.ID)<br />
+                                <strong>Street #:</strong> @Html.DisplayFor(modelItem=>item.StreetNumber)<br />
+                                <strong>Street Name:</strong> @Html.DisplayFor(modelItem=>item.StreetName)<br />
+                                <strong>Apartment:</strong> @Html.DisplayFor(modelItem=>item.AptNumber)<br />
+                                <strong>City:</strong> @Html.DisplayFor(modelItem=>item.City.Name)<br />
+                                <strong>Members:</strong> @Html.DisplayFor(modelItem=>item.NumberOfMembers)<br />
+                                <strong>Status:</strong> @Html.DisplayFor(modelItem=>item.HouseholdStatus.Name)<br />
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                            <a asp-action="Index" asp-controller="HouseholdMembers" asp-route-HouseholdID ="@item.ID">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </div>
+                    </div>
+                }
+                    
+                </div>
+            </div>
+        </div>
+
         <div class="table-responsive">
-        <table class="table table-striped rounded-lg">
+        <table class="table d-none d-lg-block">
             @*<colgroup>
                 <col />
                 <col width="300" />
@@ -89,7 +140,7 @@
                         <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
                     </th>
                     <th>
-                        <input type="submit" name="actionButton" value="Street" class="btn btn-link" />
+                        <input type="submit" name="actionButton" value="Street Name" class="btn btn-link" />
                     </th>
                     <th>
                         <input type="submit" disabled="disabled" value="Apartment" class="btn btn-link" />
