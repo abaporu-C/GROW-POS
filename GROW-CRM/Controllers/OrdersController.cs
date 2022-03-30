@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using GROW_CRM.Utilities;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -149,7 +148,7 @@ namespace GROW_CRM.Controllers
                 {
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
@@ -340,8 +339,8 @@ namespace GROW_CRM.Controllers
             if (householdID == null) return new ObjectResult("Please, enter a valid Household ID.\nIt must consist only of positive numbers.") { StatusCode = 400 };
 
             var members = await _context.Members.Where(m => m.HouseholdID == code && m.FirstName != "" && m.LastName != "").ToListAsync();
-            
-            if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400};
+
+            if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400 };
             return new JsonResult(members);
         }
     }

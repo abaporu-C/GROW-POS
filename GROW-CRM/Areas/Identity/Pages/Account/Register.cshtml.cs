@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using GROW_CRM.Data;
+﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Areas.Identity.Pages.Account
 {
@@ -95,7 +92,7 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //Create Employee
-                Employee newEmp = new Employee { FirstName = Input.FirstName, LastName = Input.LastName, Phone = Input.Phone ?? "", Email = Input.Email, Active = true};
+                Employee newEmp = new Employee { FirstName = Input.FirstName, LastName = Input.LastName, Phone = Input.Phone ?? "", Email = Input.Email, Active = true };
 
                 _context.Add(newEmp);
                 await _context.SaveChangesAsync();

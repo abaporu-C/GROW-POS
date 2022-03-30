@@ -1,15 +1,12 @@
 ﻿using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
 using GROW_CRM.Models.Utilities;
+using GROW_CRM.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GROW_CRM.ViewModels.ReportsViewModels;
-using GROW_CRM.ViewModels;
 
 namespace GROW_CRM.Data
 {
@@ -63,7 +60,7 @@ namespace GROW_CRM.Data
 
         public DbSet<IncomeSituation> IncomeSituations { get; set; }
 
-        public DbSet<Item> Items { get; set; }        
+        public DbSet<Item> Items { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 
@@ -128,7 +125,7 @@ namespace GROW_CRM.Data
                 .HasKey(hn => new { hn.HouseholdID, hn.NotificationID });
 
             modelBuilder.Entity<MemberIncomeSituation>()
-                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
+                .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID })
                 .IsUnique();
 
 
@@ -157,11 +154,11 @@ namespace GROW_CRM.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             //HouseHold
-              modelBuilder.Entity<Household>()
-                  .HasOne(h => h.Province)
-                  .WithMany(p => p.Households)
-                  .HasForeignKey(h => h.ProvinceID)
-                  .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Household>()
+                .HasOne(h => h.Province)
+                .WithMany(p => p.Households)
+                .HasForeignKey(h => h.ProvinceID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Household>()
                 .HasOne(h => h.City)
@@ -200,7 +197,7 @@ namespace GROW_CRM.Data
                 .HasOne(m => m.Household)
                 .WithMany(h => h.Members)
                 .HasForeignKey(m => m.HouseholdID)
-                .OnDelete(DeleteBehavior.Restrict);            
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Order
             modelBuilder.Entity<Order>()
@@ -222,12 +219,12 @@ namespace GROW_CRM.Data
                 .HasForeignKey(oi => oi.ItemID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-           /* //About          
-            modelBuilder.Entity<About>()
-                .HasOne(oi => oi.Item)
-                .WithMany(i => i.OrderItems)
-                .HasForeignKey(oi => oi.ItemID)
-                .OnDelete(DeleteBehavior.Restrict);*/
+            /* //About          
+             modelBuilder.Entity<About>()
+                 .HasOne(oi => oi.Item)
+                 .WithMany(i => i.OrderItems)
+                 .HasForeignKey(oi => oi.ItemID)
+                 .OnDelete(DeleteBehavior.Restrict);*/
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

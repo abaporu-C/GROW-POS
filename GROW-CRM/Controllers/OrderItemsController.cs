@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -52,10 +51,10 @@ namespace GROW_CRM.Controllers
         public PartialViewResult CreateOrderItem(int? id)
         {
             var unusedItems = from oi in _context.Items
-                                 where !(from p in _context.OrderItems
-                                         where p.OrderID == id
-                                         select p.ItemID).Contains(oi.ID)
-                                 select oi;
+                              where !(from p in _context.OrderItems
+                                      where p.OrderID == id
+                                      select p.ItemID).Contains(oi.ID)
+                              select oi;
 
             SelectList items = new
                 SelectList(unusedItems

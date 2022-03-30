@@ -1,7 +1,7 @@
 namespace GROW_CRM.Models
 {
     public class HouseholdNotification
-    {        
+    {
         //Composite Keys
 
         public int HouseholdID { get; set; }

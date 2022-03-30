@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
 using Microsoft.EntityFrameworkCore.Storage;
-using GROW_CRM.Controllers.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -24,9 +22,9 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch, 
+        public async Task<IActionResult> Index(string MemberSearch, string PhoneSearch, string HouseholdSearch,
             int? HouseholdIDSearch,
-            int? HouseholdID, int? GenderID, 
+            int? HouseholdID, int? GenderID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Member")
         {
@@ -98,75 +96,75 @@ namespace GROW_CRM.Controllers
 
             //Now we know which field and direction to sort by
             if (sortField == "Member")
-                    {
-                        if (sortDirection == "asc")
-                        {
-                            members = members
-                        .OrderBy(p => p.LastName)
-                        .ThenByDescending(p => p.FirstName);
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                .OrderBy(p => p.LastName)
+                .ThenByDescending(p => p.FirstName);
 
-                        }
-                        else
-                        {
-                            members = members
-                               .OrderByDescending(p => p.LastName)
-                        .ThenByDescending(p => p.FirstName);
+                }
+                else
+                {
+                    members = members
+                       .OrderByDescending(p => p.LastName)
+                .ThenByDescending(p => p.FirstName);
 
 
 
                 }
-                    }
-                    else if (sortField == "Age")
-                    {
-                        if (sortDirection == "asc")
-                        {
-                            members = members
-                                .OrderByDescending(p => p.DOB)
-                        .ThenByDescending(p => p.LastName)
-                        .ThenByDescending(p => p.FirstName);
-                        }
-                        else
-                        {
-                            members = members
-                                 .OrderBy(p => p.DOB)
-                        .ThenBy(p => p.LastName)
-                        .ThenBy(p => p.FirstName);
-                        }
-                    }
-                    else if (sortField == "Gender")
-                    {
-                        if (sortDirection == "asc")
-                        {
-                            members = members
-                                 .OrderBy(p => p.Gender.Name)
-                        .ThenBy(p => p.LastName)
-                        .ThenBy(p => p.FirstName);
-                        }
-                        else
-                        {
-                            members = members
-                                .OrderByDescending(p => p.Gender.Name)
-                        .ThenByDescending(p => p.LastName)
-                        .ThenByDescending(p => p.FirstName);
-                        }
-                            }
-                    /*else if (sortField == "Situation")
-                    {
-                        if (sortDirection == "asc")
-                        {
-                            members = members
-                                 .OrderBy(p => p.IncomeSituation.Situation)
-                        .ThenBy(p => p.LastName)
-                        .ThenBy(p => p.FirstName);
-                        }
-                        else
-                        {
-                            members = members
-                                .OrderByDescending(p => p.IncomeSituation.Situation)
-                        .ThenByDescending(p => p.LastName)
-                        .ThenByDescending(p => p.FirstName);
-                        }
-                    }*/
+            }
+            else if (sortField == "Age")
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                        .OrderByDescending(p => p.DOB)
+                .ThenByDescending(p => p.LastName)
+                .ThenByDescending(p => p.FirstName);
+                }
+                else
+                {
+                    members = members
+                         .OrderBy(p => p.DOB)
+                .ThenBy(p => p.LastName)
+                .ThenBy(p => p.FirstName);
+                }
+            }
+            else if (sortField == "Gender")
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                         .OrderBy(p => p.Gender.Name)
+                .ThenBy(p => p.LastName)
+                .ThenBy(p => p.FirstName);
+                }
+                else
+                {
+                    members = members
+                        .OrderByDescending(p => p.Gender.Name)
+                .ThenByDescending(p => p.LastName)
+                .ThenByDescending(p => p.FirstName);
+                }
+            }
+            /*else if (sortField == "Situation")
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                         .OrderBy(p => p.IncomeSituation.Situation)
+                .ThenBy(p => p.LastName)
+                .ThenBy(p => p.FirstName);
+                }
+                else
+                {
+                    members = members
+                        .OrderByDescending(p => p.IncomeSituation.Situation)
+                .ThenByDescending(p => p.LastName)
+                .ThenByDescending(p => p.FirstName);
+                }
+            }*/
 
 
 
@@ -242,7 +240,7 @@ namespace GROW_CRM.Controllers
 
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
-         
+
             PopulateDropDownLists(member);
             return View(member);
         }
@@ -377,7 +375,7 @@ namespace GROW_CRM.Controllers
         {
             return new SelectList(_context.Households
                 .OrderBy(d => d.ID), "ID", "ID", selectedId);
-                
+
         }
         private SelectList GenderSelectList(int? selectedId)
         {

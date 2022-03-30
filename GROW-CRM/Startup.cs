@@ -4,19 +4,14 @@ using GROW_CRM.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace GROW_CRM
 {
@@ -39,11 +34,11 @@ namespace GROW_CRM
             services.AddDbContext<GROWContext>(options => options.UseSqlite(
                 Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllersWithViews();            
+            services.AddControllersWithViews();
 
             services.AddDefaultIdentity<IdentityUser>(options => options
-                                .SignIn.RequireConfirmedAccount = false) 
-                                .AddRoles<IdentityRole>()                                
+                                .SignIn.RequireConfirmedAccount = false)
+                                .AddRoles<IdentityRole>()
                                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<IdentityOptions>(options =>
@@ -76,7 +71,7 @@ namespace GROW_CRM
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
-            });            
+            });
 
             //To give access to IHttpContextAccessor for Audit Data with IAuditable
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

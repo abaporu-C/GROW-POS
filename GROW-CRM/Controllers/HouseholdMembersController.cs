@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
+﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using GROW_CRM.Controllers.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -31,7 +29,7 @@ namespace GROW_CRM.Controllers
         // GET: Household Members
         public async Task<IActionResult> Index(int? HouseholdID, int? page, int? pageSizeID, int? IncomeSituationID, string actionButton,
             string NotesSearchString, string MemberSearchString, string sortDirection = "desc", string sortField = "Member")
-        {            
+        {
             //Get the URL with the last filter, sort and page parameters from THE PATIENTS Index View
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, "Households");
 
@@ -58,12 +56,12 @@ namespace GROW_CRM.Controllers
                                   .Include(m => m.Household)
                                   .Include(m => m.MemberDocuments)
                                   .Include(m => m.MemberIncomeSituations)
-                        where m.HouseholdID == HouseholdID.GetValueOrDefault() && m.FirstName != "" && m.LastName != ""
-                        select m;
+                          where m.HouseholdID == HouseholdID.GetValueOrDefault() && m.FirstName != "" && m.LastName != ""
+                          select m;
 
-            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();            
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
 
-            foreach(Member m in members)
+            foreach (Member m in members)
             {
                 var v = _context.MemberIncomeSituations
                 .Include(s => s.IncomeSituation)
@@ -183,7 +181,7 @@ namespace GROW_CRM.Controllers
                 return RedirectToAction("Index", "Members");
             }
 
-         
+
 
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
@@ -203,7 +201,7 @@ namespace GROW_CRM.Controllers
             };
 
             _context.Add(m);
-            await _context.SaveChangesAsync();            
+            await _context.SaveChangesAsync();
 
             PopulateAssignedDietaryRestrictionData(m);
             PopulateDropDownLists();
@@ -222,7 +220,7 @@ namespace GROW_CRM.Controllers
 
             try
             {
-                
+
 
                 var memberToUpdate = await _context.Members
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
@@ -230,7 +228,7 @@ namespace GROW_CRM.Controllers
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == member.ID);
 
-                if(memberToUpdate != null)
+                if (memberToUpdate != null)
                 {
                     if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
                     m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
@@ -305,7 +303,7 @@ namespace GROW_CRM.Controllers
                               where mistu.MemberID == member.ID
                               select mistu;
 
-                    foreach(MemberIncomeSituation memberIncomeSituation in mis)
+                    foreach (MemberIncomeSituation memberIncomeSituation in mis)
                     {
                         memberIncomeSituation.MemberID = m.ID;
                         _context.Update(memberIncomeSituation);
@@ -318,7 +316,7 @@ namespace GROW_CRM.Controllers
 
                 }
 
-                
+
             }
             catch (RetryLimitExceededException /* dex */)
             {
@@ -360,7 +358,7 @@ namespace GROW_CRM.Controllers
                                                             .Include(s => s.IncomeSituation)
                                                             .Where(s => s.MemberID == member.ID)
                                                             .OrderBy(s => s.IncomeSituation.Situation)
-                                                            .ToList();            
+                                                            .ToList();
 
             ViewBag.MisList = misList;
 
@@ -401,7 +399,7 @@ namespace GROW_CRM.Controllers
             }
 
             //Update Dietary Restrictions
-            UpdateDietaryRestrictionMembers(selectedIllnessOptions, selectedConcernOptions,memberToUpdate);
+            UpdateDietaryRestrictionMembers(selectedIllnessOptions, selectedConcernOptions, memberToUpdate);
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
@@ -409,7 +407,7 @@ namespace GROW_CRM.Controllers
                 m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.DependantMember, m => m.GenderID))
             {
                 try
-                {                    
+                {
                     _context.Update(memberToUpdate);
                     await CheckLICO(memberToUpdate);
                     await AddDocumentsAsync(memberToUpdate, theFiles);
@@ -557,7 +555,7 @@ namespace GROW_CRM.Controllers
             {
                 if (currentOptionsHS.Contains(option.ID))
                 {
-                    if(option.HealthIssueType.Type == "Illness") selectedIllnesses.Add(new ListOptionVM{ID = option.ID,DisplayText = option.Restriction});
+                    if (option.HealthIssueType.Type == "Illness") selectedIllnesses.Add(new ListOptionVM { ID = option.ID, DisplayText = option.Restriction });
                     if (option.HealthIssueType.Type == "Concern") selectedConcerns.Add(new ListOptionVM { ID = option.ID, DisplayText = option.Restriction });
                 }
                 else
@@ -588,7 +586,7 @@ namespace GROW_CRM.Controllers
                 selectedOptionsHS.AddRange(selectedConcernOptions);
 
             var memberOptionsHS = new HashSet<int>(memberToUpdate.DietaryRestrictionMembers.Select(c => c.DietaryRestrictionID));//IDs of the currently selected conditions
-            
+
             foreach (var option in _context.DietaryRestrictions)
             {
                 if (selectedOptionsHS.Contains(option.ID.ToString())) //It is checked
@@ -607,7 +605,7 @@ namespace GROW_CRM.Controllers
                         _context.Remove(dietaryRestrictionToRemove);
                     }
                 }
-            }            
+            }
         }
 
         public async Task<FileContentResult> Download(int id)
@@ -656,7 +654,7 @@ namespace GROW_CRM.Controllers
             double totalIncome = m.YearlyIncome;
             int memberCount = household.Members.Count();
 
-            foreach(Member member in household.Members)
+            foreach (Member member in household.Members)
             {
                 totalIncome += member.YearlyIncome;
             }

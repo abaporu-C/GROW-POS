@@ -59,7 +59,7 @@ namespace GROW_CRM.Models
         [RegularExpression("^\\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number (no spaces).")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(10)]
-        public string Phone { get; set; }        
+        public string Phone { get; set; }
 
         [Required(ErrorMessage = "Email Address is required.")]
         [StringLength(255)]

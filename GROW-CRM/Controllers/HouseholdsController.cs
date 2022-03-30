@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.AspNetCore.Authorization;
-using GROW_CRM.Utilities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -26,7 +26,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, int? IDSearch, 
+        public async Task<IActionResult> Index(string StreetSearch, string CitySearch, string HouseholdNameSearch, int? IDSearch,
             int? HouseholdID, int? HouseholdStatusID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
@@ -36,9 +36,9 @@ namespace GROW_CRM.Controllers
             ViewData["Filtering"] = ""; //Asume not filtering*/
             PopulateDropDownLists();
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "ID","Street", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "ID", "Street", "City", "Province", "Members", "LICO", "Status" };
 
-          
+
 
             //Trying to save the world
 
@@ -62,8 +62,8 @@ namespace GROW_CRM.Controllers
                 households = households.Where(h => h.StreetNumber.Contains(StreetSearch.ToString().ToUpper())
                 || (h.StreetNumber + ' ' + h.StreetName.ToUpper()).Contains(StreetSearch.ToString().ToUpper())
                 || (h.StreetNumber + ' ' + h.StreetName.ToUpper() + ' ' + h.City.Name.ToUpper()).Contains(StreetSearch.ToString().ToUpper())
-                ||  h.StreetName.ToUpper().Contains(StreetSearch.ToUpper()) 
-                ||  h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
+                || h.StreetName.ToUpper().Contains(StreetSearch.ToUpper())
+                || h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
 
                 isFiltering = true;
             }
@@ -71,6 +71,11 @@ namespace GROW_CRM.Controllers
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
+                isFiltering = true;
+            }
+            if (!String.IsNullOrEmpty(HouseholdNameSearch))
+            {
+                households = households.Where(h => h.Name.ToUpper().Contains(HouseholdNameSearch.ToUpper()));
                 isFiltering = true;
             }
             if (IDSearch != null)
@@ -86,7 +91,7 @@ namespace GROW_CRM.Controllers
 
                     //TODO
                 }
-                
+
             }
 
 
@@ -306,7 +311,7 @@ namespace GROW_CRM.Controllers
                         }
                     }
                     //Create default household name if Name is empty
-                    if(household.Name == null || household.Name == "")
+                    if (household.Name == null || household.Name == "")
                     {
                         int lastID = _context.Households.ToList().Last().ID;
                         household.Name = $"House #{lastID + 1}";
@@ -407,11 +412,11 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            
+
 
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
-                
+
                 h => h.Name,
                 h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
@@ -503,7 +508,7 @@ namespace GROW_CRM.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Unable to save changes. Delete All Members before deleting Household.");
             }
@@ -573,7 +578,7 @@ namespace GROW_CRM.Controllers
         {
             ViewData["CityID"] = CitySelectList(household?.CityID);
             ViewData["ProvinceID"] = ProvinceSelectList(household?.ProvinceID);
-            ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);           
+            ViewData["HouseholdStatusID"] = HouseholdStatusSelectList(household?.HouseholdStatusID);
         }
         private string ControllerName()
         {

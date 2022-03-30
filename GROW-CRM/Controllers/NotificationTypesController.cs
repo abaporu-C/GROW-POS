@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
+﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -160,9 +160,9 @@ namespace GROW_CRM.Controllers
             //add a variable that calls HouseholdStatus ID...but how?
             var HouseholdStatusID = await _context.Members
                 .Include(m => m.Household)
-                .ThenInclude(m=>m.HouseholdStatus)
+                .ThenInclude(m => m.HouseholdStatus)
                 .FirstOrDefaultAsync(m => m.Household.HouseholdStatusID == householdStatusID);
-            
+
 
             if (id == null)
             {

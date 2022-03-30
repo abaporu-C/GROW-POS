@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using Microsoft.AspNetCore.Authorization;
-using GROW_CRM.Utilities;
 
 namespace GROW_CRM.Controllers
 {

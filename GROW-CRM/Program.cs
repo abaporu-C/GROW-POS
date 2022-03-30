@@ -2,15 +2,10 @@ using GROW_CRM.BackgroundTasks;
 using GROW_CRM.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GROW_CRM
 {
@@ -20,7 +15,7 @@ namespace GROW_CRM
         {
             IHost host = CreateHostBuilder(args).Build();
 
-            using( var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
@@ -41,7 +36,7 @@ namespace GROW_CRM
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
-                
+
             host.Run();
         }
 

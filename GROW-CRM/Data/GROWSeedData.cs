@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Faker;
 
 namespace GROW_CRM.Data
 {
@@ -24,7 +23,7 @@ namespace GROW_CRM.Data
 
                 if (!context.HealthIssueTypes.Any())
                 {
-                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> { 
+                    context.HealthIssueTypes.AddRange(new List<HealthIssueType> {
                         new HealthIssueType{Type = "Illness"},
                         new HealthIssueType{Type = "Concern"}
                     });
@@ -46,7 +45,7 @@ namespace GROW_CRM.Data
 
                     //Add DietaryRestrictions to dietaryRestrictions List
                     for (int i = 0; i < illnesses.Count(); i++)
-                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1});
+                        dietaryRestrictions.Add(new DietaryRestriction { Restriction = illnesses[i], HealthIssueTypeID = 1 });
 
                     for (int i = 0; i < concerns.Count(); i++)
                         dietaryRestrictions.Add(new DietaryRestriction { Restriction = concerns[i], HealthIssueTypeID = 2 });
@@ -83,14 +82,14 @@ namespace GROW_CRM.Data
                 if (!context.Genders.Any())
                 {
                     //Array of gender names
-                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say"};
+                    string[] names = new string[] { "Male", "Female", "Non-Binary", "Other", "Prefer Not to Say" };
 
                     //List of Gender Objects
                     List<Gender> genders = new List<Gender>();
 
                     //Add Genders to genders List
                     for (int i = 0; i < names.Count(); i++)
-                        genders.Add(new Gender { Name = names[i]});
+                        genders.Add(new Gender { Name = names[i] });
 
                     //Add list to context
                     context.Genders.AddRange(genders);
@@ -117,7 +116,7 @@ namespace GROW_CRM.Data
 
                     //Save the changes
                     context.SaveChanges();
-                        
+
                 }
 
                 //Look for Income Situation
@@ -132,7 +131,7 @@ namespace GROW_CRM.Data
 
                     //add situations to list
                     for (int i = 0; i < situations.Count(); i++)
-                        incomeSituations.Add(new IncomeSituation { Situation = situations[i]});
+                        incomeSituations.Add(new IncomeSituation { Situation = situations[i] });
 
                     //add list to context
                     context.IncomeSituations.AddRange(incomeSituations);
@@ -155,7 +154,7 @@ namespace GROW_CRM.Data
                     context.Categories.AddRange(categories);
                     context.SaveChanges();
                 }
-                
+
                 //Looks for Items
                 if (!context.Items.Any())
                 {
@@ -375,7 +374,7 @@ namespace GROW_CRM.Data
 
                     //Fill message list
                     for (int i = 0; i < 10; i++)
-                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now});
+                        messages.Add(new Message { Text = baconNotes[rnd.Next(5)], Date = DateTime.Now });
 
                     //Add list to context
                     context.Messages.AddRange(messages);
@@ -447,7 +446,7 @@ namespace GROW_CRM.Data
 
 
                     context.Cities.AddRange(cities);
-                    context.SaveChanges();                                        
+                    context.SaveChanges();
                 }
 
                 //Look for Provinces
@@ -663,10 +662,10 @@ namespace GROW_CRM.Data
 
                     );*/
 
-                    
-                   //Save changes
-                   context.SaveChanges();
-                }                
+
+                    //Save changes
+                    context.SaveChanges();
+                }
 
 
 
@@ -676,21 +675,21 @@ namespace GROW_CRM.Data
                 {
                     //Foreign Keys
                     int[] householdIDs = context.Households.Select(h => h.ID).ToArray();
-                    int householdCount = householdIDs.Count();                    
+                    int householdCount = householdIDs.Count();
 
                     int[] genderIDs = context.Genders.Select(g => g.ID).ToArray();
-                    int genderCount = genderIDs.Count();                    
+                    int genderCount = genderIDs.Count();
 
                     //Name Generator
                     string[] firstNames = new string[] { "Mark", "Pedro", "Roger", "Hitome", "Lin", "Brendon", "Michelle", "Leticia", "Love", "Jennifer", "Shadwick" };
-                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G"};
-                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise"};
+                    string[] middleNames = new string[] { "M", "L", "K", "P", "A", "T", "R", "G" };
+                    string[] lastNames = new string[] { "Pereira", "Martin", "Scott", "McTavish", "Smith", "Castro", "Lee", "Zhang", "Cruise" };
 
                     //Start DOB
                     DateTime startDOB = Convert.ToDateTime("1992-08-22");
 
                     //Phone Generator
-                    string[] areaCodes = new string[] { "905", "289", "365", "742"};
+                    string[] areaCodes = new string[] { "905", "289", "365", "742" };
                     int areaCodesCount = areaCodes.Length;
 
                     //Loop over wach household and assign family members to it
@@ -700,9 +699,9 @@ namespace GROW_CRM.Data
 
                         string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
 
-                        for(int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
+                        for (int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
 
-                        for(int j = 0; j < rnd.Next(5) + 1; j++)
+                        for (int j = 0; j < rnd.Next(5) + 1; j++)
                         {
                             context.Members.Add(
                                 new Member
@@ -717,7 +716,7 @@ namespace GROW_CRM.Data
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
                                     HouseholdID = householdIDs[i]
-                                }    
+                                }
                             );
 
                             context.SaveChanges();
@@ -734,9 +733,9 @@ namespace GROW_CRM.Data
                 {
                     //Foreign Keys
                     int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
-                    int drCount = drIDs.Count();                                     
+                    int drCount = drIDs.Count();
 
-                    foreach(int memberID in memberIDs)
+                    foreach (int memberID in memberIDs)
                     {
                         if ((memberID % 3) == 0) continue;
 
@@ -756,7 +755,7 @@ namespace GROW_CRM.Data
                 if (!context.MemberIncomeSituations.Any())
                 {
                     int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();                    
+                    int incomeSituationCount = incomeSituationIDs.Count();
 
                     List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
 
@@ -806,7 +805,7 @@ namespace GROW_CRM.Data
 
                     List<OrderItem> ois = new List<OrderItem>();
 
-                    for(int i = 0; i < orders.Count; i++)
+                    for (int i = 0; i < orders.Count; i++)
                     {
                         OrderItem oi = new OrderItem
                         {
@@ -820,7 +819,7 @@ namespace GROW_CRM.Data
 
                         orders[i].Total = oi.Quantity * item.Price;
                     }
-                    context.Orders.UpdateRange(orders);                    
+                    context.Orders.UpdateRange(orders);
                     context.OrderItems.AddRange(ois);
                     context.SaveChanges();
                 }

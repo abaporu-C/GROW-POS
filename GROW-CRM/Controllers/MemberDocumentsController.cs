@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Data;
+using GROW_CRM.Models;
+using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using GROW_CRM.Utilities;
-using GROW_CRM.Controllers.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -41,7 +39,7 @@ namespace GROW_CRM.Controllers
 
             var documents = from d in _context.MemberDocuments.Include(a => a.Member)
                             where d.Member.FirstName != "" && d.Member.LastName != ""
-                            select d;            
+                            select d;
 
             if (MemberID.HasValue)
             {

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GROW_CRM.ViewModels;
+﻿using GROW_CRM.ViewModels;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using MimeKit;
 using MimeKit.Text;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace GROW_CRM.Utilities

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GROW_CRM.Models
 {
-    public class Message : Auditable 
+    public class Message : Auditable
     {
         public Message()
         {

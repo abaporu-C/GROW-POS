@@ -4,19 +4,32 @@
     ViewData["Title"] = "Households Index";
 }
 
-    <div class="row ">
-        <div class="col-md-6">
+    <div class="row mb-3">
+        <div class="col-md-12 ">
             <h2>Households</h2>
-        
-
-        
-            <a class="btn btn-outline-info" asp-area="" asp-controller="Members" asp-action="Index">Members Index</a>
-                
-            <a class="btn btn-outline-success" asp-action="Create">Create New</a>
-            
-            <a asp-controller="NotificationTypes" asp-route-id="2" asp-action="Notification" class="btn btn-primary linkClick">Send Notification</a>
-            </div>
         </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12 d-flex">
+            <a class="btn btn-outline-success mr-2" asp-action="Create">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                </svg> Create New
+            </a>
+            <a class="btn btn-outline-info mr-2" asp-area="" asp-controller="Members" asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                </svg> Members Index
+            </a>
+            <a asp-controller="NotificationTypes" asp-route-id="2" asp-action="Notification" class="btn btn-primary linkClick ml-auto p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-envelope-plus-fill" viewBox="0 0 16 16">
+                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 4.697v4.974A4.491 4.491 0 0 0 12.5 8a4.49 4.49 0 0 0-1.965.45l-.338-.207L16 4.697Z" />
+                    <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z" />
+                </svg> Send Notification
+            </a>
+        </div>
+        </div>
+   
 
 
 
@@ -31,21 +44,17 @@
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
         <div class="form-horizontal">
             <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Filter/Search
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                </svg> Filter/Search 
             </button>
             <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
                 <div class="card card-body bg-light">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="control-label">Search by ID:</label>
-                                    @Html.TextBox("IDSearch", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
-                                </div>
-                                <div class="invalid-feedback">
-                                    Only numeric values for ID.
-                                </div>
-                            </div>
+
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Household Name:</label>
+                            @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
                         </div>
                         <div class="col-md-2">
                         </div>
@@ -57,17 +66,27 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="form-group col-md-5">
                             <label class="control-label">Search by Household Address:</label>
                             @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
                         </div>
+
                         <div class="form-group col-md-5">
                             <label class="control-label">Search by City:</label>
                             @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="control-label">Search by ID:</label>
+                                    @Html.TextBox("IDSearch", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
+                                </div>
+                                <div class="invalid-feedback">
+                                    Only numeric values for ID.
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-4 align-self-end pr-3">
                             <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
@@ -77,21 +96,24 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive mt-2">
             <table class="table table-striped rounded-lg">
                 @*<colgroup>
-                    <col />
-                    <col width="300" />
-                    <col />
-                </colgroup>*@
+                        <col />
+                        <col width="300" />
+                        <col />
+                    </colgroup>*@
                 <thead class="thead-dark">
                     <tr>
                         <th>
                             <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
                         </th>
                         <th>
-                            <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
+                            <input type="submit" disabled="disabled" value="Name" class="btn btn-link" />
                         </th>
+                       @* <th>
+                            <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
+                        </th>*@
                         <th>
                             <input type="submit" name="actionButton" value="Street" class="btn btn-link" />
                         </th>
@@ -103,8 +125,8 @@
                         </th>
 
                         @*<th>
-                            <input type="submit" name="actionButton" value="Province" class="btn btn-link" />
-                        </th>*@
+                                <input type="submit" name="actionButton" value="Province" class="btn btn-link" />
+                            </th>*@
 
                         <th>
                             <input type="submit" name="actionButton" value="Members" class="btn btn-link" />
@@ -127,11 +149,14 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.ID)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StreetNumber)
+                            <td style="max-width: 115px">
+                                @Html.DisplayFor(modelItem => item.Name)
                             </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.StreetNumber)
+                            </td>*@
                             <td>
-                                @Html.DisplayFor(modelItem => item.StreetName)
+                                @Html.DisplayFor(modelItem => item.StreetNumber) @Html.DisplayFor(modelItem => item.StreetName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.AptNumber)
@@ -140,8 +165,8 @@
                                 @Html.DisplayFor(modelItem => item.City.Name)
                             </td>
                             @*<td>
-                                @Html.DisplayFor(modelItem => item.Province.Name)
-                            </td>*@
+                                    @Html.DisplayFor(modelItem => item.Province.Name)
+                                </td>*@
                             <td>
                                 <center>
                                     @{
@@ -193,7 +218,7 @@
                 trigger: 'focus'
             })
             $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+                $('[data-toggle="tooltip"]').tooltip()
+            })
         </script>
     }

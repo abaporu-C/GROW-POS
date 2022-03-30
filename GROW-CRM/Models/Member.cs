@@ -1,6 +1,5 @@
 using GROW_CRM.Models.Utilities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -46,18 +45,20 @@ namespace GROW_CRM.Models
         }
 
         [Display(Name = "Yearly Income")]
-        public double YearlyIncome { get 
+        public double YearlyIncome
+        {
+            get
             {
                 double income = 0;
 
-                foreach(MemberIncomeSituation mis in MemberIncomeSituations)
+                foreach (MemberIncomeSituation mis in MemberIncomeSituations)
                 {
                     income += mis.Income;
                 }
 
 
                 return income;
-            } 
+            }
         }
 
         [Display(Name = "Age (DOB)")]
@@ -98,30 +99,30 @@ namespace GROW_CRM.Models
         [StringLength(100, ErrorMessage = "Last name cannot be more than 100 characters long.")]
         public string LastName { get; set; }
 
-        [Display(Name ="Date of Birth")]
+        [Display(Name = "Date of Birth")]
         [Required(ErrorMessage = "You cannot leave the birth date blank.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DOB { get; set; }
 
-        [Display(Name ="Phone Number")]
+        [Display(Name = "Phone Number")]
         [Required(ErrorMessage = "Phone number is required.")]
         [RegularExpression("^\\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number (no spaces).")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(10)]
         public string PhoneNumber { get; set; }
 
-        [Display(Name ="E-mail")]
+        [Display(Name = "E-mail")]
         [Required(ErrorMessage = "Email Address is required.")]
         [StringLength(255)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name ="Notes")]
-        
+        [Display(Name = "Notes")]
+
         [StringLength(2000, ErrorMessage = "Only 2000 characters for notes.")]
         [DataType(DataType.MultilineText)]
-        public string Notes { get; set; }        
+        public string Notes { get; set; }
 
         [Display(Name = "Member consents giving information: ")]
         public bool ConsentGiven { get; set; }
@@ -142,7 +143,7 @@ namespace GROW_CRM.Models
         [Display(Name = "Household")]
         public int HouseholdID { get; set; }
 
-        public Household Household { get; set; }        
+        public Household Household { get; set; }
 
         //O:M Relationships        
 

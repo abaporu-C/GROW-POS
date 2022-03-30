@@ -11,32 +11,32 @@ namespace GROW_CRM.Models
         public Household()
         {
             Members = new HashSet<Member>();
-            HouseholdNotifications = new HashSet<HouseholdNotification>();            
+            HouseholdNotifications = new HashSet<HouseholdNotification>();
         }
 
         //Fields
         public int ID { get; set; }
 
-        [Display(Name ="Full Address")]
+        [Display(Name = "Full Address")]
         public string FullAddress
         {
             get
-            {                
+            {
                 return this?.StreetNumber + " " + this?.StreetName + " " + this?.AptNumber + " - " + City?.Name + ", " + Province?.Code + ", " + this?.PostalCode;
             }
-        }                   
+        }
 
-        [Display(Name = "Number of Members")]        
+        [Display(Name = "Number of Members")]
         public int NumberOfMembers
         {
             get
             {
                 int count = 0;
 
-                foreach (Member m in Members) 
+                foreach (Member m in Members)
                 {
-                    if(m.FirstName != "" && m.LastName != "") count++;
-                } 
+                    if (m.FirstName != "" && m.LastName != "") count++;
+                }
 
                 return count;
             }
@@ -51,7 +51,7 @@ namespace GROW_CRM.Models
                 int dateDiff = (now - LastVerification).Days;
 
                 if (dateDiff >= 365) return $"Verification needed. Please check members income for LICO verification.";
-                if (dateDiff >= 335) return $"Verification time is near! There is only {365 - dateDiff} days left for the next verification!";                
+                if (dateDiff >= 335) return $"Verification time is near! There is only {365 - dateDiff} days left for the next verification!";
 
                 return $"There are {365 - dateDiff} days until the next LICO verification.";
             }
@@ -76,33 +76,33 @@ namespace GROW_CRM.Models
         public string Name { get; set; }
 
 
-        [Display(Name="Street Number")]
+        [Display(Name = "Street Number")]
         [Required(ErrorMessage = "You cannot leave the Street Number blank.")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Street number must be numeric")]
         public string StreetNumber { get; set; }
 
-        [Display(Name ="Street Name")]
-        [Required(ErrorMessage ="You can not leave the Street Name blank")]
+        [Display(Name = "Street Name")]
+        [Required(ErrorMessage = "You can not leave the Street Name blank")]
         [StringLength(100)]
         public string StreetName { get; set; }
 
-        [Display(Name ="Apartment Number")]
+        [Display(Name = "Apartment Number")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Apartment number must be numeric")]
-        public string AptNumber { get; set; }        
+        public string AptNumber { get; set; }
 
-        [Display(Name ="Postal Code")]
-        [Required(ErrorMessage ="You cannot leave the Postal Code blank")]
+        [Display(Name = "Postal Code")]
+        [Required(ErrorMessage = "You cannot leave the Postal Code blank")]
         [RegularExpression(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$", ErrorMessage = "E.g. A2A 2A2 (with a space)")]
-        public string PostalCode { get; set; }                        
+        public string PostalCode { get; set; }
 
-        [Display(Name ="LICO verification")]
-        public bool LICOVerified { get; set; }        
+        [Display(Name = "LICO verification")]
+        public bool LICOVerified { get; set; }
 
         [Display(Name = "Yearly Verification")]
         public DateTime LastVerification { get; set; }
 
         //Foreign Keys
-        [Display(Name ="City")]
+        [Display(Name = "City")]
         [Required(ErrorMessage = "You must select a City")]
         public int? CityID { get; set; }
 
@@ -114,8 +114,8 @@ namespace GROW_CRM.Models
 
         public Province Province { get; set; }
 
-        [Display(Name ="Household Status")]
-        [Required(ErrorMessage ="A Status should be selected")]
+        [Display(Name = "Household Status")]
+        [Required(ErrorMessage = "A Status should be selected")]
         public int? HouseholdStatusID { get; set; }
 
         public HouseholdStatus HouseholdStatus { get; set; }
@@ -127,8 +127,8 @@ namespace GROW_CRM.Models
 
         //O:M Relationships        
 
-        public ICollection<Member> Members { get; set; }        
+        public ICollection<Member> Members { get; set; }
 
-        public ICollection<HouseholdNotification> HouseholdNotifications { get; set; }  
+        public ICollection<HouseholdNotification> HouseholdNotifications { get; set; }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace GROW_CRM.ViewModels
+﻿namespace GROW_CRM.ViewModels
 {
     public interface IEmailConfiguration
     {

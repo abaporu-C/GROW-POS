@@ -20,7 +20,7 @@ namespace GROW_CRM.Models
 
         [DataType(DataType.Currency)]
         public double Total { get; set; }
-        
+
         //Foreign Keys        
 
         public int MemberID { get; set; }

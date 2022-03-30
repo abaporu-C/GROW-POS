@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Controllers.Helpers;
+using GROW_CRM.Data;
+using GROW_CRM.ViewModels.ReportsViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using GROW_CRM.ViewModels.ReportsViewModels;
-using GROW_CRM.ViewModels;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.AspNetCore.Http.Features;
 using System.IO;
-using GROW_CRM.Controllers.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {
@@ -41,7 +39,8 @@ namespace GROW_CRM.Controllers
 
         public async Task<IActionResult> SelectedReport(string Reports)
         {
-            switch(Reports){
+            switch (Reports)
+            {
                 case "0":
                     GetRenewalReport();
                     break;
@@ -67,17 +66,17 @@ namespace GROW_CRM.Controllers
                     GetCategories();
                     break;
                 default:
-                    return View("Index");                    
+                    return View("Index");
             }
             return View();
         }
-        
+
         //Get Renewal Report
         public void GetRenewalReport()
-        {            
+        {
             List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);
 
-            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification"};
+            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification" };
 
             ViewData["ReportType"] = "Renewal Report";
             ViewData["Count"] = renewalReportsFiltered.Count();
@@ -89,9 +88,9 @@ namespace GROW_CRM.Controllers
         }
 
         public IActionResult DownloadRenewal()
-        {            
-            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);            
-            
+        {
+            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);
+
             //How many rows?
             int reportRows = renewalReportsFiltered.Count();
 
@@ -125,7 +124,7 @@ namespace GROW_CRM.Controllers
                     workSheet.Column(3).Style.Numberformat.Format = "###,##0.00";
 
                     //Style first column for dates
-                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";                    
+                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -234,10 +233,10 @@ namespace GROW_CRM.Controllers
         }
 
         public void GetNewAdditions()
-        {            
+        {
             List<NewAdditionsReport> newAdditionsfiltered = (List<NewAdditionsReport>)ReportsHelper.GetNewAdditions(_context);
-            
-            DateTime lastWeek = DateTime.Now.AddDays(-7);            
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
 
             string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Created On", "Created By" };
 
@@ -399,7 +398,7 @@ namespace GROW_CRM.Controllers
         {
             var members = from m in _context.Members
                                .Include(m => m.Gender)
-                                select m;
+                          select m;
 
             int memberCount = members.Count();
 
@@ -411,7 +410,7 @@ namespace GROW_CRM.Controllers
 
             ViewData["ReportType"] = "Demographics Report";
             ViewData["Count"] = memberCount;
-            ViewData["Name"] = "Demographics";            
+            ViewData["Name"] = "Demographics";
             ViewBag.GenderReport = genderReport;
             ViewBag.AgeReport = ageReport;
             ViewBag.DietaryReport = dietaryReport;
@@ -618,7 +617,7 @@ namespace GROW_CRM.Controllers
             {
                 //Create a new spreadsheet from scratch.
                 using (ExcelPackage excel = new ExcelPackage())
-                {                    
+                {
                     var workSheet = excel.Workbook.Worksheets.Add("Mapping");
 
                     workSheet.Cells[3, 1].Value = "CITIES REPORT";
@@ -626,7 +625,7 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[4, 1].LoadFromCollection(citiesReport, true);
 
                     //Style first column for dates
-                    workSheet.Cells[4,2,citiesRows + 4, 2].Style.Numberformat.Format = "0%";                                        
+                    workSheet.Cells[4, 2, citiesRows + 4, 2].Style.Numberformat.Format = "0%";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -652,11 +651,11 @@ namespace GROW_CRM.Controllers
 
                     int rows = citiesRows + 7;
 
-                    foreach(List<CityReport> cr in cityReports)
+                    foreach (List<CityReport> cr in cityReports)
                     {
                         int count = cr.Count();
 
-                        if(count > 0)
+                        if (count > 0)
                         {
                             workSheet.Cells[rows, 1].Value = $"{cr[0]?.Name.ToUpper()} REPORT";
                             //Note: Cells[row, column]
@@ -694,7 +693,7 @@ namespace GROW_CRM.Controllers
                             }
 
                             rows += count + 5;
-                        }                        
+                        }
                     }
 
                     ////Boy those notes are BIG!

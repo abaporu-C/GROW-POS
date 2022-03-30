@@ -13,7 +13,7 @@ namespace GROW_CRM.BackgroundTasks
     }
 
     internal class ScopedDeleteEmptyMembers : IScopedDeleteEmptyMembers
-    {        
+    {
         private readonly ILogger _logger;
 
         public ScopedDeleteEmptyMembers(ILogger<ScopedDeleteEmptyMembers> logger)
@@ -29,7 +29,7 @@ namespace GROW_CRM.BackgroundTasks
                               where m.FirstName == "" && m.LastName == ""
                               select m;
 
-                foreach(Member m in members)
+                foreach (Member m in members)
                 {
                     _context.Remove(m);
                 }
