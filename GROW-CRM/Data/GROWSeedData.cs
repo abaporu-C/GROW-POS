@@ -509,19 +509,22 @@ namespace GROW_CRM.Data
                     int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
                     int citiesCount = citiesIDs.Count();
 
-                    int hhs = context.HouseholdStatuses.Where(hhs => hhs.Name == "Active").Select(hhs => hhs.ID).FirstOrDefault();
+                    int hhsa = context.HouseholdStatuses.Where(hhs => hhs.Name == "Active").Select(hhs => hhs.ID).FirstOrDefault();
+                    int hhsoh = context.HouseholdStatuses.Where(hhs => hhs.Name == "On Hold").Select(hhs => hhs.ID).FirstOrDefault();
 
                     //Data
                     string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "W", "Y", "Z" };
-                    int alhabetLen = alphabet.Count();
+                    int alhabetLen = alphabet.Count();                    
 
                     //Add Households to context
                     for (int i = 0; i < 100; i++)
                     {
+                        string lastName = Faker.Name.Last();
+
                         string postalCode = $"L{Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]} {Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]}{Faker.RandomNumber.Next(9)}";
                         context.Add(new Household
                         {
-                            Name = $"House #{i}",
+                            Name = $"House {lastName}",
                             StreetNumber = Faker.RandomNumber.Next(200).ToString(),
                             StreetName = Faker.Address.StreetName(),
                             AptNumber = Faker.RandomNumber.Next(100).ToString(),
@@ -530,140 +533,10 @@ namespace GROW_CRM.Data
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
                             ProvinceID = 1,
-                            HouseholdStatusID = hhs,
+                            HouseholdStatusID = i % 3 == 0? hhsoh : hhsa,
                             AboutID = 1
                         }); ;
                     }
-
-                    /*//Add Households to context
-                    context.Households.AddRange(
-                        new Household
-                        {
-                            Name = "House #1",
-                            StreetNumber = "65",
-                            StreetName = "Church St.",
-                            AptNumber = "201",
-                            PostalCode = "R3E 9C8",
-                            LICOVerified = true,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 1,
-                            AboutID = 1
-                        },
-                        new Household
-                        {
-                            Name = "Luke's House",
-                            StreetNumber = "1848",
-                            StreetName = "Paddock Trail Dr.",
-                            PostalCode = "L2H 1W8",
-                            LICOVerified = false,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 2,
-                            AboutID = 1
-                        },
-                         new Household
-                        {
-                            Name = "Smith's House",
-                            StreetNumber = "101",
-                            StreetName = "Development Ave.",
-                            PostalCode = "L2P 1W8",
-                            LICOVerified = false,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = 1,
-                            HouseholdStatusID = 2,
-                            AboutID = 1
-                        },
-                         new Household
-                         {
-                             Name = "McDonald's House",
-                             StreetNumber = "45",
-                             StreetName = "Niagara Str.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Boiardee House",
-                             StreetNumber = "5664",
-                             StreetName = "North Str",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "More's House",
-                             StreetNumber = "8894",
-                             StreetName = "Kentucky Cres.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Mitchels's House",
-                             StreetNumber = "667",
-                             StreetName = "Vansicle Rd.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Job's House",
-                             StreetNumber = "1",
-                             StreetName = "Coopertino Ave.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-                         ,
-                         new Household
-                         {
-                             Name = "Randy's House",
-                             StreetNumber = "246",
-                             StreetName = "Development Ave.",
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = 1,
-                             HouseholdStatusID = 2,
-                             AboutID = 1
-                         }
-
-                    );*/
-
-                    
                    //Save changes
                    context.SaveChanges();
                 }                
@@ -693,16 +566,27 @@ namespace GROW_CRM.Data
                     string[] areaCodes = new string[] { "905", "289", "365", "742"};
                     int areaCodesCount = areaCodes.Length;
 
+                    //Data
+                    string[] notes = new string[] { "Member did not yet submited their documents.",
+                                                    "Member is waiting for their CRA documents.",
+                                                    "Member address is a temporary one, we are waiting for their update on the situation."};
+
+                    int notesLen = notes.Count();
+
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];
+                        Household household = context.Households.Include(h => h.HouseholdStatus).Where(h => h.ID == (i+1)).FirstOrDefault();
+
+                        string lastName = household.Name.Substring(6);
+
+                        string hhStatus = household.HouseholdStatus.Name;
 
                         string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
 
                         for(int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
 
-                        for(int j = 0; j < rnd.Next(5) + 1; j++)
+                        for(int k = 0; k < rnd.Next(5) + 1; k++)
                         {
                             context.Members.Add(
                                 new Member
@@ -713,10 +597,10 @@ namespace GROW_CRM.Data
                                     DOB = startDOB.AddDays(rnd.Next(60, 6500)),
                                     PhoneNumber = phoneNumber,
                                     Email = Faker.Internet.Email(),
-                                    Notes = baconNotes[rnd.Next(5)],
+                                    Notes = hhStatus == "On Hold" ? notes[rnd.Next(notesLen)] : "",
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
-                                    HouseholdID = householdIDs[i]
+                                    HouseholdID = household.ID
                                 }    
                             );
 
