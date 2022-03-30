@@ -47,7 +47,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-10">
-                                <label class="control-label">Household Name:</label>
+                                <label class="control-label">Household name:</label>
                                 @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
                             </div>
                             <div class="form-group col-md-10">
@@ -71,27 +71,31 @@
                             <div class="col">
                                 <h4>Filter by: </h4>
                             </div>
-
                         </div>
+                        
 
                         <div class="row">
                             @*TODO add filters (total, etc)*@
-                            @*<div class="col-md-9">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="control-label">City:</label>
-                                        @Html.DropDownList("CityID", null, "All Cities", htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <label class="control-label">Status:</label>
-                                        @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                                        <label class="control-label">Payment type:</label>
+                                        @Html.DropDownList("PaymentTypeID", null, "All Types", htmlAttributes: new { @class = "form-control" })
                                     </div>
                                 </div>
+                            </div>
+                         @*   <div class="form-group col-md-10">
+                                <label class="control-label">Total:</label>
+                                @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
                             </div>*@
+                            @*<div class="col-md-9">
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="control-label">Status:</label>
+                    @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>*@
 
                             <div class="form-group col-md-12 align-self-end mt-4 pt-1">
                                 <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />

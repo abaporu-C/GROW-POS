@@ -25,7 +25,7 @@ namespace GROW_CRM.Controllers
 
         // GET: Orders
         public async Task<IActionResult> Index(string MemberSearch, string HouseholdNameSearch, int? HouseholdID,
-            int? PaymentID, int? HouseholdIDSearch,
+            int? PaymentTypeID, int? HouseholdIDSearch, int? Total,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
         {
@@ -46,9 +46,15 @@ namespace GROW_CRM.Controllers
                 orders = orders.Where(o => o.Member.HouseholdID == HouseholdID);
                 isFiltering = true;
             }
-            if (PaymentID.HasValue)
+            if (Total.HasValue)
             {
-                orders = orders.Where(o => o.PaymentTypeID == PaymentID);
+                if (Total < 20)
+                orders = orders.Where(o => o.Total < 20);
+                isFiltering = true;
+            }
+            if (PaymentTypeID.HasValue)
+            {
+                orders = orders.Where(o => o.PaymentTypeID == PaymentTypeID);
                 isFiltering = true;
             }
 
@@ -454,6 +460,10 @@ namespace GROW_CRM.Controllers
             return new SelectList(_context.Members
                 .OrderBy(d => d.LastName).ThenByDescending(d => d.FirstName), "ID", "FullName", selectedId);
         }
+       /* public SelectList TotalSelectList(int? selectedId)
+        {
+            return new SelectList();
+        }*/
 
         public PartialViewResult OrderItemList(int id)
         {
