@@ -49,7 +49,10 @@
 
                         <div class="col-md-5">
                             <div class="row">
-                                <h4>Search by: </h4>
+                                <div class="col">
+                                    <h4>Search by: </h4>
+                                </div>
+                               
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-10">
@@ -75,8 +78,12 @@
                         </div>
                         <div class="col-md-5">
                             <div class="row">
-                                <h4>Filter by: </h4>
+                                <div class="col">
+                                    <h4>Filter by: </h4>
+                                </div>
+                                
                             </div>
+                           
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="form-group">
@@ -94,12 +101,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="form-group col-md-12 align-self-end mt-4 pt-1">
                                     <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
                                     <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                     </div>
 
                
@@ -199,7 +207,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                                    <i class='bx bxs-edit-alt' style="color:black"></i>
+                                    <i class='bx bxs-edit-alt' style="color:grey"></i>
                                 </a>
                                 <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
                                     <i class='bx bx-info-square'></i>

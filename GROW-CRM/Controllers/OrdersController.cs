@@ -24,11 +24,160 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string MemberSearch, string HouseholdNameSearch, int? HouseholdID,
+            int? PaymentID, int? HouseholdIDSearch,
+            int? page, int? pageSizeID, string actionButton,
+            string sortDirection = "asc", string sortField = "Code")
         {
-            ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
-            var gROWContext = _context.Orders.Include(o => o.Member).ThenInclude(m => m.Household).Include(o => o.PaymentType);
-            return View(await gROWContext.ToListAsync());
+            bool isFiltering = false;
+            
+            PopulateDropDownLists();
+            //NOTE: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "Date", "Total", "Payment","Member"};
+
+            var orders = from o in _context.Orders
+                               .Include(o => o.Member).ThenInclude(m => m.Household)
+                               .Include(o => o.PaymentType)
+                               .AsNoTracking()
+                         select o;
+            //Add as many filters as needed
+            if (HouseholdID.HasValue)
+            {
+                orders = orders.Where(o => o.Member.HouseholdID == HouseholdID);
+                isFiltering = true;
+            }
+            if (PaymentID.HasValue)
+            {
+                orders = orders.Where(o => o.PaymentTypeID == PaymentID);
+                isFiltering = true;
+            }
+
+            if (!String.IsNullOrEmpty(MemberSearch))
+            {
+                orders = orders.Where(o => o.Member.LastName.ToUpper().Contains(MemberSearch.ToUpper())
+                                       || o.Member.FirstName.ToUpper().Contains(MemberSearch.ToUpper()));
+                isFiltering = true;
+            }
+            if (!String.IsNullOrEmpty(HouseholdNameSearch))
+            {
+                orders = orders.Where(o => o.Member.Household.Name.ToUpper().Contains(HouseholdNameSearch.ToUpper()));
+                isFiltering = true;
+            }
+            if (HouseholdIDSearch != null)
+            {
+                //TODO validation. Display warning if not integer entered.
+                try
+                {
+                    orders = orders.Where(o => o.ID.Equals(HouseholdIDSearch));
+                    isFiltering = true;
+                }
+                catch (Exception)
+                {
+
+                    //TODO
+                }
+            }
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted!
+            {
+                page = 1;//Reset page to start
+
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+
+
+            if (sortField == "Member")
+            {
+                if (sortDirection == "asc")
+                {
+                    orders = orders
+                    .OrderBy(o => o.Member.LastName)
+                    .ThenBy(o => o.Member.FirstName);
+                }
+                else
+                {
+                    orders = orders
+                   .OrderByDescending(o => o.Member.LastName)
+                   .ThenByDescending(o => o.Member.FirstName);
+                }
+            }
+            else if (sortField == "Date")
+            {
+                if (sortDirection == "asc")
+                {
+                    orders = orders
+                    .OrderBy(o => o.Date)
+                    .ThenBy(h => h.Member.LastName)
+                    .ThenBy(o => o.Member.FirstName);
+                }
+                else
+                {
+                    orders = orders
+                     .OrderByDescending(o => o.Date)
+                    .ThenByDescending(h => h.Member.LastName)
+                    .ThenByDescending(o => o.Member.FirstName);
+                }
+            }
+            else if (sortField == "Total")
+            {
+                if (sortDirection == "asc")
+                {
+                    orders = orders
+                   .OrderBy(o => o.Total)
+                   .ThenBy(h => h.Member.LastName)
+                   .ThenBy(o => o.Member.FirstName);
+                }
+                else
+                {
+                    orders = orders
+                      .OrderByDescending(o => o.Total)
+                     .ThenByDescending(h => h.Member.LastName)
+                     .ThenByDescending(o => o.Member.FirstName);
+                }
+            }
+            else if (sortField == "Payment")
+            {
+                if (sortDirection == "asc")
+                {
+                    orders = orders
+                   .OrderBy(o => o.PaymentType)
+                   .ThenBy(h => h.Member.LastName)
+                   .ThenBy(o => o.Member.FirstName);
+                }
+                else
+                {
+                    orders = orders
+                      .OrderByDescending(o => o.PaymentType)
+                     .ThenByDescending(h => h.Member.LastName)
+                     .ThenByDescending(o => o.Member.FirstName);
+                }
+            }
+          
+
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+            ViewData["Filtering"] = isFiltering ? " show" : "";
+            ViewData["Action"] = "/Orders";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal" };
+
+            //Handle Paging
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<Order>.CreateAsync(orders.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
+            /*
+                        ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
+                        var gROWContext = _context.Orders.Include(o => o.Member).ThenInclude(m => m.Household).Include(o => o.PaymentType);
+                        return View(await gROWContext.ToListAsync());*/
         }
 
         // GET: Orders/Details/5

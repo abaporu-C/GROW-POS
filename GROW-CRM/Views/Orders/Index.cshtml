@@ -1,13 +1,13 @@
 ﻿@using GROW_CRM.Models;
 @model IEnumerable<GROW_CRM.Models.Order>
 
-@{ ViewData["Title"] = "Index"; }
+@{ ViewData["Title"] = "Orders"; }
 
-<h1>Index</h1>
+<h1>Orders</h1>
 
 <p>
     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createOrderModal">
-        Create
+        New Order
     </button>
 </p>
 
@@ -53,8 +53,8 @@
         @Html.DisplayFor(modelItem => item.PaymentType.Type)
     </td>
     <td>
-        <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                            <i class='bx bxs-edit-alt'></i>
+        <a asp-action="Edit" class="text-warning h4"  data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                            <i class='bx bxs-edit-alt' style="color:grey"></i>
                         </a>
                          
                         <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> 
