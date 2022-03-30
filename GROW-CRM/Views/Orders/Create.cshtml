@@ -2,7 +2,7 @@
 
 @{ ViewData["Title"] = "Create"; }
 
-<h2>Create Order for: @Model.ID</h2>
+<h2>Create Order for: @Model.Member.FullName</h2>
 
 <hr />
 <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -75,9 +75,7 @@
                 <legend class="w-auto">Pay and Submit</legend>
                 <div class="form-group">
                     <label asp-for="PaymentType" class="control-label"></label>
-                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID">
-                        <option value="0">Select Payment Type</option>
-                    </select>
+                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID"></select>
                     <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
                 </div>
                 <div class="form-group">

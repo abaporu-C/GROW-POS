@@ -28,7 +28,10 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
-            var gROWContext = _context.Orders.Include(o => o.Member).ThenInclude(m => m.Household).Include(o => o.PaymentType);
+            var gROWContext = _context.Orders
+                              .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
+                              .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                              .Include(o => o.PaymentType);
             return View(await gROWContext.ToListAsync());
         }
 
@@ -68,12 +71,7 @@ namespace GROW_CRM.Controllers
 
             _context.Orders.Add(order);
             _context.SaveChanges();
-
-            var member = (Member)_context.Members.Where(m => m.ID == membersDDl).Include(m => m.Household).Select(m => m).FirstOrDefault();
-
-            ViewData["FullName"] = member.FullName;
-            ViewData["Address"] = member.Household.FullAddress;
-            ViewData["Age"] = member.Age;
+           
             ViewData["Modals"] = new List<string> { "_OrderModal" };
 
             Order viewOrder = _context.Orders
@@ -119,6 +117,14 @@ namespace GROW_CRM.Controllers
             {
                 try
                 {
+                    var yesterday = order.Date.AddDays(-1);
+                    var noItems = (orderItemsCheck == null);
+                    var badOrders = await _context.Orders.Where(o => o.Date <= yesterday && noItems).ToListAsync();
+                    if (badOrders != null)
+                    {
+                        _context.Orders.RemoveRange(badOrders);
+                        await _context.SaveChangesAsync();
+                    }
                     if (!orderItemsCheck.Any())
                     {
                         throw new Exception("You need to add items to this order.");
@@ -241,8 +247,7 @@ namespace GROW_CRM.Controllers
                     }
                 }
                 catch (DbUpdateException)
-                {
-                    Console.WriteLine("Something Went Wrong");
+                {                    
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }
