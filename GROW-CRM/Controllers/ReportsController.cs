@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GROW_CRM.Controllers.Helpers;
+using GROW_CRM.Data;
+using GROW_CRM.ViewModels.ReportsViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GROW_CRM.Data;
-using GROW_CRM.Models;
-using GROW_CRM.ViewModels.ReportsViewModels;
-using GROW_CRM.ViewModels;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.AspNetCore.Http.Features;
 using System.IO;
-using GROW_CRM.Controllers.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GROW_CRM.Controllers
 {

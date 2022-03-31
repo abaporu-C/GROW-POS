@@ -1,5 +1,3 @@
-using System;
-
 namespace GROW_CRM.Models
 {
     public class ErrorViewModel

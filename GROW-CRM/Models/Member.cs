@@ -1,6 +1,5 @@
 using GROW_CRM.Models.Utilities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -117,8 +116,7 @@ namespace GROW_CRM.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name ="Notes")]
-        
+        [Display(Name ="Notes")]        
         [StringLength(2000, ErrorMessage = "Only 2000 characters for notes.")]
         [DataType(DataType.MultilineText)]
         public string Notes { get; set; }        
@@ -127,7 +125,6 @@ namespace GROW_CRM.Models
         public bool ConsentGiven { get; set; }
 
         [Display(Name = "Is this member a Dependant?")]
-
         public bool DependantMember { get; set; }
 
 

@@ -1,117 +1,218 @@
 ﻿@using GROW_CRM.Models;
 @model IEnumerable<GROW_CRM.Models.Order>
 
-@{ ViewData["Title"] = "Index"; }
+@{
+    ViewData["Title"] = "Index";
+}
 
-<h1>Index</h1>
-
-<p>
-    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createOrderModal">
-        Create
-    </button>
-</p>
-
-<div class="table-responsive">
-<table class="table table-striped rounded-lg">
-    <thead class="thead-dark">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Member.Household)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Member.Household.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Member.FullName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Total)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.PaymentType.Type)
-    </td>
-    <td>
-        <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                            <i class='bx bxs-edit-alt'></i>
-                        </a>
-                         
-                        <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> 
-                        @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-                        {
-                        <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>                                                        
-                        }
-    </td>
-</tr>}
-    </tbody>
-</table>
+<div class="row mb-3">
+    <div class="col-md-12 ">
+        <h2>Orders</h2>
+    </div>
 </div>
 
-@section Scripts{
-    <script>
-        $(document).on('click', '#searchHH', function (event) {
-            event.preventDefault();
-            var code = $('#code');
-            var codeSerialized = code.serialize();
+<div class="row mb-3">
+    <div class="col-md-12 d-flex">
+        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createOrderModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 18">
+                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+            </svg> Create New
+        </button>
+    </div>
+</div>
+<form asp-action="Index" method="get">
+    @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+    {
+        <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]" />
+    }
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+            </svg> Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
 
-            $.ajax({
-                type: "GET",
-                url: 'Orders/GetMembers',
-                data: code.serialize(),
-                success: function (data) {                    
-                    $('#searchHErr').html("");
-                    $('#order-member-list').css("display", "inline-flex");
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Search by: </h4>
+                            </div>
 
-                    var membersDDL = $('#membersDDl')
-                    membersDDL.html("");
-                    membersDDL.append($('<option></option>').val(0).html("Select Member"))
-                    $.each(data, function (index, item) {                                                                                               
-                        membersDDL.append(
-                            $('<option></option>').val(item.id).html(item.fullName)
-                        );
-                    });
-                },
-                error: function (err) {  
-                    var membersDDL = $('#membersDDl')
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="control-label">Household name:</label>
+                                @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
+                            </div>
+                            <div class="form-group col-md-10">
+                                <div class="form-group">
+                                    <label class="control-label">Household ID:</label>
+                                    @Html.TextBox("HouseholdID", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
+                                </div>
+                                <div class="invalid-feedback">
+                                    Only numeric values for ID.
+                                </div>
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label class="control-label">Member:</label>
+                                @Html.TextBox("MemberSearch", null, new { @class = "form-control", placeholder = "Sam White" })
+                            </div>
+                        </div>
 
-                    $('#searchHErr').html(err.responseText)
-                    membersDDL.html("");
-                    membersDDL.append($('<option></option>').val(0).html("Select Member"))                    
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Filter by: </h4>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            @*TODO add filters (total, etc)*@
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Payment type:</label>
+                                        @Html.DropDownList("PaymentTypeID", null, "All Types", htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*   <div class="form-group col-md-10">
+                                <label class="control-label">Total:</label>
+                                @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
+                                </div>*@
+                            @*<div class="col-md-9">
+                                <div class="form-group">
+                                <div class="form-group">
+                                <label class="control-label">Status:</label>
+                                @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                </div>
+                                </div>*@
+
+                            <div class="form-group col-md-12 align-self-end mt-4 pt-1">
+                                <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
+                                <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped rounded-lg">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Member.Household)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Member)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Total)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member.Household.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentType.Type)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                <i class='bx bxs-edit-alt' style="color:grey"></i>
+                            </a>
+
+                            <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+                                <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
+                            }
+                        </td>
+                    </tr>
                 }
-            });
-        })
+            </tbody>
+        </table>
+    </div>
+    <partial name="_PagingNavBar" />
+</form>
 
-        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){            
-            var memberID = $('#membersDDl').val();            
-            if(memberID === "0"){        
-                event.preventDefault();
-                $('#searchHErr').html("Please, select an existing member.")
-                return;
+@section Scripts{
+<script>
+    $(document).on('click', '#searchHH', function (event) {
+        event.preventDefault();
+        var code = $('#code');
+        var codeSerialized = code.serialize();
+
+        $.ajax({
+            type: "GET",
+            url: 'Orders/GetMembers',
+            data: code.serialize(),
+            success: function (data) {
+                $('#searchHErr').html("");
+                $('#order-member-list').css("display", "inline-flex");
+
+                var membersDDL = $('#membersDDl')
+                membersDDL.html("");
+                membersDDL.append($('<option></option>').val(0).html("Select Member"))
+                $.each(data, function (index, item) {
+                    membersDDL.append(
+                        $('<option></option>').val(item.id).html(item.fullName)
+                    );
+                });
+            },
+            error: function (err) {
+                var membersDDL = $('#membersDDl')
+
+                $('#searchHErr').html(err.responseText)
+                membersDDL.html("");
+                membersDDL.append($('<option></option>').val(0).html("Select Member"))
             }
-        })
-    </script>
-    <script type="text/javascript">
+        });
+    })
+
+    $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){
+        var memberID = $('#membersDDl').val();
+        if(memberID === "0"){
+            event.preventDefault();
+            $('#searchHErr').html("Please, select an existing member.")
+            return;
+        }
+    })
+</script>
+<script type="text/javascript">
     $(function () {
         $('[data-toggle="popover"]').popover();
     });

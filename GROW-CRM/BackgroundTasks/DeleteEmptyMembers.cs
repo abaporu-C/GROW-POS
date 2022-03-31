@@ -1,13 +1,10 @@
 ﻿using GROW_CRM.Data;
-using GROW_CRM.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GROW_CRM.BackgroundTasks
 {
