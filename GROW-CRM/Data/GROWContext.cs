@@ -100,6 +100,11 @@ namespace GROW_CRM.Data
         {
             //modelBuilder.HasDefaultSchema("GROW");
 
+            //Default values
+            modelBuilder.Entity<Household>()
+            .Property(p => p.HasCustomLICO)
+            .HasDefaultValue(false);
+
             //Adding Unique Constraints
             modelBuilder.Entity<Item>()
                 .HasIndex(i => i.Code)
