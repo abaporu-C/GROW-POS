@@ -27,6 +27,7 @@
                     <legend class="w-auto">Order Information</legend>
                     <div class="form-group" id="ListMemberIncomeSituations">
                         <label class="control-label"><strong>Order Items:</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">&#x271A;</button>
+                        <label style="color:red">*</label>
                         <div class="col-md-offset-12" id="OrderItemList">
                             <table>
                                 @{ 
@@ -77,6 +78,7 @@
                 <legend class="w-auto">Pay and Submit</legend>
                 <div class="form-group">
                     <label asp-for="PaymentType" class="control-label"></label>
+                    <label style="color:red">*</label>
                     <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID">
                     </select>
                     <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
