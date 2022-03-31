@@ -13,12 +13,12 @@
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Personal Info</legend>
             <div class="form-group">
-                <label asp-for="Input.FirstName" class="control-label"></label>
+                <label asp-for="Input.FirstName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.FirstName" class="form-control" autofocus/>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.LastName" class="control-label"></label>
+                <label asp-for="Input.LastName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.LastName" class="form-control" />
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
@@ -34,17 +34,17 @@
                 <legend class="w-auto">Account Info</legend>
                 <h4 class="text-primary">@ViewData["msg"]</h4>
                 <div class="form-group">
-                    <label asp-for="Input.Email"></label>
+                    <label asp-for="Input.Email"></label><span style="color:red">*</span>
                     <input asp-for="Input.Email" class="form-control" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label>
+                    <label asp-for="Input.Password"></label><span style="color:red">*</span>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
+                    <label asp-for="Input.ConfirmPassword"></label><span style="color:red">*</span>
                     <input asp-for="Input.ConfirmPassword" class="form-control" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
