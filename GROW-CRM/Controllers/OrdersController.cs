@@ -257,6 +257,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             ViewDataReturnURL();
@@ -284,6 +285,7 @@ namespace GROW_CRM.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             ViewDataReturnURL();

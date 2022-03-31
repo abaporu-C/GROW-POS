@@ -12,7 +12,7 @@ using GROW_CRM.Utilities;
 
 namespace GROW_CRM.Controllers
 {
-    [Authorize(Roles = "Admin,Security")]
+    [Authorize(Roles = "SuperAdmin")]
     public class EmployeesController : Controller
     {
         private readonly GROWContext _context;

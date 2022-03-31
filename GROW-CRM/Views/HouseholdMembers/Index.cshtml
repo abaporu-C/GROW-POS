@@ -20,8 +20,11 @@
             }
         }
 
-       
-        <a asp-action="Delete" class="btn btn btn-outline-danger" asp-controller="Households" asp-route-id="@household.ID">Delete</a>
+        @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+        {
+            <a asp-action="Delete" class="btn btn btn-outline-danger" asp-controller="Households" asp-route-id="@household.ID">Delete</a>                        
+        }
+
         <!-- Button trigger modal -->
 <button type="button" class="btn btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
   Lico Info
@@ -167,9 +170,11 @@
                                 <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
                             </a>
                         </th>
-                        <th>
+                        @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
+                                 <th>
 
-                        </th>
+                        </th>   
+                                }                                
                     </tr>
                     </thead>
                     <tbody>
@@ -278,11 +283,14 @@
                         </a>
                        
                     </td>
-                    <td>
+                    @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
+                                    <td>
                         <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
                             <span class="btn btn btn-outline-danger">Delete</span>
                         </a>
-                    </td>
+                    </td>    
+                                    }
+                                    
                 </tr>
                     }
                     

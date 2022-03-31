@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class HealthIssueTypesController : Controller
     {
         private readonly GROWContext _context;
