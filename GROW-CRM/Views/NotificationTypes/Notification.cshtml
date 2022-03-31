@@ -4,7 +4,7 @@
 
 <h1>Notification Email</h1>
 
-<h2>Message to Members in @ViewData["Type"]</h2>
+<h2>Message to Members in @ViewData["Type"] list.</h2>
 
 <hr />
 <form asp-action="Notification">
@@ -14,10 +14,13 @@
             <hr />
             <input type="hidden" name="id" value="@ViewData["id"]" />
             @*<input type="text" name="householdStatusID" value="@ViewData["householdStatusID"]" />*@
+            <label>Select the list of recipients (by member status)</label>
             <label for="HouseholdStatusID" class="control-label"></label>
+            <br />
             <select id="HouseholdStatusID" name="householdStatusID" class="form-control" asp-items="ViewBag.householdStatusID">
             <option value="">Select...</option>
             </select>
+            <br />
             <span for="HouseholdStatusID" class="text-danger"></span>
             <div class="form-group">
                 <label for="Subject" class="control-label">Email Subject</label>
@@ -28,7 +31,7 @@
                 <textarea id="emailContent" name="emailContent" rows="5" cols="40" class="form-control"></textarea>
             </div>
             <div class="form-group">
-                <input type="submit" value="Send" class="btn btn-primary" />
+                <input type="submit" value="Send E-mail" class="btn btn-primary">
             </div>
 
         </div>
