@@ -80,5 +80,18 @@ namespace GROW_CRM.Controllers
                 .OrderBy(a => a.Name), "ID", "Name");
             return PartialView("_Categories");
         }
+
+        public PartialViewResult Cities()
+        {
+            ViewData["CitiesID"] = new
+                SelectList(_context.Cities
+                .OrderBy(a => a.Name), "ID", "Name");
+            return PartialView("_Cities");
+        }
+
+        public PartialViewResult Default()
+        {
+            return PartialView("_Default");
+        }
     }
 }

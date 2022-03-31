@@ -70,6 +70,19 @@ namespace GROW_CRM.Models
             }
         }
 
+        [Display(Name = "Yearly Income")]
+        public string YearlyIncomeFormated
+        {
+            get
+            {
+                double count = 0;
+
+                foreach (Member m in Members) count += m.YearlyIncome;
+
+                return count.ToString("C");
+            }
+        }
+
         [Display(Name = "Household Name")]
         [StringLength(20, ErrorMessage = "Household Name can't be longer than 20 symbols")]
         [Required]

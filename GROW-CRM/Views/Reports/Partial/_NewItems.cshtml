@@ -5,7 +5,9 @@
 @{
     @if ((int)ViewData["Count"] > 0)
     {
-        <a asp-action="DownloadNewItems" class="btn btn-info float-left">Download New Items Report</a>
+        <div class="row">
+            <a asp-action="DownloadNewItems" class="btn btn-info float-left">Download New Items Report</a>
+        </div>
     }
     <br />
     <div class="table-responsive">

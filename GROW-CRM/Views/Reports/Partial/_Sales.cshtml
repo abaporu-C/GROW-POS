@@ -8,7 +8,9 @@
 @{
     @if ((int)ViewData["Count"] > 0)
     {
-        <a asp-action="DownloadSales" class="btn btn-info float-left">Download Sales Report</a>
+        <div class="row">
+            <a asp-action="DownloadSales" class="btn btn-info float-left">Download Sales Report</a>
+        </div>
     }
     <br />
     <div class="table-responsive">
@@ -35,7 +37,7 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        $ @Html.DisplayFor(modelItem => item.Total)
+                        @Html.DisplayFor(modelItem => item.TotalFormated)
                     </td>
 
                 </tr>
