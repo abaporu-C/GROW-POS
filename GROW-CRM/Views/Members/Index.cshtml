@@ -104,8 +104,11 @@
                         </div>
                         <div class="card-footer">
                             <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Update</a> |
-                            <a asp-action="Details" title="Details" asp-route-id="@item.ID">Details</a> | 
-                            <a asp-action="Delete" title="Delete" asp-route-id="@item.ID">Delete</a>
+                            <a asp-action="Details" title="Details" asp-route-id="@item.ID">Details</a> |
+                            @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+                            <a asp-action="Delete" title="Delete" asp-route-id="@item.ID">Delete</a>                                                                
+                            }
                         </div>
                     </div>
                 }
@@ -182,7 +185,10 @@
                 <td>
                     <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> 
                     <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> 
-                    <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                    {
+                    <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>                        
+                    }
                 </td>
             </tr>
             }

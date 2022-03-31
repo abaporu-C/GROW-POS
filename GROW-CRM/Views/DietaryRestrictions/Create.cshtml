@@ -14,11 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Restriction" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="Restriction" class="form-control" />
                 <span asp-validation-for="Restriction" class="text-danger"></span>
                 <label asp-for="HealthIssueType" class="control-label"></label>
-                <label style="color:red">*</label>
                 <select asp-for="HealthIssueTypeID" class="form-control" asp-items="ViewBag.HealthIssueTypeID">
                     <option value="">Select a Type</option>
                 </select>

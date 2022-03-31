@@ -14,13 +14,11 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="Code" class="form-control" />
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -31,7 +29,6 @@
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
@@ -42,7 +39,6 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryID" class="control-label"></label>
-                <label style="color:red">*</label>
                 <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
                 <span asp-validation-for="CategoryID" class="text-danger"></span>
             </div>

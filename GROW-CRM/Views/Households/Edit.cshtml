@@ -25,7 +25,6 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="CityID" class="control-label"></label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="City" data-content="Members city name."><b>?</b></a>
-                        <label style="color:red">*</label>
                         <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
                             <option value="">Select a City</option>
                         </select>
@@ -48,7 +47,6 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="StreetNumber" class="control-label"></label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Street Number" data-content="Members street number."><b>?</b></a>
-                                <label style="color:red">*</label>
                                 <input asp-for="StreetNumber" class="form-control" />
                                 <span asp-validation-for="StreetNumber" class="text-danger"></span>
                             </div>
@@ -57,14 +55,12 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="StreetName" class="control-label"></label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Street Name" data-content="Members street name."><b>?</b></a>
-                        <label style="color:red">*</label>
                         <input asp-for="StreetName" class="form-control" />
                         <span asp-validation-for="StreetName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="PostalCode" class="control-label"></label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Postal Code" data-content="Members postal code."><b>?</b></a>
-                        <label style="color:red">*</label>
                         <input asp-for="PostalCode" class="form-control" id="postal-code" placeholder="Example: A2B 3C4" pattern="/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i" title="Example: A2A 2B2" />
                         <span asp-validation-for="PostalCode" class="text-danger"></span>
                     </div>
@@ -80,7 +76,6 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Household Name" data-content="Household Name."><b>?</b></a>
-                        <label style="color:red">*</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>

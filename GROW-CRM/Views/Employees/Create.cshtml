@@ -15,13 +15,11 @@
             <input type="hidden" asp-for="Active" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <label style="color:red">*</label>
-                <input asp-for="FirstName" class="form-control" autofocus />
+                <input asp-for="FirstName" class="form-control" autofocus/>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
@@ -34,7 +32,6 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <label style="color:red">*</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
