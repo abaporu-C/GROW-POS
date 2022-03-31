@@ -55,7 +55,7 @@
         {
             @if (cs.Count() > 0)
                         {
-                            string id = cs[0].Name.Replace(' ', '-');
+                            string id = cs[0].Name.Replace(' ', '-').Replace('.', '-');
                 <div>
                     <div class="card">
                         <div class="card-header" id="@($"heading{id}")">
