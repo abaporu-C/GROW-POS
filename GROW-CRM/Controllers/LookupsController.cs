@@ -76,6 +76,12 @@ namespace GROW_CRM.Controllers
             return PartialView("_PaymentTypes");
         }
 
-
+        public PartialViewResult Categories()
+        {
+            ViewData["CategoriesID"] = new
+                SelectList(_context.Categories
+                .OrderBy(a => a.Name), "ID", "Name");
+            return PartialView("_Categories");
+        }
     }
 }

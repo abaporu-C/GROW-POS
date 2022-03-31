@@ -28,6 +28,9 @@
         <li class="nav-item">
             <a href="#ProvincesPanel" id="ProvincesTab" aria-controls="ProvincesTab" role="tab" class="nav-link" name="ProvincesPanel" data-toggle="tab" aria-selected="false">Provinces</a>
         </li>
+        <li class="nav-item">
+            <a href="#CategoriesPanel" id="CategoriesTab" aria-controls="CategoriesTab" role="tab" class="nav-link" name="CategoriesPanel" data-toggle="tab" aria-selected="false">Categories</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
@@ -56,6 +59,9 @@
                 <div role="tabpanel" class="tab-pane fade ml-3" id="ProvincesPanel" aria-labelledby="Provinces-Panel">
             <br />
         </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="CategoriesPanel" aria-labelledby="Categories-Panel">
+            <br />
+        </div>
     </div>
 </div>
 <hr />
@@ -77,6 +83,8 @@
                 case 'PaymentTypesPanel': $('#PaymentTypesPanel').load('/Lookups/PaymentTypes');
                     break;
                 case 'ProvincesPanel': $('#ProvincesPanel').load('/Lookups/Provinces');
+                    break;
+                case 'CategoriesPanel': $('#CategoriesPanel').load('/Lookups/Categories');
                     break;
                 default: break;
             };

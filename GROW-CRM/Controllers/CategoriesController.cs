@@ -104,7 +104,7 @@ namespace GROW_CRM.Controllers
                 {
                     _context.Add(category);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
                 }
             }
             catch (DbUpdateException)
@@ -149,7 +149,7 @@ namespace GROW_CRM.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -202,7 +202,7 @@ namespace GROW_CRM.Controllers
             {
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
             catch (DbUpdateException dex)
             {
