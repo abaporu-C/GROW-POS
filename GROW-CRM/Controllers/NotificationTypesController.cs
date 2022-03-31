@@ -153,7 +153,7 @@ namespace GROW_CRM.Controllers
             return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
         }
 
-        // GET/POST: MedicalTrials/Notification/5
+        // GET/POST: MembersbyStatus/Notification/5
         public async Task<IActionResult> Notification(int? id, string Subject, string emailContent, int? householdStatusID)
         {
             PopulateDropDownLists();
@@ -214,7 +214,7 @@ namespace GROW_CRM.Controllers
                 {
                     string errMsg = ex.GetBaseException().Message;
                     ViewData["Message"] = "Error: Could not send email message to the " + folksCount + " Member"
-                        + ((folksCount == 1) ? "" : "s") + " in the trial.";
+                        + ((folksCount == 1) ? "" : "s") + " in the List.";
                 }
             }
             PopulateDropDownLists();
