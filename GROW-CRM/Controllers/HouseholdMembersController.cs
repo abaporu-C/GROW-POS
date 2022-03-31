@@ -654,6 +654,8 @@ namespace GROW_CRM.Controllers
                             .Where(h => h.ID == m.HouseholdID)
                             .FirstOrDefaultAsync();
 
+            if (!household.HasCustomLICO) return;
+
             double totalIncome = m.YearlyIncome;
             int memberCount = 0;
 
@@ -737,6 +739,21 @@ namespace GROW_CRM.Controllers
         private bool MemberExists(int id)
         {
             return _context.Members.Any(e => e.ID == id);
+        }
+
+        public async Task<IActionResult> CustomLICOVerification(int id)
+        {
+            var household = await _context.Households.FirstOrDefaultAsync(h => h.ID == id);
+
+            household.LICOVerified = !household.LICOVerified;
+            household.HasCustomLICO = !household.HasCustomLICO;
+
+            _context.Update(household);
+            await _context.SaveChangesAsync();
+
+            
+
+            return Json(household);
         }
     }
 }

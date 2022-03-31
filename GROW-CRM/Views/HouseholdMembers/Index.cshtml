@@ -4,8 +4,9 @@
     ViewData["Title"] = "Household Members";
     GROW_CRM.Models.Household household = (GROW_CRM.Models.Household)ViewBag.Household;
 }
-<p> </p>
-<div class="media">    
+<div class="row">
+    <div class="col-md-6">
+        <div class="media">    
     <div class="media-body ml-3">
 
         @{
@@ -29,7 +30,21 @@
 <button type="button" class="btn btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
   Lico Info
 </button>
-
+</div>
+</div>
+    </div>
+    <div class="col-md-6">
+        @if(User.IsInRole("SuperAdmin")){
+                    <div class="card" style="width: 18rem;">
+  <div class="card-body d-flex flex-column align-items-center justify-content-center" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">      
+    <h5 class="card-title">Custom LICO Verification</h5>
+                
+    <button id="toggle-LICO" class="btn btn-primary">Toggle LICO</button>
+  </div>
+</div>
+                }
+            </div>
+</div>
         <div class="row">
             <div class="col-md-6">
                 <label for="membership">Membership#</label>
@@ -48,7 +63,7 @@
                             }
                             else
                             {
-                                    <div id="lico" class="btn btn-outline-sucess">
+                                    <div id="lico" class="btn btn-outline-success">
                                           <b>Verified</b>
                                     </div>
                             }
@@ -84,9 +99,7 @@
                             }
                         }
             </div>            
-        </div>
-    </div>
-</div>
+        </div>    
 <form asp-action="Index" method="get">
     @if(!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
     {
@@ -328,5 +341,30 @@
         $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
+    </script>
+    <script>
+        $(document).on('click', '#toggle-LICO', function(event){
+            event.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: 'HouseholdMembers/CustomLICOVerification',
+                data: {"id":@household.ID},
+                success: function (data) {                    
+                    var licoDiv = document.getElementById("lico");
+
+                    if(data.licoVerified){
+                        licoDiv.className = "btn btn-outline-success";
+                        licoDiv.innerHTML = "<b>Verified</b>";
+                        return
+                    }
+
+                    licoDiv.className = "btn btn-outline-danger";
+                    licoDiv.innerHTML = "<b>Not LICO Verified</b>";
+                },
+                error: function (err) {  
+                    alert("There was an error trying to change this setting. Please, speak with your system administrator.")                    
+                }
+            });
+        })
     </script>
 }

@@ -96,7 +96,9 @@ namespace GROW_CRM.Models
         public string PostalCode { get; set; }                        
 
         [Display(Name ="LICO verification")]
-        public bool LICOVerified { get; set; }        
+        public bool LICOVerified { get; set; }
+        
+        public bool HasCustomLICO { get; set; }
 
         [Display(Name = "Yearly Verification")]
         public DateTime LastVerification { get; set; }
