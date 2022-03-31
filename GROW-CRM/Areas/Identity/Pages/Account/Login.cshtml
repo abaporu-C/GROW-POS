@@ -53,6 +53,7 @@
         </form>
 
         <button id="admin-log" class="button btn">Admin Login</button>
+        <button id="super-log" class="button btn">Super Login</button>
         <button id="user-log" class="button btn">User Login</button>
     </div>
 </div>
@@ -65,6 +66,10 @@
 
         $(document).on('click', '#user-log', function(event){
             changeCreds("user1@outlook.com", "password");
+        })
+
+        $(document).on('click', '#super-log', function(event){
+            changeCreds("super1@outlook.com", "password");
         })
 
         function changeCreds(email, password){

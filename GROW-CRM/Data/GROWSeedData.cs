@@ -721,20 +721,14 @@ namespace GROW_CRM.Data
                      },
                      new Employee
                      {
-                         FirstName = "Fred",
-                         LastName = "Flintstone",
-                         Email = "security1@outlook.com",
-                     },
-                     new Employee
-                     {
                          FirstName = "Betty",
                          LastName = "Rubble",
                          Email = "super1@outlook.com",
                      },
                      new Employee
                      {
-                         FirstName = "David",
-                         LastName = "Stovell",
+                         FirstName = "George",
+                         LastName = "Washington",
                          Email = "user1@outlook.com",
                      });
 

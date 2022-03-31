@@ -444,6 +444,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households/Delete/5
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -492,6 +493,7 @@ namespace GROW_CRM.Controllers
         // POST: Households/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var household = await _context.Households.FindAsync(id);

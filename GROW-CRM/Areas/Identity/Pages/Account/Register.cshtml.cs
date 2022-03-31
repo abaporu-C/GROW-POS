@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GROW_CRM.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles="SuperAdmin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;

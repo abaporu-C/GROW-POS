@@ -13,13 +13,13 @@
     <link rel="Manifest" href="~/Manifest.json" />
     @if (!(ViewData["Mapping-Header"] is null))
     {
-        
+
     }
 </head>
 <body class="m-0">
-    @if(!(ViewData["Modals"] is null))
+    @if (!(ViewData["Modals"] is null))
     {
-        foreach(var modal in (List<string>)ViewData["Modals"])
+        foreach (var modal in (List<string>)ViewData["Modals"])
         {
             <partial name="@modal" />
         }
@@ -27,98 +27,101 @@
     <header>
         <div class="sidebar">
             <div class="logo-details">
-                <i class='bx bxs-leaf bx-tada icon' ></i>
+                <i class='bx bxs-leaf bx-tada icon'></i>
                 <div class="logo_name">GROW POS</div>
                 <i class='bx bx-menu' id="btn"></i>
             </div>
             <div class="list-wrapper">
-            <ul class="nav-list">
-                @*<li>
-                    <i class='bx bx-search'></i>
-                    <input type="text" placeholder="Search...">
-                    <span class="tooltip">Search</span>
-                </li>*@
-                <li>
-                    <a asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class='bx bx-grid-alt'></i>
-                        <span class="links_name">Dashboard</span>
-                    </a>
-                    <span class="tooltip">Dashboard</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Households" asp-action="Index">
-                        <i class='bx bx-building-house'></i>
-                        <span class="links_name">Households</span>
-                    </a>
-                    <span class="tooltip">Households</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Orders" asp-action="Index">
-                        <i class='bx bx-cart-alt'></i>
-                        <span class="links_name">Orders</span>
-                    </a>
-                    <span class="tooltip">Orders</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Items" asp-action="Index">
-                        <i class='bx bx-food-menu'></i>
-                        <span class="links_name">Items</span>
-                    </a>
-                    <span class="tooltip">Items</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Reports" asp-action="Index">
-                        <i class='bx bx-pie-chart-alt-2'></i>
-                        <span class="links_name">Reports</span>
-                    </a>
-                    <span class="tooltip">Reports</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Lookups" asp-action="Index">
-                        <i class='bx bx-folder'></i>
-                        <span class="links_name">Misc Data</span>
-                    </a>
-                    <span class="tooltip">Misc Data</span>
-                </li>                
-                <li>
-                    <a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">
-                        <i class='bx bx-info-circle'></i>
-                        <span class="links_name">About</span>
-                    </a>
-                    <span class="tooltip">About</span>
-                </li>
-                @if (User.IsInRole("Admin"))
-                {
+                <ul class="nav-list">
+                    @*<li>
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Search...">
+                        <span class="tooltip">Search</span>
+                        </li>*@
                     <li>
-                    <a asp-area="" asp-controller="UserRoles" asp-action="Index">
-                        <i class='bx bx-cog'></i>
-                        <span class="links_name">Roles</span>
-                    </a>
-                    <span class="tooltip">Roles</span>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Employees" asp-action="Index">
-                        <i class='bx bx-user'></i>                        
-                        <span class="links_name">Employees</span>
-                    </a>
-                    <span class="tooltip">Employees</span>
-                </li>
-                }                
-                <partial name="_LoginPartial" />
-            </ul>            
+                        <a asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class='bx bx-grid-alt'></i>
+                            <span class="links_name">Dashboard</span>
+                        </a>
+                        <span class="tooltip">Dashboard</span>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Households" asp-action="Index">
+                            <i class='bx bx-building-house'></i>
+                            <span class="links_name">Households</span>
+                        </a>
+                        <span class="tooltip">Households</span>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Orders" asp-action="Index">
+                            <i class='bx bx-cart-alt'></i>
+                            <span class="links_name">Orders</span>
+                        </a>
+                        <span class="tooltip">Orders</span>
+                    </li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a asp-area="" asp-controller="Items" asp-action="Index">
+                                <i class='bx bx-food-menu'></i>
+                                <span class="links_name">Items</span>
+                            </a>
+                            <span class="tooltip">Items</span>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Lookups" asp-action="Index">
+                                <i class='bx bx-folder'></i>
+                                <span class="links_name">Misc Data</span>
+                            </a>
+                            <span class="tooltip">Misc Data</span>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">
+                                <i class='bx bx-info-circle'></i>
+                                <span class="links_name">About</span>
+                            </a>
+                            <span class="tooltip">About</span>
+                        </li>
+                    }
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <li>
+                            <a asp-area="" asp-controller="Reports" asp-action="Index">
+                                <i class='bx bx-pie-chart-alt-2'></i>
+                                <span class="links_name">Reports</span>
+                            </a>
+                            <span class="tooltip">Reports</span>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="UserRoles" asp-action="Index">
+                                <i class='bx bx-cog'></i>
+                                <span class="links_name">Roles</span>
+                            </a>
+                            <span class="tooltip">Roles</span>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Employees" asp-action="Index">
+                                <i class='bx bx-user'></i>
+                                <span class="links_name">Employees</span>
+                            </a>
+                            <span class="tooltip">Employees</span>
+                        </li>
+                    }
+                    <partial name="_LoginPartial" />
+                </ul>
             </div>
             <div class="profile-mobile">
-            <!--<img src="profile.jpg" alt="profileImg">-->
-        <div class="name_job">
-                <div class="name">
-                    <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
+                <!--<img src="profile.jpg" alt="profileImg">-->
+                <div class="name_job">
+                    <div class="name">
+                        <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
+                    </div>
+                    @*<div class="job">Web designer</div>*@
                 </div>
-                @*<div class="job">Web designer</div>*@
+                <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit"><i class='bx bx-log-out' id="log_out"></i></button>
+                </form>
             </div>
-            <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit"><i class='bx bx-log-out' id="log_out"></i></button>
-        </form>
-        </div>
         </div>
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
             <div class="container">
@@ -173,23 +176,22 @@
             </div>
             </div>
             </nav>*@
-    </header>    
+    </header>
 
     <div class="home-background"></div>
 
-    <section class="home-section">        
+    <section class="home-section">
         <div class="container">
             <main role="main">
                 <div class="box-form rounded-lg" id="box">
                     @RenderBody()
                 </div>
-                <div class="mobile-filler"style="height: 60px">
-
+                <div class="mobile-filler" style="height: 60px">
                 </div>
             </main>
         </div>
     </section>
-    
+
     @*<footer class="border-top footer text-muted">
         <div class="container">
         &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

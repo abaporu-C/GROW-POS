@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class ReportsController : Controller
     {
         private readonly GROWContext _context;

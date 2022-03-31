@@ -386,7 +386,6 @@ namespace GROW_CRM.Controllers
 
             var memberToUpdate = await _context.Members
                 .Include(m => m.Gender)
-                .Include(m => m.Household)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
@@ -444,6 +443,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: PatientAppt/Remove/5
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Remove(int? id)
         {
             if (id == null)
@@ -470,6 +470,7 @@ namespace GROW_CRM.Controllers
         // POST: PatientAppt/Remove/5
         [HttpPost, ActionName("Remove")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> RemoveConfirmed(int id)
         {
             var member = await _context.Members
@@ -654,10 +655,12 @@ namespace GROW_CRM.Controllers
                             .FirstOrDefaultAsync();
 
             double totalIncome = m.YearlyIncome;
-            int memberCount = household.Members.Count();
+            int memberCount = 0;
 
             foreach(Member member in household.Members)
             {
+                if (member.DependantMember) continue;
+                memberCount++;
                 totalIncome += member.YearlyIncome;
             }
 
@@ -683,6 +686,7 @@ namespace GROW_CRM.Controllers
             }
 
             _context.Update(household);
+            await _context.SaveChangesAsync();
 
         }
 
