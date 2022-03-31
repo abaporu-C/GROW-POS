@@ -4,6 +4,14 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
 {
     public class NewAdditionsReport
     {
+        public string IncomeFormated
+        {
+            get
+            {
+                return Income.ToString("C");
+            }
+        }
+
         public int ID { get; set; }
         public int Members { get; set; }
         public double Income { get; set; }

@@ -45,7 +45,8 @@ namespace GROW_CRM.Models
         }
 
         [Display(Name = "Yearly Income")]
-        public double YearlyIncome { get 
+        public double YearlyIncome { 
+            get 
             {
                 double income = 0;
 
@@ -57,6 +58,23 @@ namespace GROW_CRM.Models
 
                 return income;
             } 
+        }
+
+        [Display (Name = "Yearly Income")]
+        public string YearlyIncomeFormated
+        {
+            get
+            {
+                double income = 0;
+
+                foreach (MemberIncomeSituation mis in MemberIncomeSituations)
+                {
+                    income += mis.Income;
+                }
+
+
+                return income.ToString("C");
+            }
         }
 
         [Display(Name = "Age (DOB)")]

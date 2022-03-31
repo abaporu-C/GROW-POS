@@ -74,7 +74,7 @@
                     {
                         foreach (MemberIncomeSituation mis in Model.MemberIncomeSituations)
                 {
-                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> $@mis.Income</li>
+                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> @mis.IncomeFormated</li>
                         }
                     }
                 }                
@@ -162,7 +162,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <button asp-action="Index" class="btn btn-secondary">Cancel</button>
+        <input type="submit" value="Delete" class="btn btn-outline-danger" /> |
+        <button asp-action="Index" class="btn btn-outline-secondary">Cancel</button>
     </form>
 </div>

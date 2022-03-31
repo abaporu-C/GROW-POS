@@ -8,7 +8,7 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" id="myTabs" role="tablist">
         <li class="nav-item">
-            <a href="#DefaultPanel" aria-controls="DefaultTab" role="tab" class="nav-link active" name="DefaultTab" data-toggle="tab" aria-selected="false"> </a>
+            <a href="#DefaultPanel" id="DefaultTab" aria-controls="DefaultTab" role="tab" class="nav-link active" name="DefaultTab" data-toggle="tab" aria-selected="false"> </a>
         </li>
         <li class="nav-item">
             <a href="#HealthIssueTypesPanel" id="HealthIssueTypesTab" aria-controls="HealthIssueTypesTab" role="tab" class="nav-link" name="HealthIssueTypesPanel" data-toggle="tab" aria-selected="false">Health Issue Types</a>
@@ -31,15 +31,15 @@
         <li class="nav-item">
             <a href="#CategoriesPanel" id="CategoriesTab" aria-controls="CategoriesTab" role="tab" class="nav-link" name="CategoriesPanel" data-toggle="tab" aria-selected="false">Categories</a>
         </li>
+        <li class="nav-item">
+            <a href="#CitiesPanel" id="CitiesTab" aria-controls="CitiesTab" role="tab" class="nav-link" name="CitiesPanel" data-toggle="tab" aria-selected="false">Cities</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade ml-3 show active" id="DefaultPanel">
-            <br />
-            <h4>
-                Select the lookup value to maintian from the tabs.
-            </h4>
+            <partial name="_Default"/>
         </div>
         <div role="tabpanel" class="tab-pane fade ml-3" id="HealthIssueTypesPanel" aria-labelledby="HealthIssueTypes-Panel">
             <br />
@@ -60,6 +60,9 @@
             <br />
         </div>
         <div role="tabpanel" class="tab-pane fade ml-3" id="CategoriesPanel" aria-labelledby="Categories-Panel">
+            <br />
+        </div>
+        <div role="tabpanel" class="tab-pane fade ml-3" id="CitiesPanel" aria-labelledby="Cities-Panel">
             <br />
         </div>
     </div>
@@ -86,7 +89,10 @@
                     break;
                 case 'CategoriesPanel': $('#CategoriesPanel').load('/Lookups/Categories');
                     break;
-                default: break;
+                case 'CitiesPanel': $('#CitiesPanel').load('/Lookups/Cities');
+                    break;
+                default: $('#DefaultPanel').load('/Lookups/Default');                     
+                    break;
             };
             return;
         };
