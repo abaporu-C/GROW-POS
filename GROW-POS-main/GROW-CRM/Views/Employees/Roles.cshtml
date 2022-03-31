@@ -1,0 +1,43 @@
+﻿@model IEnumerable<GROW_CRM.ViewModels.RoleWithUserVM>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h1>List of Roles</h1>
+
+<table class="table table-striped table-bordered" ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserFullName)
+            </th>
+        </tr>
+    </thead>
+    @foreach (var r in Model.GroupBy(p => p.RoleName))
+    {
+        <thead>
+            <tr>
+                <th>@r.Key</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in r)
+            {
+                <tr>
+                    <td></td>
+                    <td>@u.UserName</td>
+                    <td>@u.UserFullName</td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

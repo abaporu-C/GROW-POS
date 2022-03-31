@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@*For Cookies*@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<li class="profile">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var username = HttpContextAccessor.HttpContext.Request.Cookies["userName"] ?? UserManager.GetUserName(User);
+        <div class="profile-details">
+            <!--<img src="profile.jpg" alt="profileImg">-->
+        <div class="name_job">
+                <div class="name">
+                    <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
+                </div>
+                @*<div class="job">Web designer</div>*@
+            </div>
+            <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit"><i class='bx bx-log-out' id="log_out"></i></button>
+        </form>
+        </div>         
+    }
+    else
+    {
+
+    }
+
+</li>
+
+@*<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+    </li>
+    <li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>*@

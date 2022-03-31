@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class LookupsController : Controller
     {
         private readonly GROWContext _context;
@@ -24,6 +26,14 @@ namespace GROW_CRM.Controllers
             ///or AppointmentReasonsTab
             ViewData["Tab"] = Tab;
             return View();
+        }
+
+        public PartialViewResult HealthIssueTypes()
+        {
+            ViewData["HealthIssueTypesID"] = new
+                SelectList(_context.HealthIssueTypes
+                .OrderBy(a => a.Type), "ID", "Type");
+            return PartialView("_HealthIssueTypes");
         }
 
         public PartialViewResult DietaryRestrictions()
@@ -66,6 +76,12 @@ namespace GROW_CRM.Controllers
             return PartialView("_PaymentTypes");
         }
 
-
+        public PartialViewResult Categories()
+        {
+            ViewData["CategoriesID"] = new
+                SelectList(_context.Categories
+                .OrderBy(a => a.Name), "ID", "Name");
+            return PartialView("_Categories");
+        }
     }
 }

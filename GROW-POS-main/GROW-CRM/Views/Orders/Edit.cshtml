@@ -1,105 +1,142 @@
 ﻿@model GROW_CRM.Models.Order
 
-@{
-    ViewData["Title"] = "Edit";
-}
+@{ ViewData["Title"] = "Edit"; }
 
-<h1>Edit</h1>
+<h2>Editing Order #@Model.ID</h2>
 
-<h4>Order</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label asp-for="HouseholdCode" class="control-label"></label>
-                <input asp-for="HouseholdCode" class="form-control" />
-                <span asp-validation-for="HouseholdCode" class="text-danger"></span>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Customer Information</legend>
+                <input type="hidden" name="ID" value="@Model.ID" />
+                <input type="hidden" name="MemberID" value="@Model.MemberID" />
+                <input type="hidden" name="Date" value="@Model.Date" />
+
+                <div class="col-md-6">
+                    <p><strong>Member:</strong> @Model.Member.FullName</p>
+                    <p><strong>Household:</strong> @Model.Member.Household.Name</p>
+                    <p><strong>Address:</strong> @Html.DisplayFor(model => model.Member.Household.FullAddress)</p>
+                    <p><strong>Date: </strong>@Html.DisplayFor(model => model.Date)</p>
+                </div>
+            </fieldset>
+        </div>
+            <div class="col-md-6">
+                <fieldset class="form-group border p-4 rounded">
+                    <legend class="w-auto">Order Information</legend>
+                    <div class="form-group" id="ListMemberIncomeSituations">
+                        <label class="control-label"><strong>Order Items:</strong> &nbsp; &nbsp;</label><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">&#x271A;</button>
+                        <label style="color:red">*</label>
+                        <div class="col-md-offset-12" id="OrderItemList">
+                            <table>
+                                @{ 
+                                    //double subtotal = 0;
+                                    //double taxes = 0;
+                                    double total = 0;
+
+                                    foreach (var item in Model.OrderItems.OrderBy(s => s.Order.OrderItems))
+                                    {
+                                        total += (item.Item.Price * item.Quantity);
+                                        @:<tr><td>
+                                            @item.Summary
+                                        @:</td><td>
+                                        @:&nbsp; &nbsp;
+                                            <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
+                                            <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Item.Code" type="button">&#x274C;</button>
+                                        @:</td></tr>
+                                    }
+                                    @*<tr>
+                                        <td>Subtotal:</td>
+                                        <td>@subtotal</td>
+                                        <td><input type="hidden" name="Subtotal" value="@subtotal"/></td>
+                                      </tr>
+                                      taxes = Math.Round(subtotal * 0.15, 2);
+
+                                      <tr>
+                                        <td>GST/HST</td>
+                                        <td>@taxes</td>
+                                        <td><input type="hidden" name="Taxes" value="@taxes"/></td>
+                                      </tr>
+
+                                      total = subtotal + taxes;*@
+                                      <tr>
+                                        <td>Total</td>
+                                        <td>@total</td>
+                                        <td><input type="hidden" name="Total" value="@total" /></td>
+                                      </tr>
+                                 }
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purchases" class="control-label"></label>
-                <input asp-for="Purchases" class="form-control" />
-                <span asp-validation-for="Purchases" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Payment" class="control-label"></label>
-                <input asp-for="Payment" class="form-control" />
-                <span asp-validation-for="Payment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer" class="control-label"></label>
-                <input asp-for="Volunteer" class="form-control" />
-                <span asp-validation-for="Volunteer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Subtotal" class="control-label"></label>
-                <input asp-for="Subtotal" class="form-control" />
-                <span asp-validation-for="Subtotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Taxes" class="control-label"></label>
-                <input asp-for="Taxes" class="form-control" />
-                <span asp-validation-for="Taxes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MemberID" class="control-label"></label>
-                <select asp-for="MemberID" class="form-control" asp-items="ViewBag.MemberID"></select>
-                <span asp-validation-for="MemberID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HouseholdID" class="control-label"></label>
-                <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.HouseholdID"></select>
-                <span asp-validation-for="HouseholdID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentTypeID" class="control-label"></label>
-                <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID"></select>
-                <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ItemID" class="control-label"></label>
-                <select asp-for="ItemID" class="form-control" asp-items="ViewBag.ItemID"></select>
-                <span asp-validation-for="ItemID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderItemID" class="control-label"></label>
-                <input asp-for="OrderItemID" class="form-control" />
-                <span asp-validation-for="OrderItemID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Pay and Submit</legend>
+                <div class="form-group">
+                    <label asp-for="PaymentType" class="control-label"></label>
+                    <label style="color:red">*</label>
+                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID">
+                    </select>
+                    <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </fieldset>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href='@ViewData["returnURL"]'>Back to Orders</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/multiselect.js"></script>
+    <script>
+            //New for modal
+            function refreshModal(actionForm, MemberIncomeSituationsID) {
+              switch (actionForm) {
+                  case 'CreateForm': $('#formMemberIncomeSituationBody').load('/OrderItems/CreateOrderItem/' + @Model.ID);
+                    break;
+                  case 'EditForm': $('#formMemberIncomeSituationBody').load('/OrderItems/EditOrderItem/' + MemberIncomeSituationsID);
+                    break;
+                  case 'DeleteForm': $('#formMemberIncomeSituationBody').load('/OrderItems/DeleteOrderItem/' + MemberIncomeSituationsID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var MemberIncomeSituationsID = $(this).attr("tag");
+                refreshModal(actionForm, MemberIncomeSituationsID);
+            });
+            $(document).on("click", "#submitMemberIncomeSituationsForm", function (event) {
+                event.preventDefault();
+                var form = $('#theMemberIncomeSituationsForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#theMemberIncomeSituationModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed.  There was a problem maintaing the data.");
+                        }
+                    });
+                }
+                return false;
+            });
+        $('#theMemberIncomeSituationModal').on('hide.bs.modal', function () {
+            console.log('hey')
+            $('#OrderItemList').load('/Orders/OrderItemList/@Model.ID');
+            });
+    </script>
 }

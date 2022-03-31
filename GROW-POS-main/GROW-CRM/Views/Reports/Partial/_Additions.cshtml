@@ -2,10 +2,13 @@
 
 
 @{
-    <a asp-action="DownloadNewMembers" class="btn btn-info float-left">Download New Members Report</a>
+    <div class="row">
+    <a asp-action="DownloadNewMembers" class="btn btn-info">Download New Members Report</a>
+    </div>
     <br />
+    <div class="table-responsive">
     <table class="table table-striped">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 @foreach (string header in (string[])ViewBag.Headers)
                 {
@@ -36,4 +39,5 @@
             }
         </tbody>
     </table>
+</div>
 }

@@ -14,9 +14,9 @@ namespace GROW_CRM.Models
         public int? MemberID { get; set; }
         public Member Member { get; set; }
 
-        [Display(Name = "IncomeSituation")]
-        [Required(ErrorMessage = "You must select the Income Situation")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must choose the Income Situation")]
+        [Display(Name = "Select Financial Assistance Program")]
+        [Required(ErrorMessage = "You must select one Financial Assistance")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must choose the Financial Assistance")]
         public int IncomeSituationID { get; set; }
         public IncomeSituation IncomeSituation { get; set; }
 
@@ -29,6 +29,7 @@ namespace GROW_CRM.Models
             }
         }
 
+        [Display(Name = "Yearly Income for the program selected (in CAD)")]
         [Required(ErrorMessage = "You must enter the amount of an Income Situation")]
         [DataType(DataType.Currency)]
         [Range(0d, 1000000d, ErrorMessage = "Income Situation must be between 0 and one million dollars")]

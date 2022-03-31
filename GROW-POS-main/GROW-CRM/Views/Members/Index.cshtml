@@ -19,18 +19,34 @@
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
-        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            Filter/Search
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            <text class="d-none d-lg-inline">Filter</text><text class="d-inline d-lg-none">Filter/Sort</text>
         </button>
         <br/>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+            <div class="d-block d-lg-none">
+                    <div class="form-group">
+                        <label class="control-label">Sort By:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" class="" value="desc"
+                                           @((ViewData["sortDirection"].ToString() != "asc" ? "checked=\"checked\"" : ""))
+                                           name="sortDirectionCheck" />&nbsp;&nbsp;Descending
+                                </div>
+                            </div>
+                            <select name="sortFieldID" class="form-control" asp-items="ViewBag.sortFieldID"></select>
+                        </div>
+                    </div>
+                </div>
             <div class="card card-body bg-light">
                 <div class="row">
                    @* <div class="form-group col-md-4">
                         <label class="control-label">Filter by Household:</label>
                         @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
                     </div>*@
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <div class="form-group">
                                 <label class="control-label">Filter by Gender:</label>
@@ -65,10 +81,42 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
+    <br />
+    <div class="container-fluid d-block d-lg-none">
+            <div class="card-deck-wrapper">
+                <div class="card-deck">
+                @foreach(var item in Model)
+                {
+                    //Make a card for each one
+                    <div class="card mb-sm-3" style="min-width: 18rem;">
+                        <h5 class="card-header"><strong>Member Name: @Html.DisplayFor(modelItem=>item.FullName)</strong></h5>
+                        <div class="card-body">
+                            <div class="media-body m1-2">
+                                <strong>Household ID:</strong> @Html.DisplayFor(modelItem=>item.Household.ID)<br />
+                                <strong>Age:</strong> @Html.DisplayFor(modelItem=>item.Age)<br />
+                                <strong>Phone Number:</strong> @Html.DisplayFor(modelItem=>item.PhoneFormatted)<br />
+                                <strong>E-mail:</strong> @Html.DisplayFor(modelItem=>item.Email)<br />
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Update</a> |
+                            <a asp-action="Details" title="Details" asp-route-id="@item.ID">Details</a> | 
+                            <a asp-action="Delete" title="Delete" asp-route-id="@item.ID">Delete</a>
+                        </div>
+                    </div>
+                }
+                    
+                </div>
+            </div>
+        </div>
+
+    <div class="table-responsive">
+    <table class="table d-none d-lg-block">
+        <thead class="thead-dark">
             <tr>
                 <th>
                     <input type="submit" disabled="disabled" value="Household ID: " class="btn btn-link" />
@@ -77,9 +125,9 @@
                     <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
                     @*@Html.DisplayNameFor(model => model.FullName)*@
                 </th>
-                <th>
+                @*<th>
                     <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
-                </th>
+                </th>*@
                 <th>
                     <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
                 </th>
@@ -108,9 +156,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Gender.Name)
-                </td>
+                </td>*@
 
                 <td>
                     @Html.DisplayFor(modelItem => item.Age)
@@ -132,12 +180,24 @@
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                 </td>*@
                 <td>
-                    <a asp-action="Update" asp-controller="HouseholdMembers" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> 
+                    <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> 
+                    <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
                 </td>
             </tr>
             }
         </tbody>
     </table>
+    </div>
 </form>
+
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+}

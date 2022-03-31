@@ -1,4 +1,4 @@
-using GROW_CRM.Models;
+﻿using GROW_CRM.Models;
 using GROW_CRM.Models.Interfaces;
 using GROW_CRM.Models.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GROW_CRM.ViewModels.ReportsViewModels;
 using GROW_CRM.ViewModels;
-
 
 namespace GROW_CRM.Data
 {
@@ -39,6 +39,8 @@ namespace GROW_CRM.Data
         }
 
         //Datasets
+        public DbSet<About> Abouts { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -48,6 +50,8 @@ namespace GROW_CRM.Data
         public DbSet<DietaryRestrictionMember> DietaryRestrictionMembers { get; set; }
 
         public DbSet<DocumentType> DocumentTypes { get; set; }
+
+        public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Gender> Genders { get; set; }
 
@@ -61,13 +65,15 @@ namespace GROW_CRM.Data
 
         public DbSet<Item> Items { get; set; }        
 
+        public DbSet<Message> Messages { get; set; }
+
         public DbSet<Member> Members { get; set; }
 
         public DbSet<MemberDocument> MemberDocuments { get; set; }
 
         public DbSet<MemberIncomeSituation> MemberIncomeSituations { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
+        //public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
 
@@ -83,6 +89,8 @@ namespace GROW_CRM.Data
 
         public DbSet<HouseholdStatus> HouseholdStatuses { get; set; }
 
+        public DbSet<RoleWithUserVM> RolesWithUsers { get; set; }
+
         public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         //Methods
@@ -91,6 +99,26 @@ namespace GROW_CRM.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.HasDefaultSchema("GROW");
+
+            //Adding Unique Constraints
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.Name)
+                .IsUnique();
+
+            //Add a unique index to the Employee Email
+            modelBuilder.Entity<Employee>()
+            .HasIndex(a => new { a.Email })
+            .IsUnique();
+
+            //For the RolesWithUsers View
+            modelBuilder
+                .Entity<RoleWithUserVM>()
+                .ToView(nameof(RolesWithUsers))
+                .HasNoKey();
 
             //Adding Composite Keys
             modelBuilder.Entity<DietaryRestrictionMember>()
@@ -102,6 +130,7 @@ namespace GROW_CRM.Data
             modelBuilder.Entity<MemberIncomeSituation>()
                 .HasIndex(mis => new { mis.MemberID, mis.IncomeSituationID})
                 .IsUnique();
+
 
             //Cascading Delete Behavior
 
@@ -193,11 +222,12 @@ namespace GROW_CRM.Data
                 .HasForeignKey(oi => oi.ItemID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Order)
-                .WithMany(o => o.OrderItems)
-                .HasForeignKey(oi => oi.OrderID)
-                .OnDelete(DeleteBehavior.Restrict);
+           /* //About          
+            modelBuilder.Entity<About>()
+                .HasOne(oi => oi.Item)
+                .WithMany(i => i.OrderItems)
+                .HasForeignKey(oi => oi.ItemID)
+                .OnDelete(DeleteBehavior.Restrict);*/
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

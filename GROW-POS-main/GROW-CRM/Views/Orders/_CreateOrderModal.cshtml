@@ -1,0 +1,39 @@
+﻿<div class="modal fade" id="createOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Please enter Household ID, then select Member</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="Create" method="get" asp-controller="Orders" id="theMemberIncomeSituationsForm">
+                <div class="row d-block">
+                    <div class="col-md-12 text-center" style="margin-top:10px">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label for="code">Household ID</label>
+                            <input type="text" name="code" id="code" />                            
+                            <button class="btn btn-outline-secondary" id="searchHH">Search</button>
+                            <div class="text-danger" id="searchHErr"></div>
+                        </div>
+                        <div id="order-member-list">
+                            <label for="membersDDl" class="control-label">Members</label>
+                            <select class="form-control" data-val-required="You must select a member." id="membersDDl" name="membersDDl">
+                                <option value="0">Select Member</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top:10px">
+                            <input type="submit" value="Create" id="submitMemberIncomeSituationsForm" class="btn btn-outline-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -15,9 +15,11 @@ using System.Drawing;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
 using GROW_CRM.Controllers.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class ReportsController : Controller
     {
         private readonly GROWContext _context;
@@ -54,6 +56,15 @@ namespace GROW_CRM.Controllers
                     break;
                 case "4":
                     GetIncomeInfo();
+                    break;
+                case "5":
+                    GetSales();
+                    break;
+                case "6":
+                    GetNewItems();
+                    break;
+                case "7":
+                    GetCategories();
                     break;
                 default:
                     return View("Index");                    
@@ -585,6 +596,7 @@ namespace GROW_CRM.Controllers
             ViewData["ReportType"] = "Mapping Report";
             ViewData["Count"] = citiesReport.Count();
             ViewData["Name"] = "Mapping";
+            ViewData["Mapping-Header"] = true;
             ViewBag.CitiesReport = citiesReport;
             ViewBag.CityReports = cityReports;
 
@@ -771,7 +783,7 @@ namespace GROW_CRM.Controllers
 
         public void GetIncomeInfo()
         {
-            var sumQ = (List<ViewModels.HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
+            var sumQ = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             string[] headers = new string[] { "Household ID", "Member", "Age", "Gender", "Total Income" };
 
@@ -787,7 +799,7 @@ namespace GROW_CRM.Controllers
         public IActionResult DownloadIncomes()
         {
             //Get the placements
-            var householdInfo = (List<ViewModels.HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
+            var householdInfo = (List<HouseholdInformation>)ReportsHelper.GetIncomeData(_context);
 
             //How many rows?
             int numRows = householdInfo.Count();
@@ -929,6 +941,348 @@ namespace GROW_CRM.Controllers
             return NotFound();
         }
 
+        public void GetSales()
+        {
+            List<OrdersReport> newSalesfiltered = (List<OrdersReport>)ReportsHelper.GetSalesData(_context);
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            string[] headers = new string[] { "Order ID", "Member", "Date", "Total" };
+
+            ViewData["ReportType"] = "Sales Report";
+            ViewData["Count"] = newSalesfiltered.Count();
+            ViewData["Name"] = $"Weekly Sales - From: {lastWeek.Month}/{lastWeek.Day}/{lastWeek.Year} To: {DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.Year}";
+            ViewBag.Headers = headers;
+            ViewBag.Report = newSalesfiltered;
+
+            GetReportsDDLItems();
+
+            GetReportsDDLItems();
+        }
+
+        public IActionResult DownloadSales()
+        {
+            List<OrdersReport> salesReportsFiltered = (List<OrdersReport>)ReportsHelper.GetSalesData(_context);
+
+            //How many rows?
+            int reportRows = salesReportsFiltered.Count();
+
+            if (reportRows > 0) //We have data
+            {
+                //Create a new spreadsheet from scratch.
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    //Note: you can also pull a spreadsheet out of the database if you
+                    //have saved it in the normal way we do, as a Byte Array in a Model
+                    //such as the UploadedFile class.
+                    //
+                    // Suppose...
+                    //
+                    // var theSpreadsheet = _context.UploadedFiles.Include(f => f.FileContent).Where(f => f.ID == id).SingleOrDefault();
+                    //
+                    //    //Pass the Byte[] FileContent to a MemoryStream
+                    //
+                    // using (MemoryStream memStream = new MemoryStream(theSpreadsheet.FileContent.Content))
+                    // {
+                    //     ExcelPackage package = new ExcelPackage(memStream);
+                    // }
+
+                    var workSheet = excel.Workbook.Worksheets.Add("Weekly Sales");
+
+                    //Note: Cells[row, column]
+                    workSheet.Cells[3, 1].LoadFromCollection(salesReportsFiltered, true);
+
+                    //Style fee column for currency
+                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
+
+                    //Style first column for dates
+                    workSheet.Column(2).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
+                    //Make Date and Patient Bold
+                    workSheet.Cells[4, 1, reportRows + 3, 2].Style.Font.Bold = true;
+
+                    //Note: these are fine if you are only 'doing' one thing to the range of cells.
+                    //Otherwise you should USE a range object for efficiency
+                    using (ExcelRange totalfees = workSheet.Cells[reportRows + 4, 4])//
+                    {
+                        totalfees.Formula = "Sum(" + workSheet.Cells[4, 3].Address + ":" + workSheet.Cells[reportRows + 3, 3].Address + ")";
+                        totalfees.Style.Font.Bold = true;
+                        totalfees.Style.Numberformat.Format = "$###,##0.00";
+                    }
+
+                    //Set Style and backgound colour of headings
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightBlue);
+                    }
+
+                    ////Boy those notes are BIG!
+                    ////Lets put them in comments instead.
+                    //for (int i = 4; i < numRows + 4; i++)
+                    //{
+                    //    using (ExcelRange Rng = workSheet.Cells[i, 7])
+                    //    {
+                    //        string[] commentWords = Rng.Value.ToString().Split(' ');
+                    //        Rng.Value = commentWords[0] + "...";
+                    //        //This LINQ adds a newline every 7 words
+                    //        string comment = string.Join(Environment.NewLine, commentWords
+                    //            .Select((word, index) => new { word, index })
+                    //            .GroupBy(x => x.index / 7)
+                    //            .Select(grp => string.Join(" ", grp.Select(x => x.word))));
+                    //        ExcelComment cmd = Rng.AddComment(comment, "Apt. Notes");
+                    //        cmd.AutoFit = true;
+                    //    }
+                    //}
+
+                    //Autofit columns
+                    workSheet.Cells.AutoFitColumns();
+                    //Note: You can manually set width of columns as well
+                    //workSheet.Column(7).Width = 10;
+
+                    //Add a title and timestamp at the top of the report
+                    workSheet.Cells[1, 1].Value = "Sales Report";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    {
+                        Rng.Merge = true; //Merge columns start and end range
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    //Since the time zone where the server is running can be different, adjust to 
+                    //Local for us.
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+
+                    //Ok, time to download the Excel
+
+                    //I usually stream the response back to avoid possible
+                    //out of memory errors on the server if you have a large spreadsheet.
+                    //NOTE: Since .NET Core 3 most Web Servers disallow sync IO so we
+                    //need to temporarily change the setting for the server.
+                    //If we can't then we will try to build the file and return a FileContentResult
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=Sales.xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "Sales.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
+
+        public void GetNewItems()
+        {
+            List<NewItemsReport> newItemsfiltered = (List<NewItemsReport>)ReportsHelper.GetNewItems(_context);
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            string[] headers = new string[] { "Item Code", "Name", "Price", "Category", "Created On" };
+
+            ViewData["ReportType"] = "New Items Report";
+            ViewData["Count"] = newItemsfiltered.Count();
+            ViewData["Name"] = $"New Items - From: {lastWeek.Month}/{lastWeek.Day}/{lastWeek.Year} To: {DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.Year}";
+            ViewBag.Headers = headers;
+            ViewBag.Report = newItemsfiltered;
+
+            GetReportsDDLItems();
+        }
+        public void GetCategories()
+        {
+            List<CategoriesReport> newItemsfiltered = (List<CategoriesReport>)ReportsHelper.GetCategoriesData(_context);
+            List<OrderItemsReport> orderItems = (List<OrderItemsReport>)ReportsHelper.GetOrderItems(_context);
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
+
+            string[] headers = new string[] { "Category", "Percentage", "Total" };
+
+            ViewData["ReportType"] = "Categories Report";
+            ViewData["Count"] = newItemsfiltered.Count();
+            ViewData["ItemsSold"] = orderItems.Count();
+            ViewData["Name"] = "Total Sales by Category";
+            ViewBag.Headers = headers;
+            ViewBag.Report = newItemsfiltered;
+
+            GetReportsDDLItems();
+        }
+        public IActionResult DownloadNewItems()
+        {
+            List<NewItemsReport> newAdditionsfiltered = (List<NewItemsReport>)ReportsHelper.GetNewItems(_context);
+            //How many rows?
+            int numRows = newAdditionsfiltered.Count();
+
+            if (numRows > 0) //We have data
+            {
+                //Create a new spreadsheet from scratch.
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    //Note: you can also pull a spreadsheet out of the database if you
+                    //have saved it in the normal way we do, as a Byte Array in a Model
+                    //such as the UploadedFile class.
+                    //
+                    // Suppose...
+                    //
+                    // var theSpreadsheet = _context.UploadedFiles.Include(f => f.FileContent).Where(f => f.ID == id).SingleOrDefault();
+                    //
+                    //    //Pass the Byte[] FileContent to a MemoryStream
+                    //
+                    // using (MemoryStream memStream = new MemoryStream(theSpreadsheet.FileContent.Content))
+                    // {
+                    //     ExcelPackage package = new ExcelPackage(memStream);
+                    // }
+
+                    var workSheet = excel.Workbook.Worksheets.Add("NewItemsReport");
+
+                    //Note: Cells[row, column]
+                    workSheet.Cells[3, 1].LoadFromCollection(newAdditionsfiltered, true);
+
+                    //Style first column for currency
+                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
+
+                    //Style fee column for dates
+                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
+                    //Make Date and Patient Bold
+                    workSheet.Cells[4, 1, numRows + 3, 2].Style.Font.Bold = true;
+
+                    //Note: these are fine if you are only 'doing' one thing to the range of cells.
+                    //Otherwise you should USE a range object for efficiency
+                    using (ExcelRange totalfees = workSheet.Cells[numRows + 4, 4])//
+                    {
+                        totalfees.Formula = "Sum(" + workSheet.Cells[4, 3].Address + ":" + workSheet.Cells[numRows + 3, 3].Address + ")";
+                        totalfees.Style.Font.Bold = true;
+                        totalfees.Style.Numberformat.Format = "$###,##0.00";
+                    }
+
+                    //Set Style and backgound colour of headings
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightBlue);
+                    }
+
+                    ////Boy those notes are BIG!
+                    ////Lets put them in comments instead.
+                    //for (int i = 4; i < numRows + 4; i++)
+                    //{
+                    //    using (ExcelRange Rng = workSheet.Cells[i, 7])
+                    //    {
+                    //        string[] commentWords = Rng.Value.ToString().Split(' ');
+                    //        Rng.Value = commentWords[0] + "...";
+                    //        //This LINQ adds a newline every 7 words
+                    //        string comment = string.Join(Environment.NewLine, commentWords
+                    //            .Select((word, index) => new { word, index })
+                    //            .GroupBy(x => x.index / 7)
+                    //            .Select(grp => string.Join(" ", grp.Select(x => x.word))));
+                    //        ExcelComment cmd = Rng.AddComment(comment, "Apt. Notes");
+                    //        cmd.AutoFit = true;
+                    //    }
+                    //}
+
+                    //Autofit columns
+                    workSheet.Cells.AutoFitColumns();
+                    //Note: You can manually set width of columns as well
+                    //workSheet.Column(7).Width = 10;
+
+                    //Add a title and timestamp at the top of the report
+                    workSheet.Cells[1, 1].Value = "New Items Report";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    {
+                        Rng.Merge = true; //Merge columns start and end range
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    //Since the time zone where the server is running can be different, adjust to 
+                    //Local for us.
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+
+                    //Ok, time to download the Excel
+
+                    //I usually stream the response back to avoid possible
+                    //out of memory errors on the server if you have a large spreadsheet.
+                    //NOTE: Since .NET Core 3 most Web Servers disallow sync IO so we
+                    //need to temporarily change the setting for the server.
+                    //If we can't then we will try to build the file and return a FileContentResult
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=NewItemsReport.xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "NewItemsReport.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
+
         public void GetReportsDDLItems()
         {
             List<SelectListItem> items = new List<SelectListItem>();
@@ -938,6 +1292,9 @@ namespace GROW_CRM.Controllers
             items.Add(new SelectListItem { Text = "Demographics", Value = "2" });
             items.Add(new SelectListItem { Text = "Mapping", Value = "3" });
             items.Add(new SelectListItem { Text = "Income Information", Value = "4" });
+            items.Add(new SelectListItem { Text = "Sales Report", Value = "5" });
+            items.Add(new SelectListItem { Text = "New Items", Value = "6" });
+            items.Add(new SelectListItem { Text = "Categories Report", Value = "7" });
 
             ViewBag.Reports = items;
         }

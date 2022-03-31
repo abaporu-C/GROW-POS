@@ -1,69 +1,235 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <title>@ViewData["Title"] - GROW_CRM</title>
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Stylesheets References -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/navbar.css" />
+    <link rel="Manifest" href="~/Manifest.json" />
+    @if (!(ViewData["Mapping-Header"] is null))
+    {
+        
+    }
 </head>
-<body>
+<body class="m-0">
+    @if(!(ViewData["Modals"] is null))
+    {
+        foreach(var modal in (List<string>)ViewData["Modals"])
+        {
+            <partial name="@modal" />
+        }
+    }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/logo_sm.webp" width="158" height="52"  alt="GROW logo" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index"> <h5>Home</h5> </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Orders" asp-action="Index"> <h5>Orders</h5> </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  display-4" asp-area="" asp-controller="Households" asp-action="Index"> <h5>Households</h5> </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <h5>Member Menu</h5><b class="caret"></b>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Items</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                            </div>
-                        </li>
-                        @*<li class="nav-item">
-            <a class="nav-link  display-4" asp-area="" asp-controller="Reports" asp-action="Index"> <h5>Reports</h5> </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
-        </li>*@
-                    </ul>
-                </div>
+        <div class="sidebar">
+            <div class="logo-details">
+                <i class='bx bxs-leaf bx-tada icon' ></i>
+                <div class="logo_name">GROW POS</div>
+                <i class='bx bx-menu' id="btn"></i>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="list-wrapper">
+            <ul class="nav-list">
+                @*<li>
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search...">
+                    <span class="tooltip">Search</span>
+                </li>*@
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class='bx bx-grid-alt'></i>
+                        <span class="links_name">Dashboard</span>
+                    </a>
+                    <span class="tooltip">Dashboard</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Households" asp-action="Index">
+                        <i class='bx bx-building-house'></i>
+                        <span class="links_name">Households</span>
+                    </a>
+                    <span class="tooltip">Households</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Orders" asp-action="Index">
+                        <i class='bx bx-cart-alt'></i>
+                        <span class="links_name">Orders</span>
+                    </a>
+                    <span class="tooltip">Orders</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Items" asp-action="Index">
+                        <i class='bx bx-food-menu'></i>
+                        <span class="links_name">Items</span>
+                    </a>
+                    <span class="tooltip">Items</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Reports" asp-action="Index">
+                        <i class='bx bx-pie-chart-alt-2'></i>
+                        <span class="links_name">Reports</span>
+                    </a>
+                    <span class="tooltip">Reports</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Lookups" asp-action="Index">
+                        <i class='bx bx-folder'></i>
+                        <span class="links_name">Misc Data</span>
+                    </a>
+                    <span class="tooltip">Misc Data</span>
+                </li>                
+                <li>
+                    <a asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">
+                        <i class='bx bx-info-circle'></i>
+                        <span class="links_name">About</span>
+                    </a>
+                    <span class="tooltip">About</span>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>
+                    <a asp-area="" asp-controller="UserRoles" asp-action="Index">
+                        <i class='bx bx-cog'></i>
+                        <span class="links_name">Roles</span>
+                    </a>
+                    <span class="tooltip">Roles</span>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Employees" asp-action="Index">
+                        <i class='bx bx-user'></i>                        
+                        <span class="links_name">Employees</span>
+                    </a>
+                    <span class="tooltip">Employees</span>
+                </li>
+                }                
+                <partial name="_LoginPartial" />
+            </ul>            
+            </div>
+            <div class="profile-mobile">
+            <!--<img src="profile.jpg" alt="profileImg">-->
+        <div class="name_job">
+                <div class="name">
+                    <a id="login-anchor" asp-area="" asp-controller="EmployeeAccounts" asp-action="Details" title="Manage">@User.Identity.Name</a>
+                </div>
+                @*<div class="job">Web designer</div>*@
+            </div>
+            <form asp-area="Identity" id="logout-form" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit"><i class='bx bx-log-out' id="log_out"></i></button>
+        </form>
         </div>
-    </footer>
+        </div>
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #b3f8be;">
+            <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/logo_sm.webp" width="158" height="52" alt="GROW logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <partial name="_LoginPartial" />
+            <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Member Menu<b class="caret"></b>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Members" asp-action="Index">Member List</a>
+            <a class="dropdown-item" asp-area="" asp-controller="MemberDocuments" asp-action="Index">Member Documents</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Custom Values</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Items</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+            </div>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Abouts" asp-route-id="1" asp-action="Details">About</a>
+            </li>
+            @*<li class="nav-item">
+            <a class="nav-link  display-4" asp-area="" asp-controller="Reports" asp-action="Index"> <h5>Reports</h5> </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link  display-4" asp-area="" asp-controller="MemberDocuments" asp-action="Index"> <h5>Member Documents Management</h5> </a>
+            </li>
+            @if (User.IsInRole("Admin"))
+            {
+            <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Security Roles Assignments</a>
+            </li>
+            }
+            </ul>
+            </div>
+            </div>
+            </nav>*@
+    </header>    
+
+    <div class="home-background"></div>
+
+    <section class="home-section">        
+        <div class="container">
+            <main role="main">
+                <div class="box-form rounded-lg" id="box">
+                    @RenderBody()
+                </div>
+                <div class="mobile-filler"style="height: 60px">
+
+                </div>
+            </main>
+        </div>
+    </section>
+    
+    @*<footer class="border-top footer text-muted">
+        <div class="container">
+        &copy; 2022 - GROW_CRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+               let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", ()=>{
+          sidebar.classList.toggle("open");
+          menuBtnChange();//calling the function(optional)
+        });
+
+        /*searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+          sidebar.classList.toggle("open");
+          menuBtnChange(); //calling the function(optional)
+        });*/
+
+        // following are the code to change sidebar button(optional)
+        function menuBtnChange() {
+         if(sidebar.classList.contains("open")){
+           closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+         }else {
+           closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+         }
+        }
+    </script>
+    <script>
+        var form = document.getElementById("logout-form");
+
+        document.getElementById("log_out").addEventListener('click', function(){
+            form.submit();
+        })
+
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,69 @@
+﻿@model GROW_CRM.ViewModels.UserVM
+
+@{
+    ViewBag.Title = "Edit";
+    bool isRestrictEditing = ViewData["EditMode"]?.ToString() == "NoEdit";
+}
+
+<h2>Edit Role Assignments</h2>
+
+
+<form asp-action="Edit">
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" readonly="readonly"/>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" disabled>
+                <label asp-for="UserRoles" class="control-label"></label>
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+                            List<GROW_CRM.ViewModels.RoleVM> roles = ViewBag.Roles;
+                            foreach (var role in roles)
+                            {
+                                if (cnt++ % 3 == 0)
+                                {
+                                @:</tr><tr>
+                                }
+                                @:<td>
+                                    <input type="checkbox"
+                                           name="selectedRoles"
+                                           value="@role.RoleName"
+                                           @(Html.Raw(isRestrictEditing?"disabled=\"disabled\"":""))
+                                           @(Html.Raw(role.Assigned ? "checked=\"checked\"" : "")) />
+                                    @role.RoleName @:&nbsp;&nbsp;
+                                @:</td>
+                            }
+                        @:</tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                @if (isRestrictEditing)
+                {
+                    <span class="text-danger">Sorry, you are not allowed to change your own roles.</span>
+                }
+                else
+                {
+                    <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />                    
+                }
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>

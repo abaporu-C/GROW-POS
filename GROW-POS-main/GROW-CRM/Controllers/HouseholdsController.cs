@@ -10,14 +10,11 @@ using GROW_CRM.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Storage;
-using GROW_CRM.ViewModels;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using System.Drawing;
-using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class HouseholdsController : Controller
     {
         private readonly GROWContext _context;
@@ -28,13 +25,13 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Households
-        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, int? IDSearch, 
+        public async Task<IActionResult> Index( string StreetSearch, string CitySearch, int? IDSearch, string sortDirectionCheck, string sortFieldID,
             int? HouseholdID, int? HouseholdStatusID,
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Code")
         {
             //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = ""; //Asume not filtering
+            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
 
             //NOTE: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "ID","Street", "City", "Province", "Members", "LICO", "Status" };
@@ -55,7 +52,7 @@ namespace GROW_CRM.Controllers
             if (HouseholdStatusID.HasValue)
             {
                 households = households.Where(h => h.HouseholdStatusID == HouseholdStatusID);
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(StreetSearch))
             {
@@ -65,13 +62,13 @@ namespace GROW_CRM.Controllers
                 ||  h.StreetName.ToUpper().Contains(StreetSearch.ToUpper()) 
                 ||  h.City.Name.ToUpper().Contains(StreetSearch.ToUpper()));
 
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(CitySearch))
             {
                 households = households.Where(h => h.StreetName.ToUpper().Contains(CitySearch.ToUpper())
                                        || h.City.Name.ToUpper().Contains(CitySearch.ToUpper()));
-                ViewData["Filtering"] = " show";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (IDSearch != null)
             {
@@ -79,7 +76,7 @@ namespace GROW_CRM.Controllers
                 try
                 {
                     households = households.Where(h => h.ID.Equals(IDSearch));
-                    ViewData["Filtering"] = " show";
+                    ViewData["Filtering"] = "btn-danger";
                 }
                 catch (Exception)
                 {
@@ -102,6 +99,11 @@ namespace GROW_CRM.Controllers
                         sortDirection = sortDirection == "asc" ? "desc" : "asc";
                     }
                     sortField = actionButton;//Sort by the button clicked
+                }
+                else
+                {
+                    sortDirection = string.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
                 }
             }
 
@@ -221,6 +223,10 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            //selectlist for Sorting options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
+
 
             return View(await households.ToListAsync());
         }
@@ -250,9 +256,19 @@ namespace GROW_CRM.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
-            var household = new Household();
-            
-            PopulateDropDownLists(household);
+            //var household = new Household();
+
+            var about = (About)_context.Abouts.Where(m => m.ID == 1).FirstOrDefault();
+
+            ViewData["AptNumber"] = about.AptNumber;
+            ViewData["StreetNumber"] = about.StreetNumber;
+            ViewData["StreetName"] = about.StreetName;
+            ViewData["PostalCode"] = about.PostalCode;
+            ViewData["CityID"] = about.CityID;
+            ViewData["ProvinceID"] = about.ProvinceID;
+
+
+            PopulateDropDownLists();
             return View();
         }
 
@@ -261,7 +277,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles, string NewID)
+        public async Task<IActionResult> Create([Bind("ID,Name,StreetNumber,StreetName,AptNumber,PostalCode,LICOVerified,LastVerification,CityID,ProvinceID,HouseholdStatusID")] Household household, List<IFormFile> theFiles, string NewID, int? AboutID)
         {
             try
             {
@@ -319,14 +335,28 @@ namespace GROW_CRM.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }
-          /*  catch (DbUpdateException)
-            {
+            /*  catch (DbUpdateException)
+              {
 
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            }*/
-           
-           /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
+                  ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+              }*/
+
+            /* ViewData["HouseholdStatusID"] = new SelectList(_context.HouseholdStatuses, "ID", "ID", household.HouseholdStatusID);
+             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", household.ProvinceID);*/
+
+
+            var about = (About)_context.Abouts.Where(m => m.ID == 1).FirstOrDefault();
+
+            ViewData["AptNumber"] = about.AptNumber;
+            ViewData["StreetNumber"] = about.StreetNumber;
+            ViewData["StreetName"] = about.StreetName;
+            ViewData["PostalCode"] = about.PostalCode;
+            ViewData["CityID"] = about.CityID;
+            ViewData["ProvinceID"] = about.ProvinceID;
+
+
+            PopulateDropDownLists(household);
+
             return View(household);
         }
 
@@ -381,8 +411,7 @@ namespace GROW_CRM.Controllers
             if (await TryUpdateModelAsync<Household>(householdToUpdate, "",
                 
                 h => h.Name,
-                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode,
-                h => h.LICOVerified, h => h.LastVerification, h => h.CityID,
+                h => h.StreetName, h => h.StreetNumber, h => h.AptNumber, h => h.PostalCode, h => h.CityID,
                 h => h.ProvinceID, h => h.HouseholdStatusID))
             {
                 try
@@ -426,7 +455,32 @@ namespace GROW_CRM.Controllers
                 .Include(h => h.HouseholdStatus)
                 .Include(h => h.City)
                 .Include(h => h.Province)
+                .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            var members = from m in _context.Members
+                                  .Include(m => m.Gender)
+                                  .Include(m => m.Household)
+                                  .Include(m => m.MemberDocuments)
+                                  .Include(m => m.MemberIncomeSituations)
+                          where m.HouseholdID == id && m.FirstName != "" && m.LastName != ""
+                          select m;
+
+            List<List<MemberIncomeSituation>> misList = new List<List<MemberIncomeSituation>>();
+
+            foreach (Member m in members)
+            {
+                var v = _context.MemberIncomeSituations
+                .Include(s => s.IncomeSituation)
+                .Where(s => s.MemberID == m.ID)
+                .OrderBy(s => s.IncomeSituation.Situation)
+                .ToList();
+
+                misList.Add(v);
+            }
+
+            ViewBag.MisList = misList;
+
             if (household == null)
             {
                 return NotFound();
@@ -441,9 +495,18 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var household = await _context.Households.FindAsync(id);
-            _context.Households.Remove(household);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Households.Remove(household);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Delete All Members before deleting Household.");
+            }
+
+            return RedirectToAction("Delete", id);
         }
 
         private bool HouseholdExists(int id)

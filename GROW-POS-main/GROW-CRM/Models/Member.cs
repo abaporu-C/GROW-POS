@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GROW_CRM.Models
 {
-    public class Member : Auditable
+    public class Member : Auditable, IValidatableObject
     {
 
         //Constructor
@@ -123,8 +123,13 @@ namespace GROW_CRM.Models
         [DataType(DataType.MultilineText)]
         public string Notes { get; set; }        
 
-        [Display(Name = "Consent On Giving Information: ")]
+        [Display(Name = "Member consents giving information: ")]
         public bool ConsentGiven { get; set; }
+
+        [Display(Name = "Is this member a Dependant?")]
+
+        public bool DependantMember { get; set; }
+
 
         //Foreign Keys        
 
@@ -137,12 +142,7 @@ namespace GROW_CRM.Models
         [Display(Name = "Household")]
         public int HouseholdID { get; set; }
 
-        public Household Household { get; set; }   
-        
-        [Display(Name = "Order")]
-        public int OrderID { get; set; }
-
-        public Order Order { get; set; }
+        public Household Household { get; set; }        
 
         //O:M Relationships        
 
@@ -154,5 +154,15 @@ namespace GROW_CRM.Models
         public ICollection<Order> Orders { get; set; }
 
         public ICollection<MemberIncomeSituation> MemberIncomeSituations { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            //Test date range for DOB
+            if (DOB > DateTime.Today)
+            {
+                yield return new ValidationResult("DOB Cannot be a date in the future", new[] { "DOB" });
+            }
+        }
     }
+
 }

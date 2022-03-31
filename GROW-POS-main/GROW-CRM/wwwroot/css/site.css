@@ -1,5 +1,10 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+:root {
+    --dark-green: #347037;
+    --light-green: #74DF00;
+    --light-gray: #E3F1E3;
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -7,9 +12,17 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+li{
+    font:bold 20px calibri;
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
+}
+
+label{
+    font-weight: 700;
 }
 
 .btn-primary {
@@ -63,9 +76,164 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #eaeae8;
+}
+
+/*
+    Labels and tooltips
+*/
+.label-tab{
+    border: 1px 1px 0 1px medium #000;
+    margin-top: 10px;
+}
+
+
+/*
+    Forms
+*/
+
+.box-form {
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    /*max-width: 95%;*/
+    min-height: 100vh;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*
+    Home Section
+*/
+
+.home-section {
+    position: relative;
+    background: transparent;
+    min-height: 100vh;
+    top: 0;
+    left: 78px;
+    width: calc(100% - 78px);
+    padding: 0;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+    .home-section .text {
+        display: inline-block;
+        color: #11101d;
+        font-size: 25px;
+        font-weight: 500;
+        margin: 18px
+    }
+
+.home-background {
+    background: url('/images/Vegetables1.jpg');
+    background-size: cover;    
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
+
+.mobile-filler{
+    display:none;
+    height: 7vh;
+}
+/*
+    Modals
+*/
+.modal-bg {
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#order-member-list{
+    display: none;
+    flex-direction: column;
+    width: 80%;
+}
+
+/*
+    Boostrap Overide
+*/
+
+.btn-outline-primary{
+    border-color: var(--dark-green);
+    color: var(--dark-green);
+}
+
+.btn-outline-primary:hover{
+    background-color: var(--dark-green);
+    color:#FFF;    
+}
+
+.container{
+    padding-right: 0;
+    padding-left: 0;
+}
+
+/*
+    Reports
+*/
+
+#mapping{
+    height: 70vh;
+    margin: auto;
+    width: 100%; 
+}
+
+/*
+    Tables
+*/
+
+.table .thead-dark th{
+    background-color: var(--dark-green);
+    color: #FFF;
+}
+
+.table .thead-dark th input{
+    color: #FFF;
+}
+
+/*
+    Queries
+*/
+
+@media (min-width: 426px) {
+    .home-section {
+        padding: 3% 2%;
+    }
+    .container{
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .box-form{
+        min-height: 80vh;
+    }
+}
+
+@media (max-width: 700px) {
+    .home-section{
+        height: calc(100% - 9vh);
+        bottom:7vh;
+        left: 0;
+        top: 9vh;
+        width: 100%;
+    }
+
+    .mobile-filler{
+        display:block;
+    }
 }

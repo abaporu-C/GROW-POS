@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Notification Email";
+}
+
+<h1>Notification Email</h1>
+
+<h2>Message to Members in @ViewData["Type"]</h2>
+
+<hr />
+<form asp-action="Notification">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="text-danger">@ViewData["Message"]</div>
+            <hr />
+            <input type="hidden" name="id" value="@ViewData["id"]" />
+            @*<input type="text" name="householdStatusID" value="@ViewData["householdStatusID"]" />*@
+            <label for="HouseholdStatusID" class="control-label"></label>
+            <select id="HouseholdStatusID" name="householdStatusID" class="form-control" asp-items="ViewBag.householdStatusID">
+            <option value="">Select...</option>
+            </select>
+            <span for="HouseholdStatusID" class="text-danger"></span>
+            <div class="form-group">
+                <label for="Subject" class="control-label">Email Subject</label>
+                <input type="text" id="Subject" name="Subject" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="emailContent" class="control-label">Message Content</label>
+                <textarea id="emailContent" name="emailContent" rows="5" cols="40" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-primary" />
+            </div>
+
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Index" asp-controller="Lookups" asp-route-Tab="MedicalTrialsTab">Back to Lookup List</a>
+</div>

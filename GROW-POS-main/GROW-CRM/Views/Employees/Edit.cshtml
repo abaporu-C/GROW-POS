@@ -1,0 +1,75 @@
+﻿@model GROW_CRM.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit Account";
+}
+
+<h4>Account Details for @Model.FullName (@Model.Email)</h4>
+<hr />
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <label style="color:red">*</label>
+                <input asp-for="FirstName" class="form-control" autofocus />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <label style="color:red">*</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <label style="color:red">*</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+                <div>
+                    Note:  Changing Email will remove the Login and the user will need to register again with the new Email.
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                </label>
+                @{
+                    if (Model.Active == true)
+                    {
+                        <div>
+                            <strong>
+                                Warning! If you make this user inactive, their login to the system will also be removed.
+                                If you ever want to allow them to login again, make them Active and let them know they must register again with the same email address.
+                            </strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <div><strong>If you make this user active, let them know to Register their login again, using the same email address.  Afterwards you can add them to security roles as required.</strong></div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to Employee Account List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

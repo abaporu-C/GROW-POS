@@ -14,9 +14,11 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using GROW_CRM.Controllers.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class HouseholdMembersController : Controller
     {
         private readonly GROWContext _context;
@@ -151,6 +153,8 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            ViewData["Action"] = "/HouseholdMembers";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal", "_LICOInfoModal" };
 
             //Now get the MASTER record, the patient, so it can be displayed at the top of the screen
             Household household = _context.Households
@@ -185,6 +189,7 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             ViewData["HouseholdName"] = HouseholdName;
+            ViewData["Modals"] = new List<string> { "_MemberIncomeSituationModal", "_addIncomeSituationModal" };
             //ViewData["MISList"] = new List<MemberIncomeSituationVM>();
             Member m = new Member()
             {
@@ -220,8 +225,6 @@ namespace GROW_CRM.Controllers
                 
 
                 var memberToUpdate = await _context.Members
-                .Include(m => m.Gender)
-                .Include(m => m.Household)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments).ThenInclude(m => m.DocumentType)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
@@ -231,23 +234,23 @@ namespace GROW_CRM.Controllers
                 {
                     if (ModelState.IsValid && await TryUpdateModelAsync<Member>(memberToUpdate, "",
                     m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                    m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
+                    m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.DependantMember, m => m.GenderID))
                     {
                         //Add the selected conditions
                         if (selectedIllnessOptions != null)
                         {
                             foreach (var restriction in selectedIllnessOptions)
                             {
-                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = memberToUpdate.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                memberToUpdate.DietaryRestrictionMembers.Add(restrictionToAdd);
                             }
                         }
                         if (selectedConcernOptions != null)
                         {
                             foreach (var restriction in selectedConcernOptions)
                             {
-                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                                member.DietaryRestrictionMembers.Add(restrictionToAdd);
+                                var restrictionToAdd = new DietaryRestrictionMember { MemberID = memberToUpdate.ID, DietaryRestrictionID = int.Parse(restriction) };
+                                memberToUpdate.DietaryRestrictionMembers.Add(restrictionToAdd);
                             }
                         }
 
@@ -256,7 +259,7 @@ namespace GROW_CRM.Controllers
                         await CheckLICO(memberToUpdate);
                         await AddDocumentsAsync(memberToUpdate, theFiles);
                         await _context.SaveChangesAsync();
-                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={member.HouseholdID}";
+                        ViewData["returnURL"] = $"/HouseholdMembers?HouseholdID={memberToUpdate.HouseholdID}";
                         return Redirect(ViewData["returnURL"].ToString());
                     }
                 }
@@ -343,6 +346,8 @@ namespace GROW_CRM.Controllers
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
+            ViewData["Modals"] = new List<string> { "_MemberIncomeSituationModal", "_addIncomeSituationModal" };
+
             var member = await _context.Members
                .Include(m => m.Gender)
                .Include(m => m.Household)
@@ -401,7 +406,7 @@ namespace GROW_CRM.Controllers
             //Try updating it with the values posted
             if (await TryUpdateModelAsync<Member>(memberToUpdate, "",
                 m => m.FirstName, m => m.MiddleName, m => m.LastName, p => p.DOB, m => m.PhoneNumber,
-                m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.GenderID))
+                m => m.Email, m => m.Notes, m => m.ConsentGiven, m => m.DependantMember, m => m.GenderID))
             {
                 try
                 {                    

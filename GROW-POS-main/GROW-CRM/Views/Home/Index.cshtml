@@ -2,19 +2,105 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .index-card{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+</style>
+
 <div class="text-center">
     <h1 class="display-4">Welcome to GROW - POS</h1>
     <div class="row justify-content-center mt-4 mb-4">
         <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-5">
-                    <a class="btn btn-lg btn-outline-success" asp-controller="Households" asp-action="Create">New Household</a>
-                </div>
-                <div class="col-md-7">
-                    <a class="btn btn-lg btn-outline-primary" href="#">Search Household</a>
+                <div class="d-flex justify-content-around flex-wrap">
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Add New Household</h5>
+                            <p class="card-text">Add new household for new members!</p>
+                            <a class="btn btn-outline-primary" asp-controller="Households" asp-action="Create">Create Household</a>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">New Order</h5>
+                            <p class="card-text">Create new order now!</p>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createOrderModal">
+        Create Order
+    </button>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="p-2">
+                    <div class="card index-card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Members List</h5>
+                            <p class="card-text">See the list of all of our members!</p>
+                            <a class="btn btn-outline-primary" asp-area="" asp-controller="Members" asp-action="Index">Members List</a>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
-</div>
+@section Scripts {
+    <script>
+        //Register the service worker.
+        //Note is is still not "installable" without the manifest
+        if (navigator.serviceWorker.controller) {
+            console.log('Active service worker found, no need to register');
+        } else {
+            navigator.serviceWorker.register('sw.js', {
+                scope: './'
+            }).then(function (reg) {
+                console.log('Service worker has been registered for scope:' + reg.scope);
+            });
+        }
+    </script>
+    <script>
+        $(document).on('click', '#searchHH', function (event) {
+            event.preventDefault();
+            var code = $('#code');
+            var codeSerialized = code.serialize();
+
+            $.ajax({
+                type: "GET",
+                url: 'Orders/GetMembers',
+                data: code.serialize(),
+                success: function (data) {                    
+                    $('#searchHErr').html("");
+                    $('#order-member-list').css("display", "inline-flex");
+
+                    var membersDDL = $('#membersDDl')
+                    membersDDL.html("");
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))
+                    $.each(data, function (index, item) {                                                                                               
+                        membersDDL.append(
+                            $('<option></option>').val(item.id).html(item.fullName)
+                        );
+                    });
+                },
+                error: function (err) {  
+                    var membersDDL = $('#membersDDl')
+
+                    $('#searchHErr').html(err.responseText)
+                    membersDDL.html("");
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))                    
+                }
+            });
+        })
+
+        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){            
+            var memberID = $('#membersDDl').val();            
+            if(memberID === "0"){        
+                event.preventDefault();
+                $('#searchHErr').html("Please, select an existing member.")
+                return;
+            }
+        })
+    </script>
+}

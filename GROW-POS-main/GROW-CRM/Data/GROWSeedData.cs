@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Faker;
 
 namespace GROW_CRM.Data
 {
@@ -197,11 +198,11 @@ namespace GROW_CRM.Data
                             new Item { Code = "134", Name = "Peppers Mini", Price = 0.05 },
                             new Item { Code = "135", Name = "Plums", Price = 0.05 },
                             new Item { Code = "136", Name = "Potatoes", Price = 0.05 },
-                            new Item { Code = "136", Name = "Bag of Potatoes", Price = 1.50 },
+                            //new Item { Code = "136", Name = "Bag of Potatoes", Price = 1.50 },
                             new Item { Code = "137", Name = "Potatoes Baby Basket", Price = 0.50 },
                             new Item { Code = "138", Name = "Potatoes Sweet(Yam)", Price = 0.75 },
                             new Item { Code = "139", Name = "Raspberries", Price = 1.50 },
-                            new Item { Code = "147", Name = "Shallots", Price = 0.05 },
+                            //new Item { Code = "147", Name = "Shallots", Price = 0.05 },
                             new Item { Code = "140", Name = "Squash", Price = 2.50 },
                             new Item { Code = "141", Name = "Strawberries", Price = 1.50 },
                             new Item { Code = "142", Name = "Swiss Chard", Price = 0.50 },
@@ -229,7 +230,7 @@ namespace GROW_CRM.Data
                             new Item { Code = "304", Name = "Cheese Large", Price = 3.00 },
                             new Item { Code = "305", Name = "Cream Cheese", Price = 2.00 },
                             new Item { Code = "306", Name = "Eggs (12)   ", Price = 2.00 },
-                            new Item { Code = "306", Name = "Eggs (12)   ", Price = 3.00 },
+                            //new Item { Code = "306", Name = "Eggs (12)   ", Price = 3.00 },
                             new Item { Code = "307", Name = "Goat Milk 1l", Price = 2.00 },
                             new Item { Code = "308", Name = "Hummus",   Price = 2.50 },
                             new Item { Code = "309", Name = "Hummus Mini",  Price = 0.25 },
@@ -239,14 +240,14 @@ namespace GROW_CRM.Data
                             new Item { Code = "313", Name = "Oat Milk 1l",  Price = 2.00 },
                             new Item { Code = "314", Name = "Orange Juice", Price = 2.00 },
                             new Item { Code = "315", Name = "Pizza Dough",  Price = 2.00 },
-                            new Item { Code = "316", Name = "Sour Crème",   Price = 2.00 },
+                            new Item { Code = "316", Name = "Sour CrÃ¨me",   Price = 2.00 },
                             new Item { Code = "317", Name = "Soy Milk 1l",  Price = 2.00 },
                             new Item { Code = "318", Name = "Tofu", Price = 2.50 },
                             new Item { Code = "319", Name = "Yogurt 4 pack",    Price = 1.00 },
                             new Item { Code = "322", Name = "Yogurt 6 pack",    Price = 1.50 },
                             new Item { Code = "320", Name = "Yogurt Greek", Price = 3.00 },
                             new Item { Code = "321", Name = "Yogurt Tub",   Price = 2.00 },
-                            new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
+                            //new Item { Code = "322", Name = "Sliced Cheese",    Price = 2.50 }
                             };
 
                     var pantryItems = new List<Item> {
@@ -261,13 +262,13 @@ namespace GROW_CRM.Data
                             new Item { Code = "409", Name = " Cereal all other", Price =    2.00 },
                             new Item { Code = "410", Name = " Cereal Rice Krispies", Price =    3.00 },
                             new Item { Code = "445", Name = " Coconut Milk", Price =    1.00 },
-                            new Item { Code = "445", Name = " Coffee", Price =  4.00 },
+                            //new Item { Code = "445", Name = " Coffee", Price =  4.00 },
                             new Item { Code = "411", Name = " Crackers ", Price =   2.00 },
                             new Item { Code = "412", Name = " Dried Legumes/Beans", Price = 1.50 },
                             new Item { Code = "413", Name = " Flour", Price =   2.00 },
                             new Item { Code = "414", Name = " Garden Cocktail", Price = 0.75 },
                             new Item { Code = "415", Name = " Granola Bars 6 pack", Price = 1.00 },
-                            new Item { Code = "446", Name = " Gummies", Price = 0.10 },
+                            //new Item { Code = "446", Name = " Gummies", Price = 0.10 },
                             new Item { Code = "416", Name = " Jam", Price = 2.00 },
                             new Item { Code = "417", Name = " Kraft Dinner", Price =    1.00 },
                             new Item { Code = "418", Name = " Laundry Soap large", Price =  6.00 },
@@ -281,11 +282,11 @@ namespace GROW_CRM.Data
                             new Item { Code = "426", Name = " Pasta Sauce", Price = 0.75 },
                             new Item { Code = "427", Name = " Peanut Butter", Price =   2.50 },
                             new Item { Code = "428", Name = " Polenta", Price = 3.00 },
-                            new Item { Code = "445", Name = " Protein Drink", Price =   0.50 },
+                            //new Item { Code = "445", Name = " Protein Drink", Price =   0.50 },
                             new Item { Code = "446", Name = " Raisins", Price = 4.00 },
                             new Item { Code = "429", Name = " Rice", Price =    1.50 },
                             new Item { Code = "430", Name = " Salad Dressing", Price =  1.00 },
-                            new Item { Code = "445", Name = " Salsa", Price =   1.50 },
+                            //new Item { Code = "445", Name = " Salsa", Price =   1.50 },
                             new Item { Code = "431", Name = " Soap ", Price =   0.50 },
                             new Item { Code = "432", Name = " Soup Small", Price =  0.50 },
                             new Item { Code = "433", Name = " Spices", Price =  1.00 },
@@ -436,10 +437,10 @@ namespace GROW_CRM.Data
                         new City{Name = "Wainfleet"},
                         new City{Name = "Pelham"},
                         new City{Name = "St. Catharines"},
-                        new City{Name = "Throld"},
+                        new City{Name = "Thorold"},
                         new City{Name = "Welland"},
                         new City{Name = "Port Colborne"},
-                        new City{Name = "Niagara-On-The-Lake"},
+                        new City{Name = "Niagara-on-the-Lake"},
                         new City{Name = "Niagara Falls"},
                         new City{Name = "Fort Erie"}
                     };
@@ -455,20 +456,42 @@ namespace GROW_CRM.Data
                     var provinces = new List<Province>
                     {
                         new Province { Code = "ON", Name = "Ontario"},
-                        new Province { Code = "PE", Name = "Prince Edward Island"},
-                        new Province { Code = "NB", Name = "New Brunswick"},
-                        new Province { Code = "BC", Name = "British Columbia"},
-                        new Province { Code = "NL", Name = "Newfoundland and Labrador"},
-                        new Province { Code = "SK", Name = "Saskatchewan"},
-                        new Province { Code = "NS", Name = "Nova Scotia"},
-                        new Province { Code = "MB", Name = "Manitoba"},
-                        new Province { Code = "QC", Name = "Quebec"},
-                        new Province { Code = "YT", Name = "Yukon"},
-                        new Province { Code = "NU", Name = "Nunavut"},
-                        new Province { Code = "NT", Name = "Northwest Territories"},
-                        new Province { Code = "AB", Name = "Alberta"}
+                        //new Province { Code = "PE", Name = "Prince Edward Island"},
+                        //new Province { Code = "NB", Name = "New Brunswick"},
+                        //new Province { Code = "BC", Name = "British Columbia"},
+                        //new Province { Code = "NL", Name = "Newfoundland and Labrador"},
+                        //new Province { Code = "SK", Name = "Saskatchewan"},
+                        //new Province { Code = "NS", Name = "Nova Scotia"},
+                        //new Province { Code = "MB", Name = "Manitoba"},
+                        //new Province { Code = "QC", Name = "Quebec"},
+                        //new Province { Code = "YT", Name = "Yukon"},
+                        //new Province { Code = "NU", Name = "Nunavut"},
+                        //new Province { Code = "NT", Name = "Northwest Territories"},
+                        //new Province { Code = "AB", Name = "Alberta"}
                     };
                     context.Provinces.AddRange(provinces);
+                    context.SaveChanges();
+                }
+
+                //Look for About
+                if (!context.Abouts.Any())
+                {
+                    //add initial GROW address
+                    context.Abouts.AddRange(
+                   new About
+                   {
+                       OrgName = "GROW",
+                       StreetNumber = "4377",
+                       StreetName = "Fourth Avenue",
+                       AptNumber = "",
+                       PostalCode = "L2E 4N1",
+                       CityID = 11,
+                       ProvinceID = 1,
+                       PhoneNumber = "9052626812",
+                       WebSite = "https://www.growcflc.com/",
+                       Email = "info@growflc.com"
+                   });
+                    //Save changes
                     context.SaveChanges();
                 }
 
@@ -486,53 +509,40 @@ namespace GROW_CRM.Data
                     int[] citiesIDs = context.Cities.Select(c => c.ID).ToArray();
                     int citiesCount = citiesIDs.Count();
 
+                    int hhsa = context.HouseholdStatuses.Where(hhs => hhs.Name == "Active").Select(hhs => hhs.ID).FirstOrDefault();
+                    int hhsoh = context.HouseholdStatuses.Where(hhs => hhs.Name == "On Hold").Select(hhs => hhs.ID).FirstOrDefault();
+
+                    //Data
+                    string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "W", "Y", "Z" };
+                    int alhabetLen = alphabet.Count();                    
+
                     //Add Households to context
-                    context.Households.AddRange(
-                        new Household
+                    for (int i = 0; i < 100; i++)
+                    {
+                        string lastName = Faker.Name.Last();
+
+                        string postalCode = $"L{Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]} {Faker.RandomNumber.Next(9)}{alphabet[rnd.Next(alhabetLen)]}{Faker.RandomNumber.Next(9)}";
+                        context.Add(new Household
                         {
-                            Name = "House #1",
-                            StreetNumber = "65",
-                            StreetName = "Church St.",
-                            AptNumber = "201",
-                            PostalCode = "R3E 9C8",
+                            Name = $"House {lastName}",
+                            StreetNumber = Faker.RandomNumber.Next(200).ToString(),
+                            StreetName = Faker.Address.StreetName(),
+                            AptNumber = Faker.RandomNumber.Next(100).ToString(),
+                            PostalCode = postalCode,
                             LICOVerified = true,
                             LastVerification = DateTime.Now,
                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                            HouseholdStatusID = 1
-                        },
-                        new Household
-                        {
-                            Name = "House #2",
-                            StreetNumber = "1848",
-                            StreetName = "Paddock Trail Dr.",
+                            ProvinceID = 1,
+                            HouseholdStatusID = i % 3 == 0? hhsoh : hhsa,
+                            AboutID = 1
+                        }); ;
+                    }
+                   //Save changes
+                   context.SaveChanges();
+                }                
 
-                            PostalCode = "L2H 1W8",
-                            LICOVerified = false,
-                            LastVerification = DateTime.Now,
-                            CityID = citiesIDs[rnd.Next(citiesCount)],
-                            ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                            HouseholdStatusID = 2
-                        },
-                         new Household
-                         {
-                             Name = "House #3",
-                             StreetNumber = "101",
-                             StreetName = "Development Ave.",
 
-                             PostalCode = "L2P 1W8",
-                             LICOVerified = false,
-                             LastVerification = DateTime.Now,
-                             CityID = citiesIDs[rnd.Next(citiesCount)],
-                             ProvinceID = provincesIDs[rnd.Next(provinceCount)],
-                             HouseholdStatusID = 2
-                         }
 
-                    ); ;
-
-                    //Save changes
-                    context.SaveChanges();
-                }
 
                 //Look for members
                 if (!context.Members.Any())
@@ -552,12 +562,31 @@ namespace GROW_CRM.Data
                     //Start DOB
                     DateTime startDOB = Convert.ToDateTime("1992-08-22");
 
+                    //Phone Generator
+                    string[] areaCodes = new string[] { "905", "289", "365", "742"};
+                    int areaCodesCount = areaCodes.Length;
+
+                    //Data
+                    string[] notes = new string[] { "Member did not yet submited their documents.",
+                                                    "Member is waiting for their CRA documents.",
+                                                    "Member address is a temporary one, we are waiting for their update on the situation."};
+
+                    int notesLen = notes.Count();
+
                     //Loop over wach household and assign family members to it
                     for (int i = 0; i < householdCount; i++)
                     {
-                        string lastName = lastNames[rnd.Next(lastNames.Count())];                        
+                        Household household = context.Households.Include(h => h.HouseholdStatus).Where(h => h.ID == (i+1)).FirstOrDefault();
 
-                        for(int j = 0; j < rnd.Next(5) + 1; j++)
+                        string lastName = household.Name.Substring(6);
+
+                        string hhStatus = household.HouseholdStatus.Name;
+
+                        string phoneNumber = $"{areaCodes[rnd.Next(areaCodesCount)]}";
+
+                        for(int j = 0; j < 7; j++) phoneNumber = phoneNumber + Faker.RandomNumber.Next(9).ToString();
+
+                        for(int k = 0; k < rnd.Next(5) + 1; k++)
                         {
                             context.Members.Add(
                                 new Member
@@ -566,12 +595,12 @@ namespace GROW_CRM.Data
                                     MiddleName = middleNames[rnd.Next(middleNames.Count())],
                                     LastName = lastName,
                                     DOB = startDOB.AddDays(rnd.Next(60, 6500)),
-                                    PhoneNumber = "0000000000",
-                                    Email = "mail@mail.com",
-                                    Notes = baconNotes[rnd.Next(5)],
+                                    PhoneNumber = phoneNumber,
+                                    Email = Faker.Internet.Email(),
+                                    Notes = hhStatus == "On Hold" ? notes[rnd.Next(notesLen)] : "",
                                     ConsentGiven = true,
                                     GenderID = genderIDs[rnd.Next(genderCount)],
-                                    HouseholdID = householdIDs[i]
+                                    HouseholdID = household.ID
                                 }    
                             );
 
@@ -580,26 +609,22 @@ namespace GROW_CRM.Data
                     }
                 }
 
+                //Members
+                int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
+                int memberCount = memberIDs.Count();
+
                 //Look for Dietary Restriction Members
                 if (!context.DietaryRestrictionMembers.Any())
                 {
                     //Foreign Keys
                     int[] drIDs = context.DietaryRestrictions.Select(dr => dr.ID).ToArray();
-                    int drCount = drIDs.Count();
-
-                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();                    
+                    int drCount = drIDs.Count();                                     
 
                     foreach(int memberID in memberIDs)
                     {
                         if ((memberID % 3) == 0) continue;
 
-                        context.DietaryRestrictionMembers.AddRange(
-                            new DietaryRestrictionMember
-                            {
-                                MemberID = memberID,
-                                DietaryRestrictionID = drIDs[rnd.Next(drCount)]
-                            },
+                        context.DietaryRestrictionMembers.Add(
                             new DietaryRestrictionMember
                             {
                                 MemberID = memberID,
@@ -615,10 +640,7 @@ namespace GROW_CRM.Data
                 if (!context.MemberIncomeSituations.Any())
                 {
                     int[] incomeSituationIDs = context.IncomeSituations.Select(i => i.ID).ToArray();
-                    int incomeSituationCount = incomeSituationIDs.Count();
-
-                    int[] memberIDs = context.Members.Select(m => m.ID).ToArray();
-                    int memberCount = memberIDs.Count();
+                    int incomeSituationCount = incomeSituationIDs.Count();                    
 
                     List<MemberIncomeSituation> mis = new List<MemberIncomeSituation>();
 
@@ -633,6 +655,89 @@ namespace GROW_CRM.Data
                         mis.Add(s);
                     }
                     context.MemberIncomeSituations.AddRange(mis);
+                    context.SaveChanges();
+                }
+
+                //Look for Orders
+                if (!context.Orders.Any())
+                {
+                    //Foreign Keys
+                    int[] paymentTypeIDs = context.PaymentTypes.Select(i => i.ID).ToArray();
+                    int paymentTypeCount = paymentTypeIDs.Count();
+
+                    List<Order> orders = new List<Order>();
+
+                    foreach (var memberID in memberIDs)
+                    {
+                        if ((memberID % 3) == 0) continue;
+
+                        Order s = new Order
+                        {
+                            Date = DateTime.Now,
+                            Total = 0,
+                            MemberID = memberID,
+                            PaymentTypeID = paymentTypeIDs[rnd.Next(paymentTypeCount)],
+                        };
+                        orders.Add(s);
+                    }
+
+                    context.Orders.AddRange(orders);
+                    context.SaveChanges();
+
+                    //Foreign Keys for OrderItems
+                    int[] itemsIDs = context.Items.Select(i => i.ID).ToArray();
+                    int itemsCount = itemsIDs.Count();
+
+                    List<OrderItem> ois = new List<OrderItem>();
+
+                    for(int i = 0; i < orders.Count; i++)
+                    {
+                        OrderItem oi = new OrderItem
+                        {
+                            ItemID = itemsIDs[rnd.Next(itemsCount - 1)],
+                            OrderID = orders[i].ID,
+                            Quantity = Faker.RandomNumber.Next(30)
+                        };
+                        ois.Add(oi);
+
+                        Item item = context.Items.FirstOrDefault(i => i.ID == oi.ItemID);
+
+                        orders[i].Total = oi.Quantity * item.Price;
+                    }
+                    context.Orders.UpdateRange(orders);                    
+                    context.OrderItems.AddRange(ois);
+                    context.SaveChanges();
+                }
+
+                // Look for any Employees.  Seed ones to match the seeded Identity accounts.
+                if (!context.Employees.Any())
+                {
+                    context.Employees.AddRange(
+                     new Employee
+                     {
+                         FirstName = "Gregory",
+                         LastName = "House",
+                         Email = "admin1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "Fred",
+                         LastName = "Flintstone",
+                         Email = "security1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "Betty",
+                         LastName = "Rubble",
+                         Email = "super1@outlook.com",
+                     },
+                     new Employee
+                     {
+                         FirstName = "David",
+                         LastName = "Stovell",
+                         Email = "user1@outlook.com",
+                     });
+
                     context.SaveChanges();
                 }
             }

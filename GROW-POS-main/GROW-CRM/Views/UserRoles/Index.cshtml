@@ -1,0 +1,40 @@
+﻿@model IEnumerable<GROW_CRM.ViewModels.UserVM>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>User Role Assignments</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserRoles)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @{
+                    foreach (var r in item.UserRoles)
+                    {
+                        @:  @r <br />
+                    }
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

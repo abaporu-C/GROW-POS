@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class ItemsController : Controller
     {
         private readonly GROWContext _context;
@@ -142,7 +144,8 @@ namespace GROW_CRM.Controllers
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
             ViewData["Filtering"] = isFiltering ? " show" : "";
-
+            ViewData["Action"] = "/Items";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal" };
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

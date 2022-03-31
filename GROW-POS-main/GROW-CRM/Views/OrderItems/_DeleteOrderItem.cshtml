@@ -1,0 +1,13 @@
+﻿@model GROW_CRM.Models.OrderItem
+<h5>Confirm Delete</h5>
+<form asp-action="Delete" asp-controller="OrderItems" id="theMemberIncomeSituationsForm">
+    <div class="row">
+        <div class="col-md-12">
+            <input type="hidden" asp-for="ID" />
+            <h6>Are you sure you want to delete - @Model.Item.Name?</h6>
+            <div class="form-group float-right">
+                <input type="submit" value="Delete" id="submitMemberIncomeSituationsForm" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
+</form>

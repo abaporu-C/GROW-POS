@@ -1,145 +1,119 @@
-﻿@model IEnumerable<GROW_CRM.Models.Order>
+﻿@using GROW_CRM.Models;
+@model IEnumerable<GROW_CRM.Models.Order>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
-<h2>Order Index</h2>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New Order</a>
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createOrderModal">
+        Create
+    </button>
 </p>
-<form asp-action="Index" method="get">
-    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-    <div class="form-horizontal">
-        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            Filter/Search
-        </button>
-        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
-            <div class="card card-body bg-light">
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Select by Household ID:</label>
-                        @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Search Member Name:</label>
-                        @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Search Volunteer:</label>
-                        @Html.TextBox("VolunteerSearch", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-4 align-self-end">
-                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HouseMember)
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Sales)
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Payment" class="btn btn-link" />
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Volunteer)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Household)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HouseMember)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sales)
-                    </td>
-                    <td>
-                        Primary: <strong>@Html.DisplayFor(modelItem => item.Sales)</strong><br />
-                        @{
-                            int theCount = item.Purchases.Count();
-                            if (theCount > 0)
-                            {
-                                string first = item.Sales.FirstOrDefault().ToString();
-                                if (theCount > 1)
-                                {
-                                    string theList = first;
-                                    var c = item.Sales.ToList();
-                                    for (int i = 1; i < theCount; i++)
-                                    {
-                                        theList += ", " + c[i];
-                                    }
-                                    @:Alt:
-                                    <a tabindex="0" class="" role="button" data-toggle="popover"
-                                       data-trigger="focus" title="All Purchases" data-placement="bottom"
-                                       data-content="@theList">
-                                        @first... <span class="badge badge-info">
-                                            @theCount
-                                        </span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    @:Alt:
-                                    @first
-                                }
-                            }
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Total)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Payment)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Volunteer)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-                </tr>
+
+<div class="table-responsive">
+<table class="table table-striped rounded-lg">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.Household)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Member.Household.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Member.FullName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Total)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PaymentType.Type)
+    </td>
+    <td>
+        <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                            <i class='bx bxs-edit-alt'></i>
+                        </a>
+                         
+                        <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> 
+                        <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
+    </td>
+</tr>}
+    </tbody>
+</table>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).on('click', '#searchHH', function (event) {
+            event.preventDefault();
+            var code = $('#code');
+            var codeSerialized = code.serialize();
+
+            $.ajax({
+                type: "GET",
+                url: 'Orders/GetMembers',
+                data: code.serialize(),
+                success: function (data) {                    
+                    $('#searchHErr').html("");
+                    $('#order-member-list').css("display", "inline-flex");
+
+                    var membersDDL = $('#membersDDl')
+                    membersDDL.html("");
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))
+                    $.each(data, function (index, item) {                                                                                               
+                        membersDDL.append(
+                            $('<option></option>').val(item.id).html(item.fullName)
+                        );
+                    });
+                },
+                error: function (err) {  
+                    var membersDDL = $('#membersDDl')
+
+                    $('#searchHErr').html(err.responseText)
+                    membersDDL.html("");
+                    membersDDL.append($('<option></option>').val(0).html("Select Member"))                    
+                }
+            });
+        })
+
+        $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){            
+            var memberID = $('#membersDDl').val();            
+            if(memberID === "0"){        
+                event.preventDefault();
+                $('#searchHErr').html("Please, select an existing member.")
+                return;
             }
-        </tbody>
-    </table>
-    <partial name="_PagingNavBar" />
-</form>
-@section Scripts {
-    <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="popover"]').popover();
-        });
+        })
     </script>
+    <script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 }

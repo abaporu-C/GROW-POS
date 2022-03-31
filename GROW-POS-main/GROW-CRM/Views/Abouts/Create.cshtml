@@ -1,0 +1,76 @@
+﻿@model GROW_CRM.Models.About
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+    <h1>Create</h1>
+
+    <h4>About</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="OrgName" class="control-label"></label>
+                    <input asp-for="OrgName" class="form-control" />
+                    <span asp-validation-for="OrgName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WebSite" class="control-label"></label>
+                    <input asp-for="WebSite" class="form-control" />
+                    <span asp-validation-for="WebSite" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StreetNumber" class="control-label"></label>
+                    <input asp-for="StreetNumber" class="form-control" />
+                    <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StreetName" class="control-label"></label>
+                    <input asp-for="StreetName" class="form-control" />
+                    <span asp-validation-for="StreetName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AptNumber" class="control-label"></label>
+                    <input asp-for="AptNumber" class="form-control" />
+                    <span asp-validation-for="AptNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PostalCode" class="control-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CityID" class="control-label"></label>
+                    <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProvinceID" class="control-label"></label>
+                    <select asp-for="ProvinceID" class="form-control" asp-items="ViewBag.ProvinceID"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

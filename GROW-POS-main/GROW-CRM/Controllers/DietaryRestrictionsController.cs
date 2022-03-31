@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GROW_CRM.Controllers
 {
+    [Authorize]
     public class DietaryRestrictionsController : Controller
     {
         private readonly GROWContext _context;
@@ -34,6 +36,7 @@ namespace GROW_CRM.Controllers
             }
 
             var dietaryRestriction = await _context.DietaryRestrictions
+                .Include(m => m.HealthIssueType)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (dietaryRestriction == null)
             {
@@ -46,6 +49,9 @@ namespace GROW_CRM.Controllers
         // GET: DietaryRestrictions/Create
         public IActionResult Create()
         {
+            new DietaryRestriction();
+            ViewData["HealthIssueTypeID"] = new SelectList(_context.HealthIssueTypes, "ID", "Type");
+            PopulateDropDownLists();
             return View();
         }
 
@@ -54,7 +60,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Restriction")] DietaryRestriction dietaryRestriction)
+        public async Task<IActionResult> Create([Bind("ID,Restriction,HealthIssueTypeID")] DietaryRestriction dietaryRestriction)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +68,7 @@ namespace GROW_CRM.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
+            PopulateDropDownLists(dietaryRestriction);
             return View(dietaryRestriction);
         }
 
@@ -73,11 +80,14 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var dietaryRestriction = await _context.DietaryRestrictions.FindAsync(id);
+            var dietaryRestriction = await _context.DietaryRestrictions
+                .Include(m => m.HealthIssueType)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (dietaryRestriction == null)
             {
                 return NotFound();
             }
+            PopulateDropDownLists(dietaryRestriction);
             return View(dietaryRestriction);
         }
 
@@ -86,7 +96,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Restriction")] DietaryRestriction dietaryRestriction)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Restriction,HealthIssueTypeID")] DietaryRestriction dietaryRestriction)
         {
             if (id != dietaryRestriction.ID)
             {
@@ -113,6 +123,7 @@ namespace GROW_CRM.Controllers
                 }
                 return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
+            PopulateDropDownLists(dietaryRestriction);
             return View(dietaryRestriction);
         }
 
@@ -125,6 +136,7 @@ namespace GROW_CRM.Controllers
             }
 
             var dietaryRestriction = await _context.DietaryRestrictions
+                .Include(m=>m.HealthIssueType)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (dietaryRestriction == null)
             {
@@ -153,6 +165,17 @@ namespace GROW_CRM.Controllers
         private bool DietaryRestrictionExists(int id)
         {
             return _context.DietaryRestrictions.Any(e => e.ID == id);
+        }
+
+        private SelectList HealthIssueTypeSelectList(int? selectedId)
+        {
+            return new SelectList(_context.HealthIssueTypes
+                .OrderBy(d => d.Type), "ID", "Type", selectedId);
+        }
+
+        private void PopulateDropDownLists(DietaryRestriction dr = null)
+        {
+            ViewData["HealthIssueTypeID"] = HealthIssueTypeSelectList(dr?.HealthIssueTypeID);
         }
     }
 }

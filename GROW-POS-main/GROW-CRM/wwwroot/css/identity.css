@@ -1,0 +1,104 @@
+:root {
+    --green: #23880E;
+}
+
+
+/******** Elements ********/
+
+a {
+    color: var(--green);
+}
+
+/******** Classes ********/
+
+.animated-text{    
+    background-color: rgba(0, 0, 0, 0);
+    color: #FFF;
+    font-family: 'Ultra', serif;
+    width: 100vh;
+    text-align: center;
+    text-justify: inter-word;
+}
+
+.text-line, .login-form {
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.text-line{
+    animation-name: FadeInOut;
+}
+
+.button {
+    background-color: var(--green);
+    color: #FFF;
+}
+
+.centered {
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+.form-title {
+    background-color: var(--green);
+    color: #FFF;
+    padding: 5% 0;
+    text-align: center;
+}
+
+.identity-form {    
+    background-color: #FFF;    
+    width: 80%;
+}
+
+.login-form {
+    animation-name: FadeIn;
+    animation-delay: 1.1s;
+    opacity: 0;
+}
+
+.fa-solid:hover{
+    cursor: pointer;
+}
+
+/******** Keyframes ********/
+
+@keyframes FadeIn{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes FadeInOut{
+    0% {
+        opacity: 0;
+    }
+
+    50%{
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/******** Queries ********/
+
+@media only screen and (min-width: 768px) {
+    .animated-text, .identity-form, .login-form{
+        width: 450px;
+    }
+
+    .animated-text{
+        font-size: 76px;
+    }
+}
