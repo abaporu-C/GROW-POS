@@ -4,93 +4,119 @@
     ViewData["Title"] = "Households Index";
 }
 
-    <div class="row ">
-        <div class="col-md-6">
-            <h2>Households</h2>
-        
-
-        
-            <a class="btn btn-outline-info" asp-area="" asp-controller="Members" asp-action="Index">Members Index</a>
-                
-            <a class="btn btn-outline-success" asp-action="Create">Create New</a>
-            
-            @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
-            <a asp-controller="NotificationTypes" asp-route-id="2" asp-action="Notification" class="btn btn-primary linkClick">Send Notification</a>                        
-        }
-
-            </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h2>Households</h2>                
         </div>
+    </div>
 
-
+    <div class="row mb-3">
+        <div class="col-md-12 d-flex">
+            <a class="btn btn-outline-success mr-2" asp-action="Create">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                </svg> Create New
+            </a>
+            <a class="btn btn-outline-info mr-2" asp-area="" asp-controller="Members" asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                </svg> Members Index
+            </a>
+        @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+        {
+            <a asp-controller="NotificationTypes" asp-route-id="2" asp-action="Notification" class="btn btn-primary linkClick ml-auto p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-envelope-plus-fill" viewBox="0 0 16 16">
+                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 4.697v4.974A4.491 4.491 0 0 0 12.5 8a4.49 4.49 0 0 0-1.965.45l-.338-.207L16 4.697Z" />
+                    <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z" />
+                </svg> Send Notification
+            </a>   
+        }            
+        </div>
+    </div>
 
 
 
     <form asp-action="Index" method="get">
+        @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+        {
+            <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]" />
+        }
         <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
         <div class="form-horizontal">
-        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            <text class="d-none d-lg-inline">Filter</text><text class="d-inline d-lg-none">Filter/Sort</text>
-        </button>
-        <br />
-        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
-            <div class="card card-body bg-light">
-            <div class="d-block d-lg-none">
-                    <div class="form-group">
-                        <label class="control-label">Sort By:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" class="" value="desc"
-                                           @((ViewData["sortDirection"].ToString() != "asc" ? "checked=\"checked\"" : ""))
-                                           name="sortDirectionCheck" />&nbsp;&nbsp;Descending
-                                </div>
-                            </div>
-                            <select name="sortFieldID" class="form-control" asp-items="ViewBag.sortFieldID"></select>
-                        </div>
-                    </div>
-                </div>
+            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                </svg> Filter/Search 
+            </button>
+            <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
                 <div class="card card-body bg-light">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="control-label">Search by ID:</label>
-                                    @Html.TextBox("IDSearch", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
+
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Search by: </h4>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Only numeric values for ID.
+                               
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-10">
+                                    <label class="control-label">Household Name:</label>
+                                    @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
+                                </div>
+                                <div class="form-group col-md-10">
+                                    <label class="control-label">Household Address:</label>
+                                    @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
+                                </div>
+                               
+                                <div class="form-group col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-label">ID:</label>
+                                        @Html.TextBox("IDSearch", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Only numeric values for ID.
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                        <div class="col-md-2">
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="control-label">Filter by Status:</label>
-                                    @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Filter by: </h4>
+                                </div>
+                                
+                            </div>
+                           
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="control-label">City:</label>
+                                            @Html.DropDownList("CityID", null, "All Cities", htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="control-label">Status:</label>
+                                            @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group col-md-12 align-self-end mt-4 pt-1">
+                                    <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
+                                    <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                                 </div>
                             </div>
-                        </div>
-
-
+                            </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-5">
-                            <label class="control-label">Search by Household Address:</label>
-                            @Html.TextBox("StreetSearch", null, new { @class = "form-control", placeholder = "E.g. 4377 Fourth Ave" })
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label class="control-label">Search by City:</label>
-                            @Html.TextBox("CitySearch", null, new { @class = "form-control", placeholder = "E.g. St Catharines" })
-                        </div>
-                        <div class="form-group col-md-4 align-self-end pr-3">
-                            <input type="submit" name="actionButton" value="Apply" class="btn btn-outline-primary" />
-                            <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
-                        </div>
-                    </div>
-                </div>
+
+               
                 </div>
             </div>
         </div>
@@ -174,66 +200,70 @@
             </thead>
             <tbody>
                 @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StreetNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StreetName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AptNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.City.Name)
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.Province.Name)
-                        </td>*@
-                        <td>
-                            <center>
-                                @{
-                                    int memberCount = item.NumberOfMembers;
-                                    if (memberCount > 0)
-                                    {
-                                        @Html.Raw(memberCount)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td style="max-width: 115px">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.StreetNumber)
+                            </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StreetNumber) @Html.DisplayFor(modelItem => item.StreetName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AptNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City.Name)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Province.Name)
+                                </td>*@
+                            <td>
+                                <center>
+                                    @{
+                                        int memberCount = item.NumberOfMembers;
+                                        if (memberCount > 0)
+                                        {
+                                            @Html.Raw(memberCount)
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("0")
+                                        }
                                     }
-                                    else
-                                    {
-                                        @Html.Raw("0")
-                                    }
-                                }
-                            </center>
-                            @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LICOVerified)
-                        </td>
+                                </center>
+                                @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LICOVerified)
+                            </td>
 
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                                <i class='bx bxs-edit-alt'></i>
-                            </a>
-                            <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
-                                <i class='bx bx-info-square'></i>
-                            </a>
-                            <a asp-action="Add" class="text-success h4" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
-                                <i class='bx bx-user-plus'></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HouseholdStatus.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                    <i class='bx bxs-edit-alt' style="color:grey"></i>
+                                </a>
+                                <a asp-action="Index" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID">
+                                    <i class='bx bx-info-square'></i>
+                                </a>
+                                <a asp-action="Add" class="text-success h4" data-toggle="tooltip" data-placement="top" title="Add Member" asp-controller="HouseholdMembers" asp-route-HouseholdID="@item.ID" asp-route-HouseholdName="@item.Name">
+                                    <i class='bx bx-user-plus'></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
         </table>
         </div>
+        <partial name="_PagingNavBar" />
     </form>
     @section Scripts {
         <script type="text/javascript">
