@@ -1,0 +1,70 @@
+Help Section for users
+
+#######################################################################################################################################################################
+
+1)Households.
+
+1-1)How do I create a new membership for a household?
+
+To create a membership, click on the households tab on the sidebar. On the households index page, click on the Create New button at the top. 
+You will be prompted with a form to create a new household. After you fill in the Household information, you will be presented to add a new member to your newly created
+membership.
+
+You don't need to add a member to a household right away. As soon as the household information is entered, it will be saved in our database and you can
+enter new members later on.
+
+In our dashboard, you will find a quick button to create a new household. We placed over there for your convenience.
+
+1-2)How do I add a member to an existing household membership?
+
+To add a member to an existing membership, click on the households tab on the side bar. You will prompted with a table of all the households registered in our 
+database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
+add a new member to it straight away. 
+
+Click on the green person icon with a plus on it to add a new member to an existing household.
+
+For your convenience, we also added an add button inside the detailed household page. Once in the index page, click on the blue info icon to navigate to the Details Page.
+There you will find a members table attached to that household on the bottom. The last table header will be an add button to add a member to that particular 
+household membership.
+
+1-3)How do I change households' information?
+
+To change household information, click on the households tab on the sidebar. You will prompted with a table of all the households registered in our 
+database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
+add a new member to it straight away. 
+
+Click on the grey pencil icon to navigate to the edit page for that specific household.
+
+1-4)How do I see more details of a household?
+
+To see more details of a household, click on the households tab on the sidebar. You will prompted with a table of all the households registered in our 
+database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
+add a new member to it straight away. 
+
+Click on the blue info icon to navigate to the details page of a specific household.
+
+1-5)How do I delete a household?
+
+To delete a household, click on the households tab on the sidebar. You will prompted with a table of all the households registered in our 
+database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
+add a new member to it straight away. 
+
+Click on the blue info icon to navigate to the details page of a specific household. There you willsee a delete button at the top. Click on it to navigate to the
+delete confirmation page. There, you will be asked to confirm the deletion. Don't worry, the household will only be deleted after you confirmed it. Just navigating
+to the deletion page doesn't alter our database.
+
+Deletion of households memberships are restricted to administrators only.
+
+1-6) Can I delete a household with members attached to it?
+
+No. For safety reasons, we decided that it's better to restrict household deletions to empty households only. You will need to delete all the members on that household 
+prior to deleting the whole membership.
+
+This ensures that you don't accidentaly delete members' informations.
+
+1-7) How LICO verification works?
+
+For your convenience, the LICO verification runs automatically on the background so you don't need to think about it while adding a new member.
+It will update the household information every time you add or edit a new member.
+
+1-8) What if a member is over the LICO Threshold 
