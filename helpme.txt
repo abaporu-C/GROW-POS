@@ -2,9 +2,9 @@ Help Section for users
 
 #######################################################################################################################################################################
 
-1)Households.
+1) Households.
 
-1-1)How do I create a new membership for a household?
+1-1) How do I create a new membership for a household?
 
 To create a membership, click on the households tab on the sidebar. On the households index page, click on the Create New button at the top. 
 You will be prompted with a form to create a new household. After you fill in the Household information, you will be presented to add a new member to your newly created
@@ -45,7 +45,7 @@ Click on the blue info icon to navigate to the details page of a specific househ
 
 1-5)How do I delete a household?
 
-To delete a household, click on the households tab on the sidebar. You will prompted with a table of all the households registered in our 
+To delete a household, click on the households tab on the sidebar. You will be prompted with a table of all the households registered in our 
 database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
 add a new member to it straight away. 
 
@@ -67,4 +67,42 @@ This ensures that you don't accidentaly delete members' informations.
 For your convenience, the LICO verification runs automatically on the background so you don't need to think about it while adding a new member.
 It will update the household information every time you add or edit a new member.
 
-1-8) What if a member is over the LICO Threshold 
+1-8) What if a member is over the LICO Threshold for just a bit?
+
+A Super Administrator can judge situations like these case to case. They have the ability to toggle LICO verification status on a household at will.
+
+1-9) What if a member doesn't have a fixed address?
+
+While creating the household, there is a No Fixed Address check box on the top of the form. Check that box so the household will have GROW address as their own.
+
+1-10) Where would a Super Administrator be able to change LICO Verification status of a household?
+
+On the household details page, the Super Admin will have access to a button on the top of the page that will change the LICO status at their will.
+
+#######################################################################################################################################################################
+
+2) Member
+
+2-1) How do I add a new member?
+
+If the member is part of a household already subscribed to GROW, you have to ask for their household information first. Once you have it, click on the households tab on the sidebar. You will be prompted with a table of all the households registered in our 
+database. On the last column of every row, you will see action icons to edit the household information, to see the household information in more detail and also to 
+add a new member to it straight away. 
+
+Click on the green perfon icon to add a new member to that household.
+
+If a member is not part of a household subscribed to GROW, you will have to enter their household information first. 
+
+To create a membership, click on the households tab on the sidebar. On the households index page, click on the Create New button at the top. 
+You will be prompted with a form to create a new household. After you fill in the Household information, you will be presented to add a new member to your newly created
+membership.
+
+2-2) How do I change members' informations?
+
+To change member's information you can do it two ways.
+
+Click on the households tab on the sidebar. Over there, you will see a button called Member's Index. There you will see a table of all members of GROW and in the last
+column of all rows, you will see a group of action icons. Click on the grey pencil icon to navigate to the edit page. Over there, you can edit the selected member
+information.
+
+2-3)
