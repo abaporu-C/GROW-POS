@@ -189,7 +189,8 @@ namespace GROW_CRM.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Gender)
-                .Include(m => m.Household)
+                .Include(m => m.Household).ThenInclude(h => h.City)
+                .Include(m => m.Household).ThenInclude(h => h.Province)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)
@@ -341,7 +342,8 @@ namespace GROW_CRM.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Gender)
-                .Include(m => m.Household)
+                .Include(m => m.Household).ThenInclude(h => h.City)
+                .Include(m => m.Household).ThenInclude(h => h.Province)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (member == null)

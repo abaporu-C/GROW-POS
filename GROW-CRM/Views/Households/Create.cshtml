@@ -76,7 +76,7 @@
             <div class="col-md-6 addr-mode-hide" id="otherInfo">
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Other Info</legend>
-                    <button id="custom-id-btn" class="btn btn-primary">Custom ID?</button>
+                    <button id="custom-id-btn" class="btn btn-outline-primary">Custom ID?</button>
                     <div style="display: none" id="custom-id" class="form-group">
                         <label id="NewIDLabel" class="control-label">Member ID:</label><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Custom ID" data-content="Customized Member ID."><b>?</b></a>
                         @Html.TextBox("NewID", null, new { @class = "form-control" })
@@ -96,8 +96,8 @@
             </div>
         </div>
         <div class="form-group mt-3 addr-mode-hide">
-                <input class="btn btn-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
-                <input type="submit" id="submitForm" value="Next Step" class="btn btn-primary " />
+                <input class="btn btn-outline-danger mr-3 " type="reset" name="name" value="Clear" onclick="return confirm('Are you sure you want to clear all data on this page?');" />
+                <input type="submit" id="submitForm" value="Next Step" class="btn btn-outline-primary " />
 
             </div>
         </form>

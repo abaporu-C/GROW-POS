@@ -73,7 +73,7 @@
                     {
                         foreach (MemberIncomeSituation mis in Model.MemberIncomeSituations)
                 {
-                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> $@mis.Income</li>
+                            <li class="list-group-item"><b>@mis.IncomeSituation.Situation</b> @mis.IncomeFormated</li>
                         }
                     }
                 }                

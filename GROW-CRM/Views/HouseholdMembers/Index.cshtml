@@ -51,8 +51,8 @@
                 <span id="membership">#@Html.DisplayFor(model => household.ID)</span><br />
                 <label for="addr">Address:</label>
                 <span id="addr">@Html.DisplayFor(model => household.FullAddress)</span><br />                
-                <label for="income">@Html.DisplayNameFor(model => household.YearlyIncome)</label>
-                <span id="income">$@Html.DisplayFor(model => household.YearlyIncome)</span><br />
+                <label for="income">@Html.DisplayNameFor(model => household.YearlyIncomeFormated)</label>
+                <span id="income">@Html.DisplayFor(model => household.YearlyIncomeFormated)</span><br />
                 <label for="lico">LICO Verified:</label>                
                         @{
                             if (!household.LICOVerified)
@@ -236,7 +236,7 @@
                         @Html.DisplayFor(modelItem => item.Age)
                     </td>
                     <td>
-                       $ @Html.DisplayFor(modelItem => item.YearlyIncome)
+                        @Html.DisplayFor(modelItem => item.YearlyIncomeFormated)
                     </td>
                     @*<td>
                         @{

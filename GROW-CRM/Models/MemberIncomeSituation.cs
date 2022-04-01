@@ -26,6 +26,15 @@ namespace GROW_CRM.Models
             }
         }
 
+        [Display(Name = "Income")]
+        public string IncomeFormated
+        {
+            get
+            {
+                return this.Income.ToString("c");
+            }
+        }
+
         [Display(Name = "Yearly Income for the program selected (in CAD)")]
         [Required(ErrorMessage = "You must enter the amount of an Income Situation")]
         [DataType(DataType.Currency)]

@@ -6,35 +6,41 @@
 
 <h2>User Role Assignments</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserRoles)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @{
-                    foreach (var r in item.UserRoles)
-                    {
-                        @:  @r <br />
-                    }
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-            </td>
-        </tr>
-    }
-
-</table>
+<div class="table-responsive">
+    <table class="table table-striped rounded-lg">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserRoles)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @{
+                            foreach (var r in item.UserRoles)
+                            {
+                                @:  @r <br />
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="text-secondary h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.Id">
+                        <i class='bx bxs-edit-alt'></i>
+                    </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
