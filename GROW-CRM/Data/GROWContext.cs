@@ -93,6 +93,8 @@ namespace GROW_CRM.Data
 
         public DbSet<UploadedFile> UploadedFiles { get; set; }
 
+        public DbSet<Subscription> Subscriptions { get; set; }
+
         //Methods
 
         //Model Builder Event

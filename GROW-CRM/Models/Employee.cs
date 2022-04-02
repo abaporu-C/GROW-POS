@@ -1,5 +1,6 @@
 ﻿using GROW_CRM.Models.Utilities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GROW_CRM.Models
@@ -9,6 +10,7 @@ namespace GROW_CRM.Models
         public Employee()
         {
             Active = true;
+            Subscriptions = new HashSet<Subscription>();
         }
 
         public int ID { get; set; }
@@ -67,5 +69,8 @@ namespace GROW_CRM.Models
         public string Email { get; set; }
 
         public bool Active { get; set; }
+
+        public ICollection<Subscription> Subscriptions { get; set; }
+
     }
 }

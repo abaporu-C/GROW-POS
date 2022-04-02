@@ -27,7 +27,8 @@ namespace GROW_CRM.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Employees
+                .Include(e=>e.Subscriptions).ToListAsync());
         }
 
         // GET: Employee/Create

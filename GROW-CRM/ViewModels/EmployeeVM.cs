@@ -67,5 +67,8 @@ namespace GROW_CRM.ViewModels
         public string Email { get; set; }
 
         public bool Active { get; set; }
+
+        [Display(Name = "Number of Notification Subscriptions")]
+        public int NumberOfPushSubscriptions { get; set; }
     }
 }
