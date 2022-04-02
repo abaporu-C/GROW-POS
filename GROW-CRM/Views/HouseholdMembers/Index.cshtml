@@ -100,145 +100,141 @@
                         }
             </div>            
         </div>    
-<form asp-action="Index" method="get">
-    @if(!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
-    {
-        <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]"/>   
-    } 
-    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-    <input type="hidden" name="HouseholdID" value="@household.ID" />
+        <form asp-action="Index" method="get">
+            @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
+            {
+        <input type="hidden" name="pageSizeID" value="@Context.Request.Query["pageSizeID"]" />}
+            <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+            <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+            <input type="hidden" name="HouseholdID" value="@household.ID" />
 
-    <dl class="dl-horizontal">
-        <dt>
-            <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Filter
-            </button>
-        </dt>
-        <dd>
-            <div class="form-horizontal">
-                <div class="collapse card card-body bg-light" style="padding-top: 10px; padding-bottom: 0px;" id="collapseFilter">
-                    <div class="form-row">
-                        <div class="form-group col-md-3 ml-md-3">
-                            <label class="control-label">Reason:</label>
-                            @Html.DropDownList("IncomeSituationID", null, "All Situations", htmlAttributes: new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-4 ml-md-3">
-                            <label class="control-label">Search Notes:</label>
-                            @Html.TextBox("NotesSearchString", null, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Search Name:</label>
-                            @Html.TextBox("MemberSearchString", null, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-3 align-self-end">
-                            <input type="submit" name="actionButton" value="Apply" class="btn btn-primary mr-3" />
-                            <a asp-action="Index" asp-route-HouseholdID="@household.ID" class="btn btn-outline-secondary">Clear</a>
+            <dl class="dl-horizontal">
+                <dt>
+                    <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        Filter
+                    </button>
+                </dt>
+                <dd>
+                    <div class="form-horizontal">
+                        <div class="collapse card card-body bg-light" style="padding-top: 10px; padding-bottom: 0px;" id="collapseFilter">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 ml-md-3">
+                                    <label class="control-label">Reason:</label>
+                                    @Html.DropDownList("IncomeSituationID", null, "All Situations", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4 ml-md-3">
+                                    <label class="control-label">Search Notes:</label>
+                                    @Html.TextBox("NotesSearchString", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search Name:</label>
+                                    @Html.TextBox("MemberSearchString", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-3 align-self-end">
+                                    <input type="submit" name="actionButton" value="Apply" class="btn btn-primary mr-3" />
+                                    <a asp-action="Index" asp-route-HouseholdID="@household.ID" class="btn btn-outline-secondary">Clear</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </dd>
-        <dt>
-        </dt>
-        <dd>
-            <div>
-                <div class="table-responsive">
-                <table class="table table-striped rounded-lg">
-                    <colgroup>
-                        <col />
-                        <col />
-                        <col />
-                        <col />
-                        <col />
-                        <col />
-                        <col />
-                        <col />
-                    </colgroup>
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>
-                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
-                        </th>
-                        <th>
-                            <input type="submit" name="actionButton" value="Income Situation" class="btn btn-link" />
-                        </th>
-                        <th>
-                            <input type="submit" disabled="disabled" value="Gender" class="btn btn-link" />
-                        </th>
-                        <th>
-                            <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
-                        </th>
-                        <th>
-                            <input type="submit" name="disabled" value="Yearly Income" class="btn btn-link" />
-                        </th>
-                       @* <th>
-                            <input type="submit" disabled="disabled" value="Documents" class="btn btn-link" />
-                        </th>
-                        <th>
-                            <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
-                        </th>*@
-                        <th>
-                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
-                                <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
-                            </a>
-                        </th>
-                        @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
-                                 <th>
+                </dd>
+                <dt>
+                </dt>
+                <dd>
+                    <div>
+                        <div class="table-responsive">
+                            <table class="table table-striped rounded-lg">
+                                <colgroup>
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col />
+                                </colgroup>
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>
+                                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
+                                        </th>
+                                        <th>
+                                            <input type="submit" name="actionButton" value="Income Situation" class="btn btn-link" />
+                                        </th>
+                                        <th>
+                                            <input type="submit" disabled="disabled" value="Gender" class="btn btn-link" />
+                                        </th>
+                                        <th>
+                                            <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
+                                        </th>
+                                        <th>
+                                            <input type="submit" name="disabled" value="Yearly Income" class="btn btn-link" />
+                                        </th>
+                                        @* <th>
+                                        <input type="submit" disabled="disabled" value="Documents" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
+                                    </th>*@
+                                        <th>
+                                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
+                                                <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
+                                            </a>
+                                        </th>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                        {
+                            <th>
 
-                        </th>   
-                                }                                
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var item in Model)
-                    {
-                <tr>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.FullName)*@
-                        <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a> <br />
-                    </td>
-                    <td>
-                        @{
-                            var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
-                            var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault()?.MemberID == item.ID).Select(mis => mis).ToList();
-                            int theCount = misList.FirstOrDefault() == null ? 0 : misList.FirstOrDefault().Count;
-                            if (theCount > 0)
-                            {
-                                string first = misList.FirstOrDefault().FirstOrDefault().Summary;
-                                if (theCount > 1)
-                                {
-                                    string theList = first;
-                                    var c = misList.ToList();
-                                    for (int i = 1; i < theCount; i++)
+                            </th>
+}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
                                     {
-                                        theList += ", \n" + c.FirstOrDefault()[i].Summary;
-                                    }
-                                    <a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus" 
+                        <tr>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.FullName)*@
+                                <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a> <br />
+                            </td>
+                            <td>
+                                @{ var list = (List<List<MemberIncomeSituation>>)ViewBag.MisList;
+                                                    var misList = (List<List<MemberIncomeSituation>>)list.Where(mis => mis.FirstOrDefault()?.MemberID == item.ID).Select(mis => mis).ToList();
+                                                    int theCount = misList.FirstOrDefault() == null ? 0 : misList.FirstOrDefault().Count;
+                                                    if (theCount > 0)
+                                                    {
+                                                        string first = misList.FirstOrDefault().FirstOrDefault().Summary;
+                                                        if (theCount > 1)
+                                                        {
+                                                            string theList = first;
+                                                            var c = misList.ToList();
+                                                            for (int i = 1; i < theCount; i++)
+                                                            {
+                                                                theList += ", \n" + c.FirstOrDefault()[i].Summary;
+                                                            }
+                                    <a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus"
                                        title="IncomeSituations" data-placement="bottom"
                                        data-content="@theList">
                                         @first... <span class="badge badge-info">
                                             @theCount
                                         </span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    @first
-                                }
-                            }
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Age)
-                    </td>
-                    <td>
-                       $ @Html.DisplayFor(modelItem => item.YearlyIncome)
-                    </td>
-                    @*<td>
+                                    </a> }
+                                                        else
+                                                        {
+                                    @first }
+                                                    } }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Gender.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Age)
+                            </td>
+                            <td>
+                                $ @Html.DisplayFor(modelItem => item.YearlyIncome)
+                            </td>
+                            @*<td>
                         @{
                             int fileCount = item.MemberDocuments.Count;
                             if (fileCount > 0)
@@ -266,8 +262,8 @@
                             }
                         }
                         @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/4.3/components/collapse/*@
-                    @*</td>*@
-                    @*<td>
+                            @*</td>*@
+                            @*<td>
                         @{if (!string.IsNullOrEmpty(item.Notes))
                             {
                                 string[] noteWords = item.Notes.Split(' ');
@@ -289,43 +285,100 @@
                             }
                         }
                         @*For help with Bootstrap Collapse see: https://getbootstrap.com/docs/3.3/javascript/#collapse*@
-                    @*</td>*@
-                    <td>
-                        <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
-                            <span class="btn btn btn-outline-primary">Edit</span>
-                        </a>
-                       
-                    </td>
-                    @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
-                                    <td>
-                        <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
-                            <span class="btn btn btn-outline-danger">Delete</span>
-                        </a>
-                    </td>    
-                                    }
-                                    
-                </tr>
-                    }
-                    
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
+                            @*</td>*@
+                            <td>
+                                <a asp-controller="HouseholdMembers" asp-action="Update" asp-route-id="@item.ID">
+                                    <span class="btn btn btn-outline-primary">Edit</span>
+                                </a>
+
+                            </td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+            <td>
+                <a asp-controller="HouseholdMembers" asp-action="Remove" asp-route-id="@item.ID">
+                    <span class="btn btn btn-outline-danger">Delete</span>
+                </a>
+            </td>
+}
+
+                        </tr>}
+
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+
+            <div class="table-responsive">
+                <table class="table table-striped rounded-lg">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                Order #
+                            </th>
+                            <th>
+                                Member
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Payment
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Order order in (List<Order>)ViewData["MembersOrders"])
+                        {
+            <tr>
+                        <td>
+                            @order.ID
+                        </td>
+                <td>
+                    @order.Member.FullName
+                </td>
+                <td>
+                    @order.DateFormatted
+                </td>
+                <td>
+                    @order.TotalFormatted
+                </td>
+                <td>
+                    @order.PaymentType.Type
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Orders" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@order.ID">
+                        <i class='bx bxs-edit-alt' style="color:grey"></i>
+                    </a>
+
+                    <a asp-action="Details" asp-controller="Orders" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@order.ID"> <i class='bx bx-info-square'></i></a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                    {
+        <a asp-action="Delete" asp-controller="Orders" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@order.ID"> <i class='bx bx-minus-circle'></i></a>}
+                </td>
+            </tr>}
+                    </tbody>
                 </table>
-                </div>
             </div>
-        </dd>
-    </dl>
-    <partial name="_PagingNavBar" />
-</form>
+
+            <partial name="_PagingNavBar" />
+        </form>
 <div>
     <a asp-action="Edit" asp-controller="Households" asp-route-id="@household.ID">Edit</a> | 
     <a href='@ViewData["returnURL"]'>Back to Households List</a>

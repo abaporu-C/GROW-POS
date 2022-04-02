@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using GROW_CRM.Data;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
@@ -86,6 +88,10 @@ namespace GROW_CRM
             //For the Identity System
             services.AddTransient<IEmailSender, EmailSender>();
 
+            //DinkToPdf
+            services.AddSingleton(typeof(IConverter),
+            new SynchronizedConverter(new PdfTools()));
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -188,8 +188,10 @@ namespace GROW_CRM.Controllers
             }
 
             var member = await _context.Members
+                .Include(m => m.Orders).ThenInclude(m => m.PaymentType)
                 .Include(m => m.Gender)
-                .Include(m => m.Household)
+                .Include(m => m.Household).ThenInclude(m => m.City)
+                .Include(m => m.Household).ThenInclude(m => m.Province)
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.DietaryRestrictionMembers).ThenInclude(drm => drm.DietaryRestriction)

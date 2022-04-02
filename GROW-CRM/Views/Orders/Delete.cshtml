@@ -85,6 +85,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a href='@ViewData["returnURL"]'>Back to Orders</a>
+        <a href='@ViewData["returnURL"]'>Back to Orders</a> |
+        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.Member.ID">Back to Member</a>
     </form>
 </div>

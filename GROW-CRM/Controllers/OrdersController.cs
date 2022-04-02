@@ -1,5 +1,8 @@
-﻿using GROW_CRM.Data;
+﻿using DinkToPdf;
+using DinkToPdf.Contracts;
+using GROW_CRM.Data;
 using GROW_CRM.Models;
+using GROW_CRM.Models.Utilities;
 using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +25,7 @@ namespace GROW_CRM.Controllers
         public OrdersController(GROWContext context)
         {
             _context = context;
+
         }
 
         // GET: Orders
@@ -501,6 +506,40 @@ namespace GROW_CRM.Controllers
             
             if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400};
             return new JsonResult(members);
+        }
+
+        private IConverter _converter;
+
+        [HttpGet]
+        public IActionResult CreatePDF()
+        {
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF Report"
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = TemplateGenerator.GetHTMLString(),
+                //Page = "https://code-maze.com/",
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer" }
+            };
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            var file = _converter.Convert(pdf);
+
+            return File(file, "application/pdf", "OrderReport.pdf");
         }
     }
 }

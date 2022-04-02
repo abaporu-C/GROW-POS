@@ -1,3 +1,6 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using GROW_CRM.Models.Interfaces;
 using GROW_CRM.Models.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,22 @@ namespace GROW_CRM.Models
         public Order()
         {
             OrderItems = new HashSet<OrderItem>();
+        }
+
+        public string TotalFormatted
+        {
+            get
+            {
+                return Total.ToString("c");
+            }
+        }
+
+        public string DateFormatted
+        {
+            get
+            {
+                return $"{Date.Month}/{Date.Day}/{Date.Year}";
+            }
         }
 
         //Fields 
