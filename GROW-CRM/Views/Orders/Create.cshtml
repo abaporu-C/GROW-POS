@@ -87,7 +87,8 @@
 </form>
 
 <div>
-    <a href='@ViewData["returnURL"]'>Back to Orders</a>
+    <a href='@ViewData["returnURL"]'>Back to Orders</a> |
+    <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.Member.ID">Back to Member</a>
 </div>
 
 @section Scripts {

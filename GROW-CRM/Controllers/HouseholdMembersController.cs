@@ -163,6 +163,11 @@ namespace GROW_CRM.Controllers
                 .Where(h => h.ID == HouseholdID.GetValueOrDefault()).FirstOrDefault();
             ViewBag.Household = household;
 
+            //Order details
+            var orders = _context.Orders.Include(o => o.Member).Include(o => o.PaymentType).Where(o => o.Member.HouseholdID == HouseholdID).ToList();
+
+            ViewData["MembersOrders"] = orders;
+
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID);
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);

@@ -38,7 +38,7 @@ namespace GROW_CRM.Controllers
             PopulateDropDownLists();
 
             //NOTE: make sure this array has matching values to the column headings
-            string[] sortOptions = new[] { "ID", "Street Name", "City", "Province", "Members", "LICO", "Status" };
+            string[] sortOptions = new[] { "ID", "House Name", "City", "Province", "Members", "LICO", "Status" };
 
             //Trying to save the world
 
@@ -123,7 +123,7 @@ namespace GROW_CRM.Controllers
                    .OrderByDescending(h => h.ID);
                 }
             }
-            else if (sortField == "Street Name")
+            else if (sortField == "House Name")
             {
                 if (sortDirection == "asc")
                 {

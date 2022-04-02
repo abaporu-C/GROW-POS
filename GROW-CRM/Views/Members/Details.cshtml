@@ -155,7 +155,58 @@
                     }
                 }
             </ul>
-        </div>        
+        </div>    
+        <div class="table-responsive">
+            <table class="table table-striped rounded-lg">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Order #
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th>
+                            Payment
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Orders)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateFormatted)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalFormatted)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentType.Type)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Orders" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                <i class='bx bxs-edit-alt' style="color:grey"></i>
+                            </a>
+
+                            <a asp-action="Details" asp-controller="Orders" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+                                <a asp-action="Delete" asp-controller="Orders" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
+                            }
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 </div>
     </div>
 <div>

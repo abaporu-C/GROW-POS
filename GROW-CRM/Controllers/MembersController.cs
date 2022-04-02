@@ -200,6 +200,7 @@ namespace GROW_CRM.Controllers
             }
 
             var member = await _context.Members
+                .Include(m => m.Orders).ThenInclude(o => o.PaymentType)
                 .Include(m => m.Gender)
                 .Include(m => m.Household).ThenInclude(h => h.City)
                 .Include(m => m.Household).ThenInclude(h => h.Province)
