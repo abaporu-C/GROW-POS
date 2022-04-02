@@ -1,11 +1,13 @@
 ﻿using GROW_CRM.Data;
 using GROW_CRM.Models;
+using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,8 +30,9 @@ namespace GROW_CRM.Controllers
             int? page, int? pageSizeID, string actionButton,
             string sortDirection = "asc", string sortField = "Member")
         {
-            //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
+            
+
+            
 
             //NOTE: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "Member", "Age", "Gender", "Household", "Situation" };
@@ -172,11 +175,20 @@ namespace GROW_CRM.Controllers
 
             //Set sort for next time
             ViewData["sortField"] = sortField;
+            //Toggle the Open/Closed state of the collapse depending on if we are filtering
+            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
             ViewData["sortDirection"] = sortDirection;
             //selectlist for Sorting options
-            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+            ViewData["Action"] = "/Orders";
+            ViewData["Modals"] = new List<string> { "_PageSizeModal", "_CreateOrderModal" };
 
-            return View(await members.ToListAsync());
+            //Handle Paging
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<Member>.CreateAsync(members.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: Members/Details/5
@@ -411,6 +423,15 @@ namespace GROW_CRM.Controllers
             ViewData["HouseholdID"] = HouseholdSelectList(member?.HouseholdID);
             ViewData["GenderID"] = GenderSelectList(member?.GenderID);
             ViewData["IncomeSituationID"] = IncomeSelectList(null);
+        }
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
     }
 }

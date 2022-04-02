@@ -180,10 +180,6 @@ namespace GROW_CRM.Controllers
             var pagedData = await PaginatedList<Order>.CreateAsync(orders.AsNoTracking(), page ?? 1, pageSize);
 
             return View(pagedData);
-            /*
-                        ViewData["Modals"] = new List<string> { "_CreateOrderModal" };
-                        var gROWContext = _context.Orders.Include(o => o.Member).ThenInclude(m => m.Household).Include(o => o.PaymentType);
-                        return View(await gROWContext.ToListAsync());*/
         }
 
         // GET: Orders/Details/5
