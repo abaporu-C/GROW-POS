@@ -2,7 +2,7 @@
 @model IEnumerable<GROW_CRM.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
 }
 
 <div class="row mb-3">
@@ -51,13 +51,10 @@
                                 @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
                             </div>
                             <div class="form-group col-md-10">
-                                <div class="form-group">
+                                
                                     <label class="control-label">Household ID:</label>
                                     @Html.TextBox("HouseholdID", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
-                                </div>
-                                <div class="invalid-feedback">
-                                    Only numeric values for ID.
-                                </div>
+      
                             </div>
                             <div class="form-group col-md-10">
                                 <label class="control-label">Member:</label>
@@ -84,6 +81,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             @*   <div class="form-group col-md-10">
                                 <label class="control-label">Total:</label>
                                 @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
@@ -97,7 +96,7 @@
                                 </div>
                                 </div>*@
 
-                            <div class="form-group col-md-12 align-self-end mt-4 pt-1">
+                            <div class="form-group col-md-12 mt-4 pt-1">
                                 <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
                                 <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                             </div>
@@ -111,22 +110,65 @@
     </div>
     <div class="table-responsive">
         <table class="table table-striped rounded-lg">
+            @{
+                string bold = "font-weight-bold";
+                string field = ViewData["sortField"].ToString();
+
+                string direction = "▼";
+                if (ViewData["sortDirection"].ToString() == "desc")
+                {
+                    direction = "▲";
+                }
+            }
             <thead class="thead-dark">
                 <tr>
+                  
                     <th>
-                        @Html.DisplayNameFor(model => model.Member.Household)
+                            <input type="submit" disabled="disabled" value="Household" class="btn btn-link" />
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Member)
+                        @if (field == "Member")
+                        {
+                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" @bold />
+                            <span class="text-white">@direction</span>
+                        }
+                        else
+                        {
+                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
+                        }
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Date)
+                        @if (field == "Date")
+                        {
+                            <input type="submit" name="actionButton" value="Date" class="btn btn-link" @bold />
+                            <span class="text-white">@direction</span>
+                        }
+                        else
+                        {
+                            <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
+                        }
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Total)
+                        @if (field == "Total")
+                        {
+                            <input type="submit" name="actionButton" value="Total" class="btn btn-link" @bold />
+                            <span class="text-white">@direction</span>
+                        }
+                        else
+                        {
+                            <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
+                        }
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.PaymentType)
+                        @if (field == "Payment")
+                        {
+                            <input type="submit" name="actionButton" value="Payment" class="btn btn-link" @bold />
+                            <span class="text-white">@direction</span>
+                        }
+                        else
+                        {
+                            <input type="submit" name="actionButton" value="Payment" class="btn btn-link" />
+                        }
                     </th>
                     <th></th>
                 </tr>
