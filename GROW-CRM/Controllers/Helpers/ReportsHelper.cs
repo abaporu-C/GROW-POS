@@ -328,5 +328,30 @@ namespace GROW_CRM.Controllers.Helpers
 
             return orderItems;
         }
+
+        /*public static IEnumerable GetIncomeDataNew(GROWContext _context)
+        {
+            var members = _context.Members
+                .Include(m => m.MemberIncomeSituations)
+                .Include(m => m.Gender)
+                .Where(m => m.FirstName != "" && m.LastName != "")
+                .Select(m => m).ToList();
+
+            List<HouseholdIncomeReport> misList = new List<HouseholdIncomeReport>();
+
+            foreach (Member m in members)
+            {
+                misList.Add(new HouseholdIncomeReport
+                {
+                    ID = m.HouseholdID,
+                     = m.FullName,
+                    Gender = m.Gender.Name,
+                    Age = m.Age,
+                    TotalIncome = m.YearlyIncome
+                });
+            }
+
+            return misList;
+        }*/
     }
 }

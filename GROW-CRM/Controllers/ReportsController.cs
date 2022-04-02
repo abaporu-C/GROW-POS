@@ -69,13 +69,13 @@ namespace GROW_CRM.Controllers
             }
             return View();
         }
-        
+
         //Get Renewal Report
         public void GetRenewalReport()
-        {            
+        {
             List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);
 
-            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification"};
+            string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Last Verification" };
 
             ViewData["ReportType"] = "Renewal Report";
             ViewData["Count"] = renewalReportsFiltered.Count();
@@ -87,9 +87,9 @@ namespace GROW_CRM.Controllers
         }
 
         public IActionResult DownloadRenewal()
-        {            
-            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);            
-            
+        {
+            List<RenewalReport> renewalReportsFiltered = (List<RenewalReport>)ReportsHelper.GetRenewals(_context);
+
             //How many rows?
             int reportRows = renewalReportsFiltered.Count();
 
@@ -123,7 +123,7 @@ namespace GROW_CRM.Controllers
                     workSheet.Column(3).Style.Numberformat.Format = "###,##0.00";
 
                     //Style first column for dates
-                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";                    
+                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -232,10 +232,10 @@ namespace GROW_CRM.Controllers
         }
 
         public void GetNewAdditions()
-        {            
+        {
             List<NewAdditionsReport> newAdditionsfiltered = (List<NewAdditionsReport>)ReportsHelper.GetNewAdditions(_context);
-            
-            DateTime lastWeek = DateTime.Now.AddDays(-7);            
+
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
 
             string[] headers = new string[] { "Household ID", "Number of Members", "Yearly Income", "Created On", "Created By" };
 
@@ -281,10 +281,10 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[3, 1].LoadFromCollection(newAdditionsfiltered, true);
 
                     //Style first column for dates
-                    workSheet.Column(3).Style.Numberformat.Format = "###,##0.00";
+                    workSheet.Column(4).Style.Numberformat.Format = "$###,##0.00";
 
                     //Style fee column for currency
-                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
+                    //workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
                     workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
@@ -293,15 +293,9 @@ namespace GROW_CRM.Controllers
 
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
-                    using (ExcelRange totalfees = workSheet.Cells[numRows + 4, 4])//
-                    {
-                        totalfees.Formula = "Sum(" + workSheet.Cells[4, 3].Address + ":" + workSheet.Cells[numRows + 3, 3].Address + ")";
-                        totalfees.Style.Font.Bold = true;
-                        totalfees.Style.Numberformat.Format = "$###,##0.00";
-                    }
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 6])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -333,7 +327,7 @@ namespace GROW_CRM.Controllers
                     //workSheet.Column(7).Width = 10;
 
                     //Add a title and timestamp at the top of the report
-                    workSheet.Cells[1, 1].Value = "New Aditions Report";
+                    workSheet.Cells[1, 1].Value = "New Additions Report";
                     using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
                     {
                         Rng.Merge = true; //Merge columns start and end range
@@ -397,7 +391,7 @@ namespace GROW_CRM.Controllers
         {
             var members = from m in _context.Members
                                .Include(m => m.Gender)
-                                select m;
+                          select m;
 
             int memberCount = members.Count();
 
@@ -409,7 +403,7 @@ namespace GROW_CRM.Controllers
 
             ViewData["ReportType"] = "Demographics Report";
             ViewData["Count"] = memberCount;
-            ViewData["Name"] = "Demographics";            
+            ViewData["Name"] = "Demographics";
             ViewBag.GenderReport = genderReport;
             ViewBag.AgeReport = ageReport;
             ViewBag.DietaryReport = dietaryReport;
@@ -457,19 +451,25 @@ namespace GROW_CRM.Controllers
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
-                    workSheet.Cells[5, 1, genderRows + 4, 2].Style.Font.Bold = true;
+                    //workSheet.Cells[5, 1, genderRows + 4, 2].Style.Font.Bold = true;
 
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
-                    using (ExcelRange totalfees = workSheet.Cells[genderRows + 5, 3])//
+                    /*using (ExcelRange totalfees = workSheet.Cells[genderRows + 5, 3])//
                     {
                         totalfees.Formula = "Sum(" + workSheet.Cells[5, 3].Address + ":" + workSheet.Cells[genderRows + 4, 3].Address + ")";
                         totalfees.Style.Font.Bold = true;
                         totalfees.Style.Numberformat.Format = "0";
-                    }
+                    }*/
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[4, 1, 4, 3])
+
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 1])
+                    {
+                        headings.Style.Font.Bold = true;
+                    }
+
+                    using (ExcelRange headings = workSheet.Cells[4, 1, 4, 4])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -485,14 +485,18 @@ namespace GROW_CRM.Controllers
 
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
-                    using (ExcelRange totalfees = workSheet.Cells[genderRows + 9 + ageRows, 3])//
+                    /*using (ExcelRange totalfees = workSheet.Cells[genderRows + 9 + ageRows, 3])//
                     {
                         totalfees.Formula = "Sum(" + workSheet.Cells[genderRows + 8, 3].Address + ":" + workSheet.Cells[genderRows + 8 + ageRows, 3].Address + ")";
                         totalfees.Style.Font.Bold = true;
                         totalfees.Style.Numberformat.Format = "0";
-                    }
+                    }*/
 
-                    using (ExcelRange headings = workSheet.Cells[genderRows + 7, 1, genderRows + 7, 3])
+                    using (ExcelRange headings = workSheet.Cells[genderRows + 7, 1, genderRows + 7, 4])
+                    {
+                        headings.Style.Font.Bold = true;
+                    }
+                    using (ExcelRange headings = workSheet.Cells[genderRows + 8, 1, genderRows + 8, 4])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -500,18 +504,30 @@ namespace GROW_CRM.Controllers
                         fill.BackgroundColor.SetColor(Color.LightBlue);
                     }
 
-                    workSheet.Cells[genderRows + 8 + ageRows + restrictionsRows, 1].Value = "DIETARY RESTRICTIONS REPORT";
+                    using (ExcelRange headings = workSheet.Cells[genderRows + 2 + ageRows + restrictionsRows, 1, genderRows + 2 + ageRows + restrictionsRows, 4])
+                    {
+                        headings.Style.Font.Bold = true;
+                    }
+                    using (ExcelRange headings = workSheet.Cells[genderRows + 3 + ageRows + restrictionsRows, 1, genderRows + 3 + ageRows + restrictionsRows, 4])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightBlue);
+                    }
 
-                    workSheet.Cells[genderRows + 9 + ageRows + restrictionsRows, 1].LoadFromCollection(dietaryReport, true);
+                    workSheet.Cells[genderRows + 2 + ageRows + restrictionsRows, 1].Value = "DIETARY RESTRICTIONS REPORT";
 
-                    using (ExcelRange totalfees = workSheet.Cells[genderRows + 14 + ageRows + restrictionsRows, 3])//
+                    workSheet.Cells[genderRows + 3 + ageRows + restrictionsRows, 1].LoadFromCollection(dietaryReport, true);
+
+                    /*using (ExcelRange totalfees = workSheet.Cells[genderRows + 14 + ageRows + restrictionsRows, 3])//
                     {
                         totalfees.Formula = "Sum(" + workSheet.Cells[genderRows + 13 + ageRows, 3].Address + ":" + workSheet.Cells[genderRows + 13 + ageRows + restrictionsRows, 3].Address + ")";
                         totalfees.Style.Font.Bold = true;
                         totalfees.Style.Numberformat.Format = "0";
-                    }
+                    }*/
 
-                    using (ExcelRange headings = workSheet.Cells[genderRows + 11 + ageRows, 1, genderRows + 11 + ageRows, 3])
+                    using (ExcelRange headings = workSheet.Cells[genderRows + 4 + ageRows, 1, genderRows + 4 + ageRows, 4])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -526,7 +542,7 @@ namespace GROW_CRM.Controllers
 
                     //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Demographics Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 4])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
@@ -538,7 +554,7 @@ namespace GROW_CRM.Controllers
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    using (ExcelRange Rng = workSheet.Cells[2, 4])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
@@ -616,7 +632,7 @@ namespace GROW_CRM.Controllers
             {
                 //Create a new spreadsheet from scratch.
                 using (ExcelPackage excel = new ExcelPackage())
-                {                    
+                {
                     var workSheet = excel.Workbook.Worksheets.Add("Mapping");
 
                     workSheet.Cells[3, 1].Value = "CITIES REPORT";
@@ -624,7 +640,7 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[4, 1].LoadFromCollection(citiesReport, true);
 
                     //Style first column for dates
-                    workSheet.Cells[4,2,citiesRows + 4, 2].Style.Numberformat.Format = "0%";                                        
+                    workSheet.Cells[4, 2, citiesRows + 4, 2].Style.Numberformat.Format = "0%";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -640,7 +656,7 @@ namespace GROW_CRM.Controllers
                     }
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[4, 1, 4, 7])
+                    using (ExcelRange headings = workSheet.Cells[4, 1, 4, 3])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -650,11 +666,11 @@ namespace GROW_CRM.Controllers
 
                     int rows = citiesRows + 7;
 
-                    foreach(List<CityReport> cr in cityReports)
+                    foreach (List<CityReport> cr in cityReports)
                     {
                         int count = cr.Count();
 
-                        if(count > 0)
+                        if (count > 0)
                         {
                             workSheet.Cells[rows, 1].Value = $"{cr[0]?.Name.ToUpper()} REPORT";
                             //Note: Cells[row, column]
@@ -662,7 +678,7 @@ namespace GROW_CRM.Controllers
 
                             //Style first column for dates
                             workSheet.Cells[rows + 1, 3, count + rows + 1, 3].Style.Numberformat.Format = "0";
-                            workSheet.Cells[rows + 1, 4, count + rows + 1, 4].Style.Numberformat.Format = "$#,##0.00";
+                            //workSheet.Cells[rows + 1, 4, count + rows + 1, 4].Style.Numberformat.Format = "$#,##0.00";
 
                             //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                             //Make Date and Patient Bold
@@ -683,7 +699,7 @@ namespace GROW_CRM.Controllers
                             }
 
                             //Set Style and backgound colour of headings
-                            using (ExcelRange headings = workSheet.Cells[rows + 1, 1, rows + 1, 7])
+                            using (ExcelRange headings = workSheet.Cells[rows + 1, 1, rows + 1, 4])
                             {
                                 headings.Style.Font.Bold = true;
                                 var fill = headings.Style.Fill;
@@ -692,7 +708,7 @@ namespace GROW_CRM.Controllers
                             }
 
                             rows += count + 5;
-                        }                        
+                        }
                     }
 
                     ////Boy those notes are BIG!
@@ -720,7 +736,7 @@ namespace GROW_CRM.Controllers
 
                     //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Mapping Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 4])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
@@ -732,7 +748,7 @@ namespace GROW_CRM.Controllers
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    using (ExcelRange Rng = workSheet.Cells[2, 4])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
@@ -832,6 +848,9 @@ namespace GROW_CRM.Controllers
                     //Make Date and Athlete Bold
                     workSheet.Cells[4, 1, numRows + 2, 1].Style.Font.Bold = true;
 
+                    //Style fee column for currency
+                    workSheet.Column(5).Style.Numberformat.Format = "$###,##0.00";
+
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
                     //using (ExcelRange totals = workSheet.Cells[numRows + 6, 2])
@@ -847,7 +866,7 @@ namespace GROW_CRM.Controllers
                     //workSheet.Cells[numRows + 6, 1].Style.Font.Bold = true;
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 6])
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 5])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -880,7 +899,7 @@ namespace GROW_CRM.Controllers
 
                     //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Household Income Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 5])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
@@ -892,7 +911,7 @@ namespace GROW_CRM.Controllers
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    using (ExcelRange Rng = workSheet.Cells[2, 5])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
@@ -992,10 +1011,10 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[3, 1].LoadFromCollection(salesReportsFiltered, true);
 
                     //Style fee column for currency
-                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
+                    workSheet.Column(4).Style.Numberformat.Format = "$###,##0.00";
 
                     //Style first column for dates
-                    workSheet.Column(2).Style.Numberformat.Format = "yyyy-mm-dd";
+                    workSheet.Column(3).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     //Note: You can define a BLOCK of cells: Cells[startRow, startColumn, endRow, endColumn]
                     //Make Date and Patient Bold
@@ -1011,7 +1030,7 @@ namespace GROW_CRM.Controllers
                     }
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 4])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -1044,7 +1063,7 @@ namespace GROW_CRM.Controllers
 
                     //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Sales Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 4])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
@@ -1056,7 +1075,7 @@ namespace GROW_CRM.Controllers
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    using (ExcelRange Rng = workSheet.Cells[2, 4])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
@@ -1170,7 +1189,7 @@ namespace GROW_CRM.Controllers
                     workSheet.Cells[3, 1].LoadFromCollection(newAdditionsfiltered, true);
 
                     //Style first column for currency
-                    workSheet.Column(4).Style.Numberformat.Format = "###,##0.00";
+                    workSheet.Column(4).Style.Numberformat.Format = "$###,##0.00";
 
                     //Style fee column for dates
                     workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd";
@@ -1181,15 +1200,10 @@ namespace GROW_CRM.Controllers
 
                     //Note: these are fine if you are only 'doing' one thing to the range of cells.
                     //Otherwise you should USE a range object for efficiency
-                    using (ExcelRange totalfees = workSheet.Cells[numRows + 4, 4])//
-                    {
-                        totalfees.Formula = "Sum(" + workSheet.Cells[4, 3].Address + ":" + workSheet.Cells[numRows + 3, 3].Address + ")";
-                        totalfees.Style.Font.Bold = true;
-                        totalfees.Style.Numberformat.Format = "$###,##0.00";
-                    }
+
 
                     //Set Style and backgound colour of headings
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 6])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
