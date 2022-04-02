@@ -1,0 +1,65 @@
+﻿
+@model GROW_CRM.Models.Subscription
+
+@{
+    ViewData["Title"] = "Manage Push Subscriptions";
+}
+
+<h2>Manage Push Subscriptions</h2>
+
+<hr />
+<div class="alert alert-danger" style="display: none;">
+    <strong>Note:</strong>
+    <ul id="errorMessage"></ul>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Push" id="CreateForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EmployeeID" />
+            <div class="well" style="width: 500px;">
+                <h4>Web Push Details</h4>
+                <span style="font-size: 12px;">These values will automatically become populated once correct permissions are given by the browser.</span>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="PushEndpoint" class="control-label"></label>
+                    <input asp-for="PushEndpoint" class="form-control" readonly required />
+                    <span asp-validation-for="PushEndpoint" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PushP256DH" class="control-label"></label>
+                    <input asp-for="PushP256DH" class="form-control" readonly required />
+                    <span asp-validation-for="PushP256DH" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PushAuth" class="control-label"></label>
+                    <input asp-for="PushAuth" class="form-control" readonly required />
+                    <span asp-validation-for="PushAuth" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" id="btnSubscribe" name="btnSubmit" value="Subscribe" class="btn btn-primary" />
+                <input type="submit" id="btnUnsubscribe" name="btnSubmit" value="Unsubscribe" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Details</a>
+</div>
+
+@section Scripts {
+    <script>
+        //Vapid public key.
+        var applicationServerPublicKey = '@ViewBag.PublicKey';
+        $(document).on("click", "#btnUnsubscribe", function () {
+            unsubscribe();
+        });
+        $(document).on("click", "#btnSubscribe", function (event) {
+            event.preventDefault();
+            subscribe();
+        });
+    </script>
+    <script src="~/js/CreateSubscription.js"></script>
+}

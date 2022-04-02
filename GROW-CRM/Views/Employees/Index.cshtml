@@ -47,9 +47,11 @@
                     @Html.DisplayFor(modelItem => item.Active)
                 </td>
                 <td>
-                    <a asp-action="Edit" class="text-secondary h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                        <i class='bx bxs-edit-alt'></i>
-                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    @if (item.Subscriptions.Count() > 0)
+                    {
+                        @:| @{<a asp-controller="WebPush" asp-action="Send" asp-route-id="@item.ID">Send Notification</a>}
+                    }
                 </td>
             </tr>
         }

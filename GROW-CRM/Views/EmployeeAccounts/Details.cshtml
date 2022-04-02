@@ -1,4 +1,4 @@
-﻿@model GROW_CRM.Models.Employee
+﻿@model GROW_CRM.ViewModels.EmployeeVM
 
 @{
     ViewData["Title"] = "Account";
@@ -10,33 +10,51 @@
 
 <div>
     <hr />
+    <div class="alert alert-danger" style="display: none;">
+        <strong>Note:</strong>
+        <ul id="errorMessage"></ul>
+    </div>
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-6">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.LastName)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-6">
             @Html.DisplayFor(model => model.LastName)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Phone)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-6">
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.NumberOfPushSubscriptions)
+        </dt>
+        <dd class="col-sm-6">
+            @Html.DisplayFor(model => model.NumberOfPushSubscriptions)
+        </dd>
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-6">
             @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit Account Details</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit Account Details</a> |
+    <a asp-action="Push" asp-route-EmployeeID="@Model.ID">Notifications on this Device</a>
 </div>
+@section Scripts {
+    <script>
+        //Vapid public key.
+        var applicationServerPublicKey = '@ViewBag.PublicKey';
+    </script>
+    <script src="~/js/CheckSubscription.js"></script>
+}
