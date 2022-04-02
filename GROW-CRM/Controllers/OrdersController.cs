@@ -339,6 +339,8 @@ namespace GROW_CRM.Controllers
             //ViewData["Address"] = member.Household.FullAddress;
             //ViewData["Date"] = DateTime.Today;
 
+            ViewData["Modals"] = new List<string> { "_OrderModal" };
+
             PopulateDropDownLists(order);
             return View(order);
         }
