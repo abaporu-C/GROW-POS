@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -63,6 +64,12 @@ namespace GROW_CRM.Controllers
                     break;
                 case "7":
                     GetCategories();
+                    break;
+                case "8":
+                    ViewData["ReportType"] = "RawData";
+                    ViewData["Name"] = $"Download Raw Data";
+                    ViewData["Count"] = 1;
+                    GetReportsDDLItems();
                     break;
                 default:
                     return View("Index");                    
@@ -1307,6 +1314,7 @@ namespace GROW_CRM.Controllers
             items.Add(new SelectListItem { Text = "Sales Report", Value = "5" });
             items.Add(new SelectListItem { Text = "New Items", Value = "6" });
             items.Add(new SelectListItem { Text = "Categories Report", Value = "7" });
+            items.Add(new SelectListItem { Text = "Download Raw Data", Value = "8" });
 
             ViewBag.Reports = items;
         }
@@ -1330,6 +1338,179 @@ namespace GROW_CRM.Controllers
             var mapData = ReportsHelper.GetCitiesData(_context);
 
             return Json(mapData);
+        }
+
+        public IActionResult DownloadData<T>(List<T> data, string title, int columnsCount,
+                                                      List<ExcelColumnFormating> format = null,
+                                                      List<ExcelColumnFormating> totalFormat = null)
+        {
+
+            //Create a new spreadsheet from scratch.
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                var workSheet = excel.Workbook.Worksheets.Add(title);
+
+                int numRows = 0;
+                int formatCounter = 0;
+                int totalFormatCounter = 0;
+
+                //Get Number of Rows in a data collection
+                int dataCount = data.Count();
+
+                //Load data
+                workSheet.Cells[3, 1].LoadFromCollection(data, true);
+
+                //Format Numeric Columns
+                if (format != null && format?.ElementAt(formatCounter) != null)
+                {
+                    foreach (ExcelColumnFormating columnFormat in format)
+                    {
+                        workSheet.Cells[numRows + 3, columnFormat.Column, numRows + 3 + dataCount, columnFormat.Column].Style.Numberformat.Format = columnFormat.Format;
+                    }
+                }
+
+                //Make data Bold
+                //Unecessary. Also, to add this feature properly, we would need a new List<T> to verify which columns 
+                //the user wants to be bold.
+                //workSheet.Cells[numRows + 4, 1, numRows + 4 + dataCount, columnCount].Style.Font.Bold = true;
+
+                formatCounter++;
+
+                //Check if the user needs a Total Columns inside their code
+                if (format != null && totalFormat?.ElementAt(totalFormatCounter) != null)
+                {
+                    foreach (ExcelColumnFormating columnFormat in totalFormat)
+                    {
+                        using (ExcelRange totalfees = workSheet.Cells[numRows + dataCount + 4, columnFormat.Column])//
+                        {
+                            totalfees.Formula = "Sum(" + workSheet.Cells[numRows + 4, columnFormat.Column].Address + ":" + workSheet.Cells[numRows + 4 + dataCount, columnFormat.Column].Address + ")";
+                            totalfees.Style.Font.Bold = true;
+                            totalfees.Style.Numberformat.Format = columnFormat.Format;
+                        }
+                    }
+                }
+
+                totalFormatCounter++;
+
+                using (ExcelRange headings = workSheet.Cells[numRows + 3, 1, numRows + 3, columnsCount])
+                {
+                    headings.Style.Font.Bold = true;
+                    var fill = headings.Style.Fill;
+                    fill.PatternType = ExcelFillStyle.Solid;
+                    fill.BackgroundColor.SetColor(Color.LightBlue);
+                }
+
+                //Autofit columns
+                workSheet.Cells.AutoFitColumns();
+
+                //Add a title and timestamp at the top of the report
+                workSheet.Cells[1, 1].Value = title;
+                using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                {
+                    Rng.Merge = true; //Merge columns start and end range
+                    Rng.Style.Font.Bold = true; //Font should be bold
+                    Rng.Style.Font.Size = 18;
+                    Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+
+                DateTime utcDate = DateTime.UtcNow;
+                TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                using (ExcelRange Rng = workSheet.Cells[2, 6])
+                {
+                    Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                        localDate.ToShortDateString();
+                    Rng.Style.Font.Bold = true; //Font should be bold
+                    Rng.Style.Font.Size = 12;
+                    Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                }
+                
+                var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                if (syncIOFeature != null)
+                {
+                    syncIOFeature.AllowSynchronousIO = true;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.Headers["content-disposition"] = $"attachment;  filename={title}.xlsx";
+                        excel.SaveAs(memoryStream);
+                        memoryStream.WriteTo(Response.Body);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        Byte[] theData = excel.GetAsByteArray();
+                        string filename = $"{title}.xlsx";
+                        string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        return File(theData, mimeType, filename);
+                    }
+                    catch (Exception)
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+
+            return NotFound();
+        }
+
+        public async void DownloadHouseholdData()
+        {
+            var households = await _context.Households
+                                   .Include(h => h.City)
+                                   .Include(h => h.Province)
+                                   .Include(h => h.HouseholdStatus)
+                                   .Include(h => h.Members)
+                                   .Select( h => new HouseholdData
+                                   {
+                                       ID = h.ID,
+                                       Name = h.Name,
+                                       NumberOfMembers = h.Members.Count,
+                                       Address = h.FullAddress,
+                                       LICOVerified = h.LICOVerified,
+                                       HasCustomLICO = h.HasCustomLICO,
+                                       LastVerification = h.LastVerification,
+                                       HouseholdStatus = h.HouseholdStatus.Name,
+                                       CreatedAt = h.CreatedOn,
+                                       CreatedBy = h.CreatedBy,
+                                       LastUpdatedAt = h.UpdatedOn,
+                                       LastUpdatedBy = h.UpdatedBy,
+                                   }).ToListAsync();           
+
+            DownloadData<HouseholdData>(households , "Households",  8 );
+        }
+
+        public async void DownloadMemberData()
+        {
+            var members = await _context.Members
+                                .Include(m => m.Household).ThenInclude(h => h.City)
+                                .Include(m => m.Household).ThenInclude(h => h.Province)
+                                .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
+                                .Include(m => m.Gender)
+                                .Include(m => m.DietaryRestrictionMembers).ThenInclude(dr => dr.DietaryRestriction)
+                                .Select(m => new MemberData
+                                {
+                                    ID = m.ID,
+                                    Name = m.FullName,
+                                    Age = m.Age,
+                                    PhoneNumber = m.PhoneFormatted,
+                                    Email = m.Email,
+                                    Notes = m.Notes,
+                                    ConsentGiven = m.ConsentGiven,
+                                    DependantMember = m.DependantMember,
+                                    YearlyIncome = m.YearlyIncomeFormated,
+                                    Gender = m.Gender.Name,
+                                    Address = m.Household.FullAddress,
+                                    CreatedAt = m.CreatedOn,
+                                    CreatedBy = m.CreatedBy,
+                                    UpdatedAt = m.UpdatedOn,
+                                    UpdatedBy = m.UpdatedBy,
+                                }).ToListAsync();
+
+            DownloadData<MemberData>(members, "Members", 15);
+
         }
     }
 }
