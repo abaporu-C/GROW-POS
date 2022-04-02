@@ -14,6 +14,8 @@
                     <option value="">Select the Income Situation</option>
                 </select>
                 <span asp-validation-for="IncomeSituationID" class="text-danger"></span>
+                <small>Couldn't find Income Situation? Close this menu and click on ⚙️, <strong> next to "Add Yearly Income" button </strong> '</small>
+                <br />
             </div>
             <div class="form-group">
                 <label asp-for="Income" class="control-label"></label>
@@ -21,7 +23,7 @@
                 <span asp-validation-for="Income" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" id="submitMemberIncomeSituationsForm" class="btn btn-outline-secondary" />
+                <input type="submit" value="Add" id="submitMemberIncomeSituationsForm" class="btn btn-block btn-outline-success" />
             </div>
         </div>
     </div>
