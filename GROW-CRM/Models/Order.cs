@@ -12,6 +12,22 @@ namespace GROW_CRM.Models
             OrderItems = new HashSet<OrderItem>();
         }
 
+        public string TotalFormatted
+        {
+            get
+            {
+                return Total.ToString("c");
+            }
+        }
+
+        public string DateFormatted
+        {
+            get
+            {
+                return $"{Date.Month}/{Date.Day}/{Date.Year}";
+            }
+        }
+
         //Fields 
         public int ID { get; set; }
 
