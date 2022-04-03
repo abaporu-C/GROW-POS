@@ -139,9 +139,25 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var incomeSituation = await _context.IncomeSituations.FindAsync(id);
-            _context.IncomeSituations.Remove(incomeSituation);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _context.IncomeSituations.Remove(incomeSituation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Income Sources. Remember, you cannot delete a Income Sources that has Members associated with it.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(incomeSituation);
         }
 
         private bool IncomeSituationExists(int id)

@@ -139,9 +139,24 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var province = await _context.Provinces.FindAsync(id);
-            _context.Provinces.Remove(province);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            try
+            {
+                _context.Provinces.Remove(province);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Province. Remember, you cannot delete a Province that has Households associated with it.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(province);
         }
 
         private string ControllerName()
