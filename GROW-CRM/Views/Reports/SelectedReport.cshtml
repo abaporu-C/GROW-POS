@@ -41,6 +41,10 @@
     {
         <partial name="~/Views/Reports/Partial/_Additions.cshtml" />
     }
+    else if ((string)ViewData["ReportType"] == "RawData")
+    {
+        <partial name="~/Views/Reports/Partial/_RawData.cshtml" />
+    }
     else if ((string)ViewData["ReportType"] == "Demographics Report")
     {
         <label>
