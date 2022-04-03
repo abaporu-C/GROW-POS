@@ -1,4 +1,5 @@
-﻿using GROW_CRM.Data;
+﻿using DinkToPdf;
+using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -242,8 +243,6 @@ namespace GROW_CRM.Controllers
             ViewDataReturnURL();
 
             var orderToUpdate = await _context.Orders
-                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
-                                .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
                                 .Include(o => o.PaymentType)
                                 .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
                                 .FirstOrDefaultAsync(o => o.ID == order.ID);
@@ -279,7 +278,7 @@ namespace GROW_CRM.Controllers
                     else
                     {
                         _context.Update(orderToUpdate);
-                        await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();                        
                         return RedirectToAction("Details", new { order.ID });
                     }
                 }
@@ -499,6 +498,105 @@ namespace GROW_CRM.Controllers
             
             if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400};
             return new JsonResult(members);
+        }
+
+        public IActionResult GetOrderPdf(int id)
+        {
+            var converter = new SynchronizedConverter(new PdfTools());
+
+            var order = _context.Orders
+                        .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
+                        .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
+                        .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+                        .Where(o => o.ID == id).FirstOrDefault();
+
+            string html = @$"
+<h1>Order #:{id}</h1>
+<hr />
+
+    <dl>
+        <dt>
+            <b>Member:</b> {order.Member.FullName}
+        </dt>
+        <dt>
+            <b>Address:</b> {order.Member.Household.FullAddress}
+        </dt>
+        <dt>
+            <b>Date:</b> {order.DateFormatted}
+        </dt>
+    </dl>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Item
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>            
+        </thead>
+        <tbody>
+            ";
+
+            foreach(OrderItem oi in order.OrderItems)
+            {
+                html += $@"<tr><td>
+                    {oi.Item.Name}
+                </td>
+                <td>
+                    {oi.Quantity}                    
+                </td>
+                <td>
+                    {oi.Item.Price.ToString("C")}
+                </td></tr>";
+            }
+
+            html += @$"
+        </tbody>
+<tfoot>
+    <tr>
+    <td></td>
+    <td>Total</td>
+    <td>{order.TotalFormatted}</td>
+</tr>
+</tfoot>
+    </table>";
+
+    html += @"<style>th, td {
+  border-bottom: 1px solid #ddd;
+}
+table {
+    text-align: center;
+    width: 80%;
+}
+</style>"; 
+
+
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Landscape,
+                PaperSize = PaperKind.A4Plus,
+            },
+                Objects = {
+                    new ObjectSettings() {
+                    PagesCount = true,
+                    HtmlContent = html,
+                    WebSettings = { DefaultEncoding = "utf-8" },
+                    HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+                    }
+                }
+            };
+
+            var result = converter.Convert(doc);
+
+            return File(result,
+            "application/octet-stream", $"Order{id}Receit.pdf");
         }
     }
 }
