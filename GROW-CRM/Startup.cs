@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using GROW_CRM.Data;
 using GROW_CRM.Utilities;
 using GROW_CRM.ViewModels;
@@ -33,6 +35,9 @@ namespace GROW_CRM
 
             services.AddDbContext<GROWContext>(options => options.UseSqlite(
                 Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton(typeof(IConverter),
+            new SynchronizedConverter(new PdfTools()));
 
             services.AddControllersWithViews();            
 

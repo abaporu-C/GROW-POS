@@ -4,6 +4,12 @@
 
 <h2>Editing Order #@Model.ID</h2>
 
+<div class="row mb-3">
+    <div class="col-md-12 d-flex">
+        <a class="btn btn-outline-info" asp-action="GetOrderPdf" asp-route-id="@Model.ID">Receit</a>
+    </div>
+</div>
+
 <hr />
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <div class="row">
