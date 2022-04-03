@@ -139,9 +139,24 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var healthIssueType = await _context.HealthIssueTypes.FindAsync(id);
-            _context.HealthIssueTypes.Remove(healthIssueType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            try
+            {
+                _context.HealthIssueTypes.Remove(healthIssueType);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Health Issue Type. Remember, you cannot delete a Health Issue Type that has Health Issuess associated with it.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }            
+            return View(healthIssueType);
         }
 
         private string ControllerName()

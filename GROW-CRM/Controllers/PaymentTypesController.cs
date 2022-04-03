@@ -139,9 +139,24 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var paymentType = await _context.PaymentTypes.FindAsync(id);
-            _context.PaymentTypes.Remove(paymentType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            try
+            {                
+                _context.PaymentTypes.Remove(paymentType);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Payment Types. Remember, you cannot delete a Payment Types that has Orders associated with it.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(paymentType);
         }
 
         private string ControllerName()

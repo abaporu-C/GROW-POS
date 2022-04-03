@@ -148,11 +148,28 @@ namespace GROW_CRM.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {
+       {
             var dietaryRestriction = await _context.DietaryRestrictions.FindAsync(id);
-            _context.DietaryRestrictions.Remove(dietaryRestriction);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            try
+            {
+                _context.DietaryRestrictions.Remove(dietaryRestriction);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Dietary Restriction. Remember, you cannot delete a Dietary Restriction that has Members associated with.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
+            return View(dietaryRestriction);
         }
 
         private string ControllerName()

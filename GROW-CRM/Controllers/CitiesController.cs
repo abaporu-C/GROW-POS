@@ -109,7 +109,7 @@ namespace GROW_CRM.Controllers
                     {
                         throw;
                     }
-                }
+                }                
                 return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
             }
             return View(city);
@@ -139,9 +139,24 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var city = await _context.Cities.FindAsync(id);
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            try
+            {                
+                _context.Cities.Remove(city);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete City. Remember, you cannot delete a City that any Household resides in.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(city);
         }
 
         private string ControllerName()
