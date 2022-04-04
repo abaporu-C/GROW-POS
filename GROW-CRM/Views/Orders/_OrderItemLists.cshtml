@@ -1,4 +1,22 @@
-﻿<table>
+﻿<div class="table-responsive">
+                            <table class="table table-striped rounded-lg">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>
+                                            Item
+                                        </th>
+                                        <th>
+                                            Quantity
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                        <th>
+
+                                        </th>
+                                    </tr>                                    
+                                </thead>
+                                <tbody>
                             @{
                                 //double subtotal = 0;
                                 //double taxes = 0;
@@ -7,15 +25,17 @@
                                 foreach (var item in ViewBag.OrderItems)
                                 {
                                     total += (item.Item.Price * item.Quantity);
-
-                                    @:<tr><td>
-
-                                    @item.Summary                                    
-                                    @:</td><td>
+                                        @:<tr><td>
+                                            @item.Item.Name
+                                        @:</td><td>
+                                            @item.Quantity
+                                        @:</td><td>
+                                            @item.Item.PriceFormatted
+                                        @:</td><td>
                                         @:&nbsp; &nbsp;
-                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
-                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Item.Code" type="button">&#x274C;</button>
-		                            @:</td></tr>
+                                            <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
+                                            <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Item.Code" type="button">&#x274C;</button>
+                                        @:</td></tr>
                                 }
                                 @*<tr>
                                     <td>SubTotal</td>
@@ -33,10 +53,13 @@
 
                                 total = subtotal + taxes;*@
                                 <tr>
-                                    <td>Total</td>
-                                    <td>@total</td>
-                                    <td><input type="hidden" name="Total" value="@total"/></td>
-                                </tr>
+                                      <td></td>
+                                        <td></td>
+                                        <td><b>Total: </b>$@total</td>
+                                        <td><input type="hidden" name="Total" value="@total" /></td>
+                                      </tr>
 
                             }
-                    </table>
+</tbody>
+</table>
+</div>
