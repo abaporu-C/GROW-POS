@@ -51,11 +51,22 @@
         </form>
     </div>
 </div>
-
+<div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("Code").value = "999";
+        document.getElementById("Name").value = "Cassava";
+        document.getElementById("Description").value = "South Amercian Root";
+        document.getElementById("Price").value = "1.50";
+        document.getElementById("CategoryID").value = "5";
+    })
+    </script>
 }

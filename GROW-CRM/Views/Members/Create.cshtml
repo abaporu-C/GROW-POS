@@ -102,5 +102,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-   
+   <script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("FirstName").value = "Ricardo";
+        document.getElementById("MiddleName").value = "R";
+        document.getElementById("LastName").value = "Fernandes";
+        document.getElementById("DOB").value = "03/03/1995";
+        document.getElementById("GenderID").value = "1";
+        document.getElementById("Name").value = "House Fernandes";
+    })
+</script>
 }

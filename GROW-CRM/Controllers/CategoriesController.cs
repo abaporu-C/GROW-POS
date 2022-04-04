@@ -21,7 +21,12 @@ namespace GROW_CRM.Controllers
             _context = context;
         }
 
-        // GET: Categories
+
+        public IActionResult Index()
+        {
+            return RedirectToAction("Index", "Lookups", new { Tab = ControllerName() + "Tab" });
+        }
+        /*// GET: Categories
         public async Task<IActionResult> Index(string SearchString, int? page, int? pageSizeID, string sortDirection = "desc")
         {
             bool isFiltering = false;
@@ -62,7 +67,7 @@ namespace GROW_CRM.Controllers
             var pagedData = await PaginatedList<Category>.CreateAsync(categories.AsNoTracking(), page ?? 1, pageSize);
 
             return View(pagedData);
-        }
+        }*/
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
