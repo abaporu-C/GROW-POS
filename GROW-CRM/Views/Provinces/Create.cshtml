@@ -28,8 +28,19 @@
         </form>
     </div>
 </div>
-
+<div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
 <div>
     <a asp-action="Index" asp-controller="Lookups" asp-route-Tab="ProvincesTab">Back to Lookup List</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("Code").value = "BC";
+        document.getElementById("Name").value = "British Columbia";
+    })
+    </script>
+}

@@ -23,7 +23,9 @@
             </form>
         </div>
     </div>
-
+    <div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
@@ -31,4 +33,9 @@
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
+        <script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("Name").value = "Candy";
+    })
+    </script>
     }

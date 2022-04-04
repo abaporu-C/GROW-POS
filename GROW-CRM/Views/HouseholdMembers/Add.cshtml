@@ -73,14 +73,20 @@
                 </div>
                 <br />
                 <div class="form-group">
-                    <label asp-for="DependantMember"></label>
-                    <input asp-for="DependantMember" /><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Dependant Member" data-content="Member is dependent financialy."><b>?</b></a>
+                    <label asp-for="ConsentGiven"></label><span style="color:red">*</span>
+                    <input asp-for="ConsentGiven" />
+            <a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Consent" data-content="Member's consent on giving information.'"><b>?</b></a><br />
+
                 </div>
             </fieldset>
         </div>
         <div class="col-md-6">
             <fieldset class="form-group border p-4 rounded">
                 <legend class="w-auto">Income & Documents</legend>
+                <div class="form-group">
+                    <label asp-for="DependantMember"></label>
+                    <input asp-for="DependantMember" /><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Dependant Member" data-content="Member is dependent financialy."><b>?</b></a>
+                </div>
                 <div class="form-group" id="ListMemberIncomeSituations">
                     @*<label class="control-label"><strong>Add Yearly Income</strong></label>*@
                     <div class="btn-group" role="group" aria-label="Add new income situation button group">
@@ -200,11 +206,7 @@
                     </div>
                 </div>
             </fieldset>
-            <br>
-            <label asp-for="ConsentGiven"></label><span style="color:red">*</span>
-            <input asp-for="ConsentGiven" />
-            <a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Consent" data-content="Member's consent on giving information.'"><b>?</b></a><br />
-
+            <br>            
         </div>
     </div>
     <div class="row">
@@ -216,6 +218,9 @@
         </div>
     </div>
 </form>
+<div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
 <div>
     <a asp-area="" asp-controller="HouseholdMembers" asp-route-MemberID="@Model.ID" asp-action="CancelMember" asp-route-direction="households" asp-route-HouseholdID="@null">Back to Households List</a> | <a asp-controller="HouseholdMembers" asp-action="CancelMember" asp-route-MemberID="@Model.ID" asp-route-direction="householdDetails" asp-route-HouseholdID="@Model.HouseholdID">Back To Household Details</a>
 </div>
@@ -300,4 +305,16 @@
             trigger: 'focus'
         })
     </script>
+    <script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("FirstName").value = "Ricardo";
+        document.getElementById("MiddleName").value = "R";
+        document.getElementById("LastName").value = "Fernandes";
+        document.getElementById("DOB").value = "1995-03-03";
+        document.getElementById("GenderID").value = "1";
+        document.getElementById("PhoneNumber").value = "9056954837";
+        document.getElementById("Email").value = "mail@mail.com";
+        document.getElementById("Notes").value = "Member still needs to send us documentation over address.";
+    })
+</script>
 }

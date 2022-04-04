@@ -4,6 +4,10 @@
     ViewData["Title"] = "Register";
 }
 
+@section Heads{
+    <script src="https://kit.fontawesome.com/60de6f2e29.js" crossorigin="anonymous"></script>
+}
+
 <h1>Register Employee</h1>
 
 <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -39,12 +43,12 @@
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label><span style="color:red">*</span>
+                    <label asp-for="Input.Password"></label><span style="color:red">*</span><span><i id="password-toggle" class="fa-solid fa-eye"></i></span>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label><span style="color:red">*</span>
+                    <label asp-for="Input.ConfirmPassword"></label><span style="color:red">*</span><span> <i id="confirm-password-toggle" class="fa-solid fa-eye"></i></span>
                     <input asp-for="Input.ConfirmPassword" class="form-control" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
@@ -53,9 +57,58 @@
         <button type="submit" class="btn btn-outline-primary">Register</button>
     </div>
 </form>
-
+<div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+    $(document).on('click', '#password-toggle', function () {
+        passwordToggle();
+    })
+
+    function passwordToggle() {
+        var element = document.getElementById("Input_Password")
+        var toggle = document.getElementById("password-toggle");
+        var type = element.getAttribute("type");
+        if (type === "password") {
+            element.setAttribute("type", "text");
+            toggle.className = 'fa-solid fa-eye-slash';
+        }
+        else {
+            element.setAttribute("type", "password");
+            toggle.className = 'fa-solid fa-eye';
+        }        
+    }
+
+    $(document).on('click', '#confirm-password-toggle', function () {
+        confirmPasswordToggle();
+    })
+
+    function confirmPasswordToggle() {
+        var element = document.getElementById("Input_ConfirmPassword")
+        var toggle = document.getElementById("confirm-password-toggle");
+        var type = element.getAttribute("type");
+        if (type === "password") {
+            element.setAttribute("type", "text");
+            toggle.className = 'fa-solid fa-eye-slash';
+        }
+        else {
+            element.setAttribute("type", "password");
+            toggle.className = 'fa-solid fa-eye';
+        }
+    }
+</script>
+<script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("Input_FirstName").value = "Tom";
+        document.getElementById("Input_LastName").value = "Cruise";
+        document.getElementById("Input_Phone").value = "9056076879";
+        document.getElementById("Input_Email").value = "mail@gmail.com";
+        document.getElementById("Input_Password").value = "password";
+        document.getElementById("Input_ConfirmPassword").value = "password";
+    })
+</script>
 }

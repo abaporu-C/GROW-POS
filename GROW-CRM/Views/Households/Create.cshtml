@@ -101,6 +101,9 @@
 
             </div>
         </form>
+        <div class="row">
+    <button id="auto-fill" class="btn btn-outline-info">Auto Fill</button>
+</div>
         <div>
             <a asp-action="Index" class="mt-3">Back to List</a>
         </div>
@@ -187,6 +190,16 @@ $('.popover-dismiss').popover({
             return;
         }
         ci.css('display', 'none');
+    })
+</script>
+<script>
+    $(document).on('click', '#auto-fill', function(event){
+        document.getElementById("CityID").value = "5";
+        document.getElementById("AptNumber").value = "102";
+        document.getElementById("StreetNumber").value = "82";
+        document.getElementById("StreetName").value = "Church Street";
+        document.getElementById("postal-code").value = "L2R 3C8";
+        document.getElementById("Name").value = "House Fernandes";
     })
 </script>
 }
