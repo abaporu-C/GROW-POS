@@ -28,6 +28,21 @@ namespace GROW_CRM.Models
             }
         }
 
+        public string OrderItemsString
+        {
+            get
+            {
+                string returnString = "";
+
+                foreach(OrderItem item in OrderItems)
+                {
+                    returnString += $"{item.Item.Name},";
+                }
+
+                return returnString;
+            }
+        }
+
         //Fields 
         public int ID { get; set; }
 

@@ -20,6 +20,8 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
 
         public string HouseholdStatus { get; set; }
 
+        public string Members { get; set; }
+
         public DateTime? CreatedAt { get; set; }
 
         public string CreatedBy { get; set; }
