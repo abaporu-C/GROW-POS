@@ -152,7 +152,8 @@ namespace GROW_CRM.Controllers
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
             ViewData["Action"] = "/HouseholdMembers";
-            ViewData["Modals"] = new List<string> { "_PageSizeModal", "_LICOInfoModal" };
+            ViewData["Modals"] = new List<string> { "_PageSizeModal", "_LICOInfoModal", "_VerificationModal" };
+            ViewData["IdForModal"] = HouseholdID;
 
             //Now get the MASTER record, the patient, so it can be displayed at the top of the screen
             Household household = _context.Households
@@ -757,6 +758,18 @@ namespace GROW_CRM.Controllers
             
 
             return Json(household);
+        }
+
+        public async Task<IActionResult> VerifyHousehold(int id)
+        {
+            var household = await _context.Households.Where(h => h.ID == id).FirstOrDefaultAsync();
+
+            household.LastVerification = DateTime.Now;
+
+            _context.Update(household);
+            await _context.SaveChangesAsync();
+
+            return Redirect($"/HouseholdMembers?HouseholdID={id}");
         }
     }
 }
