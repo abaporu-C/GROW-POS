@@ -76,11 +76,14 @@
             <div class="col-md-6 addr-mode-hide" id="otherInfo">
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Other Info</legend>
+                @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                {
                     <button id="custom-id-btn" class="btn btn-outline-primary">Custom ID?</button>
                     <div style="display: none" id="custom-id" class="form-group">
                         <label id="NewIDLabel" class="control-label">Member ID:</label><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Custom ID" data-content="Customized Member ID."><b>?</b></a>
                         @Html.TextBox("NewID", null, new { @class = "form-control" })
-                    </div>
+                    </div>   
+                }                
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
                         <input asp-for="Name" class="form-control" />
@@ -181,7 +184,8 @@ $('.popover-dismiss').popover({
   trigger: 'focus'
 })
 </script>
-<script>
+@if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
+    <script>
     $(document).on('click', '#custom-id-btn', function(event){
         event.preventDefault();
         var ci = $('#custom-id');
@@ -192,6 +196,7 @@ $('.popover-dismiss').popover({
         ci.css('display', 'none');
     })
 </script>
+}
 <script>
     $(document).on('click', '#auto-fill', function(event){
         document.getElementById("CityID").value = "5";
