@@ -1,4 +1,22 @@
-﻿<table>
+﻿<div class="table-responsive">
+                            <table class="table table-striped rounded-lg">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>
+                                            Item
+                                        </th>
+                                        <th>
+                                            Quantity
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                        <th>
+
+                                        </th>
+                                    </tr>                                    
+                                </thead>
+                                <tbody>
     @{
         foreach (var item in ViewBag.OrderItems)
         {
@@ -11,4 +29,6 @@
                 @:</td></tr>
             }
     }
+    </tbody>
 </table>
+</div>

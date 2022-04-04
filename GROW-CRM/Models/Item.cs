@@ -27,6 +27,14 @@ namespace GROW_CRM.Models
             }
         }
 
+        public string PriceFormatted
+        {
+            get
+            {
+                return Price.ToString("C");
+            }
+        }
+
         //Fields 
         public int ID { get; set; }
 

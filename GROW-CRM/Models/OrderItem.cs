@@ -9,7 +9,7 @@ namespace GROW_CRM.Models
                 string summary = $"{Quantity}X{Item?.Name} - ${Item?.Price} each";
                 return summary;
             } 
-        }
+        }        
 
         //Fields 
         public int ID { get; set; }
