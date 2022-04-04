@@ -14,6 +14,21 @@ namespace GROW_CRM.Models
             HouseholdNotifications = new HashSet<HouseholdNotification>();            
         }
 
+        public string MembersString
+        {
+            get
+            {
+                string returnString = "";
+
+                foreach (Member item in Members)
+                {
+                    returnString += $"{item.FullName},";
+                }
+
+                return returnString;
+            }
+        }
+
         //Fields
         public int ID { get; set; }
 

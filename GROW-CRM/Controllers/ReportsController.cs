@@ -1473,6 +1473,7 @@ namespace GROW_CRM.Controllers
                                        HasCustomLICO = h.HasCustomLICO,
                                        LastVerification = h.LastVerification,
                                        HouseholdStatus = h.HouseholdStatus.Name,
+                                       Members = h.MembersString,
                                        CreatedAt = h.CreatedOn,
                                        CreatedBy = h.CreatedBy,
                                        LastUpdatedAt = h.UpdatedOn,
@@ -1503,6 +1504,8 @@ namespace GROW_CRM.Controllers
                                     YearlyIncome = m.YearlyIncomeFormated,
                                     Gender = m.Gender.Name,
                                     Address = m.Household.FullAddress,
+                                    DietaryRestrictions = m.DietaryRestrictionsString,
+                                    IncomeSources = m.IncomeSourceString,
                                     CreatedAt = m.CreatedOn,
                                     CreatedBy = m.CreatedBy,
                                     UpdatedAt = m.UpdatedOn,
@@ -1511,6 +1514,29 @@ namespace GROW_CRM.Controllers
 
             DownloadData<MemberData>(members, "Members", 15);
 
+        }
+
+        public async void DownloadOrderData()
+        {
+            var orders = await _context.Orders
+                               .Include(o => o.Member)
+                               .Include(o => o.PaymentType)
+                               .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+                               .Select(o => new OrderData
+                               {
+                                   ID = o.ID,
+                                   Date = o.Date,
+                                   Total = o.Total,
+                                   Member = o.Member.FullName,
+                                   PaymentType = o.PaymentType.Type,
+                                   OrderItems = o.OrderItemsString,
+                                   CreatedAt = o.CreatedOn,
+                                   CreatedBy= o.CreatedBy,
+                                   UpdatedAt= o.UpdatedOn,
+                                   UpdatedBy= o.UpdatedBy
+                               }).ToListAsync();
+
+            DownloadData<OrderData>(orders, "Orders", 10);
         }
     }
 }

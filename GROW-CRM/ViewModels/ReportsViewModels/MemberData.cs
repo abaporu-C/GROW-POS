@@ -22,6 +22,9 @@ namespace GROW_CRM.ViewModels.ReportsViewModels
 
         public string YearlyIncome { get; set; }
 
+        public string IncomeSources { get; set; }
+        
+        public string DietaryRestrictions { get; set; }
 
         //Foreign Keys        
 

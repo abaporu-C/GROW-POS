@@ -100,6 +100,36 @@ namespace GROW_CRM.Models
             }
         }
 
+        public string DietaryRestrictionsString
+        {
+            get
+            {
+                string returnString = "";
+
+                foreach (DietaryRestrictionMember item in DietaryRestrictionMembers)
+                {
+                    returnString += $"{item.DietaryRestriction.Restriction},";
+                }
+
+                return returnString;
+            }
+        }
+
+        public string IncomeSourceString
+        {
+            get
+            {
+                string returnString = "";
+
+                foreach (MemberIncomeSituation item in MemberIncomeSituations)
+                {
+                    returnString += $"{item.IncomeSituation.Situation},";
+                }
+
+                return returnString;
+            }
+        }
+
 
         [Display(Name = "First Name")]
         [Required(ErrorMessage = "You cannot leave the first name blank.")]
