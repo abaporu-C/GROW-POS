@@ -69,7 +69,7 @@ prior to deleting the whole membership.
 
 This ensures that you don't accidentaly delete members' informations.
 
-1-7) How LICO verification works?
+1-7) How does LICO verification work?
 
 For your convenience, the LICO verification runs automatically on the background so you don't need to think about it while adding a new member.
 It will update the household information every time you add or edit a new member.
@@ -197,7 +197,7 @@ information, click the green 'Submit' button and the table below will display on
 
 4-1) How do I add new items?
 
-To add a new item to the GROW system, find the Items button on the sidebar, represented by a book icon. This will bring you to the Items Index where you can find every 
+First of all, this operation is restricted to administrators only. To add a new item to the GROW system, find the Items button on the sidebar, represented by a book icon. This will bring you to the Items Index where you can find every 
 item currently in the GROW system and perform a number of different operations on them. From here, click the green 'Create New' button near the top of the page to 
 navigate to the Item Creation page.
 
@@ -215,9 +215,47 @@ the grey pencil icon to navigate to the Edit Item page. Here you can change any 
 To add or remove a discount from any item, navigate to the Items Index and click the grey pencil icon next to the item you want to change. On this Edit Item page, you 
 can change the 'Discount (%)' field to represent the discount (or lack thereof) you wish to apply to that item.
 
-4-4) How can I quikcly find a specific item?
+4-4) How can I quickly find a specific item?
 
 Like most other indexes, it is possible to filter by a variety of fields to find the item you need. First, navigate to the Items Index via the Items button on the 
 sidebar. From here, click the grey 'Filter/Search' button near the top and take note of the fields you can search by. Once you have entered the relevant information 
 you wish to search/filter by, click the green 'Filter' button and the table below will reflect your specifications.
+
+#######################################################################################################################################################################
+
+5) Miscellaneous Data & Lookup Values
+
+5-1) What is the Misc Data tab for on the side bar? 
+
+The Misc Tab is there so that administrators can add or remove "lookup values" within the app. Lookup values are essentially anything you might find in a dropdown list 
+that isn't prone to changing any time soon. The dietary restrictions and payment type selections are examples of this. Essentially, they exist to allow for flexibility 
+and growth of the application over time to suit the needs of the user.
+
+5-2) How can I change or add lookup values?
+
+-- Add
+All tabs in the Lookup Values page will have the same options asides from Notification Types which has an extra option for sending a notification. To add a value to 
+the lookups, select which one you would like to add to, Cities for example, and click the 'Create' button near the bottom left of the window. You will be prompted to 
+enter a city name. Click the green 'Create' button after filling in the Name field and that city will be added to the lookup values for City.
+
+-- Edit
+If you want to edit a value, click on the item you want to edit in the list and it should be highlighted. Now, click the 'Edit' button near the bottom left of the 
+screen. This will bring you to an Edit page where you can change the name of your selected lookup value.
+
+-- Delete
+If you want to delete a value altogether, click on the item you want to delete from the list and it should be highlighted. Now, click the 'Delete' button near the 
+bottom of the screen alongside the other action buttons. You will be asked if you're sure that you want to delete the selected item, which you can confirm by clicking 
+the red 'Delete' button or back out of by clicking 'Back to Lookup List'.
+
+#######################################################################################################################################################################
+
+6) Users & Roles
+
+6-1) Who can assign roles?
+
+For security reasons, only the Super Administrator is able to assign roles to volunteers of GROW. They will not, however, be able to change their own role. 
+
+6-2) Can there be multiple Super Administrators and Admins? 
+
+Yes, there can be as many of each role as the organization sees fit. 
 
