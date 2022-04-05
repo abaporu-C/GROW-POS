@@ -175,7 +175,8 @@ selection from the dropdown menu, click the green 'Create' button to finish ente
 
 3-2) I made a mistake in creating a new order. Can I go back and fix it? 
 
-Yes! To edit any order, navigate to the Orders Index from the Orders button on the sidebar. From here, click the grey pencil icon next to the order you want to edit and you'll be brought back to the same screen you used to add items and select payment type in the first place.
+Yes! To edit any order, navigate to the Orders Index from the Orders button on the sidebar. From here, click the grey pencil icon next to the order you want to edit 
+and you'll be brought back to the same screen you used to add items and select payment type in the first place.
 
 3-3) What if I want to delete an order?
 
@@ -183,3 +184,40 @@ You can delete orders by navigating to the Orders Index via the Orders button on
 circle icon next to it. You will then be brought to a summary page to review the order being deleted. You can now click the red 'Delete' button to continue with 
 deleting the order, the 'Back to Orders' button to return to the previous page, or the 'Back to Member' button to view the details of the member whose purchase you are 
 currently looking at.
+
+3-4) How can I quickly find a specific order in the system?
+
+To quickly find any order, all you need to do is navigate to the Orders page via the sidebar and then click the grey 'Filter/Search' button near the top of the page, 
+under 'Create New'. This will expand a menu which lets you search orders by Household Name or ID, Member, and Payment Type. Once you have entered the appropriate 
+information, click the green 'Submit' button and the table below will display only orders that meet these criteria.
+
+#######################################################################################################################################################################
+
+4) Items 
+
+4-1) How do I add new items?
+
+To add a new item to the GROW system, find the Items button on the sidebar, represented by a book icon. This will bring you to the Items Index where you can find every 
+item currently in the GROW system and perform a number of different operations on them. From here, click the green 'Create New' button near the top of the page to 
+navigate to the Item Creation page.
+
+Here, you will be prompted for an Item Code, Name, Description, Price, Discount Percentage, and Category. All of these fields are required except Discount and 
+Description, so fill these out appropriately to match the item you wish to add. Once you have filled out the form, click the green 'Create' button at the bottom to add 
+the item to the system and return to the Items Index.
+
+4-2) How do I edit an item that's already been created?
+
+Navigate to the Items Index via the Items button on the sidebar, and find the item you want to edit in the list. Once you have found the item you want to edit, click 
+the grey pencil icon to navigate to the Edit Item page. Here you can change any of the item's details including its Item Code.
+
+4-3) How can I apply a discount to an item? How do I remove a discount?
+
+To add or remove a discount from any item, navigate to the Items Index and click the grey pencil icon next to the item you want to change. On this Edit Item page, you 
+can change the 'Discount (%)' field to represent the discount (or lack thereof) you wish to apply to that item.
+
+4-4) How can I quikcly find a specific item?
+
+Like most other indexes, it is possible to filter by a variety of fields to find the item you need. First, navigate to the Items Index via the Items button on the 
+sidebar. From here, click the grey 'Filter/Search' button near the top and take note of the fields you can search by. Once you have entered the relevant information 
+you wish to search/filter by, click the green 'Filter' button and the table below will reflect your specifications.
+
