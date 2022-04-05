@@ -1,11 +1,14 @@
 Help Section for users
 
-
+-----------------
 TABLE OF CONTENTS
-
+-----------------
 1) Households - Line 11
 2) Members - Line 90
 3) Orders - Line 135
+4) Items - Line 197
+5) Misc Data & Lookup Values - Line 229
+6) Users & Roles - Line 252
 
 #######################################################################################################################################################################
 
@@ -195,7 +198,7 @@ information, click the green 'Submit' button and the table below will display on
 
 4) Items 
 
-4-1) How do I add new items?
+4-1) What if the item I need isn't in the system?
 
 First of all, this operation is restricted to administrators only. To add a new item to the GROW system, find the Items button on the sidebar, represented by a book icon. This will bring you to the Items Index where you can find every 
 item currently in the GROW system and perform a number of different operations on them. From here, click the green 'Create New' button near the top of the page to 
@@ -223,7 +226,7 @@ you wish to search/filter by, click the green 'Filter' button and the table belo
 
 #######################################################################################################################################################################
 
-5) Miscellaneous Data & Lookup Values
+5) Misc Data & Lookup Values
 
 5-1) What is the Misc Data tab for on the side bar? 
 
@@ -253,9 +256,24 @@ the red 'Delete' button or back out of by clicking 'Back to Lookup List'.
 
 6-1) Who can assign roles?
 
-For security reasons, only the Super Administrator is able to assign roles to volunteers of GROW. They will not, however, be able to change their own role. 
+For security reasons, only the Super Administrator is able to assign roles to volunteers of GROW. 
 
-6-2) Can there be multiple Super Administrators and Admins? 
+6-2) Can a Super Administrator change their own role?
+
+No. This would make it possible to have NO Super Administrators at a given time meaning that no roles could ever be assigned again.
+
+6-3) Can there be multiple Super Administrators and Admins? 
 
 Yes, there can be as many of each role as the organization sees fit. 
 
+6-4) How do I create a new user?
+
+While logged in as the Super Administrator, go down to the Employees tab on the sidebar. Click it and you will be brought to the Employees Index, listing all current 
+employees. Next, click 'Create New Employee' near the top of the page. Once on the Register Employee page, fill out all the necessary and required fields. New users 
+will automatically be assigned the lowest User role but can be assigned greater privileges after the fact.
+
+6-5) Can I disable a user login?
+
+Yes you can. As a Super Administrator, navigate to the Employees Index via the sidebar and click the 'Edit' button corresponding to the user you wish to disable. You 
+will be brought to an Edit page where you can edit their information. From here, un-check the 'Active' checkbox. Be warned, however, that unchecking this will force 
+that user to re-register their email with the GROW system after checking it again.
