@@ -86,6 +86,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: OrderItems/Edit/5
+        [Authorize(Roles = "SuperAdmin")]
         public PartialViewResult EditOrderItem(int? id)
         {
             //Get the Sponsorship to edit
@@ -111,6 +112,7 @@ namespace GROW_CRM.Controllers
         // POST: OrderItems/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)

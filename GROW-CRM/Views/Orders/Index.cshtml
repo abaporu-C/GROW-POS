@@ -195,10 +195,13 @@
                             @Html.DisplayFor(modelItem => item.PaymentType.Type)
                         </td>
                         <td>
-                            <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
-                                <i class='bx bxs-edit-alt' style="color:grey"></i>
-                            </a>
-
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                                <a asp-action="Edit" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-route-id="@item.ID">
+                                    <i class='bx bxs-edit-alt' style="color:grey"></i>
+                                </a>
+                            }
+                            
                             <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a>
                             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                             {

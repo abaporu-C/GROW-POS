@@ -23,47 +23,12 @@
             </fieldset>
         </div>        
             <div class="col-md-6">
-            <fieldset class="form-group border p-4 rounded">
-                <legend class="w-auto">Pay and Submit</legend>
-                <div class="form-group">
-                    <label asp-for="PaymentType" class="control-label"></label><span style="color:red">*</span>
-                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID"></select>
-                    <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-outline-primary" />
-                </div>
-            </fieldset>
-        </div>
-    </div>
-        
-
-    <div class="row">
-        <div class="col-md-12">
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Order Information</legend>
                     <div class="form-group" id="ListMemberIncomeSituations">
-                        <label class="control-label"><strong>Items:</strong> &nbsp; &nbsp;</label><span style="color:red">*</span><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">&#x271A;</button>
+                        <label class="control-label"><strong>Order Items:</strong> &nbsp; &nbsp;</label><span style="color:red">*</span><button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Add Order Items" type="button">Add Item</button>
                         <div class="col-md-offset-12" id="OrderItemList">
-                            <div class="table-responsive">
-                            <table class="table table-striped rounded-lg">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>
-                                            Item
-                                        </th>
-                                        <th>
-                                            Quantity
-                                        </th>
-                                        <th>
-                                            Price
-                                        </th>
-                                        <th>
-
-                                        </th>
-                                    </tr>                                    
-                                </thead>
-                                <tbody>
+                            <table>
                                 @{
                                     //double subtotal = 0;
                                     //double taxes = 0;
@@ -73,11 +38,7 @@
                                     {
                                         total += (item.Item.Price * item.Quantity);
                                         @:<tr><td>
-                                            @item.Item.Name
-                                        @:</td><td>
-                                            @item.Quantity
-                                        @:</td><td>
-                                            @item.Item.PriceFormatted
+                                            @item.Summary
                                         @:</td><td>
                                         @:&nbsp; &nbsp;
                                             <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
@@ -97,19 +58,31 @@
                                       </tr>
                                       total = subtotal + taxes;*@
                                       <tr>
-                                      <td></td>
-                                        <td></td>
-                                        <td><b>Total: </b>$@total</td>
+                                        <td>Total:</td>
+                                        <td>@total</td>
                                         <td><input type="hidden" name="Total" value="@total" /></td>
                                       </tr>
                                  }
-                                 </tbody>
                             </table>
-                            </div>
                         </div>
                     </div>
                 </fieldset>
             </div>
+        </div>
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Pay and Submit</legend>
+                <div class="form-group">
+                    <label asp-for="PaymentType" class="control-label"></label><span style="color:red">*</span>
+                    <select asp-for="PaymentTypeID" class="form-control" asp-items="ViewBag.PaymentTypeID"></select>
+                    <span asp-validation-for="PaymentTypeID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Checkout" class="btn btn-primary" />
+                </div>
+            </fieldset>
+        </div>
     </div>
 </form>
 
