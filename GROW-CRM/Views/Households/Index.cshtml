@@ -168,10 +168,10 @@
                         <input type="submit" name="actionButton" value="ID" class="btn btn-link" />
                     </th>
                     <th>
-                        <input type="submit" disabled="disabled" value="Street #" class="btn btn-link" />
+                        <input type="submit" disabled="disabled" value="Name" class="btn btn-link" />
                     </th>
                     <th>
-                        <input type="submit" name="actionButton" value="Street Name" class="btn btn-link" />
+                        <input type="submit" name="actionButton" value="Street" class="btn btn-link" />
                     </th>
                     <th>
                         <input type="submit" disabled="disabled" value="Apartment" class="btn btn-link" />
@@ -208,9 +208,6 @@
                             <td style="max-width: 115px">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.StreetNumber)
-                            </td>*@
                             <td>
                                 @Html.DisplayFor(modelItem => item.StreetNumber) @Html.DisplayFor(modelItem => item.StreetName)
                             </td>

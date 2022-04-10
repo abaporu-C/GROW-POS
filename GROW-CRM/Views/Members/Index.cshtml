@@ -19,13 +19,16 @@
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
-        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            <text class="d-none d-lg-inline">Filter</text><text class="d-inline d-lg-none">Filter/Sort</text>
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+            </svg> Filter/Search
         </button>
-        <br/>
+      
+        <br />
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
-            <div class="d-block d-lg-none">
+                <div class="d-block d-lg-none">
                     <div class="form-group">
                         <label class="control-label">Sort By:</label>
                         <div class="input-group">
@@ -40,47 +43,47 @@
                         </div>
                     </div>
                 </div>
-            <div class="card card-body bg-light">
-                <div class="row">
-                   @* <div class="form-group col-md-4">
-                        <label class="control-label">Filter by Household:</label>
-                        @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
-                    </div>*@
-                    <div class="col-md-3">
-                        <div class="form-group">
+                <div class="card card-body bg-light">
+                    <div class="row">
+                        @* <div class="form-group col-md-4">
+                            <label class="control-label">Filter by Household:</label>
+                            @Html.DropDownList("HouseholdID", null, "All Households", htmlAttributes: new { @class = "form-control" })
+                        </div>*@
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Filter by Gender:</label>
-                                @Html.DropDownList("GenderID", null, "All Genders", htmlAttributes: new { @class = "form-control" })
+                                <div class="form-group">
+                                    <label class="control-label">Filter by Gender:</label>
+                                    @Html.DropDownList("GenderID", null, "All Genders", htmlAttributes: new { @class = "form-control" })
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                </div>
-                <div class="row">
 
-                    <div class="form-group col-md-5">
-                        <label class="control-label">Search by Member Name:</label>
-                        @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-5">
-                        <label class="control-label">Search by Phone:</label>
-                        @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label class="control-label">Search by Household Address:</label>
-                        @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label class="control-label">Search by Household ID:</label>
-                        @Html.TextBox("HouseholdIDSearch", null, new { @class = "form-control" })
-                    </div>
+                    <div class="row">
 
-                    <div class="form-group col-md-4 align-self-end">
-                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Member Name:</label>
+                            @Html.TextBox("MemberSearch", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Phone:</label>
+                            @Html.TextBox("PhoneSearch", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Household Address:</label>
+                            @Html.TextBox("HouseholdSearch", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search by Household ID:</label>
+                            @Html.TextBox("HouseholdIDSearch", null, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group col-md-4 align-self-end">
+                            <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                            <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
