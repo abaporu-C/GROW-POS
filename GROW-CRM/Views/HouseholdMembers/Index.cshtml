@@ -53,17 +53,17 @@
                 <span id="addr">@Html.DisplayFor(model => household.FullAddress)</span><br />                
                 <label for="income">@Html.DisplayNameFor(model => household.YearlyIncomeFormated)</label>
                 <span id="income">@Html.DisplayFor(model => household.YearlyIncomeFormated)</span><br />
-                <label for="lico">LICO Verified:</label>                
+                @*<label for="lico">LICO Verified:</label> *@               
                         @{
                             if (!household.LICOVerified)
                             {
-                                    <div id="lico" class="btn btn-outline-danger">
+                                    <div id="lico" class="alert alert-danger " role="alert">
                                           <b>Not LICO Verified</b>
                                     </div>
                             }
                             else
                             {
-                                    <div id="lico" class="btn btn-outline-success">
+                                    <div id="lico" class="alert alert-success " role="alert">
                                           <b>Verified</b>
                                     </div>
                             }
@@ -76,7 +76,7 @@
                 <span id="join">@household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year</span><br />
                 <label for="status">Status</label>
                 <span id="status">@Html.DisplayFor(model => household.HouseholdStatus.Name)</span><br />
-                <label for="verification">Yearly Verification:</label>                
+               @* <label for="verification">Yearly Verification:</label>  *@              
                         @{
                             DateTime now = DateTime.Now;
                             int dateDiff = (now - @household.LastVerification).Days;
@@ -87,13 +87,13 @@
   </div>
                         }                                                        
                         else if (dateDiff >= 335){
-                                    <div id="verification" class="btn btn-outline-warning">
+                                    <div id="verification" class="alert alert-warning" role="alert">
                                           <b>@household.VerificationStatus</b>
                                     </div>
                         } 
                         else
                             {
-                                    <div id="verification" class="btn btn-outline-success">
+                                    <div id="verification" class="alert alert-info" role="alert">
                                           <b>@household.VerificationStatus</b>
                                     </div>
                             }
@@ -142,7 +142,7 @@
         <dt>
         </dt>
         <dd>
-            <div>
+            <div class="col-12">
                 <div class="table-responsive">
                 <table class="table table-striped rounded-lg">
                     <colgroup>
