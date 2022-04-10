@@ -326,8 +326,13 @@ namespace GROW_CRM.Controllers
                         int lastID = _context.Households.ToList().Last().ID;
                         household.Name = $"House #{lastID + 1}";
                     }
+                    //if house has custom name, prepend "House" 
+                    if (!String.IsNullOrEmpty(household.Name))
+                    {
+                        household.Name = $"House {household.Name}";
+                    }
 
-                    _context.Add(household);
+                        _context.Add(household);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Add", "HouseholdMembers", new { HouseholdID = household.ID, HouseholdName = household.Name });
                 }

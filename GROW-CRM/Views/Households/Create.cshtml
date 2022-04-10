@@ -81,17 +81,28 @@
                         <label id="NewIDLabel" class="control-label">Member ID:</label><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Custom ID" data-content="Customized Member ID."><b>?</b></a>
                         @Html.TextBox("NewID", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="HouseholdStatusID">Household status</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Status" data-content="Household status with grow."><b>?</b></a>
-                        <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
-                        </select>
-                        <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
-                    </div>
+                    <div class="form-group mt-2">
+                        <label class="" for="houseNameInput">Household Name</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">House:</div>
+                            </div>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger" id="houseNameInput"></span>
+                        </div>
+                        </div>
+
+                        @* <div class="form-group">
+                <label asp-for="Name" class="control-label"></label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>*@
+                        <div class="form-group">
+                            <label asp-for="HouseholdStatusID">Household status</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Status" data-content="Household status with grow."><b>?</b></a>
+                            <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
+                            </select>
+                            <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
+                        </div>
                 </fieldset>
             </div>
         </div>
