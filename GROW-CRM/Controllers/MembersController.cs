@@ -176,7 +176,7 @@ namespace GROW_CRM.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
+            ViewData["Filtering"] = ""; //Asume not filtering
             ViewData["sortDirection"] = sortDirection;
             //selectlist for Sorting options
             ViewData["Action"] = "/Orders";

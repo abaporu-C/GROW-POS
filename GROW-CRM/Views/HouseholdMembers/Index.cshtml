@@ -5,9 +5,7 @@
     GROW_CRM.Models.Household household = (GROW_CRM.Models.Household)ViewBag.Household;
 }
 <div class="row">
-    <div class="col-md-6">
-        <div class="media">    
-    <div class="media-body ml-3">
+    <div class="col-md-5">
 
         @{
 
@@ -33,10 +31,8 @@
 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#verificationModal">
   Verify
 </button>
-</div>
-</div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         @if(User.IsInRole("SuperAdmin")){
                     <div class="card" style="width: 18rem;">
   <div class="card-body d-flex flex-column align-items-center justify-content-center" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">      
@@ -56,17 +52,16 @@
                 <span id="addr">@Html.DisplayFor(model => household.FullAddress)</span><br />                
                 <label for="income">@Html.DisplayNameFor(model => household.YearlyIncomeFormated)</label>
                 <span id="income">@Html.DisplayFor(model => household.YearlyIncomeFormated)</span><br />
-                <label for="lico">LICO Verified:</label>                
                         @{
                             if (!household.LICOVerified)
                             {
-                                    <div id="lico" class="btn btn-outline-danger">
+                                    <div id="lico" class="alert alert-danger" role="alert">
                                           <b>Not LICO Verified</b>
                                     </div>
                             }
                             else
                             {
-                                    <div id="lico" class="btn btn-outline-success">
+                                    <div id="lico" class="alert alert-info" role="alert">
                                           <b>Verified</b>
                                     </div>
                             }
@@ -79,24 +74,23 @@
                 <span id="join">@household.CreatedOn?.Month/@household.CreatedOn?.Day/@household.CreatedOn?.Year</span><br />
                 <label for="status">Status</label>
                 <span id="status">@Html.DisplayFor(model => household.HouseholdStatus.Name)</span><br />
-                <label for="verification">Yearly Verification:</label>                
                         @{
                             DateTime now = DateTime.Now;
                             int dateDiff = (now - @household.LastVerification).Days;
                             if (dateDiff >= 365)
                         {
-  <div id="verification" class="btn btn-outline-danger">
+  <div id="verification" class="alert alert-danger" role="alert">
     <b>@household.VerificationStatus</b>
   </div>
                         }                                                        
                         else if (dateDiff >= 335){
-                                    <div id="verification" class="btn btn-outline-warning">
+                                    <div id="verification" class="alert alert-warning" role="alert">
                                           <b>@household.VerificationStatus</b>
                                     </div>
                         } 
                         else
                             {
-                                    <div id="verification" class="btn btn-outline-success">
+                                    <div id="verification" class="alert alert-info" role="alert">
                                           <b>@household.VerificationStatus</b>
                                     </div>
                             }
@@ -414,12 +408,12 @@
                     licoFlag.innerHTML = `<p id="custom-lico-flag">Custom Verification On: <b>${data.hasCustomLICO ? "True" : "False"}</b></p>`;   
                     
                     if(data.licoVerified){
-                        licoDiv.className = "btn btn-outline-success";
+                        licoDiv.className = "alert alert-info";
                         licoDiv.innerHTML = "<b>Verified</b>";
                         return
                     }
 
-                    licoDiv.className = "btn btn-outline-danger";
+                    licoDiv.className = "alert alert-danger";
                     licoDiv.innerHTML = "<b>Not LICO Verified</b>";
                 },
                 error: function (err) {  

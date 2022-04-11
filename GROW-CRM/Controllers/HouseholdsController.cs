@@ -61,6 +61,12 @@ namespace GROW_CRM.Controllers
                 households = households.Where(h => h.CityID == CityID);
                 isFiltering = true;
             }
+            if (!String.IsNullOrEmpty(HouseholdNameSearch))
+            {
+                households = households.Where(h => h.Name.ToUpper().Contains(HouseholdNameSearch.ToString().ToUpper()));
+
+                isFiltering = true;
+            }
             if (!String.IsNullOrEmpty(StreetSearch))
             {
                 households = households.Where(h => h.StreetNumber.Contains(StreetSearch.ToString().ToUpper())
@@ -319,6 +325,11 @@ namespace GROW_CRM.Controllers
                     {
                         int lastID = _context.Households.ToList().Last().ID;
                         household.Name = $"House #{lastID + 1}";
+                    }
+                    //if house has custom name, prepend "House" 
+                    if (!String.IsNullOrEmpty(household.Name))
+                    {
+                        household.Name = $"House {household.Name}";
                     }
 
                     _context.Add(household);
