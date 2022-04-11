@@ -11,16 +11,7 @@
     </div>
 </div>
 
-<div class="row mb-3">
-    <div class="col-md-12 d-flex">
-        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createOrderModal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 18">
-                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
-                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg> Create New
-        </button>
-    </div>
-</div>
+
 <form asp-action="Index" method="get">
     @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
     {
@@ -34,7 +25,12 @@
                 <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
             </svg> Filter/Search
         </button>
-        <br/>
+        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createOrderModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 18">
+                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+            </svg> Create New
+        </button>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
@@ -52,10 +48,13 @@
                                 @Html.TextBox("HouseholdNameSearch", null, new { @class = "form-control", placeholder = "Jack's House" })
                             </div>
                             <div class="form-group col-md-10">
-                                
+                                <div class="form-group">
                                     <label class="control-label">Household ID:</label>
                                     @Html.TextBox("HouseholdID", null, new { @class = "form-control", placeholder = "123", RegularExpression = "^[0-9]*$" })
-      
+                                </div>
+                                <div class="invalid-feedback">
+                                    Only numeric values for ID.
+                                </div>
                             </div>
                             <div class="form-group col-md-10">
                                 <label class="control-label">Member:</label>
@@ -82,22 +81,20 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             @*   <div class="form-group col-md-10">
-                                <label class="control-label">Total:</label>
-                                @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
-                                </div>*@
+                            <label class="control-label">Total:</label>
+                            @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
+                            </div>*@
                             @*<div class="col-md-9">
-                                <div class="form-group">
-                                <div class="form-group">
-                                <label class="control-label">Status:</label>
-                                @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
-                                </div>
-                                </div>
-                                </div>*@
+                            <div class="form-group">
+                            <div class="form-group">
+                            <label class="control-label">Status:</label>
+                            @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            </div>
+                            </div>*@
 
-                            <div class="form-group col-md-12 mt-4 pt-1">
+                            <div class="form-group col-md-12 align-self-end mt-4 pt-1">
                                 <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
                                 <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                             </div>
@@ -108,69 +105,25 @@
 
             </div>
         </div>
-        <br />
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive mt-2">
         <table class="table table-striped rounded-lg">
-            @{
-                string bold = "font-weight-bold";
-                string field = ViewData["sortField"].ToString();
-
-                string direction = "▼";
-                if (ViewData["sortDirection"].ToString() == "desc")
-                {
-                    direction = "▲";
-                }
-            }
             <thead class="thead-dark">
                 <tr>
-                  
                     <th>
-                            <input type="submit" disabled="disabled" value="Household" class="btn btn-link" />
+                        @Html.DisplayNameFor(model => model.Member.Household)
                     </th>
                     <th>
-                        @if (field == "Member")
-                        {
-                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" @bold />
-                            <span class="text-white">@direction</span>
-                        }
-                        else
-                        {
-                            <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
-                        }
+                        @Html.DisplayNameFor(model => model.Member)
                     </th>
                     <th>
-                        @if (field == "Date")
-                        {
-                            <input type="submit" name="actionButton" value="Date" class="btn btn-link" @bold />
-                            <span class="text-white">@direction</span>
-                        }
-                        else
-                        {
-                            <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
-                        }
+                        @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
-                        @if (field == "Total")
-                        {
-                            <input type="submit" name="actionButton" value="Total" class="btn btn-link" @bold />
-                            <span class="text-white">@direction</span>
-                        }
-                        else
-                        {
-                            <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
-                        }
+                        @Html.DisplayNameFor(model => model.Total)
                     </th>
                     <th>
-                        @if (field == "Payment")
-                        {
-                            <input type="submit" name="actionButton" value="Payment" class="btn btn-link" @bold />
-                            <span class="text-white">@direction</span>
-                        }
-                        else
-                        {
-                            <input type="submit" name="actionButton" value="Payment" class="btn btn-link" />
-                        }
+                        @Html.DisplayNameFor(model => model.PaymentType)
                     </th>
                     <th></th>
                 </tr>
@@ -219,7 +172,6 @@
         event.preventDefault();
         var code = $('#code');
         var codeSerialized = code.serialize();
-
         $.ajax({
             type: "GET",
             url: 'Orders/GetMembers',
@@ -227,7 +179,6 @@
             success: function (data) {
                 $('#searchHErr').html("");
                 $('#order-member-list').css("display", "inline-flex");
-
                 var membersDDL = $('#membersDDl')
                 membersDDL.html("");
                 membersDDL.append($('<option></option>').val(0).html("Select Member"))
@@ -239,14 +190,12 @@
             },
             error: function (err) {
                 var membersDDL = $('#membersDDl')
-
                 $('#searchHErr').html(err.responseText)
                 membersDDL.html("");
                 membersDDL.append($('<option></option>').val(0).html("Select Member"))
             }
         });
     })
-
     $(document).on('submit', "#theMemberIncomeSituationsForm", function(event){
         var memberID = $('#membersDDl').val();
         if(memberID === "0"){

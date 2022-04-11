@@ -4,7 +4,7 @@
     ViewData["Title"] = "Delete";
 }
 
-    <h3 class="btn btn-danger">
+    <h4 class="alert alert-danger" role="alert">
         Are you sure you want to delete @{
 
             if (!String.IsNullOrEmpty(Model.Name))
@@ -16,7 +16,7 @@
                 @Html.Raw(" # ") @Html.DisplayFor(model => model.ID)
             }
         }
-    </h3>
+    </h4>
     <hr />
     <div>
 
@@ -28,19 +28,19 @@
                 <span id="addr">@Html.DisplayFor(model => model.FullAddress)</span><br />
                 <label for="income">@Html.DisplayNameFor(model => model.YearlyIncomeFormated)</label>
                 <span id="income">@Html.DisplayFor(model => model.YearlyIncomeFormated)</span><br />
-                <label for="lico">LICO Verified:</label>
+                
                 <div id="lico">                    
                     @{
                         if (!Model.LICOVerified)
                         {
-                            <div id="lico" class="btn btn-outline-danger">
+                            <div id="lico" class="alert alert-danger" role="alert">
                                           <b>Not LICO Verified</b>
                                     </div>
                         }
                         else
                         {
-                            <div id="lico" class="btn btn-outline-success">
-                                          <b>Verified</b>
+                            <div id="lico" class="alert alert-info" role="alert">
+                                          <b>LICO Verified</b>
                                     </div>
                         }
                     }
@@ -53,26 +53,26 @@
                 <span id="join">@Model.CreatedOn?.Month/@Model.CreatedOn?.Day/@Model.CreatedOn?.Year</span><br />
                 <label for="status">Status</label>
                 <span id="status">@Html.DisplayFor(model => model.HouseholdStatus.Name)</span><br />
-                <label for="verification">Yearly Verification:</label>
+                
                 <div id="verification">                    
                     @{
                         DateTime now = DateTime.Now;
                         int dateDiff = (now - @Model.LastVerification).Days;
                         if (dateDiff >= 365)
                         {
-                            <div id="verification" class="btn btn-outline-danger">
+                            <div id="verification" class="btn btn-outline-warning">
     <b>@Model.VerificationStatus</b>
   </div>
                         }
                         else if (dateDiff >= 335)
                         {
-                            <div id="verification" class="btn btn-outline-warning">
+                            <div id="verification" class="alert alert-danger" role="alert">
                                           <b>@Model.VerificationStatus</b>
                                     </div>
                         }
                         else
                         {
-                            <div id="verification" class="btn btn-outline-success">
+                            <div id="verification" class="alert alert-info" role="alert">
                                           <b>@Model.VerificationStatus</b>
                                     </div>
                         }
@@ -230,7 +230,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <input id="deleteBtn" type="submit" value="Delete" class="btn btn-outline-danger" /> |
-            <a asp-area="" asp-controller="Households" class="btn-outline-primary btn" asp-action="Index">Back to Households List</a> | <a asp-action="Index" class="btn-outline-primary btn" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.ID">Back To Household Details</a>
+            <a asp-area="" asp-controller="Households" class="btn-outline-secondary btn" asp-action="Index">Back to Households List</a> | <a asp-action="Index" class="btn-outline-secondary btn" asp-controller="HouseholdMembers" asp-route-HouseholdID="@Model.ID">Back To Household Details</a>
         </form>
     </div>
 @section Scripts {
