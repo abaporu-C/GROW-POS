@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<GROW_CRM.Models.Item>
 
 @{
-    ViewData["Title"] = "Item Index";
+    ViewData["Title"] = "Items";
 }
 
-<h1>Item Index</h1>
+<div class="row mb-3">
+    <div class="col-md-12 ">
+        <h2>Items</h2>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-success"> <i class="fa-solid fa-circle-plus"></i> New Item</a>
-</p>
 <form asp-action="Index" method="get">
     @if(!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
     {
@@ -18,8 +19,17 @@
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            <i class="fa-solid fa-filter"></i> Filter/Search
-        </button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                </svg>
+                Filter/Search
+</button>
+        <a asp-action="Create" class="btn btn-outline-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" fill="currentColor" class="bi bi-plus-circle" viewBox="0 1 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg> New Item
+        </a>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
@@ -35,11 +45,11 @@
                         <label class="control-label">Select by Price Status:</label>
                         <div class="border-top pt-2">
                             <div class="form-check form-check-inline pr-2">
-                                @Html.RadioButton("ProductPriceStatus", "false", htmlAttributes: new { @class = "mr-1", @id = "ProductPriceStatus1",  @checked = "checked" })
+                                @Html.RadioButton("ProductPriceStatus", "false", htmlAttributes: new { @class = "mr-1", @id = "ProductPriceStatus1", @checked = "checked" })
                                 <label class="form-check-label" for="ProductPriceStatus1"> All Items</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                @Html.RadioButton("ProductPriceStatus", "true", htmlAttributes: new { @class = "mr-1", @id="ProductPriceStatus2" });
+                                @Html.RadioButton("ProductPriceStatus", "true", htmlAttributes: new { @class = "mr-1", @id = "ProductPriceStatus2" });
                                 <label class="form-check-label" for="ProductPriceStatus2"> Items On Sale</label>
                             </div>
                         </div>
@@ -54,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive mt-2">
     <table class="table table-striped rounded-lg">
         @{
             string bold = "font-weight-bold";
@@ -66,13 +76,13 @@
                 direction = "▲";
             }
         }
-        <thead class="thead-dark">
+        <thead class="thead-dark" >
             <tr>
                 <th>
                     @if (field == "Code")
                     {
                         <input type="submit" name="actionButton" value="Code" class="btn btn-link @bold" />
-                        <span class="text-primary">@direction</span>
+                        <span class="text-white">@direction</span>
                     }
                     else
                     {
@@ -83,7 +93,7 @@
                     @if (field == "Name")
                     {
                         <input type="submit" name="actionButton" value="Name" class="btn btn-link @bold" />
-                        <span class="text-primary">@direction</span>
+                        <span class="text-white">@direction</span>
                     }
                     else
                     {
@@ -94,7 +104,7 @@
                     @if (field == "Category")
                     {
                         <input type="submit" name="actionButton" value="Category" class="btn btn-link  @bold" />
-                        <span class="text-primary">@direction</span>
+                        <span class="text-white">@direction</span>
                     }
                     else
                     {
@@ -105,7 +115,7 @@
                     @if (field == "Discount (%)")
                     {
                         <input type="submit" name="actionButton" value="Discount (%)" class="btn btn-link  @bold" />
-                        <span class="text-primary">@direction</span>
+                        <span class="text-white">@direction</span>
                     }
                     else
                     {
@@ -116,7 +126,7 @@
                     @if (field == "Price ($)")
                     {
                         <input type="submit" name="actionButton" value="Price ($)" class="btn btn-link  @bold" />
-                        <span class="text-primary">@direction</span>
+                        <span class="text-white">@direction</span>
                     }
                     else
                     {
@@ -156,7 +166,7 @@
                         </span>
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit"><i class='bx bxs-edit-alt'></i></a> 
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit"><i class='bx bxs-edit-alt' style="color:grey"></i></a> 
                         <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"> <i class='bx bx-info-square'></i></a> 
                         <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"> <i class='bx bx-minus-circle'></i></a>
                     </td>

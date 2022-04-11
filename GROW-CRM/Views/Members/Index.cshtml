@@ -4,15 +4,21 @@
     ViewData["Title"] = "Member Index";
 }
 
-<h2>Member Index</h2>
-
-<p>Note: To add member to the household</p>
-<ol>
-    <li>Go to <a class="btn-link" asp-controller="Households" asp-action="Index">Households</a></li>
-    <li>Find an existing Household or <a class="btn-link" asp-controller="Households" asp-action="Create">Create New Household</a></li>
-    <li>Go to Household <b>Details</b> ---> Add New Member. </li>
-</ol>
-   
+<div class="row mb-3">
+    <div class="col-md-12 ">
+        <h2>Member Index</h2>
+    </div>
+</div>
+<div class="alert alert-info col-md-8" role="alert">
+    <section>
+        <h5> Adding member to the household:</h5>
+        <ol>
+            <li>Go to <a class="btn-link" asp-controller="Households" asp-action="Index">Households</a></li>
+            <li>Find an existing Household or <a class="btn-link" asp-controller="Households" asp-action="Create">Create New Household</a></li>
+            <li>Go to Household <b>Details</b> ---> Add New Member. </li>
+        </ol>
+    </section>
+</div>
     
 
 <form asp-action="Index" method="get">
@@ -87,7 +93,7 @@
             </div>
         </div>
     </div>
-    <br />
+  
     <div class="container-fluid d-block d-lg-none">
             <div class="card-deck-wrapper">
                 <div class="card-deck">
@@ -120,7 +126,7 @@
             </div>
         </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive mt-2">
     <table class="table d-none d-lg-block">
         <thead class="thead-dark">
             <tr>
@@ -186,7 +192,7 @@
                     @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                 </td>*@
                 <td>
-                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt'></i></a> 
+                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt' style="color:grey"></i></a> 
                     <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> 
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {

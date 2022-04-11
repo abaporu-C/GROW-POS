@@ -2,7 +2,7 @@
 @model IEnumerable<GROW_CRM.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
 }
 
 <div class="row mb-3">
@@ -11,16 +11,7 @@
     </div>
 </div>
 
-<div class="row mb-3">
-    <div class="col-md-12 d-flex">
-        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createOrderModal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 18">
-                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
-                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg> Create New
-        </button>
-    </div>
-</div>
+
 <form asp-action="Index" method="get">
     @if (!(Context.Request.Query["pageSizeID"].FirstOrDefault() is null))
     {
@@ -33,6 +24,12 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                 <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
             </svg> Filter/Search
+        </button>
+        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createOrderModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 18">
+                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+            </svg> Create New
         </button>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
@@ -85,17 +82,17 @@
                                 </div>
                             </div>
                             @*   <div class="form-group col-md-10">
-                                <label class="control-label">Total:</label>
-                                @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
-                                </div>*@
+                            <label class="control-label">Total:</label>
+                            @Html.DropDownList("Total", null, "Any amount", htmlAttributes: new { @class = "form-control" })
+                            </div>*@
                             @*<div class="col-md-9">
-                                <div class="form-group">
-                                <div class="form-group">
-                                <label class="control-label">Status:</label>
-                                @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
-                                </div>
-                                </div>
-                                </div>*@
+                            <div class="form-group">
+                            <div class="form-group">
+                            <label class="control-label">Status:</label>
+                            @Html.DropDownList("HouseholdStatusID", null, "All Statuses", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            </div>
+                            </div>*@
 
                             <div class="form-group col-md-12 align-self-end mt-4 pt-1">
                                 <input type="submit" name="actionButton" value="Submit" class="btn btn-outline-primary" />
@@ -109,7 +106,7 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive mt-2">
         <table class="table table-striped rounded-lg">
             <thead class="thead-dark">
                 <tr>
