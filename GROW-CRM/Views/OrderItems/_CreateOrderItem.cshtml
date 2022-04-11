@@ -1,12 +1,12 @@
 ﻿@model GROW_CRM.Models.OrderItem
-<h5>Add New Income Situation</h5>
+<h5>Add New Order Item</h5>
 <form asp-action="Create" asp-controller="OrderItems" id="theMemberIncomeSituationsForm">
     <div class="row">
         <div class="col-md-12">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderID" value='@ViewData["OrderID"]' />
             <div class="form-group">
-                <label asp-for="ItemID" class="control-label"></label><span style="color:red">*</span>
+                <label asp-for="Item" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="ItemID" class="form-control" asp-items="ViewBag.ItemID">
                     <option value="">Select the Item</option>
                 </select>
@@ -18,7 +18,7 @@
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" id="submitMemberIncomeSituationsForm" class="btn btn-outline-secondary" />
+                <input type="submit" value="Add" id="submitMemberIncomeSituationsForm" class="btn btn-outline-secondary" />
             </div>
         </div>
     </div>
