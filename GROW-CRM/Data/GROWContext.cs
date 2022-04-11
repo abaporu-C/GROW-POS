@@ -156,6 +156,12 @@ namespace GROW_CRM.Data
                 .HasForeignKey(drm => drm.DietaryRestrictionID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<DietaryRestrictionMember>()
+                .HasOne(drm => drm.Member)
+                .WithMany(dr => dr.DietaryRestrictionMembers)
+                .HasForeignKey(drm => drm.MemberID)
+                .OnDelete(DeleteBehavior.Cascade);
+
             //Items
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Category)
@@ -214,7 +220,7 @@ namespace GROW_CRM.Data
                 .HasOne(o => o.Member)
                 .WithMany(m => m.Orders)
                 .HasForeignKey(o => o.MemberID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.PaymentType)

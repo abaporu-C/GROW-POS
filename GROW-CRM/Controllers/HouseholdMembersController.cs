@@ -477,22 +477,22 @@ namespace GROW_CRM.Controllers
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> RemoveConfirmed(int id)
         {
-            var member = await _context.Members
-                .Include(m => m.Gender)
-                .Include(m => m.Household)
+            var member = await _context.Members                
                 .Include(m => m.MemberIncomeSituations).ThenInclude(mis => mis.IncomeSituation)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
+            int householdID = member.HouseholdID;
             //Get the URL with the last filter, sort and page parameters
             ViewDataReturnURL();
 
             try
-            {
-                _context.Members.Remove(member);
+            {                
+                _context.Remove(member);                
                 await _context.SaveChangesAsync();
+                await CheckLICO(householdID);
                 return Redirect(ViewData["returnURL"].ToString());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
@@ -658,12 +658,57 @@ namespace GROW_CRM.Controllers
                             .Where(h => h.ID == m.HouseholdID)
                             .FirstOrDefaultAsync();
 
-            if (!household.HasCustomLICO) return;
+            if (household.HasCustomLICO) return;
 
-            double totalIncome = m.YearlyIncome;
+            double totalIncome = 0;
             int memberCount = 0;
 
             foreach(Member member in household.Members)
+            {
+                if (member.DependantMember) continue;
+                memberCount++;
+                totalIncome += member.YearlyIncome;
+            }
+
+            if (totalIncome == 0) household.LICOVerified = true;
+            else if (memberCount == 1 && totalIncome > 26426) household.LICOVerified = false;
+            else if (memberCount == 2 && totalIncome > 32898) household.LICOVerified = false;
+            else if (memberCount == 3 && totalIncome > 40444) household.LICOVerified = false;
+            else if (memberCount == 4 && totalIncome > 49106) household.LICOVerified = false;
+            else if (memberCount == 5 && totalIncome > 55694) household.LICOVerified = false;
+            else if (memberCount == 6 && totalIncome > 62814) household.LICOVerified = false;
+            else if (memberCount == 7 && totalIncome > 69934) household.LICOVerified = false;
+            else
+            {
+                if (memberCount > 7)
+                {
+                    double lico = 69934;
+                    for (int i = 0; i < (memberCount - 7); i++) lico += 7120;
+
+                    if (totalIncome > lico) household.LICOVerified = false;
+                    else household.LICOVerified = true;
+                }
+                else household.LICOVerified = true;
+            }
+
+            _context.Update(household);
+            await _context.SaveChangesAsync();
+
+        }
+
+        private async Task CheckLICO(int id)
+        {
+            var household = await _context.Households
+                            .Include(h => h.Members).ThenInclude(m => m.MemberIncomeSituations)
+                            .Where(h => h.ID == id)
+                            .FirstOrDefaultAsync();
+
+            if (household.HasCustomLICO) return;
+
+            double totalIncome = 0;
+            int memberCount = 0;
+
+            foreach (Member member in household.Members)
             {
                 if (member.DependantMember) continue;
                 memberCount++;
@@ -762,7 +807,13 @@ namespace GROW_CRM.Controllers
 
         public async Task<IActionResult> VerifyHousehold(int id)
         {
-            var household = await _context.Households.Where(h => h.ID == id).FirstOrDefaultAsync();
+            var household = await _context.Households.Include(h => h.Members).Where(h => h.ID == id).FirstOrDefaultAsync();
+
+            if (household.Members.Count > 0) 
+            {
+                Member member = household.Members.ElementAt(0);
+                await CheckLICO(member);
+            }            
 
             household.LastVerification = DateTime.Now;
 

@@ -24,11 +24,11 @@ namespace GROW_CRM
 
                     var identityContext = services.GetRequiredService<ApplicationDbContext>();
                     identityContext.Database.Migrate();
-                    //ApplicationSeedData.SeedAsync(identityContext, services).Wait();
+                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
 
                     var context = services.GetRequiredService<GROWContext>();
                     context.Database.Migrate();
-                    //GROWSeedData.Initialize(services);
+                    GROWSeedData.Initialize(services);
                 }
                 catch (Exception ex)
                 {
