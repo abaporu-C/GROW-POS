@@ -83,13 +83,21 @@ namespace GROW_CRM.Controllers
                 return NotFound();
             }
 
-            var about = await _context.Abouts.FindAsync(id);
+            /*var about = await _context.Abouts.FindAsync(id);*/
+
+            var about = await _context.Abouts
+               .Include(h => h.City)
+               .Include(h => h.Province)
+               .FirstOrDefaultAsync(h => h.ID == id);
+
+
             if (about == null)
             {
                 return NotFound();
             }
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "ID", about.CityID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", about.ProvinceID);
+            /* ViewData["CityID"] = new SelectList(_context.Cities, "ID", "ID", about.CityID);
+             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", about.ProvinceID);*/
+            PopulateDropDownLists(about);
             return View(about);
         }
 
@@ -126,8 +134,10 @@ namespace GROW_CRM.Controllers
                 /*return RedirectToAction(nameof(Index));*/
                 return RedirectToAction("Create", "Households");
             }
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "ID", about.CityID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", about.ProvinceID);
+            /* ViewData["CityID"] = new SelectList(_context.Cities, "ID", "ID", about.CityID);
+             ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ID", about.ProvinceID);*/
+
+            PopulateDropDownLists(about);
 
 
 
@@ -170,5 +180,25 @@ namespace GROW_CRM.Controllers
         {
             return _context.Abouts.Any(e => e.ID == id);
         }
+
+        private SelectList CitySelectList(int? selectedId)
+        {
+            return new SelectList(_context.Cities
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+        private SelectList ProvinceSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Provinces
+
+                .OrderByDescending(d => d.Name == "Ontario")
+                .ThenBy(d => d.Name), "ID", "Name", selectedId);
+        }
+        private void PopulateDropDownLists(About about = null)
+        {
+            ViewData["CityID"] = CitySelectList(about?.CityID);
+            ViewData["ProvinceID"] = ProvinceSelectList(about?.ProvinceID);
+           
+        }
+
     }
 }

@@ -6,7 +6,7 @@
 
 <h2>Members</h2>
 
-<div class="alert alert-info col-md-8" role="alert">
+<div class="alert alert-info col-md-6" role="alert">
     <section>
         <h5> Adding member to the household:</h5>
         <ol>
@@ -24,7 +24,7 @@
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            <text class="d-none d-lg-inline">Filter/Sort</text>
+            Filter/Sort
         </button>
         <br />
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
@@ -120,64 +120,65 @@
             </div>
         </div>
     </div>
-
-    <div class="table-responsive">
-        <table class="table d-none d-lg-block">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        <input type="submit" disabled="disabled" value="Household ID: " class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
-                        @*@Html.DisplayNameFor(model => model.FullName)*@
-                    </th>
-                    @*<th>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive" >
+                <table class="table ">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Household ID: " class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
+                                @*@Html.DisplayNameFor(model => model.FullName)*@
+                            </th>
+                            @*<th>
                             <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
                         </th>*@
-                    <th>
-                        <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
-                    </th>
+                            <th>
+                                <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
+                            </th>
 
-                    <th>
-                        <input type="submit" disabled="disabled" value="Phone Number" class="btn btn-link" />
-                    </th>
-                    <th>
-                        <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
-                    </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Phone Number" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Email" class="btn btn-link" />
+                            </th>
 
 
-                    @*<th>
+                            @*<th>
                             <input type="submit" name="actionButton" value="Situation" class="btn btn-link" />
                         </th>*@
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <center># @Html.DisplayFor(modelItem => item.HouseholdID)</center>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FullName)
-                        </td>
-                        @*<td>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <center># @Html.DisplayFor(modelItem => item.HouseholdID)</center>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                @*<td>
                                 @Html.DisplayFor(modelItem => item.Gender.Name)
                             </td>*@
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Age)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Age)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
 
-                        @* <td>
+                                @* <td>
                                 @Html.DisplayFor(modelItem => item.Household.StreetNumber) @Html.DisplayFor(modelItem => item.Household.StreetName)<br />
                                 @Html.DisplayFor(modelItem => item.Household.City)
                                 @Html.DisplayFor(modelItem => item.Household.Province)
@@ -186,19 +187,22 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.IncomeSituation.Situation)
                             </td>*@
-                        <td>
-                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt' style="color:grey"></i></a> 
-                    <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a> 
-                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-                    {
-                    <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>                        
-                    }
-                </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                                <td>
+                                    <a asp-action="Update" class="text-warning h4" data-toggle="tooltip" data-placement="top" title="Edit" asp-controller="HouseholdMembers" asp-route-id="@item.ID"><i class='bx bxs-edit-alt' style="color:grey"></i></a>
+                                    <a asp-action="Details" class="h4" data-toggle="tooltip" data-placement="top" title="Details" asp-route-id="@item.ID"><i class='bx bx-info-square'></i></a>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                    {
+                                        <a asp-action="Delete" class="text-danger h4" data-toggle="tooltip" data-placement="top" title="Delete" asp-route-id="@item.ID"><i class='bx bx-minus-circle'></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
     <partial name="_PagingNavBar" />
 </form>
 
