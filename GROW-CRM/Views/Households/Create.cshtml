@@ -76,11 +76,7 @@
             <div class="col-md-6 addr-mode-hide" id="otherInfo">
                 <fieldset class="form-group border p-4 rounded">
                     <legend class="w-auto">Other Info</legend>
-                    <button id="custom-id-btn" class="btn btn-outline-primary">Custom ID?</button>
-                    <div style="display: none" id="custom-id" class="form-group">
-                        <label id="NewIDLabel" class="control-label">Member ID:</label><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Custom ID" data-content="Customized Member ID."><b>?</b></a>
-                        @Html.TextBox("NewID", null, new { @class = "form-control" })
-                    </div>
+
                     <div class="form-group mt-2">
                         <label class="" for="houseNameInput">Household Name</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
                         <div class="input-group">
@@ -90,19 +86,31 @@
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger" id="houseNameInput"></span>
                         </div>
+                    </div>
+
+                    @* <div class="form-group">
+            <label asp-for="Name" class="control-label"></label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>*@
+                    <div class="form-group">
+                        <label asp-for="HouseholdStatusID">Household status</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Status" data-content="Household status with grow."><b>?</b></a>
+                        <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
+                        </select>
+                        <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <button id="custom-id-btn" class="btn btn-outline-info">Rewrite ID</button> (optional, click for details)
+
+                    <div style="display: none" id="custom-id" class="form-group">
+                        <div class="alert alert-primary mt-2" role="alert">
+                            <p>You can assign a Custom ID to the Household. </p>
+                            <p>Otherwise this Household will get an automatically generated ID.</p>
+                            <label id="NewIDLabel" class="control-label">Custom Household ID:</label><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Custom ID" data-content="Customized Household ID."><b>?</b></a>
+                            @Html.TextBox("NewID", null, new { @class = "form-control" })
                         </div>
 
-                        @* <div class="form-group">
-                <label asp-for="Name" class="control-label"></label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Name" data-content="Household Name."><b>?</b></a>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>*@
-                        <div class="form-group">
-                            <label asp-for="HouseholdStatusID">Household status</label><span style="color:red">*</span><a href="javascript:void(0)" data-toggle="popover" data-trigger="focus" title="Household Status" data-content="Household status with grow."><b>?</b></a>
-                            <select asp-for="HouseholdStatusID" class="form-control" asp-items="ViewBag.HouseholdStatusID">
-                            </select>
-                            <span asp-validation-for="HouseholdStatusID" class="text-danger"></span>
-                        </div>
+                    </div>
                 </fieldset>
             </div>
         </div>
@@ -146,7 +154,7 @@
                 $('#StreetNumber').val("@Html.ViewData["StreetNumber"]").prop('disabled', true);
                 $('#StreetName').val("@Html.ViewData["StreetName"]").prop('disabled', true);
                 $('#postal-code').prop("value", "@Html.ViewData["PostalCode"]").prop('disabled', true);
-                $('#CityID').val(2).prop('disabled', true);
+                $('#CityID').val(7).prop('disabled', true);
                 $('#ProvinceID').val(1).prop('disabled', true);
             }
             else {

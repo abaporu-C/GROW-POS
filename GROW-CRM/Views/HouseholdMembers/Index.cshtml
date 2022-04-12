@@ -46,8 +46,8 @@
 </div>
         <div class="row">
             <div class="col-md-6">
-                <label for="membership">Membership#</label>
-                <span id="membership">#@Html.DisplayFor(model => household.ID)</span><br />
+                <label for="household">Household</label>
+                <span id="household">#@Html.DisplayFor(model => household.ID)</span><br />
                 <label for="addr">Address:</label>
                 <span id="addr">@Html.DisplayFor(model => household.FullAddress)</span><br />                
                 <label for="income">@Html.DisplayNameFor(model => household.YearlyIncomeFormated)</label>
@@ -62,7 +62,7 @@
                             else
                             {
                                     <div id="lico" class="alert alert-info" role="alert">
-                                          <b>Verified</b>
+                                          <b>LICO Verified</b>
                                     </div>
                             }
                         }
@@ -111,6 +111,9 @@
             <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                 Filter
             </button>
+            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
+                <span class="btn btn-success">&#x271A; Add New Member</span>
+            </a>
         </dt>
         <dd>
             <div class="form-horizontal">
@@ -176,9 +179,7 @@
                             <input type="submit" disabled="disabled" value="Notes" class="btn btn-link" />
                         </th>*@
                         <th>
-                            <a asp-controller="HouseholdMembers" asp-action="Add" asp-route-HouseholdID="@household.ID" asp-route-HouseholdName="@household.Name">
-                                <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
-                            </a>
+                           
                         </th>
                         @if(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")){
                                  <th>
@@ -312,8 +313,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    
+                    
                 </tr>
                 </tbody>
                 </table>
