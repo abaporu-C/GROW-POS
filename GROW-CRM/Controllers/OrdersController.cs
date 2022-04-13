@@ -28,7 +28,7 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> Index(string MemberSearch, string HouseholdNameSearch, int? HouseholdID,
             int? PaymentTypeID, int? HouseholdIDSearch, int? Total,
             int? page, int? pageSizeID, string actionButton,
-            string sortDirection = "asc", string sortField = "Code")
+            string sortDirection = "desc", string sortField = "Date")
         {
             bool isFiltering = false;
 
