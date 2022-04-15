@@ -11,12 +11,26 @@
                 <div class="row d-block">
                     <div class="col-md-12 text-center" style="margin-top:10px">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label for="code">Household ID</label>
-                            <input type="text" name="code" id="code" />                            
-                            <button class="btn btn-outline-secondary" id="searchHH">Search</button>
-                            <div class="text-danger" id="searchHErr"></div>
+                        @*<div class="form-group">
+                                <label for="code">Household ID</label>
+                                <input type="text" name="code" id="code" />
+                                <button class="btn btn-outline-secondary" id="searchHH">Search</button>
+                                <div class="text-danger" id="searchHErr"></div>
+                            </div>*@
+
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Find Household:</label>
+                                    @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4 align-self-end">
+                                    <input type="submit" name="actionButton" value="Find" class="btn btn-outline-primary" />
+                                    <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                                </div>
+                            </div>
                         </div>
+
                         <div id="order-member-list">
                             <label for="membersDDl" class="control-label">Members</label>
                             <select class="form-control" data-val-required="You must select a member." id="membersDDl" name="membersDDl">
@@ -36,4 +50,14 @@
 @section Scripts{
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $('#SearchString').autocomplete({
+                minLength: 1,
+                source: '@Url.Action("GetHouseholds","Orders")'
+            });
+    </script>
+}
+@section Styles {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 }

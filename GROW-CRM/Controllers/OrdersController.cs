@@ -209,7 +209,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create(int membersDDl)
+        public IActionResult Create(int membersDDl, string SearchString)
         {
             ViewDataReturnURL();
 
@@ -228,8 +228,26 @@ namespace GROW_CRM.Controllers
                               .Where(m => m.ID == order.ID)
                               .FirstOrDefault();
 
+            var orders = from o in _context.Orders
+                         .Include(o => o.Member).ThenInclude(m => m.Household)
+                         select o;
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                orders = orders.Where(o => o.Member.Household.Name.ToUpper() == SearchString.ToUpper());
+            }
+
             PopulateDropDownLists();
             return View(order);
+        }
+
+        public JsonResult GetHouseholds(string term)
+        {
+            var result = from h in _context.Households
+                         where h.Name.ToUpper().Contains(term.ToUpper())
+                         orderby h.Name
+                         select new { value = h.Name };
+            return Json(result);
         }
 
         // POST: Orders/Create
@@ -312,6 +330,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Edit/5
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             ViewDataReturnURL();
@@ -349,6 +368,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Total,MemberID,PaymentTypeID")] Order order)
         {
             //Get the URL with the last filter, sort and page parameters
