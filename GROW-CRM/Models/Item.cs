@@ -19,6 +19,7 @@ namespace GROW_CRM.Models
 
         //Summary Properties
         [Display(Name = "Price after discount ($)")]
+        [DataType(DataType.Currency)]
         public double PriceAfterDiscount
         {
             get

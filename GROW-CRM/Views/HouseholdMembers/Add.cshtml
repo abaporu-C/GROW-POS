@@ -147,29 +147,30 @@
                     <div class="row">
                         <div class="form-group col-md-5">
                             <div class="m-1">
-                                <label class="control-label"> Illness Accredited</label>
+                                <label class="control-label"> Choose Illness</label> <a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Illness" data-content="Member's illnesses.'"><b>?</b></a>
                             </div>
-                            @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 5, @class = "form-control" })
+                            @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 5, @class = "form-control" })
                         </div>
+
                         <div>
                             <div class="align-middle">
                                 <br />
                                 <br />
                                 <br />
                                 <button type="button" id="btnIllnessLeft" class="btn btn-success btn-sm">
-                                    <strong>&#8592;</strong>
+                                    <strong>&#8594;</strong>
                                 </button>
                                 <br />
                                 <button type="button" id="btnIllnessRight" class="btn btn-danger btn-sm">
-                                    <strong>&#8594;</strong>
+                                    <strong>&#8592;</strong>
                                 </button>
                             </div>
                         </div>
                         <div class="form-group col-md-5">
                             <div class="m-1">
-                                <label class="control-label"> Choose Illness</label> <a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Illness" data-content="Member's illnesses.'"><b>?</b></a>
+                                <label class="control-label"> Medical History</label>
                             </div>
-                            @Html.ListBox("availIllnessOptions", (MultiSelectList)ViewBag.availIllnessOpts, new { @size = 5, @class = "form-control" })
+                            @Html.ListBox("selectedIllnessOptions", (MultiSelectList)ViewBag.selIllnessOpts, new { @size = 5, @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -177,9 +178,9 @@
                     <div class="row">
                         <div class="form-group col-md-5">
                             <div class="m-1">
-                                <label class="control-label"> Concerns Accredited</label>
+                                <label class="control-label"> Choose Concerns</label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Health Concerns" data-content="Member's health concerns.'"><b>?</b></a>
                             </div>
-                            @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 5, @class = "form-control" })
+                            @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 5, @class = "form-control" })
                         </div>
                         <div>
                             <div class="align-middle">
@@ -187,22 +188,22 @@
                                 <br />
                                 <br />
                                 <button type="button" id="btnConcernLeft" class="btn btn-success btn-sm">
-                                    <strong>&#8592;</strong>
+                                    <strong>&#8594;</strong>
                                 </button>
                                 <br />
                                 <button type="button" id="btnConcernRight" class="btn btn-danger btn-sm">
-                                    <strong>&#8594;</strong>
+                                    <strong>&#8592;</strong>
                                 </button>
                             </div>
                         </div>
-
-
                         <div class="form-group col-md-5">
                             <div class="m-1">
-                                <label class="control-label"> Choose Concerns</label><a href="javascript:void(0)" data-trigger="focus" data-toggle="popover" title="Health Concerns" data-content="Member's health concerns.'"><b>?</b></a>
+                                <label class="control-label"> Dietary Concerns</label>
                             </div>
-                            @Html.ListBox("availConcernOptions", (MultiSelectList)ViewBag.availConcernOpts, new { @size = 5, @class = "form-control" })
+                            @Html.ListBox("selectedConcernOptions", (MultiSelectList)ViewBag.selConcernOpts, new { @size = 5, @class = "form-control" })
                         </div>
+
+
                     </div>
                 </div>
             </fieldset>
