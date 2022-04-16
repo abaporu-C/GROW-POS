@@ -36,15 +36,19 @@
 
                                     foreach (var item in Model.OrderItems.OrderBy(s => s.Item.Name))
                                     {
-                                        total += (item.Item.Price * item.Quantity);
+                                        total += (item.Item.PriceAfterDiscount * item.Quantity);
                                         @:<tr><td>
-                                            @item.Summary
+                                            @item.Item.Name
+                                        @:</td><td>
+                                            @item.Quantity
+                                        @:</td><td>
+                                            @item.Item.PriceAfterDiscount
                                         @:</td><td>
                                         @:&nbsp; &nbsp;
                                             <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
                                             <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Delete @item.Item.Code" type="button">&#x274C;</button>
                                         @:</td></tr>
-                                    } 
+                                    }
                                     @*<tr>
                                         <td>Subtotal:</td>
                                         <td>@subtotal</td>
@@ -58,8 +62,9 @@
                                       </tr>
                                       total = subtotal + taxes;*@
                                       <tr>
-                                        <td>Total:</td>
-                                        <td>@total</td>
+                                      <td></td>
+                                        <td></td>
+                                        <td><b>Total: </b>$@total.ToString("N2")</td>
                                         <td><input type="hidden" name="Total" value="@total" /></td>
                                       </tr>
                                  }

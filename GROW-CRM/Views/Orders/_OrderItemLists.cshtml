@@ -24,13 +24,13 @@
 
                                 foreach (var item in ViewBag.OrderItems)
                                 {
-                                    total += (item.Item.Price * item.Quantity);
+                                    total += (item.Item.PriceAfterDiscount * item.Quantity);
                                         @:<tr><td>
                                             @item.Item.Name
                                         @:</td><td>
                                             @item.Quantity
                                         @:</td><td>
-                                            @item.Item.PriceFormatted
+                                            @item.Item.PriceAfterDiscount.ToString("c")
                                         @:</td><td>
                                         @:&nbsp; &nbsp;
                                             <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theMemberIncomeSituationModal" title="Edit @item.Item.Code" type="button">&#x270D;</button>
@@ -55,7 +55,7 @@
                                 <tr>
                                       <td></td>
                                         <td></td>
-                                        <td><b>Total: </b>$@total</td>
+                                        <td><b>Total: </b>$@total.ToString("N2")</td>
                                         <td><input type="hidden" name="Total" value="@total" /></td>
                                       </tr>
 

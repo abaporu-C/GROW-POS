@@ -28,7 +28,7 @@ namespace GROW_CRM.Controllers
         public async Task<IActionResult> Index(string MemberSearch, string HouseholdNameSearch, int? HouseholdID,
             int? PaymentTypeID, int? HouseholdIDSearch, int? Total,
             int? page, int? pageSizeID, string actionButton,
-            string sortDirection = "asc", string sortField = "Code")
+            string sortDirection = "desc", string sortField = "Date")
         {
             bool isFiltering = false;
 
@@ -41,6 +41,8 @@ namespace GROW_CRM.Controllers
                                .Include(o => o.PaymentType)
                                .AsNoTracking()
                          select o;
+
+            
             //Add as many filters as needed
             if (HouseholdID.HasValue)
             {
@@ -165,6 +167,11 @@ namespace GROW_CRM.Controllers
                      .ThenByDescending(h => h.Member.LastName)
                      .ThenByDescending(o => o.Member.FirstName);
                 }
+            }
+            else
+            {
+                sortField = "Date";
+                sortDirection = "desc";
             }
 
 
