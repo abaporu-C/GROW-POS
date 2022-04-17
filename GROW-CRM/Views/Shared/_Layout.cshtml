@@ -60,6 +60,13 @@
                         </a>
                         <span class="tooltip">Orders</span>
                     </li>
+                    <li>
+                        <a asp-area="" asp-controller="Home" asp-action="FAQ">
+                            <i class='bx bx-question-mark'></i>
+                            <span class="links_name">FAQ</span>
+                        </a>
+                        <span class="tooltip">FAQ</span>
+                    </li>
                     @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                     {
                         <li>
