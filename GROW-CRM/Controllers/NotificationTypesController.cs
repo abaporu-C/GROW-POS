@@ -194,16 +194,19 @@ namespace GROW_CRM.Controllers
                     folksCount = folks.Count();
                     if (folksCount > 0)
                     {
-                        var msg = new EmailMessage()
+                        foreach(EmailAddress email in folks)
                         {
-                            ToAddresses = folks,
-                            Subject = Subject,
-                            Content = "<p>" + emailContent + "</p><p>Please access the <strong>GROW Food Literacy Centre</strong> web site to review.</p>"
+                            var msg = new EmailMessage()
+                            {
+                                ToAddresses = new List<EmailAddress> { email },
+                                Subject = Subject,
+                                Content = "<p>" + emailContent + "</p><p>Please access the <strong>GROW Food Literacy Centre</strong> web site to review.</p>"
 
-                        };
-                        await _emailSender.SendToManyAsync(msg);
-                        ViewData["Message"] = "Message sent to " + folksCount + " Member"
-                            + ((folksCount == 1) ? "." : "s.");
+                            };
+                            await _emailSender.SendToManyAsync(msg);
+                            ViewData["Message"] = "Message sent to " + folksCount + " Member"
+                                + ((folksCount == 1) ? "." : "s.");
+                        }                        
                     }
                     else
                     {
