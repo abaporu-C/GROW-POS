@@ -87,13 +87,7 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
-                    CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
-                    if (String.IsNullOrEmpty(emp.Phone))
-                    {
-                        //Nag to complete the profile?
-                        TempData["message"] = "Please enter the phone number.";
-                        returnUrl = "~/EmployeeAccounts/Edit";
-                    }
+                    CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);                    
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

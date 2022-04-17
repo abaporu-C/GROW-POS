@@ -333,6 +333,7 @@ namespace GROW_CRM.Controllers
         }
 
         // GET: Orders/Edit/5
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             ViewDataReturnURL();
@@ -370,6 +371,7 @@ namespace GROW_CRM.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Total,MemberID,PaymentTypeID")] Order order)
         {
             //Get the URL with the last filter, sort and page parameters

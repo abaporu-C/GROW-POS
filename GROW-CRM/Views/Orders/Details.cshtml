@@ -8,7 +8,7 @@
 
 <div class="row mb-3">
     <div class="col-md-12 d-flex">
-        <a class="btn btn-outline-info" asp-action="GetOrderPdf" asp-route-id="@Model.ID">Receipt</a>
+        <a class="btn btn-outline-info" asp-action="GetOrderPdf" asp-route-id="@Model.ID">Receit</a>
     </div>
 </div>
 
@@ -40,7 +40,55 @@
                 </dl>
             </fieldset>
         </div>
+        
+        @*table of products and quantity*@
         <div class="col-md-6">
+            <fieldset class="form-group border p-4 rounded">
+                <legend class="w-auto">Purchases</legend>
+                <dl class="row">
+                    @*<dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.OrderItems)
+                        </dt>*@
+                    <dd class="col-sm-10">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Item)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Item.Price)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Quantity)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                    </tr>}
+                            </tbody>
+                        </table>
+                    </dd>
+                </dl>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
         <fieldset class="form-group border p-4 rounded">
             <legend class="w-auto">Payment and Total</legend>
             @*<dl class="col-md-3">
@@ -81,59 +129,11 @@
             </div>
         </fieldset>
     </div>
-
-        
-    </div>
 </div>
 
-@*put in a line*@
-<div class="row">
-    @*table of products and quantity*@
-        <div class="col-md-12">
-            <fieldset class="form-group border p-4 rounded">
-                <legend class="w-auto">Purchases</legend>
-                <dl class="row">
-                    @*<dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.OrderItems)
-                        </dt>*@
-                    <dd class="col-sm-10">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Item)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Item.Price)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(modelItem => Model.OrderItems.FirstOrDefault().Quantity)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.OrderItems)
-                                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Quantity)
-                        </td>
-                    </tr>
-}
-                            </tbody>
-                        </table>
-                    </dd>
-                </dl>
-            </fieldset>
-        </div>
-</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a href='@ViewData["returnURL"]'>Back to Orders</a>
+    <a href='@ViewData["returnURL"]'>Back to Orders</a> |
+    <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.Member.ID">Back to Member</a> | 
+    <a asp-action="Delete" asp-route-id="@Model.ID">Delete</a>
 </div>
