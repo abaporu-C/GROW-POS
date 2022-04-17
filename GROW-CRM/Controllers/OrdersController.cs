@@ -289,6 +289,8 @@ namespace GROW_CRM.Controllers
                     {
                         _context.Update(orderToUpdate);
                         await _context.SaveChangesAsync();
+
+                        //Create and Send PDF for Order
                         try
                         {
                             CreatePdf(orderToUpdate.ID);
