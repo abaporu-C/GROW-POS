@@ -296,7 +296,7 @@ namespace GROW_CRM.Controllers
                             string path = $"./TempFiles/Order{orderToUpdate.ID}.pdf";
                             await _emailSender.SendEmailWithAttachmentAsync(orderToUpdate.Member.Email, "GROW - Your Receipt", message, path, $"Order{orderToUpdate.ID}.pdf");                            
                         }
-                        catch (Exception ex)
+                        catch
                         {
 
                         }                        

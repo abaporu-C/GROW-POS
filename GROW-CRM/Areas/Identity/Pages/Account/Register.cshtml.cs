@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -91,55 +92,61 @@ namespace GROW_CRM.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //Create Employee
-                Employee newEmp = new Employee { FirstName = Input.FirstName, LastName = Input.LastName, Phone = Input.Phone ?? "", Email = Input.Email, Active = true };
+                try
+                {
+                    //Create Employee
+                    Employee newEmp = new Employee { FirstName = Input.FirstName, LastName = Input.LastName, Phone = Input.Phone ?? "", Email = Input.Email, Active = true };
 
-                _context.Add(newEmp);
-                await _context.SaveChangesAsync();
-
-                //First see if the user exists and is allowed to register
-                var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
-                if (emp == null)
-                {
-                    string msg = "Error: Account for " + Input.Email + " has not been created by the Admin.";
-                    _logger.LogInformation(msg);
-                    ViewData["msg"] = msg;
-                }
-                else if (!emp.Active)
-                {
-                    string msg = "Error: Account for login " + Input.Email + " is not active.";
-                    _logger.LogInformation(msg);
-                    ViewData["msg"] = msg;
-                }
-                else //All good to add the account
-                {
-                    var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-                    var result = await _userManager.CreateAsync(user, Input.Password);
-                    if (result.Succeeded)
+                    _context.Add(newEmp);
+                    await _context.SaveChangesAsync();
+                    //First see if the user exists and is allowed to register
+                    var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
+                    if (emp == null)
                     {
-                        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ResetPassword",
-                            pageHandler: null,
-                            values: new { area = "Identity", code },
-                            protocol: Request.Scheme);
-
-                        await InviteUserToRegister(newEmp, callbackUrl);
-
-                        string msg = "Success: Account for " + Input.Email + " has been created with password.";
+                        string msg = "Error: Account for " + Input.Email + " has not been created by the Admin.";
                         _logger.LogInformation(msg);
                         ViewData["msg"] = msg;
-                        //await _signInManager.SignInAsync(user, isPersistent: false);
-                        //Set Cookie to show full name
-                        //CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
-                        return LocalRedirect(returnUrl);
                     }
-                    foreach (var error in result.Errors)
+                    else if (!emp.Active)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        string msg = "Error: Account for login " + Input.Email + " is not active.";
+                        _logger.LogInformation(msg);
+                        ViewData["msg"] = msg;
+                    }
+                    else //All good to add the account
+                    {
+                        var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                        var result = await _userManager.CreateAsync(user, Input.Password);
+                        if (result.Succeeded)
+                        {
+                            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            var callbackUrl = Url.Page(
+                                "/Account/ResetPassword",
+                                pageHandler: null,
+                                values: new { area = "Identity", code },
+                                protocol: Request.Scheme);
+
+                            await InviteUserToRegister(newEmp, callbackUrl);
+
+                            string msg = "Success: Account for " + Input.Email + " has been created with password.";
+                            _logger.LogInformation(msg);
+                            ViewData["msg"] = msg;
+                            //await _signInManager.SignInAsync(user, isPersistent: false);
+                            //Set Cookie to show full name
+                            //CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                            return LocalRedirect(returnUrl);
+                        }
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
                     }
                 }
+                catch
+                {
+                    ModelState.AddModelError(string.Empty, "Unable to save changes. Remember, the email account and user name informations are required and you can't use the same email address to add two employees.");
+                }                
             }
             // If we got this far, something failed, redisplay form
             return Page();
