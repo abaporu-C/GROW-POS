@@ -1,5 +1,4 @@
-﻿using Aspose.Pdf;
-using DinkToPdf;
+﻿using DinkToPdf;
 using GROW_CRM.Data;
 using GROW_CRM.Models;
 using GROW_CRM.Utilities;
@@ -19,12 +18,10 @@ namespace GROW_CRM.Controllers
     public class OrdersController : Controller
     {
         private readonly GROWContext _context;
-        private readonly IMyEmailSender _emailSender;
 
-        public OrdersController(GROWContext context, IMyEmailSender emailSender)
+        public OrdersController(GROWContext context)
         {
             _context = context;
-            _emailSender = emailSender;
         }
 
         // GET: Orders
@@ -521,15 +518,15 @@ namespace GROW_CRM.Controllers
             return new JsonResult(members);
         }
 
-        public async Task<IActionResult> GetOrderPdf(int id)
+        public IActionResult GetOrderPdf(int id)
         {
             var converter = new SynchronizedConverter(new PdfTools());
 
-            var order = await _context.Orders
+            var order = _context.Orders
                         .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
                         .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
                         .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
-                        .Where(o => o.ID == id).FirstOrDefaultAsync();
+                        .Where(o => o.ID == id).FirstOrDefault();
 
             string html = @$"
 <h1>Order #:{id}</h1>
@@ -615,56 +612,9 @@ table {
             };
 
             var result = converter.Convert(doc);
-            
+
             return File(result,
             "application/octet-stream", $"Order{id}Receit.pdf");
-        }
-
-        public void CreatePdf(int id)
-        {
-            var order = _context.Orders
-                        .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.City)
-                        .Include(o => o.Member).ThenInclude(m => m.Household).ThenInclude(h => h.Province)
-                        .Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
-                        .Where(o => o.ID == id).FirstOrDefault();
-
-            Aspose.Pdf.Document document = new Aspose.Pdf.Document();
-            Page page = document.Pages.Add();
-            page.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment($"Order #:{id}"));
-            page.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment($"Member: {order.Member.FullName}"));
-            page.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment($"Address: {order.Member.Household.FullAddress}"));
-            page.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment($"Date: {order.DateFormatted}"));
-
-            Aspose.Pdf.Table table = new Aspose.Pdf.Table();
-
-            table.Border = new Aspose.Pdf.BorderInfo(Aspose.Pdf.BorderSide.All, .5f, Aspose.Pdf.Color.FromRgb(System.Drawing.Color.LightGray));
-            table.DefaultCellBorder = new Aspose.Pdf.BorderInfo(Aspose.Pdf.BorderSide.All, .5f, Aspose.Pdf.Color.FromRgb(System.Drawing.Color.LightGray));
-
-            Aspose.Pdf.Row header = table.Rows.Add();
-
-            header.Cells.Add("Item");
-            header.Cells.Add("Quantity");
-            header.Cells.Add("Price");
-
-            foreach (OrderItem oi in order.OrderItems)
-            {
-                // Add row to table
-                Aspose.Pdf.Row row = table.Rows.Add();
-                // Add table cells
-                row.Cells.Add($"{oi.Item.Name}");
-                row.Cells.Add($"{oi.Quantity}");
-                row.Cells.Add(oi.Item.Price.ToString("C"));
-            }
-
-            Aspose.Pdf.Row footer = table.Rows.Add();
-
-            footer.Cells.Add("");
-            footer.Cells.Add("Total:");
-            footer.Cells.Add($"{order.TotalFormatted}");
-
-            page.Paragraphs.Add(table);
-
-            document.Save($"./TempFiles/Order{id}.pdf");
         }
     }
 }
