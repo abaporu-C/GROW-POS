@@ -467,6 +467,7 @@ namespace GROW_CRM.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Check if order exists
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.ID == id);
@@ -511,13 +512,13 @@ namespace GROW_CRM.Controllers
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
-        public async Task<ActionResult> GetMembers(int code)
+        public async Task<ActionResult> GetMembers(string code)
         {
             //Checks to see if there is a valid household ID for the user input
-            var householdID = await _context.Households.FirstOrDefaultAsync(h => h.ID == code);
-            if (householdID == null) return new ObjectResult("Please, enter a valid Household ID.\nIt must consist only of positive numbers.") { StatusCode = 400 };
+            var household = await _context.Households.FirstOrDefaultAsync(h => h.Name.ToLower().Contains(code.ToLower()));
+            if (household == null) return new ObjectResult("Please, enter a valid Household Name.\nCheck the household list if you need.") { StatusCode = 400 };
 
-            var members = await _context.Members.Where(m => m.HouseholdID == code && m.FirstName != "" && m.LastName != "").ToListAsync();
+            var members = await _context.Members.Where(m => m.HouseholdID == household.ID && m.FirstName != "" && m.LastName != "").ToListAsync();
             
             if (!members.Any()) return new ObjectResult("There are no members registered on this Household ID") { StatusCode = 400};
             return new JsonResult(members);
