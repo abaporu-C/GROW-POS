@@ -271,7 +271,7 @@ namespace GROW_CRM.Controllers.Helpers
                                 .Select(na => new NewItemsReport
                                 {
                                     ID = na.ID,
-                                    Code = na.Code,
+                                    Code = na.Code.ToString(),
                                     Name = na.Name,
                                     Price = na.Price,
                                     Category = na.Category.Name,

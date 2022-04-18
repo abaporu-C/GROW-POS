@@ -199,9 +199,17 @@ namespace GROW_CRM.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dex)
             {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                {
+                    ModelState.AddModelError("Code", "Unable to save changes. Remember, you cannot have duplicate Item Codes.");
+                    ModelState.AddModelError("Name", "Unable to save changes. Remember, you cannot have duplicate Item Names.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
 
             PopulateDropDownLists(item);
