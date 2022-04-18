@@ -40,6 +40,7 @@ namespace GROW_CRM.Models
         public int ID { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the Code blank.")]
+        [RegularExpression("^\\d+$", ErrorMessage = "The item code can only be composed by numeric characters.")]
         public string Code { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the Name blank")]
