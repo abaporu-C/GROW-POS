@@ -40,7 +40,8 @@ namespace GROW_CRM.Models
         public int ID { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the Code blank.")]
-        public int Code { get; set; }
+        [CustomValidation(typeof(ValidationMethods), "ValidateGreaterOrEqualToZero")]
+        public double Code { get; set; }
 
         [Required(ErrorMessage = "You cannot leave the Name blank")]
         [StringLength(150, ErrorMessage = "Name cannot be more than 150 characters long.")]
